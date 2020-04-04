@@ -1,0 +1,175 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "configurarEntidad",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 3,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 296,
+          "layoutY": 203
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "obtener tipo",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "type": "subtipoDispositivo"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 294,
+          "layoutY": 141
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "originador?",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "name": "customerName"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 569,
+          "layoutY": 132
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Originator=Entidad",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${idEntidad}",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 287,
+          "layoutY": 51
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Validacion",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\nmetadata.idEntidad = msg.idEntidad;\n\nmetadata.alarmas = msg.alarmas;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 567,
+          "layoutY": 53
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Originador=Customer",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "CUSTOMER",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 581,
+          "layoutY": 330
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardarAtributos",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 289,
+          "layoutY": 330
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "POST_ATTRIBUTES_REQUEST",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 570,
+          "layoutY": 202
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararMensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var mensaje = {};\n//Las alarmas se guardan siempre\nif (metadata.hasOwnProperty('alarmas')) {\n    mensaje[\"alarma_\" + metadata.subtipoDispositivo] =\n        metadata.alarmas;\n    //Si incluye una alarma de inactividad tengo que actualizar el parámetro del servidor inactivityTimeout\n    var obj = JSON.parse(metadata.alarmas);\n    if (obj.hasOwnProperty('inactividad')) {\n        \n        mensaje.inactivityTimeout = parseInt(obj.inactividad.umbralInactividad) * 1000;\n    }\n}\n\nmsg = mensaje;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 0,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 6,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}

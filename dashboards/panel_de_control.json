@@ -1,0 +1,151 @@
+{
+  "title": "Panel de control",
+  "configuration": {
+    "widgets": {
+      "c5a51edb-77e1-a7d8-5b9d-a7825ca29723": {
+        "isSystemType": true,
+        "bundleAlias": "cards",
+        "typeAlias": "entities_hierarchy",
+        "type": "latest",
+        "title": "New widget",
+        "sizeX": 7,
+        "sizeY": 10,
+        "config": {
+          "timewindow": {
+            "realtime": {
+              "interval": 1000,
+              "timewindowMs": 86400000
+            },
+            "aggregation": {
+              "type": "NONE",
+              "limit": 200
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgba(0, 0, 0, 0.87)",
+          "padding": "4px",
+          "settings": {
+            "nodeRelationQueryFunction": "/**\n\n// Function should return relations query object for current node used to fetch entity children.\n// Function can return 'default' string value. In this case default relations query will be used.\n\n// The following example code will construct simple relations query that will fetch relations of type 'Contains'\n// from the current entity.\n\nvar entity = nodeCtx.entity;\nvar query = {\n    parameters: {\n        rootId: entity.id.id,\n        rootType: entity.id.entityType,\n        direction: types.entitySearchDirection.from,\n        relationTypeGroup: \"COMMON\",\n        maxLevel: 1\n    },\n    filters: [{\n        relationType: \"Contains\",\n        entityTypes: []\n    }]\n};\nreturn query;\n\n**/\n",
+            "nodeHasChildrenFunction": "/**\n\n// Function should return boolean value indicating whether current node has children (whether it can be expanded).\n\n// The following example code will restrict entities hierarchy expansion up to third level.\n\nreturn nodeCtx.level <= 2;\n\n// The next example code will restrict entities expansion according to the value of example 'nodeHasChildren' attribute.\n\nvar data = nodeCtx.data;\nif (data.hasOwnProperty('nodeHasChildren') && data['nodeHasChildren'] !== null) {\n    return data['nodeHasChildren'] === 'true';\n} else {\n    return true;\n}\n  \n**/\n ",
+            "nodeTextFunction": "/**\n\n// Function should return text (can be HTML code) for the current node.\n\n// The following example code will generate node text consisting of entity name and temperature if temperature value is present in entity attributes/timeseries.\n\nvar data =  nodeCtx.data;\nvar entity = nodeCtx.entity;\nvar text = entity.name;\nif (data.hasOwnProperty('temperature') && data['temperature'] !== null) {\n    text += \" <b>\"+ data['temperature'] +\" °C</b>\";\n}\nreturn text;\n\n**/\nvar entity = nodeCtx.entity;\nvar nombreCompleto = entity.name;\nvar nombre = nombreCompleto.substring(nombreCompleto.indexOf(\"_\")+1);\nreturn nombre;",
+            "nodeIconFunction": "/** \n\n// Function should return node icon info object.\n// Resulting object should contain either 'materialIcon' or 'iconUrl' property. \n// Where:\n    - 'materialIcon' - name of the material icon to be used from the Material Icons Library (https://material.io/tools/icons);\n    - 'iconUrl' - url of the external image to be used as node icon.\n// Function can return 'default' string value. In this case default icons according to entity type will be used.\n\n// The following example code shows how to use external image for devices which name starts with 'Test' and use \n// default icons for the rest of entities.\n\nvar entity = nodeCtx.entity;\nif (entity.id.entityType === 'DEVICE' && entity.name.startsWith('Test')) {\n    return {iconUrl: 'https://avatars1.githubusercontent.com/u/14793288?v=4&s=117'};\n} else {\n    return 'default';\n}\n \n**/",
+            "nodeDisabledFunction": "/**\n\n// Function should return boolean value indicating whether current node should be disabled (not selectable).\n\n// The following example code will disable current node according to the value of example 'nodeDisabled' attribute.\n\nvar data = nodeCtx.data;\nif (data.hasOwnProperty('nodeDisabled') && data['nodeDisabled'] !== null) {\n    return data['nodeDisabled'] === 'true';\n} else {\n    return false;\n}\n  \n**/\n",
+            "nodesSortFunction": "/**\n\n// This function is used to sort nodes of the same level. Function should compare two nodes and return \n// integer value: \n//     - less than 0 - sort nodeCtx1 to an index lower than nodeCtx2\n//     - 0 - leave nodeCtx1 and nodeCtx2 unchanged with respect to each other\n//     - greater than 0 - sort nodeCtx2 to an index lower than nodeCtx1\n\n// The following example code will sort entities first by entity type in alphabetical order then\n// by entity name in alphabetical order.\n\nvar result = nodeCtx1.entity.id.entityType.localeCompare(nodeCtx2.entity.id.entityType);\nif (result === 0) {\n    result = nodeCtx1.entity.name.localeCompare(nodeCtx2.entity.name);\n}\nreturn result;\n  \n**/",
+            "nodeOpenedFunction": "/**\n\n// Function should return boolean value indicating whether current node should be opened (expanded) when it first loaded.\n\n// The following example code will open by default nodes up to third level.\n\nreturn nodeCtx.level <= 2;\n\n**/\n  //return nodeCtx.level <=1;"
+          },
+          "title": "ACTIVOS Y DISPOSITIVOS",
+          "dropShadow": true,
+          "enableFullscreen": true,
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400,
+            "padding": "5px 10px 5px 10px"
+          },
+          "useDashboardTimewindow": false,
+          "showLegend": false,
+          "datasources": [
+            {
+              "type": "entity",
+              "dataKeys": [],
+              "entityAliasId": "a5b1d9c8-ea06-b40c-27de-12f0c6c43b05"
+            }
+          ],
+          "widgetStyle": {},
+          "actions": {
+            "nodeSelected": [
+              {
+                "id": "bce6b302-f1b0-6b26-9f58-21d4aac3f2ad",
+                "name": "CLICK",
+                "icon": "more_horiz",
+                "type": "custom",
+                "customFunction": "var $injector = widgetContext.$scope.$injector;\nvar attributeService = $injector.get('attributeService');\nvar userService = $injector.get('userService');\nvar vm = this;\nvm.currentUser = userService.getCurrentUser();\nvm.attributes = {};\n$injector.get('deviceService').getDevice(entityId.id).then(\n    function(device) {\n        attributeService.getEntityAttributesValues(\n            entityId.entityType, entityId.id,\n            'SERVER_SCOPE').then(\n            function(data) {\n                if (data.length) {\n                    getEntityAttributes(data);\n                }\n                console.log(vm.attributes[\n                    'tipoEntidad']);\n                if (vm.attributes['tipoEntidad'] ==\n                    'V02_001') {\n                    openDashboard(\n                        'Dispositivo_V02_001');\n                } else if (vm.attributes[\n                        'tipoEntidad'] ==\n                    'V02_002') {\n                    openDashboard(\n                        'Dispositivo_V02_002');\n                }\n            });\n\n\n    });\n\nfunction getEntityAttributes(attributes) {\n    for (var i = 0; i < attributes.length; i++) {\n        vm.attributes[attributes[i].key] = attributes[i]\n            .value;\n    }\n}\n\nfunction openDashboard(nombrePanel) {\n    $injector.get('dashboardService').getCustomerDashboards(\n        currentUser.customerId, {\n            limit: 100\n        }, {}).then(\n        function(data) {\n            for (let clave in data.data) {\n                if (data.data[clave].name ==\n                    nombrePanel) {\n                    vm.destinationDashboardId = data\n                        .data[\n                            clave]\n                        .id.id;\n                }\n            }\n        }\n    ).then(\n        function() {\n            var stateObject = {};\n            stateObject.params = {};\n            stateObject.params.entityId = entityId;\n            stateObject.params.entityName = entityName;\n            console.log(widgetContext);\n            var params = {\n                dashboardId: destinationDashboardId,\n\n                state: widgetContext.aliasController\n                    .utils.objToBase64([\n                        stateObject\n                    ])\n            };\n            console.log(params);\n            userService.gotoDashboard(vm\n                .destinationDashboardId, params);\n        });\n}\n\nfunction openDashboardState(stateId) {\n    var params = {\n        entityId: entityId,\n        entityName: entityName\n    };\n\n\n    widgetContext.stateController.openState(stateId, params,\n        false);\n\n}"
+              }
+            ]
+          },
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "displayTimewindow": true
+        },
+        "id": "c5a51edb-77e1-a7d8-5b9d-a7825ca29723"
+      }
+    },
+    "states": {
+      "default": {
+        "name": "Panel de control",
+        "root": true,
+        "layouts": {
+          "main": {
+            "widgets": {
+              "c5a51edb-77e1-a7d8-5b9d-a7825ca29723": {
+                "sizeX": 7,
+                "sizeY": 10,
+                "row": 0,
+                "col": 0
+              }
+            },
+            "gridSettings": {
+              "backgroundColor": "#eeeeee",
+              "color": "rgba(0,0,0,0.870588)",
+              "columns": 24,
+              "margins": [
+                10,
+                10
+              ],
+              "backgroundSizeMode": "100%"
+            }
+          }
+        }
+      }
+    },
+    "entityAliases": {
+      "a5b1d9c8-ea06-b40c-27de-12f0c6c43b05": {
+        "id": "a5b1d9c8-ea06-b40c-27de-12f0c6c43b05",
+        "alias": "TodosLosActivos",
+        "filter": {
+          "type": "assetType",
+          "resolveMultiple": true,
+          "assetType": "ROOT",
+          "assetNameFilter": ""
+        }
+      }
+    },
+    "timewindow": {
+      "displayValue": "",
+      "selectedTab": 0,
+      "hideInterval": false,
+      "hideAggregation": false,
+      "hideAggInterval": false,
+      "realtime": {
+        "interval": 1000,
+        "timewindowMs": 60000
+      },
+      "history": {
+        "historyType": 0,
+        "interval": 1000,
+        "timewindowMs": 60000,
+        "fixedTimewindow": {
+          "startTimeMs": 1584129501222,
+          "endTimeMs": 1584215901222
+        }
+      },
+      "aggregation": {
+        "type": "AVG",
+        "limit": 25000
+      }
+    },
+    "settings": {
+      "stateControllerId": "entity",
+      "showTitle": false,
+      "showDashboardsSelect": true,
+      "showEntitiesSelect": true,
+      "showDashboardTimewindow": true,
+      "showDashboardExport": true,
+      "toolbarAlwaysOpen": true
+    }
+  },
+  "name": "Panel de control"
+}

@@ -1,0 +1,276 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "borrarEntidad",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": true,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 5,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 295,
+          "layoutY": 411
+        },
+        "type": "org.thingsboard.rule.engine.action.TbUnassignFromCustomerNode",
+        "name": "desasignar",
+        "debugMode": true,
+        "configuration": {
+          "customerNamePattern": "${customerName}",
+          "customerCacheExpiration": 300
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 574,
+          "layoutY": 310
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararMensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var mensaje = {};\nmensaje.nombreActual=metadata.nombreEntidadOriginal;\nmensaje.nombreNuevo=metadata.customerName+'_'+metadata.idEntidad;\nmensaje.tipoEntidad=metadata.tipoEntidad;\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 569,
+          "layoutY": 233
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararMensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "//Antes de borrarlo voy a cambiarle el nombre\n//usando el id\n//Esto lo hago porque al borrar una entidad y volver\n//a crearla con el mismo nombre he encontrado problemas\nvar mensaje = {};\n    mensaje.nombreEntidad = metadata.idEntidad;\n    metadata.nombreEntidadOriginal=metadata.customerName+'_'+metadata.nombreEntidadOriginal;\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 301,
+          "layoutY": 313
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardarAtributos",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 564,
+          "layoutY": 149
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Originador=Customer",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "CUSTOMER",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 301,
+          "layoutY": 150
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Validacion",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "/*Antes de borrarlo le cambio el nombre \na su ID porque he visto que había problemas\nal crear una entidad con un nombre que ya \nse había utilizado anteriormente*/\nmetadata.tipoEntidad=msg.tipoEntidad;\nmetadata.idEntidad=msg.idEntidad;\nmetadata.padreEntidadNuevo=msg.padreEntidad;\nmetadata.tipoPadreEntidadNuevo=msg.tipoPadreEntidad;\nmetadata.nombreEntidadOriginal=msg.nombreEntidad;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 300,
+          "layoutY": 232
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Originator=Entidad",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${idEntidad}",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 48,
+          "layoutY": 228
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "originador?",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "name": "customerName"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 208,
+          "layoutY": 792
+        },
+        "type": "org.thingsboard.rule.engine.action.TbRetypeEntityNode",
+        "name": "retipar",
+        "debugMode": true,
+        "configuration": {
+          "claveNombreEntidad": "nombreActual",
+          "claveTipoEntidad": "tipoEntidad",
+          "claveSubtipoEntidad": "subtipoEntidad"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 210,
+          "layoutY": 710
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararMensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var mensaje = {};\nmensaje.nombreActual=metadata.customerName+'_'+metadata.ss_nombreEntidad;\nmensaje.tipoEntidad=metadata.tipoEntidad;\nmensaje.subtipoEntidad=metadata.tipoEntidadNuevo;\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 574,
+          "layoutY": 400
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Validacion",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.nombreEntidad=msg.nombreNuevo;\nmetadata.tipoEntidad=msg.tipoEntidad;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 54,
+          "layoutY": 493
+        },
+        "type": "org.thingsboard.rule.engine.action.TbDeleteEntityNode",
+        "name": "borrar",
+        "debugMode": true,
+        "configuration": {
+          "claveNombreEntidad": "nombreNuevo",
+          "claveTipoEntidad": "tipoEntidad"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 46,
+          "layoutY": 314
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "POST_ATTRIBUTES_REQUEST",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 44,
+          "layoutY": 403
+        },
+        "type": "org.thingsboard.rule.engine.action.TbRenameEntityNode",
+        "name": "renombrar",
+        "debugMode": true,
+        "configuration": {
+          "claveNombreActual": "nombreActual",
+          "claveNombreNuevo": "nombreNuevo",
+          "claveTipoEntidad": "tipoEntidad"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 10,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 13,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 12,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 9,
+        "toIndex": 8,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 10,
+        "toIndex": 11,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 0,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}
