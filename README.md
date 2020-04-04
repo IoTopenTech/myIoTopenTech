@@ -24,19 +24,19 @@ Procedimiento (todo esto se realizará atuomáticamente en breve gracias a la co
     
   3. Crear un activo que comience con el nombre del customer seguido de \_ROOT; por ejemplo: 00001\_ROOT
    * Indicar como tipo del activo: ROOT
-   * Crear en el atributo los 2 atributos del lado del servidor siguientes:
-    
+   * Crear en el atributo los 2 atributos del lado del servidor siguientes:    
     * nombreEntidad
       
     ```
     ROOT
-    ```
-        
+    ```       
+    
     * tipoEntidad
     
     ```
     ROOT
     ```
+    
    * Copiar el Asset ID del activo creado (será del tipo ffeabc0-6ffa-121a-b4b5-4bbff7e83283) y crear en el activo una relación de tipo TO hacia el Customer y que utilice este ID como Relation type.
       
   4. Crear un dispositivo que comience con el nombre del customer seguido de _CONTROL; por ejemplo: 00001_CONTROL
