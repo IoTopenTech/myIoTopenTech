@@ -1,6 +1,6 @@
 # ThingsBoard TTN Edition
 
-Procedimiento (todo esto se realizará atuomáticamente en breve gracias a la colaboración de todos, pero de momento hay que hacerlo a mano):
+Procedimiento (todo esto se realizará automáticamente en breve gracias a la colaboración de todos, pero de momento hay que hacerlo a mano):
 
 1. Crear un customer cuyo nombre sea un número de 5 dígitos; por ejemplo 00001.
 2. Asignar a este customer los siguientes atributos del lado del servidor:
