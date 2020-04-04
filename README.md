@@ -6,4 +6,7 @@ Procedimiento:
 2. Asignar a este customer los siguientes atributos del lado del servidor:
   * tiposDeActivos
 
+    ```
+    	MAP01,IMAGE01
+    ```
 
