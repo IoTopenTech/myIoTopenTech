@@ -27,15 +27,15 @@ Procedimiento (todo esto se realizará automáticamente en breve gracias a la co
     * Crear en el activo los 2 atributos del lado del servidor siguientes:    
         * nombreEntidad
       
-        ```
-        ROOT
-        ```       
+            ```
+            ROOT
+            ```       
     
         * tipoEntidad
     
-        ```
-        ROOT
-        ```
+            ```
+            ROOT
+            ```
     
     * Copiar el Asset ID del activo creado (será del tipo ffeabc0-6ffa-121a-b4b5-4bbff7e83283) y crear en el activo una relación de tipo TO hacia el Customer y que utilice este ID como Relation type.
       
