@@ -41,7 +41,7 @@ Procedimiento (todo esto se realizará automáticamente en breve gracias a la co
       
 4. Crear un dispositivo que comience con el nombre del customer seguido de \_CONTROL; por ejemplo: 00001\_CONTROL. Mediante telemetrías que enviaremos a este dispositivo desde los widgets de los dashboard podremos realizar operaciones de gestión, como crear dispositivos o configurarlos (ver la regla Root Rule Chain).
     * Indicar como tipo del dispositivo SYSTEM.
-5. Importar las reglas y los dashboards de este repositorio (no es necesario importar los widgets porque ya están disponibles a nivel de sistema). Al importar las reglas, hacerlo en el siguiente orden:
+5. Importar las reglas y los dashboards de este repositorio (no es necesario importar los widgets porque ya están disponibles a nivel de sistema). Al importar las reglas, hacerlo en el siguiente orden (al importar reglas, ThingsBoard pierde la vinculación que hay de unas reglas a otras; tendrá que revincularlas manualmente):
     1. notificaciones
     2. V02_001
     3. borrarEntidad
