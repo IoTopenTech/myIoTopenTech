@@ -4,7 +4,7 @@ Procedimiento (todo esto se realizará automáticamente en breve gracias a la co
 
 1. Crear un customer cuyo nombre sea un número de 5 dígitos; por ejemplo 00001.
 2. Asignar a este customer los siguientes atributos del lado del servidor:
-   * tiposDeActivos
+    * tiposDeActivos
 
         ```
         MAP01,IMAGE01
@@ -23,19 +23,19 @@ Procedimiento (todo esto se realizará automáticamente en breve gracias a la co
         ```
     
 3. Crear un activo que comience con el nombre del customer seguido de \_ROOT; por ejemplo: 00001\_ROOT. Este activo nos permitirá seleccionar mediante relaciones de tipo CONTAINS todos los demás activos y dispositivos que cree el customer a través del dashboard Configuración.
-  * Indicar como tipo del activo: ROOT
-  * Crear en el activo los 2 atributos del lado del servidor siguientes:    
-    * nombreEntidad
+    * Indicar como tipo del activo: ROOT
+    * Crear en el activo los 2 atributos del lado del servidor siguientes:    
+        * nombreEntidad
       
-      ```
-      ROOT
-      ```       
+        ```
+        ROOT
+        ```       
     
-    * tipoEntidad
+        * tipoEntidad
     
-      ```
-      ROOT
-      ```
+        ```
+        ROOT
+        ```
     
   * Copiar el Asset ID del activo creado (será del tipo ffeabc0-6ffa-121a-b4b5-4bbff7e83283) y crear en el activo una relación de tipo TO hacia el Customer y que utilice este ID como Relation type.
       
