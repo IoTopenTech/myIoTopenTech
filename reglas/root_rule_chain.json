@@ -210,7 +210,7 @@
         "name": "dispositivo permitido?",
         "debugMode": true,
         "configuration": {
-          "jsScript": "return metadata.tiposDeDispositivos.split(\",\").indexOf(metadata.deviceType)>=0\n"
+          "jsScript": "if (metadata.hasOwnProperty('tiposDeDispositivos') &&\n    metadata.hasOwnProperty('deviceType')) {\n    return metadata.tiposDeDispositivos.split(\",\").indexOf(\n        metadata.deviceType) >= 0;\n} else {\n    return false;\n}"
         }
       },
       {
@@ -269,38 +269,18 @@
       },
       {
         "fromIndex": 7,
-        "toIndex": 1,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 7,
         "toIndex": 13,
         "type": "Success"
       },
       {
-        "fromIndex": 11,
-        "toIndex": 0,
-        "type": "Activity Event"
+        "fromIndex": 7,
+        "toIndex": 1,
+        "type": "Success"
       },
       {
         "fromIndex": 11,
-        "toIndex": 17,
-        "type": "Inactivity Event"
-      },
-      {
-        "fromIndex": 11,
-        "toIndex": 7,
-        "type": "Post telemetry"
-      },
-      {
-        "fromIndex": 11,
-        "toIndex": 9,
-        "type": "Other"
-      },
-      {
-        "fromIndex": 11,
-        "toIndex": 12,
-        "type": "Post attributes"
+        "toIndex": 8,
+        "type": "RPC Request to Device"
       },
       {
         "fromIndex": 11,
@@ -309,17 +289,37 @@
       },
       {
         "fromIndex": 11,
-        "toIndex": 8,
-        "type": "RPC Request to Device"
+        "toIndex": 12,
+        "type": "Post attributes"
       },
       {
-        "fromIndex": 13,
-        "toIndex": 16,
-        "type": "Success"
+        "fromIndex": 11,
+        "toIndex": 9,
+        "type": "Other"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 7,
+        "type": "Post telemetry"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 17,
+        "type": "Inactivity Event"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 0,
+        "type": "Activity Event"
       },
       {
         "fromIndex": 13,
         "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 16,
         "type": "Success"
       },
       {
@@ -343,27 +343,14 @@
         "fromIndex": 6,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "e9c2b450-701f-11ea-b4a5-4f0127e83283"
-        },
-        "additionalInfo": {
-          "layoutX": 1436,
-          "layoutY": 109,
-          "ruleChainNodeId": "rule-chain-node-26"
-        },
-        "type": "borrarEntidad"
-      },
-      {
-        "fromIndex": 6,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "3e402ff0-68fd-11ea-a5d1-174bec7b16a7"
+          "id": "cc9716b0-7587-11ea-b6f7-395813a5429b"
         },
         "additionalInfo": {
           "layoutX": 1438,
-          "layoutY": 0,
-          "ruleChainNodeId": "rule-chain-node-25"
+          "layoutY": 170,
+          "ruleChainNodeId": "rule-chain-node-24"
         },
-        "type": "editarEntidad"
+        "type": "configurarEntidad"
       },
       {
         "fromIndex": 6,
@@ -374,7 +361,7 @@
         "additionalInfo": {
           "layoutX": 1437,
           "layoutY": 56,
-          "ruleChainNodeId": "rule-chain-node-24"
+          "ruleChainNodeId": "rule-chain-node-23"
         },
         "type": "crearEntidad"
       },
@@ -382,14 +369,27 @@
         "fromIndex": 6,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "cc9716b0-7587-11ea-b6f7-395813a5429b"
+          "id": "3e402ff0-68fd-11ea-a5d1-174bec7b16a7"
         },
         "additionalInfo": {
           "layoutX": 1438,
-          "layoutY": 170,
-          "ruleChainNodeId": "rule-chain-node-23"
+          "layoutY": 0,
+          "ruleChainNodeId": "rule-chain-node-22"
         },
-        "type": "configurarEntidad"
+        "type": "editarEntidad"
+      },
+      {
+        "fromIndex": 6,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "e9c2b450-701f-11ea-b4a5-4f0127e83283"
+        },
+        "additionalInfo": {
+          "layoutX": 1436,
+          "layoutY": 109,
+          "ruleChainNodeId": "rule-chain-node-21"
+        },
+        "type": "borrarEntidad"
       },
       {
         "fromIndex": 14,
@@ -400,7 +400,7 @@
         "additionalInfo": {
           "layoutX": 1349,
           "layoutY": 380,
-          "ruleChainNodeId": "rule-chain-node-22"
+          "ruleChainNodeId": "rule-chain-node-20"
         },
         "type": "V02_001"
       }
