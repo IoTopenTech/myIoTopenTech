@@ -8,69 +8,42 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 3,
+    "firstNodeIndex": 4,
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 296,
-          "layoutY": 203
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
-        "name": "obtener tipo",
-        "debugMode": true,
-        "configuration": {
-          "fieldsMapping": {
-            "type": "subtipoDispositivo"
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 294,
-          "layoutY": 141
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
-        "name": "originador?",
-        "debugMode": true,
-        "configuration": {
-          "fieldsMapping": {
-            "name": "customerName"
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 569,
-          "layoutY": 132
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "Originator=Entidad",
-        "debugMode": true,
-        "configuration": {
-          "originatorSource": "RELATED",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "${idEntidad}",
-                "entityTypes": []
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 287,
-          "layoutY": 51
+          "layoutX": 570,
+          "layoutY": 202
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "Validacion",
+        "name": "prepararMensaje",
         "debugMode": true,
         "configuration": {
-          "jsScript": "\nmetadata.idEntidad = msg.idEntidad;\n\nmetadata.alarmas = msg.alarmas;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "jsScript": "var mensaje = {};\nif (metadata.hasOwnProperty('ttn_dev_id')) {\n    mensaje['ttn_dev_id'] = metadata.ttn_dev_id;\n\n}\n//Las alarmas se guardan siempre\nif (metadata.hasOwnProperty('alarmas')) {\n    mensaje[\"alarma_\" + metadata.subtipoDispositivo] =\n        metadata.alarmas;\n    //Si incluye una alarma de inactividad tengo que actualizar el parámetro del servidor inactivityTimeout\n    var obj = JSON.parse(metadata.alarmas);\n    if (obj.hasOwnProperty('inactividad')) {\n\n        mensaje.inactivityTimeout = parseInt(obj.inactividad\n            .umbralInactividad) * 1000;\n    }\n}\n\nmsg = mensaje;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 289,
+          "layoutY": 330
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "POST_ATTRIBUTES_REQUEST",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 581,
+          "layoutY": 330
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardarAtributos",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
         }
       },
       {
@@ -98,45 +71,72 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 581,
-          "layoutY": 330
+          "layoutX": 287,
+          "layoutY": 51
         },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "guardarAtributos",
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Validacion",
         "debugMode": true,
         "configuration": {
-          "scope": "SERVER_SCOPE"
+          "jsScript": "metadata.idEntidad = msg.idEntidad;\nif (msg.hasOwnProperty('alarmas')) {\n    metadata.alarmas = msg.alarmas;\n}\nif (msg.hasOwnProperty('ttn_dev_id')) {\n    metadata.ttn_dev_id = msg.ttn_dev_id;\n}\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 289,
-          "layoutY": 330
+          "layoutX": 569,
+          "layoutY": 132
         },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "POST_ATTRIBUTES_REQUEST",
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Originator=Entidad",
         "debugMode": true,
         "configuration": {
-          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${idEntidad}",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 570,
-          "layoutY": 202
+          "layoutX": 294,
+          "layoutY": 141
         },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "prepararMensaje",
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "originador?",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var mensaje = {};\n//Las alarmas se guardan siempre\nif (metadata.hasOwnProperty('alarmas')) {\n    mensaje[\"alarma_\" + metadata.subtipoDispositivo] =\n        metadata.alarmas;\n    //Si incluye una alarma de inactividad tengo que actualizar el parámetro del servidor inactivityTimeout\n    var obj = JSON.parse(metadata.alarmas);\n    if (obj.hasOwnProperty('inactividad')) {\n        \n        mensaje.inactivityTimeout = parseInt(obj.inactividad.umbralInactividad) * 1000;\n    }\n}\n\nmsg = mensaje;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "fieldsMapping": {
+            "name": "customerName"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 296,
+          "layoutY": 203
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "obtener tipo",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "type": "subtipoDispositivo"
+          }
         }
       }
     ],
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 7,
+        "toIndex": 1,
         "type": "Success"
       },
       {
@@ -145,18 +145,18 @@
         "type": "Success"
       },
       {
-        "fromIndex": 2,
-        "toIndex": 0,
-        "type": "Success"
-      },
-      {
         "fromIndex": 3,
-        "toIndex": 4,
+        "toIndex": 6,
         "type": "Success"
       },
       {
         "fromIndex": 4,
-        "toIndex": 1,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 7,
         "type": "Success"
       },
       {
@@ -166,7 +166,7 @@
       },
       {
         "fromIndex": 7,
-        "toIndex": 6,
+        "toIndex": 0,
         "type": "Success"
       }
     ],

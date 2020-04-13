@@ -8,12 +8,104 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 7,
+    "firstNodeIndex": 11,
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 311,
-          "layoutY": 547
+          "layoutX": 515,
+          "layoutY": 285
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateEntityNode",
+        "name": "crear",
+        "debugMode": true,
+        "configuration": {
+          "claveNombreEntidad": "nombreEntidadNuevoCompleto",
+          "claveTipoEntidad": "tipoEntidad",
+          "claveSubtipoEntidad": "subtipoEntidad"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 804,
+          "layoutY": 280
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
+        "name": "crearDispositivo",
+        "debugMode": true,
+        "configuration": {
+          "direction": "TO",
+          "relationType": "Contains",
+          "entityType": "DEVICE",
+          "entityNamePattern": "${nombreEntidadNuevoCompleto}",
+          "entityTypePattern": "${subtipoEntidadNuevo}",
+          "entityCacheExpiration": 5,
+          "createEntityIfNotExists": false,
+          "changeOriginatorToRelatedEntity": true,
+          "removeCurrentRelations": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1083,
+          "layoutY": 438
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
+        "name": "Relacion con Customer",
+        "debugMode": true,
+        "configuration": {
+          "direction": "FROM",
+          "relationType": "${entityId}",
+          "entityType": "CUSTOMER",
+          "entityNamePattern": "${customerName}",
+          "entityTypePattern": null,
+          "entityCacheExpiration": 300,
+          "createEntityIfNotExists": false,
+          "changeOriginatorToRelatedEntity": false,
+          "removeCurrentRelations": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 807,
+          "layoutY": 437
+        },
+        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
+        "name": "Asignar al Customer",
+        "debugMode": true,
+        "configuration": {
+          "customerNamePattern": "${customerName}",
+          "customerCacheExpiration": 300,
+          "createCustomerIfNotExists": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 807,
+          "layoutY": 352
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "Guardar Atributos",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1062,
+          "layoutY": 278
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "POST ATTRIBUTES",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var msg={'nombreEntidad':metadata.nombreEntidadNuevo,\n'tipoEntidad':metadata.subtipoEntidadNuevo,\n'padreEntidad':metadata.padreEntidadNombre};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1079,
+          "layoutY": 356
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
         "name": "Campos del nuevo",
@@ -26,75 +118,80 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 321,
-          "layoutY": 443
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "POST ATTRIBUTES",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var msg={'nombreEntidad':metadata.nombreEntidadNuevo,\n'tipoEntidad':metadata.subtipoEntidadNuevo,\n'padreEntidad':metadata.padreEntidadNombre};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 45,
-          "layoutY": 545
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "Guardar Atributos",
-        "debugMode": true,
-        "configuration": {
-          "scope": "SERVER_SCOPE"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 49,
+          "layoutX": 304,
           "layoutY": 242
         },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
-        "name": "Nombre del originador",
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prefijo nombreCustomer",
         "debugMode": true,
         "configuration": {
-          "fieldsMapping": {
-            "name": "customerName"
-          }
+          "jsScript": "msg.nombreEntidadNuevoCompleto=metadata.customerName+\"_\"+metadata.nombreEntidadNuevo;\nmetadata.nombreEntidadNuevoCompleto=metadata.customerName+\"_\"+metadata.nombreEntidadNuevo;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 517,
-          "layoutY": 363
+          "layoutX": 44,
+          "layoutY": 445
         },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "Activo o Dispositivos?",
+        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
+        "name": "crearActivo",
         "debugMode": true,
         "configuration": {
-          "jsScript": "if (metadata.tipoEntidadNuevo=='ASSET'){\n    return ['Activo'];\n}else if (metadata.tipoEntidadNuevo=='DEVICE'){\n    return ['Dispositivo'];\n}\n"
+          "direction": "TO",
+          "relationType": "Contains",
+          "entityType": "ASSET",
+          "entityNamePattern": "${nombreEntidadNuevoCompleto}",
+          "entityTypePattern": "${subtipoEntidadNuevo}",
+          "entityCacheExpiration": 5,
+          "createEntityIfNotExists": true,
+          "changeOriginatorToRelatedEntity": true,
+          "removeCurrentRelations": false
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 575,
-          "layoutY": 147
+          "layoutX": 315,
+          "layoutY": 643
         },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "Customer",
+        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
+        "name": "Relacion con Customer",
         "debugMode": true,
         "configuration": {
-          "originatorSource": "CUSTOMER",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "Contains",
-                "entityTypes": []
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
+          "direction": "FROM",
+          "relationType": "${entityId}",
+          "entityType": "CUSTOMER",
+          "entityNamePattern": "${customerName}",
+          "entityTypePattern": null,
+          "entityCacheExpiration": 300,
+          "createEntityIfNotExists": false,
+          "changeOriginatorToRelatedEntity": false,
+          "removeCurrentRelations": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 48,
+          "layoutY": 645
+        },
+        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
+        "name": "Asignar al Customer",
+        "debugMode": true,
+        "configuration": {
+          "customerNamePattern": "${customerName}",
+          "customerCacheExpiration": 300,
+          "createCustomerIfNotExists": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 302,
+          "layoutY": 148
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Validacion",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.nombreEntidadNuevo=msg.nombreEntidad;\nmetadata.tipoEntidadNuevo=msg.tipoEntidad;\nmetadata.subtipoEntidadNuevo=msg.subtipoEntidad;\nmetadata.padreEntidadId=msg.padreEntidadId;\nmetadata.padreEntidadNombre=msg.padreEntidadNombre;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
         }
       },
       {
@@ -122,112 +219,57 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 302,
-          "layoutY": 148
+          "layoutX": 575,
+          "layoutY": 147
         },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "Validacion",
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Customer",
         "debugMode": true,
         "configuration": {
-          "jsScript": "metadata.nombreEntidadNuevo=msg.nombreEntidad;\nmetadata.tipoEntidadNuevo=msg.tipoEntidad;\nmetadata.subtipoEntidadNuevo=msg.subtipoEntidad;\nmetadata.padreEntidadId=msg.padreEntidadId;\nmetadata.padreEntidadNombre=msg.padreEntidadNombre;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 48,
-          "layoutY": 645
-        },
-        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
-        "name": "Asignar al Customer",
-        "debugMode": true,
-        "configuration": {
-          "customerNamePattern": "${customerName}",
-          "customerCacheExpiration": 300,
-          "createCustomerIfNotExists": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 315,
-          "layoutY": 643
-        },
-        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
-        "name": "Relacion con Customer",
-        "debugMode": true,
-        "configuration": {
-          "direction": "FROM",
-          "relationType": "${entityId}",
-          "entityType": "CUSTOMER",
-          "entityNamePattern": "${customerName}",
-          "entityTypePattern": null,
-          "entityCacheExpiration": 300,
-          "createEntityIfNotExists": false,
-          "changeOriginatorToRelatedEntity": false,
-          "removeCurrentRelations": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 44,
-          "layoutY": 445
-        },
-        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
-        "name": "crearActivo",
-        "debugMode": true,
-        "configuration": {
-          "direction": "TO",
-          "relationType": "Contains",
-          "entityType": "ASSET",
-          "entityNamePattern": "${nombreEntidadNuevoCompleto}",
-          "entityTypePattern": "${subtipoEntidadNuevo}",
-          "entityCacheExpiration": 5,
-          "createEntityIfNotExists": true,
-          "changeOriginatorToRelatedEntity": true,
-          "removeCurrentRelations": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 304,
-          "layoutY": 242
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "prefijo nombreCustomer",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "msg.nombreEntidadNuevoCompleto=metadata.customerName+\"_\"+metadata.nombreEntidadNuevo;\nmetadata.nombreEntidadNuevoCompleto=metadata.customerName+\"_\"+metadata.nombreEntidadNuevo;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1079,
-          "layoutY": 356
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
-        "name": "Campos del nuevo",
-        "debugMode": true,
-        "configuration": {
-          "fieldsMapping": {
-            "id": "entityId"
+          "originatorSource": "CUSTOMER",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
           }
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 1062,
-          "layoutY": 278
+          "layoutX": 517,
+          "layoutY": 363
         },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "POST ATTRIBUTES",
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "Activo o Dispositivos?",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var msg={'nombreEntidad':metadata.nombreEntidadNuevo,\n'tipoEntidad':metadata.subtipoEntidadNuevo,\n'padreEntidad':metadata.padreEntidadNombre};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+          "jsScript": "if (metadata.tipoEntidadNuevo=='ASSET'){\n    return ['Activo'];\n}else if (metadata.tipoEntidadNuevo=='DEVICE'){\n    return ['Dispositivo'];\n}\n"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 807,
-          "layoutY": 352
+          "layoutX": 49,
+          "layoutY": 242
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "Nombre del originador",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "name": "customerName"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 45,
+          "layoutY": 545
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
         "name": "Guardar Atributos",
@@ -238,162 +280,120 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 807,
-          "layoutY": 437
+          "layoutX": 321,
+          "layoutY": 443
         },
-        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
-        "name": "Asignar al Customer",
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "POST ATTRIBUTES",
         "debugMode": true,
         "configuration": {
-          "customerNamePattern": "${customerName}",
-          "customerCacheExpiration": 300,
-          "createCustomerIfNotExists": false
+          "jsScript": "var msg={'nombreEntidad':metadata.nombreEntidadNuevo,\n'tipoEntidad':metadata.subtipoEntidadNuevo,\n'padreEntidad':metadata.padreEntidadNombre};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 1083,
-          "layoutY": 438
+          "layoutX": 311,
+          "layoutY": 547
         },
-        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
-        "name": "Relacion con Customer",
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "Campos del nuevo",
         "debugMode": true,
         "configuration": {
-          "direction": "FROM",
-          "relationType": "${entityId}",
-          "entityType": "CUSTOMER",
-          "entityNamePattern": "${customerName}",
-          "entityTypePattern": null,
-          "entityCacheExpiration": 300,
-          "createEntityIfNotExists": false,
-          "changeOriginatorToRelatedEntity": false,
-          "removeCurrentRelations": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 804,
-          "layoutY": 280
-        },
-        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
-        "name": "crearDispositivo",
-        "debugMode": true,
-        "configuration": {
-          "direction": "TO",
-          "relationType": "Contains",
-          "entityType": "DEVICE",
-          "entityNamePattern": "${nombreEntidadNuevoCompleto}",
-          "entityTypePattern": "${subtipoEntidadNuevo}",
-          "entityCacheExpiration": 5,
-          "createEntityIfNotExists": false,
-          "changeOriginatorToRelatedEntity": true,
-          "removeCurrentRelations": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 515,
-          "layoutY": 285
-        },
-        "type": "org.thingsboard.rule.engine.action.TbCreateEntityNode",
-        "name": "crear",
-        "debugMode": true,
-        "configuration": {
-          "claveNombreEntidad": "nombreEntidadNuevoCompleto",
-          "claveTipoEntidad": "tipoEntidad",
-          "claveSubtipoEntidad": "subtipoEntidad"
+          "fieldsMapping": {
+            "id": "entityId"
+          }
         }
       }
     ],
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 8,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 1,
-        "toIndex": 2,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 0,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 3,
-        "toIndex": 11,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 4,
-        "toIndex": 10,
-        "type": "Activo"
-      },
-      {
-        "fromIndex": 4,
-        "toIndex": 17,
-        "type": "Dispositivo"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 3,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 6,
-        "toIndex": 18,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 7,
-        "toIndex": 5,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 8,
-        "toIndex": 9,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 10,
-        "toIndex": 1,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 11,
-        "toIndex": 6,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 15,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 13,
         "toIndex": 14,
         "type": "Success"
       },
       {
-        "fromIndex": 14,
+        "fromIndex": 1,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
         "toIndex": 12,
         "type": "Success"
       },
       {
-        "fromIndex": 15,
-        "toIndex": 16,
+        "fromIndex": 8,
+        "toIndex": 17,
         "type": "Success"
       },
       {
-        "fromIndex": 17,
+        "fromIndex": 10,
+        "toIndex": 9,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
         "toIndex": 13,
         "type": "Success"
       },
       {
+        "fromIndex": 12,
+        "toIndex": 0,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 15,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 14,
+        "toIndex": 8,
+        "type": "Activo"
+      },
+      {
+        "fromIndex": 14,
+        "toIndex": 1,
+        "type": "Dispositivo"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 16,
+        "toIndex": 18,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 16,
+        "type": "Success"
+      },
+      {
         "fromIndex": 18,
-        "toIndex": 4,
+        "toIndex": 10,
         "type": "Success"
       }
     ],

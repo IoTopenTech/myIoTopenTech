@@ -563,6 +563,63 @@
           "alarmsFetchSize": 100
         },
         "id": "59d678c9-f9c1-b54c-a024-7d38c9af50c3"
+      },
+      "c03ead73-2a16-7928-5c58-2d865b7345cc": {
+        "isSystemType": true,
+        "bundleAlias": "iotopentech",
+        "typeAlias": "downlink_digital",
+        "type": "latest",
+        "title": "New widget",
+        "sizeX": 7,
+        "sizeY": 7,
+        "config": {
+          "datasources": [
+            {
+              "type": "entity",
+              "dataKeys": [
+                {
+                  "name": "digital_in_2",
+                  "type": "timeseries",
+                  "label": "digital_in_2",
+                  "color": "#2196f3",
+                  "settings": {},
+                  "_hash": 0.9187961822828628
+                }
+              ],
+              "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#fff",
+          "color": "rgba(0, 0, 0, 0.87)",
+          "padding": "8px",
+          "settings": {
+            "outputChannel": 6
+          },
+          "title": "Downlink",
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "dropShadow": true,
+          "enableFullscreen": true,
+          "widgetStyle": {},
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400
+          },
+          "useDashboardTimewindow": true,
+          "displayTimewindow": true,
+          "showLegend": false,
+          "actions": {}
+        },
+        "id": "c03ead73-2a16-7928-5c58-2d865b7345cc"
       }
     },
     "states": {
@@ -609,6 +666,12 @@
                 "sizeY": 10,
                 "row": 11,
                 "col": 0
+              },
+              "c03ead73-2a16-7928-5c58-2d865b7345cc": {
+                "sizeX": 7,
+                "sizeY": 7,
+                "row": 2,
+                "col": 17
               }
             },
             "gridSettings": {
