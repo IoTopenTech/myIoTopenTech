@@ -16,7 +16,7 @@
 3.  Crear un bloque de HTML para la configuración del dispositivo. Por
     ejemplo, para configurar los umbrales de las alarmas. Este bloque
     de código se almacenará en un atributo de cada customer con el
-    ombre config\_V02\_002, y el sistema lo tomará de ahí para
+    nombre config\_V02\_002, y el sistema lo tomará de ahí para
     mostrarlo en el panel de configuración de este modo
 
 ![](.//media/image1.png)
