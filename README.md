@@ -28,7 +28,7 @@ Procedimiento (todo esto se realizará automáticamente en breve gracias a la co
         * nombreEntidad
       
             ```
-            ROOT
+            _ROOT
             ```       
     
         * tipoEntidad
@@ -48,5 +48,6 @@ Procedimiento (todo esto se realizará automáticamente en breve gracias a la co
     4. editarEntidad
     5. crearEntidad
     6. configurarEntidad
-    7. Root Rule Chain (convertir esta regla en la nueva regla raíz, y borrar la Root Rule Chain original).
+    7. reclamarDispositivo
+    8. Root Rule Chain (convertir esta regla en la nueva regla raíz, y borrar la Root Rule Chain original).
 
