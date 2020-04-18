@@ -8,8 +8,69 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 4,
+    "firstNodeIndex": 8,
     "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 770,
+          "layoutY": 647,
+          "description": "Esto he tenido que hacerlo porque a veces perdía la asignación."
+        },
+        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
+        "name": "reasignar al cliente",
+        "debugMode": true,
+        "configuration": {
+          "customerNamePattern": "${customerName}",
+          "customerCacheExpiration": 300,
+          "createCustomerIfNotExists": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 551,
+          "layoutY": 481
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararMensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var mensaje = {};\nmensaje.nombreActual=metadata.customerName+'_'+metadata.ss_nombreEntidad;\nmensaje.tipoEntidad=metadata.tipoEntidad;\nmensaje.subtipoEntidad=metadata.tipoEntidadNuevo;\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 549,
+          "layoutY": 563
+        },
+        "type": "org.thingsboard.rule.engine.action.TbRetypeEntityNode",
+        "name": "retipar",
+        "debugMode": true,
+        "configuration": {
+          "claveNombreEntidad": "nombreActual",
+          "claveTipoEntidad": "tipoEntidad",
+          "claveSubtipoEntidad": "subtipoEntidad"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 300,
+          "layoutY": 479
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
+        "name": "asignarPadre",
+        "debugMode": true,
+        "configuration": {
+          "direction": "FROM",
+          "relationType": "Contains",
+          "entityType": "ASSET",
+          "entityNamePattern": "${padreEntidadNuevo}",
+          "entityTypePattern": "${tipoPadreEntidadNuevo}",
+          "entityCacheExpiration": 300,
+          "createEntityIfNotExists": false,
+          "changeOriginatorToRelatedEntity": false,
+          "removeCurrentRelations": false
+        }
+      },
       {
         "additionalInfo": {
           "layoutX": 299,
@@ -95,7 +156,7 @@
         "name": "Validacion",
         "debugMode": true,
         "configuration": {
-          "jsScript": "metadata.nombreEntidadNuevo = msg.nombreEntidad;\nmetadata.tipoEntidadNuevo = msg.subtipoEntidad;\nmetadata.tipoEntidad = msg.tipoEntidad;\nmetadata.idEntidad = msg.idEntidad;\nmetadata.padreEntidadNuevo = msg.padreEntidad;\nmetadata.tipoPadreEntidadNuevo = msg.tipoPadreEntidad;\nmetadata.alarmas = msg.alarmas;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "jsScript": "//Esto lo hago porque TB intenta convertir siempre en número\n//por lo que el nombre 001 pasa a ser 1\nmsg.nombreEntidad=msg.nombreEntidad.substr(0);\nmetadata.nombreEntidadNuevo = msg.nombreEntidad;\nmetadata.tipoEntidadNuevo = msg.subtipoEntidad;\nmetadata.tipoEntidad = msg.tipoEntidad;\nmetadata.idEntidad = msg.idEntidad;\nmetadata.padreEntidadNuevo = msg.padreEntidad;\nmetadata.tipoPadreEntidadNuevo = msg.tipoPadreEntidad;\nmetadata.alarmas = msg.alarmas;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       },
       {
@@ -178,7 +239,7 @@
         "name": "prepararMensaje",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var mensaje = {};\nmensaje.nombreActual=metadata.customerName+'_'+metadata.ss_nombreEntidad;\nmensaje.nombreNuevo=metadata.customerName+'_'+metadata.nombreEntidadNuevo;\nmensaje.tipoEntidad=metadata.tipoEntidad;\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};"
+          "jsScript": "var mensaje = {};\nmensaje.nombreActual=metadata.customerName+metadata.ss_nombreEntidad;\nmensaje.nombreNuevo=metadata.customerName+metadata.nombreEntidadNuevo;\nmensaje.tipoEntidad=metadata.tipoEntidad;\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};"
         }
       },
       {
@@ -206,129 +267,88 @@
         "configuration": {
           "jsScript": "var salidas =[];\nif (msg.hasOwnProperty('nombreEntidad')) {\n    salidas.push('renombrar');\n}\nif (msg.hasOwnProperty('tipoEntidad')) {\n    salidas.push('retipar');\n}\n\nreturn salidas;"
         }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 551,
-          "layoutY": 481
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "prepararMensaje",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var mensaje = {};\nmensaje.nombreActual=metadata.customerName+'_'+metadata.ss_nombreEntidad;\nmensaje.tipoEntidad=metadata.tipoEntidad;\nmensaje.subtipoEntidad=metadata.tipoEntidadNuevo;\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};\n"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 549,
-          "layoutY": 563
-        },
-        "type": "org.thingsboard.rule.engine.action.TbRetypeEntityNode",
-        "name": "retipar",
-        "debugMode": true,
-        "configuration": {
-          "claveNombreEntidad": "nombreActual",
-          "claveTipoEntidad": "tipoEntidad",
-          "claveSubtipoEntidad": "subtipoEntidad"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 300,
-          "layoutY": 479
-        },
-        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
-        "name": "asignarPadre",
-        "debugMode": true,
-        "configuration": {
-          "direction": "FROM",
-          "relationType": "Contains",
-          "entityType": "ASSET",
-          "entityNamePattern": "${padreEntidadNuevo}",
-          "entityTypePattern": "${tipoPadreEntidadNuevo}",
-          "entityCacheExpiration": 300,
-          "createEntityIfNotExists": false,
-          "changeOriginatorToRelatedEntity": false,
-          "removeCurrentRelations": false
-        }
       }
     ],
     "connections": [
       {
-        "fromIndex": 0,
-        "toIndex": 15,
-        "type": "Success"
-      },
-      {
         "fromIndex": 1,
-        "toIndex": 3,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 9,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 3,
         "toIndex": 2,
         "type": "Success"
       },
       {
         "fromIndex": 4,
-        "toIndex": 5,
+        "toIndex": 3,
         "type": "Success"
       },
       {
         "fromIndex": 5,
-        "toIndex": 1,
+        "toIndex": 7,
         "type": "Success"
       },
       {
         "fromIndex": 6,
-        "toIndex": 12,
+        "toIndex": 13,
         "type": "Success"
       },
       {
         "fromIndex": 7,
         "toIndex": 6,
-        "type": "guardarAtributos"
-      },
-      {
-        "fromIndex": 7,
-        "toIndex": 0,
-        "type": "cambiarPadre"
+        "type": "Success"
       },
       {
         "fromIndex": 8,
-        "toIndex": 7,
+        "toIndex": 9,
         "type": "Success"
       },
       {
         "fromIndex": 9,
-        "toIndex": 8,
+        "toIndex": 5,
         "type": "Success"
       },
       {
         "fromIndex": 10,
+        "toIndex": 16,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 4,
+        "type": "cambiarPadre"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 10,
+        "type": "guardarAtributos"
+      },
+      {
+        "fromIndex": 12,
         "toIndex": 11,
         "type": "Success"
       },
       {
-        "fromIndex": 12,
-        "toIndex": 13,
-        "type": "retipar"
+        "fromIndex": 13,
+        "toIndex": 12,
+        "type": "Success"
       },
       {
-        "fromIndex": 12,
-        "toIndex": 10,
+        "fromIndex": 14,
+        "toIndex": 15,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 0,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 16,
+        "toIndex": 14,
         "type": "renombrar"
       },
       {
-        "fromIndex": 13,
-        "toIndex": 14,
-        "type": "Success"
+        "fromIndex": 16,
+        "toIndex": 1,
+        "type": "retipar"
       }
     ],
     "ruleChainConnections": null

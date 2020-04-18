@@ -578,12 +578,12 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "digital_in_2",
+                  "name": "digital_in_3",
                   "type": "timeseries",
-                  "label": "digital_in_2",
+                  "label": "digital_in_3",
                   "color": "#2196f3",
                   "settings": {},
-                  "_hash": 0.9187961822828628
+                  "_hash": 0.4521971134543328
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -698,7 +698,7 @@
           "stateEntityParamName": null,
           "defaultStateEntity": {
             "entityType": "DEVICE",
-            "id": "c0ed5650-5e47-11ea-914a-d3f42a2c349b"
+            "id": "8c7afc40-80a9-11ea-b6f7-395813a5429b"
           }
         }
       }

@@ -1,0 +1,214 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "reclamarDispositivo",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 7,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 550,
+          "layoutY": 191
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
+        "name": "relacion con ROOT",
+        "debugMode": true,
+        "configuration": {
+          "direction": "FROM",
+          "relationType": "Contains",
+          "entityType": "ASSET",
+          "entityNamePattern": "${nombreROOT}",
+          "entityTypePattern": "ROOT",
+          "entityCacheExpiration": 300,
+          "createEntityIfNotExists": false,
+          "changeOriginatorToRelatedEntity": false,
+          "removeCurrentRelations": true
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 282,
+          "layoutY": 191
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Nombre_ROOT",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.nombreROOT=metadata.customerName+\"_ROOT\";\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 277,
+          "layoutY": 271
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "POST_ATTRIBUTES_REQUEST",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\nvar nombreEntidadAbreviado=\"_\"+metadata.nombreEntidad.substring(9);\nmsg={\"padreEntidad\":metadata.nombreROOT,\"nombreEntidad\":nombreEntidadAbreviado,\"tipoEntidad\":metadata.tipoEntidad};\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 545,
+          "layoutY": 270
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar atributos",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 554,
+          "layoutY": 358
+        },
+        "type": "org.thingsboard.rule.engine.action.TbRenameEntityNode",
+        "name": "renombrar",
+        "debugMode": true,
+        "configuration": {
+          "claveNombreActual": "nombreActual",
+          "claveNombreNuevo": "nombreNuevo",
+          "claveTipoEntidad": "tipoEntidad"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 280,
+          "layoutY": 360
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararMensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var mensaje = {};\nvar nombreEntidadAbreviado=metadata.nombreEntidad.substring(9);\nmensaje.nombreActual=metadata.nombreEntidad;\nmensaje.nombreNuevo=metadata.customerName+'_'+nombreEntidadAbreviado;\nmensaje.tipoEntidad=\"DEVICE\";\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 553,
+          "layoutY": 23
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Originador=Customer",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "CUSTOMER",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 273,
+          "layoutY": 21
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Validacion",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.nombreEntidad = msg.nombreEntidad;\nmetadata.tipoEntidad = msg.subtipoEntidad;\nmetadata.idEntidad = msg.idEntidad;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 280,
+          "layoutY": 111
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "originador?",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "name": "customerName"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 551,
+          "layoutY": 113
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
+        "name": "Relacion con customer",
+        "debugMode": true,
+        "configuration": {
+          "direction": "TO",
+          "relationType": "${idEntidad}",
+          "entityType": "DEVICE",
+          "entityNamePattern": "${nombreEntidad}",
+          "entityTypePattern": "${subtipoEntidad}",
+          "entityCacheExpiration": 300,
+          "createEntityIfNotExists": false,
+          "changeOriginatorToRelatedEntity": true,
+          "removeCurrentRelations": true
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 0,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 8,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 9,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 9,
+        "toIndex": 1,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}

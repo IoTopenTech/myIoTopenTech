@@ -12,8 +12,8 @@
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 515,
-          "layoutY": 285
+          "layoutX": 207,
+          "layoutY": 360
         },
         "type": "org.thingsboard.rule.engine.action.TbCreateEntityNode",
         "name": "crear",
@@ -99,7 +99,7 @@
         "name": "POST ATTRIBUTES",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var msg={'nombreEntidad':metadata.nombreEntidadNuevo,\n'tipoEntidad':metadata.subtipoEntidadNuevo,\n'padreEntidad':metadata.padreEntidadNombre};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+          "jsScript": "\nvar msg={'nombreEntidad':String(metadata.nombreEntidadNuevo),\n'tipoEntidad':metadata.subtipoEntidadNuevo,\n'padreEntidad':metadata.padreEntidadNombre};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
         }
       },
       {
@@ -125,7 +125,7 @@
         "name": "prefijo nombreCustomer",
         "debugMode": true,
         "configuration": {
-          "jsScript": "msg.nombreEntidadNuevoCompleto=metadata.customerName+\"_\"+metadata.nombreEntidadNuevo;\nmetadata.nombreEntidadNuevoCompleto=metadata.customerName+\"_\"+metadata.nombreEntidadNuevo;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+          "jsScript": "msg.nombreEntidadNuevoCompleto=metadata.customerName+metadata.nombreEntidadNuevo;\nmetadata.nombreEntidadNuevoCompleto=metadata.customerName+metadata.nombreEntidadNuevo;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
         }
       },
       {
@@ -191,13 +191,13 @@
         "name": "Validacion",
         "debugMode": true,
         "configuration": {
-          "jsScript": "metadata.nombreEntidadNuevo=msg.nombreEntidad;\nmetadata.tipoEntidadNuevo=msg.tipoEntidad;\nmetadata.subtipoEntidadNuevo=msg.subtipoEntidad;\nmetadata.padreEntidadId=msg.padreEntidadId;\nmetadata.padreEntidadNombre=msg.padreEntidadNombre;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+          "jsScript": "//Esto lo hago porque TB intenta convertir siempre en número\n//por lo que el nombre 001 pasa a ser 1\nmsg.nombreEntidad=msg.nombreEntidad.substr(0);\nmetadata.nombreEntidadNuevo=msg.nombreEntidad;\nmetadata.tipoEntidadNuevo=msg.tipoEntidad;\nmetadata.subtipoEntidadNuevo=msg.subtipoEntidad;\nmetadata.padreEntidadId=msg.padreEntidadId;\nmetadata.padreEntidadNombre=msg.padreEntidadNombre;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 51,
-          "layoutY": 353
+          "layoutX": 576,
+          "layoutY": 244
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "Padre",
@@ -242,8 +242,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 517,
-          "layoutY": 363
+          "layoutX": 509,
+          "layoutY": 361
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
         "name": "Activo o Dispositivos?",
@@ -368,13 +368,13 @@
       },
       {
         "fromIndex": 14,
-        "toIndex": 8,
-        "type": "Activo"
+        "toIndex": 1,
+        "type": "Dispositivo"
       },
       {
         "fromIndex": 14,
-        "toIndex": 1,
-        "type": "Dispositivo"
+        "toIndex": 8,
+        "type": "Activo"
       },
       {
         "fromIndex": 15,
