@@ -5,7 +5,7 @@
 2.  Crear un dashboard para tu tipo de dispositivo llamado
     Dispositivo\_V02\_002. Puedes usar como referencia el del nodo
     V02\_001 que hay en el repositorio
-    ([[https://github.com/IoTopenTech/ThingsBoard-TTN-Edition/tree/master/dashboards]{.underline}](https://github.com/IoTopenTech/ThingsBoard-TTN-Edition/tree/master/dashboards)).
+    ([[https://github.com/IoTopenTech/ThingsBoard-TTN-Edition/tree/master/dashboards]](https://github.com/IoTopenTech/ThingsBoard-TTN-Edition/tree/master/dashboards)).
     El sistema está preparado para que cuando el usuario haga clic en
     el dashboard \"Panel de control\" sobre un dispositivo de tipo
     \"identificador\" se abra automáticamente el dashboard
