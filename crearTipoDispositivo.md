@@ -2,23 +2,24 @@
     se te asigne un identificador de dispositivo, del tipo VXX\_XXX (por
     ejemplo, V02\_002).
 
-2.  Crear un dashboard para tu dispositivo llamado
-    > Dispositivo\_V02\_002. Puedes usar como referencia el del nodo
-    > V02\_001 que hay en el repositorio
-    > ([[https://github.com/IoTopenTech/ThingsBoard-TTN-Edition/tree/master/dashboards]{.underline}](https://github.com/IoTopenTech/ThingsBoard-TTN-Edition/tree/master/dashboards)).
-    > El sistema está preparado para que cuando el usuario haga clic en
-    > el dashboard \"Panel de control\" sobre un dispositivo de tipo
-    > \"identificador\" se abra automáticamente el dashboard
-    > \"Dispositivo\_identificador\", que es el que tú vas a crear.
+2.  Crear un dashboard para tu tipo de dispositivo llamado
+    Dispositivo\_V02\_002. Puedes usar como referencia el del nodo
+    V02\_001 que hay en el repositorio
+    ([[https://github.com/IoTopenTech/ThingsBoard-TTN-Edition/tree/master/dashboards]{.underline}](https://github.com/IoTopenTech/ThingsBoard-TTN-Edition/tree/master/dashboards)).
+    El sistema está preparado para que cuando el usuario haga clic en
+    el dashboard \"Panel de control\" sobre un dispositivo de tipo
+    \"identificador\" se abra automáticamente el dashboard
+    \"Dispositivo\_identificador\", que es el que tú vas a crear.
+    Asignar el dashboard al customer.
+    
 
 3.  Crear un bloque de HTML para la configuración del dispositivo. Por
-    > ejemplo, para configurar los umbrales de las alarmas. Este bloque
-    > de código se almacenará en un atributo de cada customer con el
-    > nombre config\_V02\_002, y el sistema lo tomará de ahí para
-    > mostrarlo en el panel de configuración de este modo
+    ejemplo, para configurar los umbrales de las alarmas. Este bloque
+    de código se almacenará en un atributo de cada customer con el
+    ombre config\_V02\_002, y el sistema lo tomará de ahí para
+    mostrarlo en el panel de configuración de este modo
 
-![](.//media/image1.png){width="5.666666666666667in"
-height="5.979166666666667in"}
+![](.//media/image1.png)
 
 A continuación, se muestra el bloque de código correspondiente al tipo
 de nodo V02\_001 que puede servir como referencia:
@@ -122,42 +123,36 @@ class=\"ng-scope\"\>inactividad\</sustituir-notificaciones\>\
 Básicamente, hay que inventarse un nombre para cada alarma; por ejemplo,
 cambioDeEstado
 
-![](.//media/image2.png){width="5.905555555555556in"
-height="0.6270833333333333in"}
+![](.//media/image2.png)
 
 Y un nombre para la variable en la que se quiera almacenar el umbral o
 disparador de ese tipo de alarma; por ejemplo, para el caso de
 cambioDeEstado en el tipo V02\_001 se ha llamado trigger
 
-![](.//media/image3.png){width="5.905555555555556in"
-height="1.2013888888888888in"}
+![](.//media/image3.png)
 
 Otro ejemplo; en el tipo V02\_001 se ha creado una alarma llamada
 nivelDeBateria y la variable para su umbral se ha llamado umbralBateria.
 
-![](.//media/image4.png){width="5.905555555555556in"
-height="1.0256944444444445in"}
+![](.//media/image4.png)
 
 Y lo único peculiar que queda por explicar de este bloque de código es
 que, al final de cada alarma, se tiene que incluir un elemento de este
 tipo en el que el texto debe coincidir con el nombre que se eligió para
 la alarma; en este caso nivelDeBateria.
 
-![](.//media/image5.png){width="5.905555555555556in"
-height="0.3277777777777778in"}
+![](.//media/image5.png)
 
 El sistema reconocerá este elemento y lo sustituirá automáticamente por
 el código que permite configurar las notificaciones:
 
-![](.//media/image6.png){width="5.239583333333333in"
-height="5.729166666666667in"}
+![](.//media/image6.png)
 
 4.  Crear la cadena de reglas para gestionar tu dispositivo en
     particular; conviene que se llame V02\_002. Puede usarse como
     referencia la del dispositivo V02\_001, que muestro debajo
 
-![](.//media/image7.png){width="5.905555555555556in"
-height="1.3555555555555556in"}
+![](.//media/image7.png)
 
 Esto realmente es muy sencillo; básicamente lo único que hace es cargar
 las alarmas (cuando el customer configura una alarma usando el
@@ -165,14 +160,12 @@ formulario que se creó en el paso anterior, se añade automáticamente un
 atributo en el dispositivo llamado alarma\_V02\_001). Por eso, el primer
 nodo carga ese atributo.
 
-![](.//media/image8.png){width="5.905555555555556in"
-height="2.9715277777777778in"}
+![](.//media/image8.png)
 
 El nodo siguiente es el principal; en él se comparan los umbrales de las
 alarmas con los valores recibidos en la telemetría
 
-![](.//media/image9.png){width="5.905555555555556in"
-height="1.4590277777777778in"}
+![](.//media/image9.png)
 
 Y el resto es muy simple; básicamente en cada rama de cada tipo de
 alarma se verifica si la alarma está activada, se configura el nombre
