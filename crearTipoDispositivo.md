@@ -127,7 +127,7 @@ el código que permite configurar las notificaciones:
 ![](.//media/image6.png)
 
 4.  Crear la cadena de reglas para gestionar tu dispositivo en
-    particular; conviene que se llame V02\_002. Puede usarse como
+    particular; conviene que se llame como el tipo de dispositivo (en nuestro ejemplo V02\_002). Puede usarse como
     referencia la del dispositivo V02\_001, que muestro debajo
 
 ![](.//media/image7.png)
