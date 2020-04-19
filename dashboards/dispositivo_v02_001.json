@@ -696,10 +696,7 @@
           "type": "stateEntity",
           "resolveMultiple": false,
           "stateEntityParamName": null,
-          "defaultStateEntity": {
-            "entityType": "DEVICE",
-            "id": "8c7afc40-80a9-11ea-b6f7-395813a5429b"
-          }
+          "defaultStateEntity": null
         }
       }
     },

@@ -20,7 +20,7 @@
         "debugMode": true,
         "configuration": {
           "fieldsMapping": {
-            "type": "subtipoDispositivo"
+            "type": "subtipoEntidad"
           }
         }
       },
@@ -70,7 +70,7 @@
         "name": "Validacion",
         "debugMode": true,
         "configuration": {
-          "jsScript": "metadata.idEntidad = msg.idEntidad;\nif (msg.hasOwnProperty('alarmas')) {\n    metadata.alarmas = msg.alarmas;\n}\n\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "jsScript": "metadata.idEntidad = msg.idEntidad;\nif (msg.hasOwnProperty('configuracion')) {\n    metadata.configuracion = msg.configuracion;\n}\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       },
       {
@@ -110,18 +110,6 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 289,
-          "layoutY": 330
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "POST_ATTRIBUTES_REQUEST",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
-        }
-      },
-      {
-        "additionalInfo": {
           "layoutX": 570,
           "layoutY": 202
         },
@@ -129,14 +117,14 @@
         "name": "prepararMensaje",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var mensaje = {};\n\n//Las alarmas se guardan siempre\nif (metadata.hasOwnProperty('alarmas')) {\n    mensaje[\"alarma_\" + metadata.subtipoDispositivo] =\n        metadata.alarmas;\n    //Si incluye una alarma de inactividad tengo que actualizar el parámetro del servidor inactivityTimeout\n    var obj = JSON.parse(metadata.alarmas);\n    if (obj.hasOwnProperty('inactividad')) {\n\n        mensaje.inactivityTimeout = parseInt(obj.inactividad\n            .umbralInactividad) * 1000;\n    }\n}\n\nmsg = mensaje;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\nvar mensaje = {};\n//Las alarmas se guardan siempre\nvar configuracion = JSON.parse(metadata.configuracion);\n\n\n\nfor (var clave in configuracion) {\n    if (clave=='__alarmas') {\n        mensaje[\"__alarma_\" + metadata.subtipoEntidad] =\n            configuracion.__alarmas;\n        //Si incluye una alarma de inactividad tengo que actualizar el parámetro del servidor inactivityTimeout\n        if (clave=='inactividad') {\n            mensaje.inactivityTimeout = parseInt(configuracion.__alarmas.inactividad.umbralInactividad) * 1000;\n        }\n    }else{\n        mensaje[clave]=configuracion[clave];\n    }\n}\nreturn {\n    msg: mensaje,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       }
     ],
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 7,
+        "toIndex": 6,
         "type": "Success"
       },
       {
@@ -162,11 +150,6 @@
       {
         "fromIndex": 6,
         "toIndex": 5,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 7,
-        "toIndex": 6,
         "type": "Success"
       }
     ],

@@ -177,7 +177,8 @@
             $curl_post_data = array(
                 "tiposDeDispositivos" => TIPOS_DE_DISPOSITIVOS,
                 "tiposDeActivos" => TIPOS_DE_ACTIVOS,
-				"V02_001_config"=> V02_001_CONFIG
+				"V02_001_config"=> V02_001_CONFIG,
+				"IMAGE01_config"=> IMAGE01_CONFIG
             );
 
             curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
