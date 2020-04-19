@@ -24,7 +24,7 @@
 A continuación, se muestra el bloque de código correspondiente al tipo
 de nodo V02\_001 que puede servir como referencia:
 
-´´´´
+```
 <div class="md-body-1" style="padding-bottom: 10px; color: rgba(0,0,0,0.57);"> Coordenadas</div>
 <div class="body">
     <div class="row" layout="row" layout-align="start center">
@@ -92,7 +92,7 @@ de nodo V02\_001 que puede servir como referencia:
         </div>
     </div>
 </div>
-´´´´
+```
 
 Básicamente, hay que inventarse un nombre para cada alarma; por ejemplo,
 cambioDeEstado
