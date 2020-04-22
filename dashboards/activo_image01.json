@@ -9,7 +9,7 @@
         "type": "latest",
         "title": "New widget",
         "sizeX": 17,
-        "sizeY": 10,
+        "sizeY": 12,
         "config": {
           "datasources": [
             {
@@ -44,6 +44,22 @@
                   "color": "#607d8b",
                   "settings": {},
                   "_hash": 0.3396511287998052
+                },
+                {
+                  "name": "name",
+                  "type": "entityField",
+                  "label": "Name",
+                  "color": "#ffc107",
+                  "settings": {},
+                  "_hash": 0.42745472625459713
+                },
+                {
+                  "name": "tooltip",
+                  "type": "attribute",
+                  "label": "tooltip",
+                  "color": "#607d8b",
+                  "settings": {},
+                  "_hash": 0.4677845636821747
                 }
               ],
               "entityAliasId": "3fb0aab2-16f2-c72b-009e-a9cad51f3554"
@@ -60,7 +76,6 @@
           "padding": "8px",
           "settings": {
             "showLabel": true,
-            "label": "${entityName}",
             "tooltipPattern": "<b>${entityName}</b><br/><br/><b>X Pos:</b> ${xPos:2}<br/><b>Y Pos:</b> ${yPos:2}<br/><b>Temperature:</b> ${temperature} °C<br/><small>See advanced settings for details</small>",
             "markerImageSize": 34,
             "useColorFunction": true,
@@ -82,17 +97,20 @@
             "markerOffsetY": 1,
             "showTooltip": true,
             "autocloseTooltip": true,
-            "labelFunction": "var deviceType = dsData[dsIndex]['deviceType'];\r\nif (typeof deviceType !== undefined) {\r\n    if (deviceType == \"energy meter\") {\r\n        return '<span style=\"color:orange;\">${entityName}, ${energy:2} kWt</span>';\r\n    } else if (deviceType == \"thermometer\") {\r\n        return '<span style=\"color:blue;\">${entityName}, ${temperature:2} °C</span>';\r\n    }\r\n}",
-            "tooltipFunction": "var deviceType = dsData[dsIndex]['deviceType'];\r\nif (typeof deviceType !== undefined) {\r\n    if (deviceType == \"energy meter\") {\r\n        return '<b>${entityName}</b><br/><b>Energy:</b> ${energy:2} kWt<br/>';\r\n    } else if (deviceType == \"thermometer\") {\r\n        return '<b>${entityName}</b><br/><b>Temperature:</b> ${temperature:2} °C<br/>';\r\n    }\r\n}",
+            "labelFunction": "\r\nreturn '<span style=\"color:blue;\">'+dsData[dsIndex]['Name'].split(\"_\")[1]+'</span>';\r\n/*var deviceType = dsData[dsIndex]['deviceType'];\r\nif (typeof deviceType !== undefined) {\r\n    if (deviceType == \"energy meter\") {\r\n        return '<span style=\"color:orange;\">${entityName}, ${energy:2} kWt</span>';\r\n    } else if (deviceType == \"thermometer\") {\r\n        return '<span style=\"color:blue;\">${entityName}, ${temperature:2} °C</span>';\r\n    }\r\n}\r\n*/",
+            "tooltipFunction": "return '<b>' + dsData[dsIndex]['Name'].split(\"_\")[1] +\r\n    '</b><br/>' + dsData[dsIndex]['tooltip'] +\r\n    '<br/><link-act name=\"tooltipClic\">Ver dispositivo</link-act>';\r\n\r\n/*\r\nvar deviceType = dsData[dsIndex]['deviceType'];\r\nif (typeof deviceType !== undefined) {\r\n    if (deviceType == \"energy meter\") {\r\n        return '<b>${entityName}</b><br/><b>Energy:</b> ${energy:2} kWt<br/>';\r\n    } else if (deviceType == \"thermometer\") {\r\n        return '<b>${entityName}</b><br/><b>Temperature:</b> ${temperature:2} °C<br/>';\r\n    }\r\n}\r\n*/",
             "showTooltipAction": "click",
             "imageUrlAttribute": "__urlImagenFondo",
             "imageEntityAlias": "activo",
+            "useLabelFunction": true,
+            "label": "${entityName}",
+            "useTooltipFunction": true,
             "defaultCenterPosition": [
               0,
               0
             ]
           },
-          "title": "New Image Map",
+          "title": "",
           "dropShadow": true,
           "enableFullscreen": true,
           "titleStyle": {
@@ -102,7 +120,18 @@
           "useDashboardTimewindow": true,
           "showLegend": false,
           "widgetStyle": {},
-          "actions": {},
+          "actions": {
+            "markerClick": [],
+            "tooltipAction": [
+              {
+                "id": "77b48576-1f6a-5bcf-9bb4-a1ff182c2e52",
+                "name": "tooltipClic",
+                "icon": "more_horiz",
+                "type": "custom",
+                "customFunction": "var $injector = widgetContext.$scope.$injector;\nvar attributeService = $injector.get('attributeService');\nvar userService = $injector.get('userService');\nvar vm = this;\nvm.currentUser = userService.getCurrentUser();\nvm.attributes = {};\n\nif (entityId.entityType == \"DEVICE\") {\n    $injector.get('deviceService').getDevice(entityId.id)\n        .then(\n            function(device) {\n                attributeService.getEntityAttributesValues(\n                    entityId.entityType, entityId.id,\n                    'SERVER_SCOPE').then(\n                    function(data) {\n                        if (data.length) {\n                            getEntityAttributes(data);\n                        }\n                        openDashboard('Dispositivo_'+vm.attributes['tipoEntidad']);\n                                              \n                    });\n\n\n            });\n} else {\n    //Es un activo\n    $injector.get('assetService').getAsset(entityId.id).then(\n        function(asset) {\n            \n            attributeService.getEntityAttributesValues(\n                entityId.entityType, entityId.id,\n                'SERVER_SCOPE').then(\n                function(data) {\n                    console.log(data);\n                    if (data.length) {\n                        getEntityAttributes(data);\n                    }\n                    \n                    openDashboard('Activo_'+vm.attributes['tipoEntidad']);\n                });\n\n\n        });\n}\n\nfunction getEntityAttributes(attributes) {\n    for (var i = 0; i < attributes.length; i++) {\n        vm.attributes[attributes[i].key] = attributes[i]\n            .value;\n    }\n}\n\nfunction openDashboard(nombrePanel) {\n    console.log(nombrePanel);\n    $injector.get('dashboardService').getCustomerDashboards(\n        currentUser.customerId, {\n            limit: 100\n        }, {}).then(\n        function(data) {\n            for (let clave in data.data) {\n                if (data.data[clave].name ==\n                    nombrePanel) {\n                    vm.destinationDashboardId = data\n                        .data[\n                            clave]\n                        .id.id;\n                }\n            }\n        }\n    ).then(\n        function() {\n            var stateObject = {};\n            stateObject.params = {};\n            stateObject.params.entityId = entityId;\n            stateObject.params.entityName = entityName;\n            console.log(widgetContext);\n            var params = {\n                dashboardId: destinationDashboardId,\n\n                state: widgetContext.aliasController\n                    .utils.objToBase64([\n                        stateObject\n                    ])\n            };\n            console.log(params);\n            userService.gotoDashboard(vm\n                .destinationDashboardId, params);\n        });\n}\n\nfunction openDashboardState(stateId) {\n    var params = {\n        entityId: entityId,\n        entityName: entityName\n    };\n\n\n    widgetContext.stateController.openState(stateId, params,\n        false);\n\n}"
+              }
+            ]
+          },
           "showTitleIcon": false,
           "titleIcon": null,
           "iconColor": "rgba(0, 0, 0, 0.87)",
@@ -111,6 +140,188 @@
           "displayTimewindow": true
         },
         "id": "77f18ed8-233b-7ad1-2cc2-e0c5df36f1ea"
+      },
+      "1e904dbb-b2e3-74ce-09a5-cc99c9cd37e1": {
+        "isSystemType": true,
+        "bundleAlias": "alarm_widgets",
+        "typeAlias": "alarms_table",
+        "type": "alarm",
+        "title": "New widget",
+        "sizeX": 17,
+        "sizeY": 11,
+        "config": {
+          "timewindow": {
+            "realtime": {
+              "interval": 1000,
+              "timewindowMs": 86400000
+            },
+            "aggregation": {
+              "type": "NONE",
+              "limit": 200
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgba(0, 0, 0, 0.87)",
+          "padding": "4px",
+          "settings": {
+            "enableSelection": true,
+            "enableSearch": true,
+            "displayDetails": true,
+            "allowAcknowledgment": true,
+            "allowClear": true,
+            "displayPagination": true,
+            "defaultPageSize": 10,
+            "defaultSortOrder": "-createdTime",
+            "enableSelectColumnDisplay": true,
+            "enableStatusFilter": true
+          },
+          "title": "New Alarms table",
+          "dropShadow": true,
+          "enableFullscreen": true,
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400,
+            "padding": "5px 10px 5px 10px"
+          },
+          "useDashboardTimewindow": false,
+          "showLegend": false,
+          "alarmSource": {
+            "type": "entity",
+            "dataKeys": [
+              {
+                "name": "createdTime",
+                "type": "alarm",
+                "label": "Created time",
+                "color": "#2196f3",
+                "settings": {},
+                "_hash": 0.7503842097905888
+              },
+              {
+                "name": "originator",
+                "type": "alarm",
+                "label": "Originator",
+                "color": "#4caf50",
+                "settings": {
+                  "columnWidth": "0px",
+                  "useCellContentFunction": true,
+                  "cellContentFunction": "return value.split(\"_\")[1];"
+                },
+                "_hash": 0.5617829993570278
+              },
+              {
+                "name": "type",
+                "type": "alarm",
+                "label": "Type",
+                "color": "#f44336",
+                "settings": {},
+                "_hash": 0.10725585591915032
+              },
+              {
+                "name": "severity",
+                "type": "alarm",
+                "label": "Severity",
+                "color": "#ffc107",
+                "settings": {},
+                "_hash": 0.7057802826353878
+              },
+              {
+                "name": "status",
+                "type": "alarm",
+                "label": "Status",
+                "color": "#607d8b",
+                "settings": {},
+                "_hash": 0.33958458584003526
+              }
+            ],
+            "entityAliasId": "189ad243-f222-e437-d20a-fedfffaca048",
+            "name": "alarms"
+          },
+          "alarmSearchStatus": "ANY",
+          "alarmsPollingInterval": 5,
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "widgetStyle": {},
+          "displayTimewindow": true,
+          "actions": {},
+          "datasources": [],
+          "alarmsMaxCountLoad": 0,
+          "alarmsFetchSize": 100
+        },
+        "id": "1e904dbb-b2e3-74ce-09a5-cc99c9cd37e1"
+      },
+      "c5a51edb-77e1-a7d8-5b9d-a7825ca29723": {
+        "isSystemType": true,
+        "bundleAlias": "cards",
+        "typeAlias": "entities_hierarchy",
+        "type": "latest",
+        "title": "New widget",
+        "sizeX": 7,
+        "sizeY": 10,
+        "config": {
+          "timewindow": {
+            "realtime": {
+              "interval": 1000,
+              "timewindowMs": 86400000
+            },
+            "aggregation": {
+              "type": "NONE",
+              "limit": 200
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "rgb(255, 255, 255)",
+          "color": "rgba(0, 0, 0, 0.87)",
+          "padding": "4px",
+          "settings": {
+            "nodeRelationQueryFunction": "/**\n\n// Function should return relations query object for current node used to fetch entity children.\n// Function can return 'default' string value. In this case default relations query will be used.\n\n// The following example code will construct simple relations query that will fetch relations of type 'Contains'\n// from the current entity.\n\nvar entity = nodeCtx.entity;\nvar query = {\n    parameters: {\n        rootId: entity.id.id,\n        rootType: entity.id.entityType,\n        direction: types.entitySearchDirection.from,\n        relationTypeGroup: \"COMMON\",\n        maxLevel: 1\n    },\n    filters: [{\n        relationType: \"Contains\",\n        entityTypes: []\n    }]\n};\nreturn query;\n\n**/\n",
+            "nodeHasChildrenFunction": "/**\n\n// Function should return boolean value indicating whether current node has children (whether it can be expanded).\n\n// The following example code will restrict entities hierarchy expansion up to third level.\n\nreturn nodeCtx.level <= 2;\n\n// The next example code will restrict entities expansion according to the value of example 'nodeHasChildren' attribute.\n\nvar data = nodeCtx.data;\nif (data.hasOwnProperty('nodeHasChildren') && data['nodeHasChildren'] !== null) {\n    return data['nodeHasChildren'] === 'true';\n} else {\n    return true;\n}\n  \n**/\n ",
+            "nodeTextFunction": "/**\n\n// Function should return text (can be HTML code) for the current node.\n\n// The following example code will generate node text consisting of entity name and temperature if temperature value is present in entity attributes/timeseries.\n\nvar data =  nodeCtx.data;\nvar entity = nodeCtx.entity;\nvar text = entity.name;\nif (data.hasOwnProperty('temperature') && data['temperature'] !== null) {\n    text += \" <b>\"+ data['temperature'] +\" °C</b>\";\n}\nreturn text;\n\n**/\nvar entity = nodeCtx.entity;\nvar nombreCompleto = entity.name;\nvar nombre = nombreCompleto.substring(nombreCompleto.indexOf(\"_\")+1);\nreturn nombre;",
+            "nodeIconFunction": "/** \n\n// Function should return node icon info object.\n// Resulting object should contain either 'materialIcon' or 'iconUrl' property. \n// Where:\n    - 'materialIcon' - name of the material icon to be used from the Material Icons Library (https://material.io/tools/icons);\n    - 'iconUrl' - url of the external image to be used as node icon.\n// Function can return 'default' string value. In this case default icons according to entity type will be used.\n\n// The following example code shows how to use external image for devices which name starts with 'Test' and use \n// default icons for the rest of entities.\n\nvar entity = nodeCtx.entity;\nif (entity.id.entityType === 'DEVICE' && entity.name.startsWith('Test')) {\n    return {iconUrl: 'https://avatars1.githubusercontent.com/u/14793288?v=4&s=117'};\n} else {\n    return 'default';\n}\n \n**/",
+            "nodeDisabledFunction": "/**\n\n// Function should return boolean value indicating whether current node should be disabled (not selectable).\n\n// The following example code will disable current node according to the value of example 'nodeDisabled' attribute.\n\nvar data = nodeCtx.data;\nif (data.hasOwnProperty('nodeDisabled') && data['nodeDisabled'] !== null) {\n    return data['nodeDisabled'] === 'true';\n} else {\n    return false;\n}\n  \n**/\n",
+            "nodesSortFunction": "/**\n\n// This function is used to sort nodes of the same level. Function should compare two nodes and return \n// integer value: \n//     - less than 0 - sort nodeCtx1 to an index lower than nodeCtx2\n//     - 0 - leave nodeCtx1 and nodeCtx2 unchanged with respect to each other\n//     - greater than 0 - sort nodeCtx2 to an index lower than nodeCtx1\n\n// The following example code will sort entities first by entity type in alphabetical order then\n// by entity name in alphabetical order.\n\nvar result = nodeCtx1.entity.id.entityType.localeCompare(nodeCtx2.entity.id.entityType);\nif (result === 0) {\n    result = nodeCtx1.entity.name.localeCompare(nodeCtx2.entity.name);\n}\nreturn result;\n  \n**/",
+            "nodeOpenedFunction": "/**\n\n// Function should return boolean value indicating whether current node should be opened (expanded) when it first loaded.\n\n// The following example code will open by default nodes up to third level.\n\nreturn nodeCtx.level <= 2;\n\n**/\n  //return nodeCtx.level <=1;"
+          },
+          "title": "ACTIVOS Y DISPOSITIVOS",
+          "dropShadow": true,
+          "enableFullscreen": true,
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400,
+            "padding": "5px 10px 5px 10px"
+          },
+          "useDashboardTimewindow": false,
+          "showLegend": false,
+          "datasources": [
+            {
+              "type": "entity",
+              "dataKeys": [],
+              "entityAliasId": "189ad243-f222-e437-d20a-fedfffaca048"
+            }
+          ],
+          "widgetStyle": {},
+          "actions": {
+            "nodeSelected": [
+              {
+                "id": "bce6b302-f1b0-6b26-9f58-21d4aac3f2ad",
+                "name": "CLICK",
+                "icon": "more_horiz",
+                "type": "custom",
+                "customFunction": "var $injector = widgetContext.$scope.$injector;\nvar attributeService = $injector.get('attributeService');\nvar userService = $injector.get('userService');\nvar vm = this;\nvm.currentUser = userService.getCurrentUser();\nvm.attributes = {};\n\nif (entityId.entityType == \"DEVICE\") {\n    $injector.get('deviceService').getDevice(entityId.id)\n        .then(\n            function(device) {\n                attributeService.getEntityAttributesValues(\n                    entityId.entityType, entityId.id,\n                    'SERVER_SCOPE').then(\n                    function(data) {\n                        if (data.length) {\n                            getEntityAttributes(data);\n                        }\n                        openDashboard('Dispositivo_'+vm.attributes['tipoEntidad']);\n                                              \n                    });\n\n\n            });\n} else {\n    //Es un activo\n    $injector.get('assetService').getAsset(entityId.id).then(\n        function(asset) {\n            \n            attributeService.getEntityAttributesValues(\n                entityId.entityType, entityId.id,\n                'SERVER_SCOPE').then(\n                function(data) {\n                    console.log(data);\n                    if (data.length) {\n                        getEntityAttributes(data);\n                    }\n                    \n                    openDashboard('Activo_'+vm.attributes['tipoEntidad']);\n                });\n\n\n        });\n}\n\nfunction getEntityAttributes(attributes) {\n    for (var i = 0; i < attributes.length; i++) {\n        vm.attributes[attributes[i].key] = attributes[i]\n            .value;\n    }\n}\n\nfunction openDashboard(nombrePanel) {\n    console.log(nombrePanel);\n    $injector.get('dashboardService').getCustomerDashboards(\n        currentUser.customerId, {\n            limit: 100\n        }, {}).then(\n        function(data) {\n            for (let clave in data.data) {\n                if (data.data[clave].name ==\n                    nombrePanel) {\n                    vm.destinationDashboardId = data\n                        .data[\n                            clave]\n                        .id.id;\n                }\n            }\n        }\n    ).then(\n        function() {\n            var stateObject = {};\n            stateObject.params = {};\n            stateObject.params.entityId = entityId;\n            stateObject.params.entityName = entityName;\n            console.log(widgetContext);\n            var params = {\n                dashboardId: destinationDashboardId,\n\n                state: widgetContext.aliasController\n                    .utils.objToBase64([\n                        stateObject\n                    ])\n            };\n            console.log(params);\n            userService.gotoDashboard(vm\n                .destinationDashboardId, params);\n        });\n}\n\nfunction openDashboardState(stateId) {\n    var params = {\n        entityId: entityId,\n        entityName: entityName\n    };\n\n\n    widgetContext.stateController.openState(stateId, params,\n        false);\n\n}"
+              }
+            ]
+          },
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "displayTimewindow": true
+        },
+        "id": "c5a51edb-77e1-a7d8-5b9d-a7825ca29723"
       }
     },
     "states": {
@@ -122,9 +333,21 @@
             "widgets": {
               "77f18ed8-233b-7ad1-2cc2-e0c5df36f1ea": {
                 "sizeX": 17,
-                "sizeY": 10,
+                "sizeY": 12,
                 "row": 0,
                 "col": 0
+              },
+              "1e904dbb-b2e3-74ce-09a5-cc99c9cd37e1": {
+                "sizeX": 17,
+                "sizeY": 11,
+                "row": 12,
+                "col": 0
+              },
+              "c5a51edb-77e1-a7d8-5b9d-a7825ca29723": {
+                "sizeX": 7,
+                "sizeY": 10,
+                "row": 0,
+                "col": 17
               }
             },
             "gridSettings": {
@@ -178,6 +401,16 @@
               ]
             }
           ]
+        }
+      },
+      "67464e9b-27f0-d6fb-f4de-404ef125d6e3": {
+        "id": "67464e9b-27f0-d6fb-f4de-404ef125d6e3",
+        "alias": "TodosLosActivos",
+        "filter": {
+          "type": "assetType",
+          "resolveMultiple": true,
+          "assetType": "ROOT",
+          "assetNameFilter": ""
         }
       }
     },

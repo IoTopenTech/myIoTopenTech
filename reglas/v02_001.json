@@ -8,8 +8,44 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 6,
+    "firstNodeIndex": 0,
     "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 46,
+          "layoutY": 207
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "es telemetria?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if(msgType=='POST_TELEMETRY_REQUEST') {\n    return ['telemetria'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 316,
+          "layoutY": 113
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "tooltip",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msg = {\n    'tooltip': \"<b>Puerta: </b>\" + (msg.digital_in_2 ==\n            1 ? \"Abierta\" : \"Cerrada\") +\n        \"<br/><b>LED: </b>\" + (msg.digital_in_3 == 1 ?\n            \"Encendido\" : \"Apagado\") +\n        \"<br/><b>Batería: </b>\" + (msg.analog_in_1) +\n        \" V\"\n};\nmsgType = \"POST_ATTRIBUTES_REQUEST\";\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 580,
+          "layoutY": 112
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardarTooltip",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
       {
         "additionalInfo": {
           "layoutX": 340,
@@ -74,7 +110,7 @@
       {
         "additionalInfo": {
           "layoutX": 44,
-          "layoutY": 301
+          "layoutY": 375
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
         "name": "Alarmas",
@@ -85,8 +121,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 46,
-          "layoutY": 228
+          "layoutX": 45,
+          "layoutY": 266
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
         "name": "Cargar alarmas",
@@ -126,9 +162,11 @@
           "alarmType": "${tipoAlarma}",
           "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
           "severity": "CRITICAL",
-          "propagate": false,
+          "propagate": true,
           "useMessageAlarmData": false,
-          "relationTypes": []
+          "relationTypes": [
+            "Contains"
+          ]
         }
       },
       {
@@ -216,9 +254,11 @@
           "alarmType": "${tipoAlarma}",
           "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
           "severity": "CRITICAL",
-          "propagate": false,
+          "propagate": true,
           "useMessageAlarmData": false,
-          "relationTypes": []
+          "relationTypes": [
+            "Contains"
+          ]
         }
       },
       {
@@ -282,9 +322,11 @@
           "alarmType": "${tipoAlarma}",
           "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
           "severity": "CRITICAL",
-          "propagate": false,
+          "propagate": true,
           "useMessageAlarmData": false,
-          "relationTypes": []
+          "relationTypes": [
+            "Contains"
+          ]
         }
       },
       {
@@ -315,8 +357,8 @@
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 1,
-        "type": "Success"
+        "toIndex": 9,
+        "type": "telemetria"
       },
       {
         "fromIndex": 1,
@@ -324,109 +366,124 @@
         "type": "Success"
       },
       {
-        "fromIndex": 2,
-        "toIndex": 19,
-        "type": "clear"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 20,
-        "type": "crear"
-      },
-      {
         "fromIndex": 3,
         "toIndex": 4,
-        "type": "clear"
-      },
-      {
-        "fromIndex": 3,
-        "toIndex": 8,
-        "type": "crear"
+        "type": "Success"
       },
       {
         "fromIndex": 4,
-        "toIndex": 11,
-        "type": "Cleared"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 0,
-        "type": "inactividad"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 7,
-        "type": "cambioDeEstado"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 14,
-        "type": "nivelDeBateria"
-      },
-      {
-        "fromIndex": 6,
         "toIndex": 5,
         "type": "Success"
       },
       {
+        "fromIndex": 5,
+        "toIndex": 23,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 22,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 11,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 7,
+        "type": "clear"
+      },
+      {
         "fromIndex": 7,
-        "toIndex": 9,
-        "type": "Success"
+        "toIndex": 14,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 17,
+        "type": "nivelDeBateria"
       },
       {
         "fromIndex": 8,
         "toIndex": 10,
-        "type": "Created"
+        "type": "cambioDeEstado"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 3,
+        "type": "inactividad"
       },
       {
         "fromIndex": 9,
-        "toIndex": 3,
+        "toIndex": 8,
         "type": "Success"
       },
       {
-        "fromIndex": 12,
-        "toIndex": 13,
-        "type": "clear"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 15,
-        "type": "crear"
-      },
-      {
-        "fromIndex": 13,
-        "toIndex": 18,
-        "type": "Cleared"
-      },
-      {
-        "fromIndex": 14,
-        "toIndex": 16,
+        "fromIndex": 9,
+        "toIndex": 1,
         "type": "Success"
       },
       {
-        "fromIndex": 15,
-        "toIndex": 17,
-        "type": "Created"
-      },
-      {
-        "fromIndex": 16,
+        "fromIndex": 10,
         "toIndex": 12,
         "type": "Success"
       },
       {
-        "fromIndex": 19,
-        "toIndex": 22,
+        "fromIndex": 11,
+        "toIndex": 13,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 18,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 16,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 16,
+        "toIndex": 21,
         "type": "Cleared"
       },
       {
-        "fromIndex": 20,
-        "toIndex": 21,
+        "fromIndex": 17,
+        "toIndex": 19,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 18,
+        "toIndex": 20,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 19,
+        "toIndex": 15,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 22,
+        "toIndex": 25,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 23,
+        "toIndex": 24,
         "type": "Created"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 10,
+        "fromIndex": 13,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "840e2670-7435-11ea-b6f7-395813a5429b"
@@ -434,12 +491,12 @@
         "additionalInfo": {
           "layoutX": 1724,
           "layoutY": 206,
-          "ruleChainNodeId": "rule-chain-node-25"
+          "ruleChainNodeId": "rule-chain-node-28"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 11,
+        "fromIndex": 14,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "840e2670-7435-11ea-b6f7-395813a5429b"
@@ -447,12 +504,12 @@
         "additionalInfo": {
           "layoutX": 1724,
           "layoutY": 206,
-          "ruleChainNodeId": "rule-chain-node-25"
+          "ruleChainNodeId": "rule-chain-node-28"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 17,
+        "fromIndex": 20,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "840e2670-7435-11ea-b6f7-395813a5429b"
@@ -460,20 +517,7 @@
         "additionalInfo": {
           "layoutX": 1725,
           "layoutY": 317,
-          "ruleChainNodeId": "rule-chain-node-26"
-        },
-        "type": "Success"
-      },
-      {
-        "fromIndex": 18,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "840e2670-7435-11ea-b6f7-395813a5429b"
-        },
-        "additionalInfo": {
-          "layoutX": 1725,
-          "layoutY": 317,
-          "ruleChainNodeId": "rule-chain-node-26"
+          "ruleChainNodeId": "rule-chain-node-29"
         },
         "type": "Success"
       },
@@ -484,14 +528,14 @@
           "id": "840e2670-7435-11ea-b6f7-395813a5429b"
         },
         "additionalInfo": {
-          "layoutX": 1724,
-          "layoutY": 443,
-          "ruleChainNodeId": "rule-chain-node-27"
+          "layoutX": 1725,
+          "layoutY": 317,
+          "ruleChainNodeId": "rule-chain-node-29"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 22,
+        "fromIndex": 24,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "840e2670-7435-11ea-b6f7-395813a5429b"
@@ -499,7 +543,20 @@
         "additionalInfo": {
           "layoutX": 1724,
           "layoutY": 443,
-          "ruleChainNodeId": "rule-chain-node-27"
+          "ruleChainNodeId": "rule-chain-node-30"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 25,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "840e2670-7435-11ea-b6f7-395813a5429b"
+        },
+        "additionalInfo": {
+          "layoutX": 1724,
+          "layoutY": 443,
+          "ruleChainNodeId": "rule-chain-node-30"
         },
         "type": "Success"
       }

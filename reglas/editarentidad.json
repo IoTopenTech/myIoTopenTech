@@ -12,123 +12,116 @@
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 649,
-          "layoutY": 393
+          "layoutX": 770,
+          "layoutY": 647,
+          "description": "Esto he tenido que hacerlo porque a veces perdía la asignación."
         },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "renombrar retipar",
+        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
+        "name": "reasignar al cliente",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var salidas =[];\nif (msg.hasOwnProperty('nombreEntidad')) {\n    salidas.push('renombrar');\n}\nif (msg.hasOwnProperty('tipoEntidad')) {\n    salidas.push('retipar');\n}\n\nreturn salidas;"
+          "customerNamePattern": "${customerName}",
+          "customerCacheExpiration": 300,
+          "createCustomerIfNotExists": false
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 776,
-          "layoutY": 562
-        },
-        "type": "org.thingsboard.rule.engine.action.TbRenameEntityNode",
-        "name": "renombrar",
-        "debugMode": true,
-        "configuration": {
-          "claveNombreActual": "nombreActual",
-          "claveNombreNuevo": "nombreNuevo",
-          "claveTipoEntidad": "tipoEntidad"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 777,
+          "layoutX": 551,
           "layoutY": 481
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "prepararMensaje",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var mensaje = {};\nmensaje.nombreActual=metadata.customerName+metadata.ss_nombreEntidad;\nmensaje.nombreNuevo=metadata.customerName+metadata.nombreEntidadNuevo;\nmensaje.tipoEntidad=metadata.tipoEntidad;\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};"
+          "jsScript": "var mensaje = {};\nmensaje.nombreActual=metadata.customerName+'_'+metadata.ss_nombreEntidad;\nmensaje.tipoEntidad=metadata.tipoEntidad;\nmensaje.subtipoEntidad=metadata.tipoEntidadNuevo;\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};\n"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 575,
-          "layoutY": 227
+          "layoutX": 549,
+          "layoutY": 563
         },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "prepararMensaje",
+        "type": "org.thingsboard.rule.engine.action.TbRetypeEntityNode",
+        "name": "retipar",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var mensaje = {};\nif (metadata.nombreEntidadNuevo != metadata\n    .ss_nombreEntidad) {\n    mensaje.nombreEntidad = metadata.nombreEntidadNuevo;\n}\nif (metadata.tipoEntidadNuevo != metadata.ss_tipoEntidad) {\n    mensaje.tipoEntidad = metadata.tipoEntidadNuevo;\n    //Borro la configuración de alarmas del tipo de dispositivo anterior\n    if (metadata.tipoEntidad == \"DEVICE\") {\n        mensaje['alarma_' + metadata.ss_tipoEntidad] = \"{}\";\n    }\n}\nif (metadata.padreEntidadNuevo != metadata\n    .ss_padreEntidad) {\n    mensaje.padreEntidad = metadata.padreEntidadNuevo;\n}\n\n//Las alarmas se guardan siempre\nif (metadata.hasOwnProperty('alarmas')) {\n    var obj = JSON.parse(metadata.alarmas);\n    Object.keys(obj).map(function(objectKey, index) {\n        var value = obj[objectKey];\n        mensaje[\"alarma_\" + objectKey] = JSON\n            .stringify(obj[objectKey]);\n    });\n    //for (var [key,value] in obj) {\n    //mensaje[key]=JSON.stringify(value);\n    //}\n}\nmsg = mensaje;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "claveNombreEntidad": "nombreActual",
+          "claveTipoEntidad": "tipoEntidad",
+          "claveSubtipoEntidad": "subtipoEntidad"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 49,
-          "layoutY": 316
+          "layoutX": 300,
+          "layoutY": 479
         },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "POST_ATTRIBUTES_REQUEST",
+        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
+        "name": "asignarPadre",
         "debugMode": true,
         "configuration": {
-          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+          "direction": "FROM",
+          "relationType": "Contains",
+          "entityType": "ASSET",
+          "entityNamePattern": "${padreEntidadNuevo}",
+          "entityTypePattern": "${tipoPadreEntidadNuevo}",
+          "entityCacheExpiration": 300,
+          "createEntityIfNotExists": false,
+          "changeOriginatorToRelatedEntity": false,
+          "removeCurrentRelations": false
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 297,
-          "layoutY": 314
+          "layoutX": 299,
+          "layoutY": 409
         },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "TipoMensaje",
+        "type": "org.thingsboard.rule.engine.action.TbDeleteRelationNode",
+        "name": "BorrarRelacion",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var salidas = ['guardarAtributos'];\n\nif (msg.hasOwnProperty('padreEntidad')) {\n    salidas.push('cambiarPadre');\n}\n\nreturn salidas;"
+          "direction": "FROM",
+          "relationType": "Contains",
+          "entityType": "ASSET",
+          "entityNamePattern": "${ss_padreEntidad}",
+          "entityTypePattern": null,
+          "entityCacheExpiration": 300,
+          "deleteForSingleEntity": true
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 651,
-          "layoutY": 310
+          "layoutX": 294,
+          "layoutY": 141
         },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "guardarAtributos",
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "originador?",
         "debugMode": true,
         "configuration": {
-          "scope": "SERVER_SCOPE"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 567,
-          "layoutY": 53
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "Originador=Customer",
-        "debugMode": true,
-        "configuration": {
-          "originatorSource": "CUSTOMER",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "Contains",
-                "entityTypes": []
-              }
-            ],
-            "fetchLastLevelOnly": false
+          "fieldsMapping": {
+            "name": "customerName"
           }
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 287,
-          "layoutY": 51
+          "layoutX": 293,
+          "layoutY": 232
         },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "Validacion",
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "obtenerAtributos",
         "debugMode": true,
         "configuration": {
-          "jsScript": "//Esto lo hago porque TB intenta convertir siempre en número\n//por lo que el nombre 001 pasa a ser 1\nmsg.nombreEntidad=msg.nombreEntidad.substr(0);\nmetadata.nombreEntidadNuevo = msg.nombreEntidad;\nmetadata.tipoEntidadNuevo = msg.subtipoEntidad;\nmetadata.tipoEntidad = msg.tipoEntidad;\nmetadata.idEntidad = msg.idEntidad;\nmetadata.padreEntidadNuevo = msg.padreEntidad;\nmetadata.tipoPadreEntidadNuevo = msg.tipoPadreEntidad;\nmetadata.alarmas = msg.alarmas;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "nombreEntidad",
+            "tipoEntidad",
+            "padreEntidad"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": true,
+          "getLatestValueWithTs": false
         }
       },
       {
@@ -156,199 +149,206 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 293,
-          "layoutY": 232
+          "layoutX": 287,
+          "layoutY": 51
         },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
-        "name": "obtenerAtributos",
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Validacion",
         "debugMode": true,
         "configuration": {
-          "clientAttributeNames": [],
-          "sharedAttributeNames": [],
-          "serverAttributeNames": [
-            "nombreEntidad",
-            "tipoEntidad",
-            "padreEntidad"
-          ],
-          "latestTsKeyNames": [],
-          "tellFailureIfAbsent": true,
-          "getLatestValueWithTs": false
+          "jsScript": "//Esto lo hago porque TB intenta convertir siempre en número\n//por lo que el nombre 001 pasa a ser 1\nmsg.nombreEntidad=msg.nombreEntidad.substr(0);\nmetadata.nombreEntidadNuevo = msg.nombreEntidad;\nmetadata.tipoEntidadNuevo = msg.subtipoEntidad;\nmetadata.tipoEntidad = msg.tipoEntidad;\nmetadata.idEntidad = msg.idEntidad;\nmetadata.padreEntidadNuevo = msg.padreEntidad;\nmetadata.tipoPadreEntidadNuevo = msg.tipoPadreEntidad;\nmetadata.alarmas = msg.alarmas;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 294,
-          "layoutY": 141
+          "layoutX": 567,
+          "layoutY": 53
         },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
-        "name": "originador?",
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Originador=Customer",
         "debugMode": true,
         "configuration": {
-          "fieldsMapping": {
-            "name": "customerName"
+          "originatorSource": "CUSTOMER",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
           }
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 299,
-          "layoutY": 409
+          "layoutX": 651,
+          "layoutY": 310
         },
-        "type": "org.thingsboard.rule.engine.action.TbDeleteRelationNode",
-        "name": "BorrarRelacion",
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardarAtributos",
         "debugMode": true,
         "configuration": {
-          "direction": "FROM",
-          "relationType": "Contains",
-          "entityType": "ASSET",
-          "entityNamePattern": "${ss_padreEntidad}",
-          "entityTypePattern": null,
-          "entityCacheExpiration": 300,
-          "deleteForSingleEntity": true
+          "scope": "SERVER_SCOPE"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 300,
-          "layoutY": 479
+          "layoutX": 297,
+          "layoutY": 314
         },
-        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
-        "name": "asignarPadre",
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "TipoMensaje",
         "debugMode": true,
         "configuration": {
-          "direction": "FROM",
-          "relationType": "Contains",
-          "entityType": "ASSET",
-          "entityNamePattern": "${padreEntidadNuevo}",
-          "entityTypePattern": "${tipoPadreEntidadNuevo}",
-          "entityCacheExpiration": 300,
-          "createEntityIfNotExists": false,
-          "changeOriginatorToRelatedEntity": false,
-          "removeCurrentRelations": false
+          "jsScript": "var salidas = ['guardarAtributos'];\n\nif (msg.hasOwnProperty('padreEntidad')) {\n    salidas.push('cambiarPadre');\n}\n\nreturn salidas;"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 549,
-          "layoutY": 563
+          "layoutX": 49,
+          "layoutY": 316
         },
-        "type": "org.thingsboard.rule.engine.action.TbRetypeEntityNode",
-        "name": "retipar",
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "POST_ATTRIBUTES_REQUEST",
         "debugMode": true,
         "configuration": {
-          "claveNombreEntidad": "nombreActual",
-          "claveTipoEntidad": "tipoEntidad",
-          "claveSubtipoEntidad": "subtipoEntidad"
+          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 551,
+          "layoutX": 575,
+          "layoutY": 227
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararMensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var mensaje = {};\nif (metadata.nombreEntidadNuevo != metadata\n    .ss_nombreEntidad) {\n    mensaje.nombreEntidad = metadata.nombreEntidadNuevo;\n}\nif (metadata.tipoEntidadNuevo != metadata.ss_tipoEntidad) {\n    mensaje.tipoEntidad = metadata.tipoEntidadNuevo;\n    //Borro la configuración de alarmas del tipo de dispositivo anterior\n    if (metadata.tipoEntidad == \"DEVICE\") {\n        mensaje['alarma_' + metadata.ss_tipoEntidad] = \"{}\";\n    }\n}\nif (metadata.padreEntidadNuevo != metadata\n    .ss_padreEntidad) {\n    mensaje.padreEntidad = metadata.padreEntidadNuevo;\n}\n\n//Las alarmas se guardan siempre\nif (metadata.hasOwnProperty('alarmas')) {\n    var obj = JSON.parse(metadata.alarmas);\n    Object.keys(obj).map(function(objectKey, index) {\n        var value = obj[objectKey];\n        mensaje[\"alarma_\" + objectKey] = JSON\n            .stringify(obj[objectKey]);\n    });\n    //for (var [key,value] in obj) {\n    //mensaje[key]=JSON.stringify(value);\n    //}\n}\nmsg = mensaje;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 777,
           "layoutY": 481
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "prepararMensaje",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var mensaje = {};\nmensaje.nombreActual=metadata.customerName+'_'+metadata.ss_nombreEntidad;\nmensaje.tipoEntidad=metadata.tipoEntidad;\nmensaje.subtipoEntidad=metadata.tipoEntidadNuevo;\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};\n"
+          "jsScript": "var mensaje = {};\nmensaje.nombreActual=metadata.customerName+metadata.ss_nombreEntidad;\nmensaje.nombreNuevo=metadata.customerName+metadata.nombreEntidadNuevo;\nmensaje.tipoEntidad=metadata.tipoEntidad;\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 770,
-          "layoutY": 647,
-          "description": "Esto he tenido que hacerlo porque a veces perdía la asignación."
+          "layoutX": 776,
+          "layoutY": 562
         },
-        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
-        "name": "reasignar al cliente",
+        "type": "org.thingsboard.rule.engine.action.TbRenameEntityNode",
+        "name": "renombrar",
         "debugMode": true,
         "configuration": {
-          "customerNamePattern": "${customerName}",
-          "customerCacheExpiration": 300,
-          "createCustomerIfNotExists": false
+          "claveNombreActual": "nombreActual",
+          "claveNombreNuevo": "nombreNuevo",
+          "claveTipoEntidad": "tipoEntidad"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 649,
+          "layoutY": 393
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "renombrar retipar",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var salidas =[];\nif (msg.hasOwnProperty('nombreEntidad')) {\n    salidas.push('renombrar');\n}\nif (msg.hasOwnProperty('tipoEntidad')) {\n    salidas.push('retipar');\n}\n\nreturn salidas;"
         }
       }
     ],
     "connections": [
       {
-        "fromIndex": 0,
-        "toIndex": 2,
-        "type": "renombrar"
-      },
-      {
-        "fromIndex": 0,
-        "toIndex": 15,
-        "type": "retipar"
-      },
-      {
         "fromIndex": 1,
-        "toIndex": 16,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 1,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 3,
-        "toIndex": 4,
+        "toIndex": 2,
         "type": "Success"
       },
       {
         "fromIndex": 4,
-        "toIndex": 5,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 12,
-        "type": "cambiarPadre"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 6,
-        "type": "guardarAtributos"
-      },
-      {
-        "fromIndex": 6,
-        "toIndex": 0,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 7,
-        "toIndex": 11,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 8,
-        "toIndex": 7,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 9,
-        "toIndex": 10,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 10,
         "toIndex": 3,
         "type": "Success"
       },
       {
-        "fromIndex": 11,
-        "toIndex": 9,
+        "fromIndex": 5,
+        "toIndex": 7,
         "type": "Success"
       },
       {
-        "fromIndex": 12,
+        "fromIndex": 6,
         "toIndex": 13,
         "type": "Success"
       },
       {
-        "fromIndex": 15,
-        "toIndex": 14,
+        "fromIndex": 7,
+        "toIndex": 6,
         "type": "Success"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 9,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 9,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 10,
+        "toIndex": 16,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 4,
+        "type": "cambiarPadre"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 10,
+        "type": "guardarAtributos"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 11,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 12,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 14,
+        "toIndex": 15,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 0,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 16,
+        "toIndex": 14,
+        "type": "renombrar"
+      },
+      {
+        "fromIndex": 16,
+        "toIndex": 1,
+        "type": "retipar"
       }
     ],
     "ruleChainConnections": null
