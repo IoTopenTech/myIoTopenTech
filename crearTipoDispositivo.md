@@ -14,10 +14,15 @@
     
 
 3.  Crear un bloque de HTML para la configuración del dispositivo. Por
-    ejemplo, para configurar los umbrales de las alarmas. Este bloque
+    ejemplo, para configurar, el periodo de tiempo de los heartbeat, las coordenadas, o los umbrales de las alarmas. Este bloque
     de código se almacenará en un atributo de cada customer con el
-    nombre config\_V02\_002, y el sistema lo tomará de ahí para
-    mostrarlo en el panel de configuración de este modo
+    nombre, por ejemplo, config\_V02\_002, y el sistema lo tomará de ahí para
+    mostrarlo en el panel de configuración de este modo. Cada parámetro será una propiedad del objeto vm.configuracion.
+    Existen 3 tipos de parámetros configurables:
+    
+    * Los que simplemente se almacenan en un atributo del dispositivo, como __xPos o __yPos que se utilizan para posicionar un dispositivo en un widget de tipo IMAGE.
+    * Los de alarmas, que se agrupan dentro del atributo __alarmas para distinguirlos de los demás y poder gestionarlos en las reglas para determinar si es necesario enviar algún tipo de notificación.
+    * Los que además de almacenarse en un atributo, se envían por downlink al dispositivo, como ___0700. Éstos deben empezar por tres guiones bajos, seguidos del canal y el tipo de dato (en concordancia con el formato Cayenne LPP).
 
 ![](.//media/image1.png)
 
@@ -25,7 +30,19 @@ A continuación, se muestra el bloque de código correspondiente al tipo
 de nodo V02\_001 que puede servir como referencia:
 
 ```html
-<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0,0,0,0.57);"> Coordenadas</div>
+<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0,0,0,0.57);">Heartbeat</div>
+<div class="body">
+    <div class="row" layout="row" layout-align="start center">
+        <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
+            <div class="row" layout="row">
+                <md-input-container flex class="md-block">
+                    <label>Número de minutos entre heartbeats</label>
+                    <input type="number" size="10" step="1" min="0" max="60" ng-model="vm.configuracion.___0700"> </md-input-container>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0,0,0,0.57);">Coordenadas</div>
 <div class="body">
     <div class="row" layout="row" layout-align="start center">
         <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
@@ -40,7 +57,7 @@ de nodo V02\_001 que puede servir como referencia:
         </div>
     </div>
 </div>
-<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0,0,0,0.57);"> Alarmas</div>
+<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0,0,0,0.57);">Alarmas</div>
 <div class="body">
     <div class="row" layout="row" layout-align="start center">
         <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
@@ -67,10 +84,6 @@ de nodo V02\_001 que puede servir como referencia:
 <div class="body">
     <div class="row" layout="row" layout-align="start center">
         <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
-            <div flex layout="column">
-                <label class="checkbox-label">Activar alarma de nivel bajo de batería</label>
-                <md-checkbox ng-model="vm.configuracion.__alarmas.nivelDeBateria.enable" style="margin-bottom: 10px;">{{(vm.configuracion.__alarmas.nivelDeBateria.enable ? "value.true" : "value.false") | translate}}</md-checkbox>
-            </div>
             <div class="row" layout="row">
                 <md-input-container flex class="md-block">
                     <label>Umbral (V)</label>
