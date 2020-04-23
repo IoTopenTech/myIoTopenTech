@@ -84,6 +84,10 @@ de nodo V02\_001 que puede servir como referencia:
 <div class="body">
     <div class="row" layout="row" layout-align="start center">
         <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
+            <div flex layout="column">
+                <label class="checkbox-label">Activar alarma de nivel bajo de batería</label>
+                <md-checkbox ng-model="vm.configuracion.__alarmas.nivelDeBateria.enable" style="margin-bottom: 10px;">{{(vm.configuracion.__alarmas.nivelDeBateria.enable ? "value.true" : "value.false") | translate}}</md-checkbox>
+            </div>
             <div class="row" layout="row">
                 <md-input-container flex class="md-block">
                     <label>Umbral (V)</label>
