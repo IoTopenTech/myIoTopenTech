@@ -55,5 +55,10 @@ Procedimiento (todo esto se realizará automáticamente en breve gracias a la co
     6. configurarEntidad
     7. reclamarDispositivo
     8. Root Rule Chain (convertir esta regla en la nueva regla raíz, y borrar la Root Rule Chain original).
+ 
+ Concretamente la regla Root Rule Chain deberá quedar vinculada a las demás reglas del siguiente modo:
+ 
+ ![](.//media/readme_01.png)
+ 
  6. Asignar al customer (00001) el activo ROOT, el dispositivo CONTROL y todos los dashboards.
 
