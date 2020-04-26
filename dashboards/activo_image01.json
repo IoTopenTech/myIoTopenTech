@@ -386,10 +386,7 @@
           "resolveMultiple": true,
           "rootStateEntity": true,
           "stateEntityParamName": null,
-          "defaultStateEntity": {
-            "entityType": "ASSET",
-            "id": "665ea770-7008-11ea-b4a5-4f0127e83283"
-          },
+          "defaultStateEntity": null,
           "rootEntity": null,
           "direction": "FROM",
           "maxLevel": 1,

@@ -41,7 +41,7 @@
             }
             $mysqli->set_charset("utf8");
 
-            $query = "SELECT token FROM token LIMIT 1";
+            $query = "SELECT token FROM my_token LIMIT 1";
             $resultado = $mysqli->query($query);
             $fila = $resultado->fetch_row();
             $JWT = $fila[0];
@@ -54,7 +54,7 @@
             ];
 
             curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($curl, CURLOPT_URL, 'https://tb.iotopentech.io/api/tenant/' . TENANT_ID);
+            curl_setopt($curl, CURLOPT_URL, 'https://my.iotopentech.io/api/tenant/' . TENANT_ID);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
 
@@ -69,7 +69,7 @@
             //var_dump($decoded); 
             if (isset($decoded->status) && $decoded->status == 401) {
                 //El token ha expirado
-                $url = 'https://tb.iotopentech.io/api/auth/login';
+                $url = 'https://my.iotopentech.io/api/auth/login';
                 $options = array(
                     'http' => array(
                         'header' => "Content-type: application/json\r\n",
@@ -84,7 +84,7 @@
                     die('SE HA PRODUCIDO UN ERROR DE TIPO 1');
                 }
 
-                $query = "UPDATE token SET token='" . $obj->token . "' WHERE 1";
+                $query = "UPDATE my_token SET token='" . $obj->token . "' WHERE 1";
                 $mysqli->query($query);
                 $JWT = $obj->token;
                 //var_dump($JWT);
@@ -96,9 +96,9 @@
 
 
             //Comprobar si el usuario existe
-            //Al comprobarlo directamente le manda un mail de activación
+            //Al comprobarlo, directamente le manda un mail de activación
             $email = $mysqli->real_escape_string($_POST['email']);
-            $service_url = 'https://tb.iotopentech.io/api/user/sendActivationMail?email=' . urlencode($email);
+            $service_url = 'https://my.iotopentech.io/api/user/sendActivationMail?email=' . urlencode($email);
             $curl = curl_init($service_url);
             $curl_post_data = array(
                 'message' => '{}'
@@ -121,6 +121,7 @@
             }
             curl_close($curl);
             $decoded = json_decode($curl_response);
+			//var_dump($decoded);
             //Si no devuelve nada quiere decir que el usuario ya existe pero aún no está activo
             if ($decoded == null) {
                 die("LE HEMOS ENVIADO UN MENSAJE A LA DIRECCIÓN $email.<br/>GRACIAS");
@@ -134,14 +135,14 @@
             }
 
             //Crear el customer					
-            $query = "INSERT INTO clientes VALUES (NULL, '$email','" . date("Y-m-d H:i:s") . "', '','')";
+            $query = "INSERT INTO my_clientes VALUES (NULL, '$email','" . date("Y-m-d H:i:s") . "', '','')";
 
             $mysqli->query($query);
             $mysqli->error;
             $customerID = $mysqli->insert_id;
             $customerName = str_pad($customerID, 8, "0", STR_PAD_LEFT);
 
-            $service_url = 'https://tb.iotopentech.io/api/customer';
+            $service_url = 'https://my.iotopentech.io/api/customer';
             $curl = curl_init($service_url);
             $curl_post_data = array(
                 "id" => null,
@@ -168,16 +169,16 @@
             }
             $customerTBID = $decoded->id->id;
             //Almacenar el id del customer				
-            $query = "UPDATE clientes SET customerID='" . $customerTBID . "' WHERE id=$customerID";
+            $query = "UPDATE my_clientes SET customerID='" . $customerTBID . "' WHERE id=$customerID";
             $mysqli->query($query);
             
             //Crear los atributos del customer
-            $service_url = "https://tb.iotopentech.io/api/plugins/telemetry/CUSTOMER/$customerTBID/attributes/SERVER_SCOPE";
+			//Lo hago por partes
+            $service_url = "https://my.iotopentech.io/api/plugins/telemetry/CUSTOMER/$customerTBID/attributes/SERVER_SCOPE";
             $curl = curl_init($service_url);
             $curl_post_data = array(
                 "tiposDeDispositivos" => TIPOS_DE_DISPOSITIVOS,
-                "tiposDeActivos" => TIPOS_DE_ACTIVOS,
-				"V02_001_config"=> V02_001_CONFIG,
+                "tiposDeActivos" => TIPOS_DE_ACTIVOS,				
 				"IMAGE01_config"=> IMAGE01_CONFIG
             );
 
@@ -193,10 +194,31 @@
             }
             curl_close($curl);
             $decoded = json_decode($curl_response);
-            
+			
+			
+			
+			$service_url = "https://my.iotopentech.io/api/plugins/telemetry/CUSTOMER/$customerTBID/attributes/SERVER_SCOPE";
+            $curl = curl_init($service_url);
+            $curl_post_data = array(                
+				"V02_001_config"=> V02_001_CONFIG
+            );
+
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($curl_post_data));
+            curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+            $curl_response = curl_exec($curl);
+            if ($curl_response === false) {
+                curl_close($curl);
+                die('SE HA PRODUCIDO UN ERROR DE TIPO 7BIS');
+            }
+            curl_close($curl);
+            $decoded = json_decode($curl_response);
+
             
             //Crear el activo ROOT
-            $service_url = 'https://tb.iotopentech.io/api/asset';
+            $service_url = 'https://my.iotopentech.io/api/asset';
             $curl = curl_init($service_url);
             $curl_post_data = array("customerId" => array(
                     "id" => "$customerTBID",
@@ -223,13 +245,15 @@
             }
             curl_close($curl);
             $decoded = json_decode($curl_response);
+			//var_dump($curl_post_data);
+			//var_dump($decoded);
             if (!isset($decoded->id) || !isset($decoded->id->id)) {
                 die('SE HA PRODUCIDO UN ERROR DE TIPO 9');
             }
             $rootID = $decoded->id->id;
 
             //Crear la relacion con el customer
-            $service_url = 'https://tb.iotopentech.io/api/relation';
+            $service_url = 'https://my.iotopentech.io/api/relation';
             $curl = curl_init($service_url);
             $curl_post_data = array(
                 "from" => array(
@@ -256,7 +280,7 @@
             curl_close($curl);
 
             //Crear los atributos del asset root
-            $service_url = "https://tb.iotopentech.io/api/plugins/telemetry/ASSET/$rootID/attributes/SERVER_SCOPE";
+            $service_url = "https://my.iotopentech.io/api/plugins/telemetry/ASSET/$rootID/attributes/SERVER_SCOPE";
             $curl = curl_init($service_url);
             $curl_post_data = array(
                 "nombreEntidad" => "_ROOT",
@@ -279,7 +303,7 @@
 
 
             //Crear el dispositivo CONTROL
-            $service_url = 'https://tb.iotopentech.io/api/device';
+            $service_url = 'https://my.iotopentech.io/api/device';
             $curl = curl_init($service_url);
             $curl_post_data = array(
                 "customerId" => array(
@@ -308,7 +332,7 @@
             $decoded = json_decode($curl_response);
 
             //Crear el usuario
-            $service_url = 'https://tb.iotopentech.io/api/user?sendActivationMail=true';
+            $service_url = 'https://my.iotopentech.io/api/user?sendActivationMail=true';
             $curl = curl_init($service_url);
             $curl_post_data = array(
                 "authority" => "CUSTOMER_USER",
@@ -337,9 +361,10 @@
             $decoded = json_decode($curl_response);
             
             //Asignar todos los dashboards al cliente
+			//El id de los dashboards se ve en la barra de direcciones del navegador al acceder a ellos
             foreach (DASHBOARDS as $dashboardID){
                 
-                $service_url = "https://tb.iotopentech.io/api/customer/$customerTBID/dashboard/$dashboardID";
+                $service_url = "https://my.iotopentech.io/api/customer/$customerTBID/dashboard/$dashboardID";
                 $curl = curl_init($service_url);
                 $curl_post_data = array( );
                 curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -356,7 +381,7 @@
             }
 
             //Guardr el resultado en la base de datos
-            $query = "UPDATE clientes SET resultado='CORRECTO' WHERE id=$customerID";
+            $query = "UPDATE my_clientes SET resultado='CORRECTO' WHERE id=$customerID";
             $mysqli->query($query);
             echo "LE HEMOS ENVIADO UN MENSAJE A LA DIRECCIÓN $email.<br/>GRACIAS";
         } else {
@@ -374,7 +399,7 @@
         </head>
         <body style="text-align: center;">	
             <h1>IoT open Tech</h1>
-            <h2>Crear cuenta de cliente en ThingsBoard TTN Edtition</h2>
+            <h2>Crear cuenta de cliente en My IoT open Tech</h2>
             <p>Indique la dirección de correo electrónico que desee asociar a su cuenta de cliente.</p>
             <p>Recibirá un mensaje en la dirección anterior con el resultado de la operación.</p>
             <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">

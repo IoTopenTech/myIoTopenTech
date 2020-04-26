@@ -107,7 +107,7 @@
         "alias": "TodosLosActivos",
         "filter": {
           "type": "assetType",
-          "resolveMultiple": true,
+          "resolveMultiple": false,
           "assetType": "ROOT",
           "assetNameFilter": ""
         }

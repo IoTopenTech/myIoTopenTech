@@ -208,7 +208,7 @@
         "alias": "ActivoROOT",
         "filter": {
           "type": "assetType",
-          "resolveMultiple": true,
+          "resolveMultiple": false,
           "assetType": "ROOT",
           "assetNameFilter": ""
         }
