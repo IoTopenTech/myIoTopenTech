@@ -73,6 +73,7 @@ El tipo de dispositivo V02_001 ofrece los siguientes parámetros de configuraci�
 * Número de minutos entre heartbeats.
 * Coordenadas para mostrarlo sobre la imagen de un activo de tipo IMAGE01 (corresponden al porcentaje respecto a la esquina superior izquierda; sólo se admiten valores positivos).
 * Alarmas: En todas las alarmas el usuario puede elegir por qué vía desea que le sean notificadas (email, IFTTT, Telegram...)
+
 ** Cambio de estado: Se puede activar al abrir el sensor hall o al cerrarlo.
 ** Nivel bajo de batería: Permite configurar un umbral mínimo.
 ** Inactividad: Permite establecer el número de segundos que debe transcurrir sin actividad por parte del dispositivo para que se genere la alarma (obviamente, convendrá que sea un valor mayor que el del periodo de hearbeat).
