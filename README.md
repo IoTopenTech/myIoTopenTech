@@ -1,6 +1,12 @@
 # ThingsBoard TTN Edition
 
-Procedimiento (todo esto se realizará automáticamente en breve gracias a la colaboración de todos, pero de momento hay que hacerlo a mano):
+Las instrucciones siguientes están dirigidas a los usuarios que quieran desarrollar nuevos tipos de activos y dispositivos en My IoT open Tech. Si es su caso, solicite en contacto@iotopentech.io una cuenta de nivel tenant.
+
+Si sólo desea utilizar My IoT open Tech como usuario final, siga las instrucciones de este vídeo:
+
+[![Primeros pasos con My IoT open Tech](http://img.youtube.com/vi/PtA9cxz3UNI/0.jpg)](http://www.youtube.com/watch?v=PtA9cxz3UNI)
+
+Procedimiento para crear el entorno de desarrollo en una cuenta tenant de My IoT open Tech:
 
 1. Crear un customer cuyo nombre sea un número de 5 dígitos; por ejemplo 00001.
 2. Asignar a este customer los siguientes atributos del lado del servidor:
@@ -62,3 +68,6 @@ Procedimiento (todo esto se realizará automáticamente en breve gracias a la co
  
  6. Asignar al customer (00001) el activo ROOT, el dispositivo CONTROL y todos los dashboards.
 
+Si desea crear un tipo de dispositivo puede consultar el siguiente documento:
+
+https://github.com/IoTopenTech/MyIoTopenTech/blob/master/crearTipoDispositivo.md
