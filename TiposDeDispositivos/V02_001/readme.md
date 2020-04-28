@@ -78,19 +78,19 @@ El tipo de dispositivo V02_001 ofrece los siguientes parámetros de configuraci�
   * Inactividad: Permite establecer el número de segundos que debe transcurrir sin actividad por parte del dispositivo para que se genere la alarma (obviamente, convendrá que sea un valor mayor que el del periodo de hearbeat).
   
 ## Notificaciones de alarmas
-###Cambio de estado
+### Cambio de estado
 Las notificaciones para la alarma de cambio de estado tienen la siguiente estructura:
 
 * email y Telegram: El dispositivo [nombre del dispositivo] ha generado una alarma de tipo Puerta abierta/cerrada. La tensión actual de la batería es [tensión] V, y el umbral de alarma es [umbral de alarma de nivel bajo de batería] V.
 * IFTTT: {"value1":"'[nombre del dispositivo]'","value2":"'[estado del sensor de efecto hall]'","value3":"'[tensión de la batería]'"}
 
-###Nivel bajo de batería
+### Nivel bajo de batería
 Las notificaciones para la alarma de nivel bajo de batería tienen la siguiente estructura:
 
 * email y Telegram: El dispositivo [nombre del dispositivo] ha generado una alarma de tipo Nivel bajo de batería. La tensión actual de la batería es [tensión] V, y el umbral de alarma es [umbral de alarma de nivel bajo de batería] V.
 * IFTTT: {"value1":"'[nombre del dispositivo]'","value2":"'[estado del sensor de efecto hall]'","value3":"'[tensión de la batería]'"}
 
-###Inactividad
+### Inactividad
 Las notificaciones para la alarma de inactividad tienen la siguiente estructura:
 
 * email y Telegram: El dispositivo [nombre del dispositivo] ha generado una alarma de inactividad.
