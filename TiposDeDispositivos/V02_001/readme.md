@@ -68,4 +68,11 @@ A continuación se utilizará un byte para indicar el tipo de activación (O de 
 Por último se incluirá la credencial correspondiente en el mismo formato que la presenta la consola de The Things Network por defecto (sin cambiar el endianess).
 
 # Parámetos de configuración
+El tipo de dispositivo V02_001 ofrece los siguientes parámetros de configuración en la interfaz de My IoT open Tech:
 
+* Número de minutos entre heartbeats.
+* Coordenadas para mostrarlo sobre la imagen de un activo de tipo IMAGE01 (corresponden al porcentaje respecto a la esquina superior izquierda; sólo se admiten valores positivos).
+* Alarmas: En todas las alarmas el usuario puede elegir por qué vía desea que le sean notificadas (email, IFTTT, Telegram...)
+** Cambio de estado: Se puede activar al abrir el sensor hall o al cerrarlo.
+** Nivel bajo de batería: Permite configurar un umbral mínimo.
+** Inactividad: Permite establecer el número de segundos que debe transcurrir sin actividad por parte del dispositivo para que se genere la alarma (obviamente, convendrá que sea un valor mayor que el del periodo de hearbeat).
