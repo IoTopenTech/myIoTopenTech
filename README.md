@@ -1,5 +1,11 @@
 # ThingsBoard TTN Edition
 
+Las instrucciones siguientes están dirigidas a los usuarios que quieran desarrollar nuevos tipos de activos y dispositivos en My IoT open Tech. Si es su caso, solicite en contacto@iotopentech.io una cuenta de nivel tenant.
+
+Si sólo desea utilizar My IoT open Tech como usuario final, siga las instrucciones de este vídeo:
+
+[![Primeros pasos con My IoT open Tech](http://img.youtube.com/vi/PtA9cxz3UNI&t=274s/0.jpg)](http://www.youtube.com/watch?v=PtA9cxz3UNI&t=274s)
+
 Procedimiento (todo esto se realizará automáticamente en breve gracias a la colaboración de todos, pero de momento hay que hacerlo a mano):
 
 1. Crear un customer cuyo nombre sea un número de 5 dígitos; por ejemplo 00001.
