@@ -6,7 +6,7 @@ Si sólo desea utilizar My IoT open Tech como usuario final, siga las instruccio
 
 [![Primeros pasos con My IoT open Tech](http://img.youtube.com/vi/PtA9cxz3UNI/0.jpg)](http://www.youtube.com/watch?v=PtA9cxz3UNI)
 
-Procedimiento (todo esto se realizará automáticamente en breve gracias a la colaboración de todos, pero de momento hay que hacerlo a mano):
+Procedimiento para crear el entorno de desarrollo en una cuenta tenant de My IoT open Tech:
 
 1. Crear un customer cuyo nombre sea un número de 5 dígitos; por ejemplo 00001.
 2. Asignar a este customer los siguientes atributos del lado del servidor:
