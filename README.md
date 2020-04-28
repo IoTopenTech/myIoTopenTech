@@ -4,7 +4,7 @@ Las instrucciones siguientes están dirigidas a los usuarios que quieran desarro
 
 Si sólo desea utilizar My IoT open Tech como usuario final, siga las instrucciones de este vídeo:
 
-[![Primeros pasos con My IoT open Tech](http://img.youtube.com/vi/PtA9cxz3UNI&t/0.jpg)](http://www.youtube.com/watch?v=PtA9cxz3UNI&t)
+[![Primeros pasos con My IoT open Tech](http://img.youtube.com/vi/PtA9cxz3UNI/0.jpg)](http://www.youtube.com/watch?v=PtA9cxz3UNI)
 
 Procedimiento (todo esto se realizará automáticamente en breve gracias a la colaboración de todos, pero de momento hay que hacerlo a mano):
 
