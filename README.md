@@ -4,7 +4,7 @@ Las instrucciones siguientes están dirigidas a los usuarios que quieran desarro
 
 Si sólo desea utilizar My IoT open Tech como usuario final, siga las instrucciones de este vídeo:
 
-[![Primeros pasos con My IoT open Tech](http://img.youtube.com/vi/PtA9cxz3UNI&t=274s/0.jpg)](http://www.youtube.com/watch?v=PtA9cxz3UNI&t=274s)
+[![Primeros pasos con My IoT open Tech](http://img.youtube.com/vi/PtA9cxz3UNI&t/0.jpg)](http://www.youtube.com/watch?v=PtA9cxz3UNI&t)
 
 Procedimiento (todo esto se realizará automáticamente en breve gracias a la colaboración de todos, pero de momento hay que hacerlo a mano):
 
@@ -68,3 +68,6 @@ Procedimiento (todo esto se realizará automáticamente en breve gracias a la co
  
  6. Asignar al customer (00001) el activo ROOT, el dispositivo CONTROL y todos los dashboards.
 
+Si desea crear un tipo de dispositivo puede consultar el siguiente documento:
+
+https://github.com/IoTopenTech/MyIoTopenTech/blob/master/crearTipoDispositivo.md
