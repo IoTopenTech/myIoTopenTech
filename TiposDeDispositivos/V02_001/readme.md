@@ -95,3 +95,15 @@ Las notificaciones para la alarma de inactividad tienen la siguiente estructura:
 
 * email y Telegram: El dispositivo [nombre del dispositivo] ha generado una alarma de inactividad.
 * IFTTT: {"value1":"'[nombre del dispositivo]'","value2":"'[estado del sensor de efecto hall]'","value3":"'[tensión de la batería]'"}
+
+# Formato de pre-aprovisionamiento
+Para preaprovisionar dispositivos de tipo V02_001 se requiere un archivo CSV que use como separador el signo ; (punto y coma) y contenga los siguientes campos:
+* name: Nombre del dispositivo precedido del carácter P; por ejemplo: P0000000100000001
+* type: Tipo de dispositivo; por ejemplo V02_001
+* nombreOriginal: Nombre original del dispositivo para recuperarlo si el usuario lo resetease; coincidirá con el name (P0000000100000001)
+* tipoOriginal: Tipo original del dispositivo para recuperarlo si el usuario lo resetease; coincidirá con el type (V02_001)
+* claimingData: Objeto en formato JSON con la clave de reclamación del dispositivo; por ejemplo: {"secretKey": "ABCDEFGHIJKLMNOP", "expirationTime": "1640995200000"}
+* claimingDataOriginal: Copia del parámetro anterior porque el anterior será borrado si el usuario reclama el dispositivo, y necesitamos un modo de recuperar esa información si el usuario resetease el dispositivo.
+* apropiado: Atributo en el que se indica si el usuario a tomado posesión del dispositivo; contendrá el valor false
+* admiteABP: Contendrá el valor false porque el tipo de nodo V02_001 no admite ABP
+* ___0700: Este parámetro corresponde al periodo de envío de heartbeats y contendrá el valor 1 (que es el predeterminado para el tipo V02_001).
