@@ -8,7 +8,7 @@
         "typeAlias": "speed_gauge_canvas_gauges",
         "type": "latest",
         "title": "New widget",
-        "sizeX": 5,
+        "sizeX": 8,
         "sizeY": 6,
         "config": {
           "datasources": [
@@ -131,7 +131,7 @@
         "typeAlias": "simple_card",
         "type": "latest",
         "title": "New widget",
-        "sizeX": 7,
+        "sizeX": 8,
         "sizeY": 5,
         "config": {
           "datasources": [
@@ -191,7 +191,7 @@
         "typeAlias": "state_chart",
         "type": "timeseries",
         "title": "New widget",
-        "sizeX": 10,
+        "sizeX": 9,
         "sizeY": 5,
         "config": {
           "datasources": [
@@ -310,7 +310,7 @@
         "typeAlias": "basic_timeseries",
         "type": "timeseries",
         "title": "New widget",
-        "sizeX": 12,
+        "sizeX": 9,
         "sizeY": 6,
         "config": {
           "datasources": [
@@ -587,26 +587,26 @@
           "main": {
             "widgets": {
               "71519cb3-d9c1-cae4-a2cb-7d9a796518fa": {
-                "sizeX": 5,
+                "sizeX": 8,
                 "sizeY": 6,
                 "row": 5,
-                "col": 12
+                "col": 9
               },
               "3a4f97f3-8e24-d36b-6ecb-ece617101135": {
-                "sizeX": 7,
+                "sizeX": 8,
                 "sizeY": 5,
                 "row": 0,
-                "col": 10
+                "col": 9
               },
               "a3c0c2e3-fd0f-c25d-c593-bd81f0f0f72e": {
-                "sizeX": 10,
+                "sizeX": 9,
                 "sizeY": 5,
                 "mobileHeight": null,
                 "row": 0,
                 "col": 0
               },
               "48ef91f3-ad17-96bc-7e3a-ad462f70775f": {
-                "sizeX": 12,
+                "sizeX": 9,
                 "sizeY": 6,
                 "mobileHeight": null,
                 "row": 5,
