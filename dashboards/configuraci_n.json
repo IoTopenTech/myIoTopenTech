@@ -9,7 +9,7 @@
         "type": "latest",
         "title": "New widget",
         "sizeX": 9,
-        "sizeY": 14,
+        "sizeY": 11,
         "config": {
           "timewindow": {
             "realtime": {
@@ -81,7 +81,7 @@
         "type": "static",
         "title": "New widget",
         "sizeX": 7,
-        "sizeY": 14,
+        "sizeY": 11,
         "config": {
           "datasources": [],
           "timewindow": {
@@ -171,13 +171,13 @@
             "widgets": {
               "fba8b82f-4b63-d360-68e1-9481f57706b1": {
                 "sizeX": 9,
-                "sizeY": 14,
+                "sizeY": 11,
                 "row": 0,
                 "col": 7
               },
               "f1a629d9-faa9-ae03-8c9e-91e0037b17bc": {
                 "sizeX": 7,
-                "sizeY": 14,
+                "sizeY": 11,
                 "row": 0,
                 "col": 0
               },
@@ -208,7 +208,7 @@
         "alias": "ActivoROOT",
         "filter": {
           "type": "assetType",
-          "resolveMultiple": false,
+          "resolveMultiple": true,
           "assetType": "ROOT",
           "assetNameFilter": ""
         }

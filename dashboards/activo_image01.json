@@ -97,7 +97,7 @@
             "markerOffsetY": 1,
             "showTooltip": true,
             "autocloseTooltip": true,
-            "labelFunction": "\r\nreturn '<span style=\"color:blue;\">'+dsData[dsIndex]['Name'].split(\"_\")[1]+'</span>';\r\n/*var deviceType = dsData[dsIndex]['deviceType'];\r\nif (typeof deviceType !== undefined) {\r\n    if (deviceType == \"energy meter\") {\r\n        return '<span style=\"color:orange;\">${entityName}, ${energy:2} kWt</span>';\r\n    } else if (deviceType == \"thermometer\") {\r\n        return '<span style=\"color:blue;\">${entityName}, ${temperature:2} °C</span>';\r\n    }\r\n}\r\n*/",
+            "labelFunction": "return '<div style=\"position: relative; white-space: nowrap; text-aling:center; font-size: 14px; top: 5px;\"><span style=\"border: 2px solid #000; border-radius: 10px;color: #000; background-color: #fff; padding-left: 5px; padding-right:5px; padding-top: 3px; padding-bottom: 3px;\">' +\r\n    dsData[dsIndex]['Name'].split(\"_\")[1] + '</span></div>';\r\n\r\n\r\n\r\n//return '<span style=\"color:blue;\">'+dsData[dsIndex]['Name'].split(\"_\")[1]+'</span>';\r\n/*var deviceType = dsData[dsIndex]['deviceType'];\r\nif (typeof deviceType !== undefined) {\r\n    if (deviceType == \"energy meter\") {\r\n        return '<span style=\"color:orange;\">${entityName}, ${energy:2} kWt</span>';\r\n    } else if (deviceType == \"thermometer\") {\r\n        return '<span style=\"color:blue;\">${entityName}, ${temperature:2} °C</span>';\r\n    }\r\n}\r\n*/",
             "tooltipFunction": "return '<b>' + dsData[dsIndex]['Name'].split(\"_\")[1] +\r\n    '</b><br/>' + dsData[dsIndex]['tooltip'] +\r\n    '<br/><link-act name=\"tooltipClic\">Ver dispositivo</link-act>';\r\n\r\n/*\r\nvar deviceType = dsData[dsIndex]['deviceType'];\r\nif (typeof deviceType !== undefined) {\r\n    if (deviceType == \"energy meter\") {\r\n        return '<b>${entityName}</b><br/><b>Energy:</b> ${energy:2} kWt<br/>';\r\n    } else if (deviceType == \"thermometer\") {\r\n        return '<b>${entityName}</b><br/><b>Temperature:</b> ${temperature:2} °C<br/>';\r\n    }\r\n}\r\n*/",
             "showTooltipAction": "click",
             "imageUrlAttribute": "__urlImagenFondo",
@@ -398,16 +398,6 @@
               ]
             }
           ]
-        }
-      },
-      "67464e9b-27f0-d6fb-f4de-404ef125d6e3": {
-        "id": "67464e9b-27f0-d6fb-f4de-404ef125d6e3",
-        "alias": "TodosLosActivos",
-        "filter": {
-          "type": "assetType",
-          "resolveMultiple": true,
-          "assetType": "ROOT",
-          "assetNameFilter": ""
         }
       }
     },

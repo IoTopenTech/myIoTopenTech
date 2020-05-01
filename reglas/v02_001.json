@@ -8,8 +8,20 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 0,
+    "firstNodeIndex": 1,
     "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 343,
+          "layoutY": 124
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "name": "save timeseries",
+        "debugMode": true,
+        "configuration": {
+          "defaultTTL": 0
+        }
+      },
       {
         "additionalInfo": {
           "layoutX": 46,
@@ -19,25 +31,25 @@
         "name": "es telemetria?",
         "debugMode": true,
         "configuration": {
-          "jsScript": "if(msgType=='POST_TELEMETRY_REQUEST') {\n    return ['telemetria'];\n}"
+          "jsScript": "if(msgType=='POST_TELEMETRY_REQUEST') {\n    return ['telemetria'];\n}else{\n    return null;\n}"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 316,
-          "layoutY": 113
+          "layoutX": 339,
+          "layoutY": 186
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "tooltip",
         "debugMode": true,
         "configuration": {
-          "jsScript": "msg = {\n    'tooltip': \"<b>Puerta: </b>\" + (msg.digital_in_2 ==\n            1 ? \"Abierta\" : \"Cerrada\") +\n        \"<br/><b>LED: </b>\" + (msg.digital_in_3 == 1 ?\n            \"Encendido\" : \"Apagado\") +\n        \"<br/><b>Batería: </b>\" + (msg.analog_in_1) +\n        \" V\"\n};\nmsgType = \"POST_ATTRIBUTES_REQUEST\";\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "jsScript": "// unix timestamp\nvar ts = metadata.ts;\n\n// convert unix timestamp to milliseconds\nvar ts_ms = ts * 1;\n\n// initialize new Date object\nvar date_ob = new Date(ts_ms);\n\n// year as 4 digits (YYYY)\nvar year = date_ob.getFullYear();\n\n// month as 2 digits (MM)\nvar month = (\"0\" + (date_ob.getMonth() + 1)).slice(-2);\n\n// date as 2 digits (DD)\nvar date = (\"0\" + date_ob.getDate()).slice(-2);\n\n// hours as 2 digits (hh)\nvar hours = (\"0\" + date_ob.getHours()).slice(-2);\n\n// minutes as 2 digits (mm)\nvar minutes = (\"0\" + date_ob.getMinutes()).slice(-2);\n\n// seconds as 2 digits (ss)\nvar seconds = (\"0\" + date_ob.getSeconds()).slice(-2);\n\n\nmsg = {\n    'tooltip': \"<b>\" + year + \"-\" + month + \"-\" + date +\n        \" \" + hours + \":\" + minutes + \":\" + seconds +\n        \"</b><br/>\" + \"<b>Puerta: </b>\" + (msg\n            .digital_in_2 ==\n            1 ? \"Abierta\" : \"Cerrada\") +\n        \"<br/><b>LED: </b>\" + (msg.digital_in_3 == 1 ?\n            \"Encendido\" : \"Apagado\") +\n        \"<br/><b>Batería: </b>\" + (msg.analog_in_1) +\n        \" V\"\n};\nmsgType = \"POST_ATTRIBUTES_REQUEST\";\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 580,
-          "layoutY": 112
+          "layoutX": 620,
+          "layoutY": 182
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
         "name": "guardarTooltip",
@@ -356,18 +368,18 @@
     ],
     "connections": [
       {
-        "fromIndex": 0,
-        "toIndex": 9,
+        "fromIndex": 1,
+        "toIndex": 0,
         "type": "telemetria"
       },
       {
         "fromIndex": 1,
-        "toIndex": 2,
-        "type": "Success"
+        "toIndex": 10,
+        "type": "telemetria"
       },
       {
-        "fromIndex": 3,
-        "toIndex": 4,
+        "fromIndex": 2,
+        "toIndex": 3,
         "type": "Success"
       },
       {
@@ -377,124 +389,116 @@
       },
       {
         "fromIndex": 5,
-        "toIndex": 23,
-        "type": "crear"
+        "toIndex": 6,
+        "type": "Success"
       },
       {
-        "fromIndex": 5,
-        "toIndex": 22,
+        "fromIndex": 6,
+        "toIndex": 23,
         "type": "clear"
       },
       {
         "fromIndex": 6,
-        "toIndex": 11,
+        "toIndex": 24,
         "type": "crear"
       },
       {
-        "fromIndex": 6,
-        "toIndex": 7,
+        "fromIndex": 7,
+        "toIndex": 8,
         "type": "clear"
       },
       {
         "fromIndex": 7,
-        "toIndex": 14,
+        "toIndex": 12,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 15,
         "type": "Cleared"
       },
       {
-        "fromIndex": 8,
-        "toIndex": 17,
-        "type": "nivelDeBateria"
-      },
-      {
-        "fromIndex": 8,
-        "toIndex": 10,
-        "type": "cambioDeEstado"
-      },
-      {
-        "fromIndex": 8,
-        "toIndex": 3,
+        "fromIndex": 9,
+        "toIndex": 4,
         "type": "inactividad"
       },
       {
         "fromIndex": 9,
-        "toIndex": 8,
-        "type": "Success"
+        "toIndex": 11,
+        "type": "cambioDeEstado"
       },
       {
         "fromIndex": 9,
-        "toIndex": 1,
+        "toIndex": 18,
+        "type": "nivelDeBateria"
+      },
+      {
+        "fromIndex": 10,
+        "toIndex": 2,
         "type": "Success"
       },
       {
         "fromIndex": 10,
-        "toIndex": 12,
+        "toIndex": 9,
         "type": "Success"
       },
       {
         "fromIndex": 11,
         "toIndex": 13,
-        "type": "Created"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 6,
         "type": "Success"
       },
       {
-        "fromIndex": 15,
-        "toIndex": 18,
-        "type": "crear"
+        "fromIndex": 12,
+        "toIndex": 14,
+        "type": "Created"
       },
       {
-        "fromIndex": 15,
-        "toIndex": 16,
+        "fromIndex": 13,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 16,
+        "toIndex": 17,
         "type": "clear"
       },
       {
         "fromIndex": 16,
-        "toIndex": 21,
-        "type": "Cleared"
+        "toIndex": 19,
+        "type": "crear"
       },
       {
         "fromIndex": 17,
-        "toIndex": 19,
-        "type": "Success"
+        "toIndex": 22,
+        "type": "Cleared"
       },
       {
         "fromIndex": 18,
         "toIndex": 20,
-        "type": "Created"
-      },
-      {
-        "fromIndex": 19,
-        "toIndex": 15,
         "type": "Success"
       },
       {
-        "fromIndex": 22,
-        "toIndex": 25,
-        "type": "Cleared"
+        "fromIndex": 19,
+        "toIndex": 21,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 20,
+        "toIndex": 16,
+        "type": "Success"
       },
       {
         "fromIndex": 23,
-        "toIndex": 24,
+        "toIndex": 26,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 24,
+        "toIndex": 25,
         "type": "Created"
       }
     ],
     "ruleChainConnections": [
-      {
-        "fromIndex": 13,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "840e2670-7435-11ea-b6f7-395813a5429b"
-        },
-        "additionalInfo": {
-          "layoutX": 1724,
-          "layoutY": 206,
-          "ruleChainNodeId": "rule-chain-node-28"
-        },
-        "type": "Success"
-      },
       {
         "fromIndex": 14,
         "targetRuleChainId": {
@@ -504,19 +508,19 @@
         "additionalInfo": {
           "layoutX": 1724,
           "layoutY": 206,
-          "ruleChainNodeId": "rule-chain-node-28"
+          "ruleChainNodeId": "rule-chain-node-29"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 20,
+        "fromIndex": 15,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "840e2670-7435-11ea-b6f7-395813a5429b"
         },
         "additionalInfo": {
-          "layoutX": 1725,
-          "layoutY": 317,
+          "layoutX": 1724,
+          "layoutY": 206,
           "ruleChainNodeId": "rule-chain-node-29"
         },
         "type": "Success"
@@ -530,19 +534,19 @@
         "additionalInfo": {
           "layoutX": 1725,
           "layoutY": 317,
-          "ruleChainNodeId": "rule-chain-node-29"
+          "ruleChainNodeId": "rule-chain-node-30"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 24,
+        "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "840e2670-7435-11ea-b6f7-395813a5429b"
         },
         "additionalInfo": {
-          "layoutX": 1724,
-          "layoutY": 443,
+          "layoutX": 1725,
+          "layoutY": 317,
           "ruleChainNodeId": "rule-chain-node-30"
         },
         "type": "Success"
@@ -556,7 +560,20 @@
         "additionalInfo": {
           "layoutX": 1724,
           "layoutY": 443,
-          "ruleChainNodeId": "rule-chain-node-30"
+          "ruleChainNodeId": "rule-chain-node-31"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 26,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "840e2670-7435-11ea-b6f7-395813a5429b"
+        },
+        "additionalInfo": {
+          "layoutX": 1724,
+          "layoutY": 443,
+          "ruleChainNodeId": "rule-chain-node-31"
         },
         "type": "Success"
       }

@@ -2,49 +2,6 @@
   "title": "Dispositivo_V02_001",
   "configuration": {
     "widgets": {
-      "a5f0e9be-e6bc-ce72-f50b-ac4f70be88fc": {
-        "isSystemType": true,
-        "bundleAlias": "cards",
-        "typeAlias": "html_card",
-        "type": "static",
-        "title": "New widget",
-        "sizeX": 17,
-        "sizeY": 2,
-        "config": {
-          "datasources": [],
-          "timewindow": {
-            "realtime": {
-              "timewindowMs": 60000
-            }
-          },
-          "showTitle": false,
-          "backgroundColor": "rgb(255, 255, 255)",
-          "color": "rgba(0, 0, 0, 0.87)",
-          "padding": "8px",
-          "settings": {
-            "cardHtml": "<div class='card'>Panel para dispositivos de tipo V02_001</div>",
-            "cardCss": ".card {\n    font-weight: bold;\n    font-size: 32px;\n    color: #999;\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}"
-          },
-          "title": "New HTML Card",
-          "dropShadow": true,
-          "showTitleIcon": false,
-          "titleIcon": null,
-          "iconColor": "rgba(0, 0, 0, 0.87)",
-          "iconSize": "24px",
-          "titleTooltip": "",
-          "enableFullscreen": true,
-          "widgetStyle": {},
-          "titleStyle": {
-            "fontSize": "16px",
-            "fontWeight": 400
-          },
-          "useDashboardTimewindow": true,
-          "displayTimewindow": true,
-          "showLegend": false,
-          "actions": {}
-        },
-        "id": "a5f0e9be-e6bc-ce72-f50b-ac4f70be88fc"
-      },
       "71519cb3-d9c1-cae4-a2cb-7d9a796518fa": {
         "isSystemType": true,
         "bundleAlias": "analogue_gauges",
@@ -52,7 +9,7 @@
         "type": "latest",
         "title": "New widget",
         "sizeX": 5,
-        "sizeY": 5,
+        "sizeY": 6,
         "config": {
           "datasources": [
             {
@@ -175,7 +132,7 @@
         "type": "latest",
         "title": "New widget",
         "sizeX": 7,
-        "sizeY": 4,
+        "sizeY": 5,
         "config": {
           "datasources": [
             {
@@ -235,7 +192,7 @@
         "type": "timeseries",
         "title": "New widget",
         "sizeX": 10,
-        "sizeY": 4,
+        "sizeY": 5,
         "config": {
           "datasources": [
             {
@@ -354,7 +311,7 @@
         "type": "timeseries",
         "title": "New widget",
         "sizeX": 12,
-        "sizeY": 5,
+        "sizeY": 6,
         "config": {
           "datasources": [
             {
@@ -629,36 +586,30 @@
         "layouts": {
           "main": {
             "widgets": {
-              "a5f0e9be-e6bc-ce72-f50b-ac4f70be88fc": {
-                "sizeX": 17,
-                "sizeY": 2,
-                "row": 0,
-                "col": 0
-              },
               "71519cb3-d9c1-cae4-a2cb-7d9a796518fa": {
                 "sizeX": 5,
-                "sizeY": 5,
-                "row": 6,
+                "sizeY": 6,
+                "row": 5,
                 "col": 12
               },
               "3a4f97f3-8e24-d36b-6ecb-ece617101135": {
                 "sizeX": 7,
-                "sizeY": 4,
-                "row": 2,
+                "sizeY": 5,
+                "row": 0,
                 "col": 10
               },
               "a3c0c2e3-fd0f-c25d-c593-bd81f0f0f72e": {
                 "sizeX": 10,
-                "sizeY": 4,
+                "sizeY": 5,
                 "mobileHeight": null,
-                "row": 2,
+                "row": 0,
                 "col": 0
               },
               "48ef91f3-ad17-96bc-7e3a-ad462f70775f": {
                 "sizeX": 12,
-                "sizeY": 5,
+                "sizeY": 6,
                 "mobileHeight": null,
-                "row": 6,
+                "row": 5,
                 "col": 0
               },
               "59d678c9-f9c1-b54c-a024-7d38c9af50c3": {
@@ -670,7 +621,7 @@
               "c03ead73-2a16-7928-5c58-2d865b7345cc": {
                 "sizeX": 7,
                 "sizeY": 7,
-                "row": 2,
+                "row": 0,
                 "col": 17
               }
             },
