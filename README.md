@@ -13,7 +13,7 @@ Procedimiento para crear el entorno de desarrollo en una cuenta tenant de My IoT
     * tiposDeActivos
 
         ```
-        MAP01,IMAGE01
+        IMAGE01,MAP01
         ```
     
    * tiposDeDispositivos
