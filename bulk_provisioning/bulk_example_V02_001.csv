@@ -1,2 +1,2 @@
-name;type;nombreOriginal;tipoOriginal;claimingData;claimingDataOriginal;apropiado;admiteABP;___0700
-P0000000100000001;V02_001;P0000000100000001;V02_001;{"secretKey": "ABCDEFGHIJKLMNOP", "expirationTime": "1640995200000"};{"secretKey": "ABCDEFGHIJKLMNOP", "expirationTime": "1640995200000"};false;false;5
+name;type;nombreOriginal;tipoOriginal;claimingData;claimingDataOriginal;apropiable;apropiado;admiteABP;___0700
+P0000000100000001;V02_001;P0000000100000001;V02_001;{"secretKey": "ABCDEFGHIJKLMNOP", "expirationTime": "1640995200000"};{"secretKey": "ABCDEFGHIJKLMNOP", "expirationTime": "1640995200000"};true;false;false;5
