@@ -3,6 +3,7 @@
 Se trata de un tracker dotado de GPS, acelerómetro, giróscopo, magnetómetro y barómetro, alimentado por batería recargable de litio, y configurable mediante comandos AT.
 
 La información detallada está disponible en la web del fabricante:
+
 https://doc.rakwireless.com/quick-start/rak7200-lora-tracker/overview
 
 ## Hardware
@@ -10,6 +11,7 @@ Está basado en el módulo S76G, que incluye un microcontrolador (STM32L073x), m
 
 ## Software
 En la web del fabricante se explica cómo actualizar el firmware:
+
 https://doc.rakwireless.com/rak7200-lora-tracker/upgrading-the-firmware
 
 ## Carga de pago para uplinks
