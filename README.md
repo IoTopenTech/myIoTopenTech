@@ -52,7 +52,12 @@ Procedimiento para crear el entorno de desarrollo en una cuenta tenant de My IoT
       
 4. Crear un dispositivo que comience con el nombre del customer seguido de \_CONTROL; por ejemplo: 00001\_CONTROL. Mediante telemetrías que enviaremos a este dispositivo desde los widgets de los dashboard podremos realizar operaciones de gestión, como crear dispositivos o configurarlos (ver la regla Root Rule Chain).
     * Indicar como tipo del dispositivo SYSTEM.
-5. Importar las reglas y los dashboards de este repositorio (no es necesario importar los widgets porque ya están disponibles a nivel de sistema). Al importar las reglas, hacerlo en el siguiente orden (durante la importación de la reglas, ThingsBoard pierde la vinculación que hay de unas reglas a otras; concretamente tendrá que revincular manualmente los vínculos de las reglas Root Rule Chain y V02_001):
+5. Importar las reglas y los dashboards de este repositorio (no es necesario importar los widgets porque ya están disponibles a nivel de sistema). No es necesario importar todos los dashboards; bastaría con los siguientes (el orden de importación es indiferente):
+    * activo_image01
+	* configuracion
+	* dispositivo_v02_001
+	* panel_de_control
+Tampoco en necesario importar todas las reglas, bastaría con las siguientes, pero es importante hacerlo en el siguiente orden (durante la importación de la reglas, ThingsBoard pierde la vinculación que hay de unas reglas a otras; concretamente tendrá que revincular manualmente los vínculos de las reglas Root Rule Chain y V02_001; en la regla Root Rule Chain además deberá borrar los nodos que hagan referencia a reglas que no haya importado, como RAK7200):
     1. notificaciones
     2. V02_001
     3. borrarEntidad
