@@ -1,4 +1,3 @@
-a que
 #include <Wire.h>
 #include <SPI.h>
 #include "LowPower.h"
@@ -28,9 +27,9 @@ byte DEVEUI[8] ;
 byte APPEUI[8] ;
 byte APPKEY[16];
 boolean nuevasCredenciales[3] = {false, false, false};
-static const PROGMEM u1_t DEVEUI_INICIAL[8] = { FILL_ME_IN };
-static const PROGMEM u1_t APPEUI_INICIAL[8] = { FILL_ME_IN };
-static const PROGMEM u1_t APPKEY_INICIAL[16] = { FILL_ME_IN };
+static const PROGMEM u1_t DEVEUI_INICIAL[8] = { 0x00,0x94,0x94,0xdb,0x31,0x43,0xae,0xa3 };
+static const PROGMEM u1_t APPEUI_INICIAL[8] = { 0x67, 0xDC, 0x02, 0xD0, 0x7E, 0xD5, 0xB3, 0x70 };
+static const PROGMEM u1_t APPKEY_INICIAL[16] = { 0xa6,0x3e,0xaa,0xc2,0xf5,0x5b,0xad,0x23,0xda,0xf8,0x9a,0x41,0x67,0x56,0x01,0x31 };
 boolean resetearTrasSiguienteUplink = false;
 
 //Si el byte 0 de la eeprom contiene 0xFF querrá decir que el cliente aún no ha tomado posesión del nodo
