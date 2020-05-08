@@ -12,20 +12,106 @@
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 620,
-          "layoutY": 150
+          "layoutX": 1958,
+          "layoutY": 539
         },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "es TTN?",
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "formatoCS",
         "debugMode": true,
         "configuration": {
-          "jsScript": "if (msg.hasOwnProperty('payload_fields')) {\r\n    \r\n    return ['TTN'];\r\n    \r\n} else {\r\n    return ['No_TTN']\r\n}"
+          "jsScript": " /*\n Tengo que pasar de formato TTN:\n {\n    \"port\": 99,\n    \"confirmed\": true,\n    \"payload_raw\": \"BgBk/w==\",\n    \"dev_id\": \"nodo1\"\n}\na formato CS:\n {  \"deviceQueueItem\": { \n     \"confirmed\": true,  \n     \"data\": \"AQI=\",  \n     \"devEUI\": \"009494db3143aea3\",\n     \"fCnt\": 0,\n     \"fPort\": 99  \n   } \n }\n */\nvar newMsg={};\nnewMsg.deviceQueueItem={\"confirmed\": true,\"data\": msg.payload_raw,\"devEUI\": metadata.ss_hardware_serial,\"fPort\":99};\nreturn {msg: newMsg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1958,
+          "layoutY": 681
+        },
+        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
+        "name": "enviarDownlink",
+        "debugMode": true,
+        "configuration": {
+          "restEndpointUrlPattern": "${ss___cs_url}/api/devices/${ss_hardware_serial}/queue",
+          "requestMethod": "POST",
+          "headers": {
+            "Grpc-Metadata-Authorization": "${ss___cs_token}"
+          },
+          "useSimpleClientHttpFactory": false,
+          "readTimeoutMs": 0,
+          "maxParallelRequestsCount": 0,
+          "useRedisQueueForMsgPersistence": false,
+          "trimQueue": false,
+          "maxQueueSize": 0
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1951,
+          "layoutY": 472
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "TTN-CS",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var respuesta=[];\nif (metadata.hasOwnProperty('ss_downlink_url') &&\n    metadata.hasOwnProperty('ss_ttn_dev_id')) {\n    respuesta.push('TTN');\n}\nif (metadata.hasOwnProperty('ss_downlink_chirpstack') &&\n    metadata.ss_downlink_chirpstack === \"true\" &&\n    metadata.hasOwnProperty('ss___cs_token') &&\n    metadata.hasOwnProperty('ss___cs_url')&&\n    metadata.hasOwnProperty('ss_hardware_serial')) {\n    respuesta.push('CS');\n}\n\nreturn respuesta;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 854,
+          "layoutY": 115
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "CS2TTN",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var newMsg = {};\nnewMsg.app_id = msg.applicationName;\nnewMsg.dev_id = msg.deviceName;\nnewMsg.hardware_serial = msg.devEUI;\nnewMsg.adr = msg.adr;\nnewMsg.counter = msg.fCnt;\nnewMsg.port = msg.fPort;\nnewMsg.payload_raw = msg.data;\nvar newPayloadFields = JSON.parse(msg.object);\n//Desafortunadamente el Cayenne Codec de CS es muy diferente al de TTN\n//No obstante, lo utilizaré porque aquí se hace una vez, pero si hubiera que\n//hacerlo en CS implicaría actuar sobre cada aplicación\n//\"object\": \"{\\\"analogInput\\\":{\\\"1\\\":2.74},\\\"digitalInput\\\":{\\\"2\\\":1,\\\"3\\\":0}}\"\n//\"payload_fields\": \"{\\\"analog_in_1\\\":2.75,\\\"digital_in_2\\\":1,\\\"digital_in_3\\\":0}\"\nnewMsg.payload_fields = {};\nfor (var key in newPayloadFields) {\n    var prefijo = \"\";\n    switch (key) {\n        case 'analogInput':\n            prefijo = 'analog_in_';\n            break;\n        case 'digitalInput':\n            prefijo = 'digital_in_';\n            break;\n        case 'temperatureSensor':\n            prefijo = 'temperature_';\n            break;\n        case 'humiditySensor':\n            prefijo = 'relative_humidity_';\n            break;\n        case 'accelerometer':\n            prefijo = 'accelerometer_';\n            break;\n        case 'barometer':\n            prefijo = 'barometric_pressure_';\n            break;\n        case 'gyrometer':\n            prefijo = 'gyrometer_';\n            break;\n        case 'gpsLocation':\n            prefijo = 'gps_';\n            break;\n        case 'digitalOutput':\n            prefijo = 'digital_out_';\n            break;\n        case 'analogOutput':\n            prefijo = 'analog_out_';\n            break;\n        case 'illuminanceSensor':\n            prefijo = 'luminosity_';\n            break;\n        case 'presenceSensor':\n            prefijo = 'presence_';\n            break;\n\n    }\n    for (var key2 in newPayloadFields[key]) {\n        newMsg.payload_fields[prefijo + key2] =\n            newPayloadFields[key][key2];\n    }\n}\nnewMsg.payload_fields = JSON.stringify(newMsg\n    .payload_fields);\nnewMsg.metadata = {\n    'rxInfo': JSON.parse(msg.rxInfo),\n    'txInfo': JSON.parse(msg.txInfo)\n};\nnewMsg.metadata = JSON.stringify(newMsg.metadata);\nnewMsg.downlink_url = 'chirpstack';\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1704,
+          "layoutY": 326
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "idEntidad",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.idEntidad=msg.uuid;\nreturn {msg: JSON.parse(msg.payload), metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 973,
+          "layoutY": 63
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbCheckMessageNode",
+        "name": "es accion?",
+        "debugMode": true,
+        "configuration": {
+          "messageNames": [
+            "accion"
+          ],
+          "metadataNames": [],
+          "checkAllKeys": true
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1704,
+          "layoutY": 388
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "idEntidad",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.idEntidad=msg.uuid;\nreturn {msg: JSON.parse(msg.payload), metadata: metadata, msgType: msgType};"
         }
       },
       {
         "additionalInfo": {
           "layoutX": 1959,
-          "layoutY": 325
+          "layoutY": 387
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "Originator=Entidad",
@@ -47,11 +133,11 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1447,
-          "layoutY": 327
+          "layoutX": 1445,
+          "layoutY": 385
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "customer",
+        "name": "Customer",
         "debugMode": true,
         "configuration": {
           "originatorSource": "CUSTOMER",
@@ -70,47 +156,55 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 2209,
-          "layoutY": 403
+          "layoutX": 1711,
+          "layoutY": 471
         },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "guardar atributos",
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "downlink_url[_chripstack]",
         "debugMode": true,
         "configuration": {
-          "scope": "SERVER_SCOPE"
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "downlink_url",
+            "ttn_dev_id",
+            "downlink_chirpstack",
+            "hardware_serial",
+            "__cs_token",
+            "__cs_url"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": true,
+          "getLatestValueWithTs": false
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 2211,
-          "layoutY": 324
+          "layoutX": 1713,
+          "layoutY": 610
         },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "preparar atributos",
+        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
+        "name": "enviarDownlink",
         "debugMode": true,
         "configuration": {
-          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\nvar mensaje = {};\nif(msg.payload_raw.substring(0,6)==\"RkYwM0\"){\n    //Sólo cambio si se llega a enviar el tercer downlink\n    mensaje.apropiado=true;\n    return {\n    msg: mensaje,\n    metadata: metadata,\n    msgType: msgType\n};\n}else{\n    return null;\n}\n\n"
+          "restEndpointUrlPattern": "${ss_downlink_url}",
+          "requestMethod": "POST",
+          "headers": {},
+          "useSimpleClientHttpFactory": false,
+          "readTimeoutMs": 0,
+          "maxParallelRequestsCount": 0,
+          "useRedisQueueForMsgPersistence": false,
+          "trimQueue": false,
+          "maxQueueSize": 0
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 1961,
-          "layoutY": 470
+          "layoutX": 478,
+          "layoutY": 545
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "idEntidad",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "msg.dev_id=metadata.ss_ttn_dev_id;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 477,
-          "layoutY": 617
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "alarma actividad",
+        "name": "alarma inactividad",
         "debugMode": true,
         "configuration": {
           "jsScript": "return {msg: msg, metadata: metadata, msgType: msgType};"
@@ -118,23 +212,158 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 707,
-          "layoutY": 279
+          "layoutX": 1079,
+          "layoutY": 240
         },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "downlink url y device id",
+        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerAttributeNode",
+        "name": "tiposDeDispositivos",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var newMessage = {};\r\nif (msg.hasOwnProperty('ttn_dev_id')) {\r\n    newMessage.ttn_dev_id = msg.ttn_dev_id;\r\n}\r\n\r\nif (msg.hasOwnProperty('downlink_url')) {\r\n    newMessage.downlink_url = msg.downlink_url;\r\n}\r\n\r\nreturn {\r\n    msg: newMessage,\r\n    metadata: metadata,\r\n    msgType: 'POST_ATTRIBUTES_REQUEST'\r\n};"
+          "attrMapping": {
+            "tiposDeDispositivos": "tiposDeDispositivos"
+          },
+          "telemetry": false
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 708,
-          "layoutY": 335
+          "layoutX": 1080,
+          "layoutY": 312
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "dispositivo permitido?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (metadata.hasOwnProperty('tiposDeDispositivos') &&\n    metadata.hasOwnProperty('deviceType')) {\n    return metadata.tiposDeDispositivos.split(\",\").indexOf(\n        metadata.deviceType) >= 0;\n} else {\n    return false;\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1076,
+          "layoutY": 385
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "al dispositivo",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return [metadata.deviceType];"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 808,
+          "layoutY": 7
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "name": "Save Timeseries",
+        "debugMode": true,
+        "configuration": {
+          "defaultTTL": 0
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 490,
+          "layoutY": 35
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "guardar downlink url",
+        "name": "Save Client Attributes",
+        "debugMode": false,
+        "configuration": {
+          "scope": "CLIENT_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 273,
+          "layoutY": 151
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbMsgTypeSwitchNode",
+        "name": "Message Type Switch",
+        "debugMode": true,
+        "configuration": {
+          "version": 0
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 496,
+          "layoutY": 234
+        },
+        "type": "org.thingsboard.rule.engine.action.TbLogNode",
+        "name": "Log RPC from Device",
+        "debugMode": false,
+        "configuration": {
+          "jsScript": "return '\\nIncoming message:\\n' + JSON.stringify(msg) + '\\nIncoming metadata:\\n' + JSON.stringify(metadata);"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 482,
+          "layoutY": 321
+        },
+        "type": "org.thingsboard.rule.engine.action.TbLogNode",
+        "name": "Log Other",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return '\\nIncoming message:\\n' + JSON.stringify(msg) + '\\nIncoming metadata:\\n' + JSON.stringify(metadata);"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 481,
+          "layoutY": 391
+        },
+        "type": "org.thingsboard.rule.engine.rpc.TbSendRPCRequestNode",
+        "name": "RPC Call Request",
+        "debugMode": false,
+        "configuration": {
+          "timeoutInSeconds": 60
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 845,
+          "layoutY": 202
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "TTN2JSON",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var newObj = JSON.parse(msg.payload_fields);\r\nvar obj = {};\r\n//Si el obj tiene propiedades que son, a su vez, objetos JSON\r\n//por ejemplo, el caso de un GPS\r\n//tengo que convertirlas a timeseries\r\n//Desafortunadamente, es posible que aquí tengamos que hacer algunas\r\n//conversiones porque ciertos widgets no admiten los datos en el formato\r\n//que los entregan los sensores; por ejemplo, el magnetómetro del RAK7200\r\n//entrega las mediciones en uT, pero el widget brújula requiere directamente un ángulo\r\n//Esto lo podemos resolver con una función de postprocesamiento en el propio alias\r\n//pero el Widget trip animation sólo admite timeseries (no attibutes), por lo que no\r\n//podemos cargar el cercado desde un atributo (o quizás sea mejor tratarlo en la regla del propio dispositivo)\r\nfor (var x in newObj) {\r\n    if (typeof(newObj[x]) === 'object') {\r\n        for (var y in newObj[x]) {\r\n            obj[x + '_' + y] = newObj[x][y];\r\n        }\r\n    } else {\r\n        obj[x] = newObj[x];\r\n    }\r\n}\r\nobj.metadata = msg.metadata;\r\nobj.downlink_url = msg.downlink_url;\r\nobj.ttn_dev_id = msg.dev_id;\r\nobj.hardware_serial = msg.hardware_serial;\r\nreturn {\r\n    msg: obj,\r\n    metadata: metadata,\r\n    msgType: msgType\r\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1130,
+          "layoutY": 4
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "acciones",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (metadata.deviceType == \"SYSTEM\") {\n    if (msg.hasOwnProperty('accion')) {\n        if (msg.accion == 'editarPerfil') {\n            return ['editarPerfil'];\n        } else if (msg\n            .accion == 'tomarPosesion') {\n            if (msg\n                .hasOwnProperty('uuid') && msg\n                .hasOwnProperty(\n                    'payload')) {\n                return ['tomarPosesion'];\n            }\n        } else if (msg\n            .accion == 'enviarDownlink') {\n            if (msg\n                .hasOwnProperty('uuid') && msg\n                .hasOwnProperty(\n                    'payload')) {\n                return ['enviarDownlink'];\n            }\n        } else if (msg\n            .accion == 'reclamarDispositivo') {\n            if (msg.hasOwnProperty('idEntidad') && msg\n                .hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('subtipoEntidad') ) {\n                return ['reclamarDispositivo'];\n            }\n        } else if (msg\n            .accion == 'editarEntidad') {\n            if (msg.hasOwnProperty('idEntidad') && msg\n                .hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('tipoEntidad') && msg\n                .hasOwnProperty('subtipoEntidad') && msg\n                .hasOwnProperty('padreEntidad') && msg\n                .hasOwnProperty('tipoPadreEntidad')) {\n                return ['editarEntidad'];\n            }\n        } else if (msg\n            .accion == 'configurarEntidad') {\n            if (msg.hasOwnProperty('configuracion') ) {\n                return ['configurarEntidad'];\n            }\n        } else if (msg.accion == 'crearEntidad') {\n            if (msg.hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('tipoEntidad') && msg\n                .hasOwnProperty('subtipoEntidad') && msg\n                .hasOwnProperty('padreEntidadId') && msg\n                .hasOwnProperty('padreEntidadNombre')) {\n                return ['crearEntidad'];\n            }\n        } else if (msg.accion == 'borrarEntidad') {\n            if (msg.hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('tipoEntidad')) {\n                return ['borrarEntidad'];\n            }\n        }\n    }\n} else {\n    return false;\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1704,
+          "layoutY": 265
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "preparar atributos",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\n//Valido los atributos que admito modificar\nvar mensaje={};\nif(msg.hasOwnProperty('email')){\n    mensaje.email=msg.email;\n}\nif(msg.hasOwnProperty('token_telegram')){\n    mensaje.token_telegram=msg.token_telegram;\n}\nif(msg.hasOwnProperty('chatid_telegram')){\n    mensaje.chatid_telegram=msg.chatid_telegram;\n}\nif(msg.hasOwnProperty('token_webhook_ifttt')){\n    mensaje.token_webhook_ifttt=msg.token_webhook_ifttt;\n}\n\t\nreturn {msg: mensaje, metadata: metadata, msgType: msgType};\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1961,
+          "layoutY": 260
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar atributos",
         "debugMode": true,
         "configuration": {
           "scope": "SERVER_SCOPE"
@@ -165,8 +394,68 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1961,
-          "layoutY": 260
+          "layoutX": 708,
+          "layoutY": 335
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar downlink url",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 707,
+          "layoutY": 279
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "downlink url y device id",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "//Esta información me va a servir para enviar downlinks con el formato de TTN, que requiere el URL y el device_id\r\n//Si el url es chirpstack, ya lo trataré en el código\r\n\r\nvar newMessage = {};\r\nif (msg.hasOwnProperty('ttn_dev_id')) {\r\n    newMessage.ttn_dev_id = msg.ttn_dev_id;\r\n}\r\n\r\nif (msg.hasOwnProperty('downlink_url')&& msg.downlink_url!='chirpstack') {\r\n    newMessage.downlink_url = msg.downlink_url;\r\n}\r\n\r\nif (msg.hasOwnProperty('downlink_url')&& msg.downlink_url=='chirpstack') {\r\n    newMessage.downlink_chirpstack = true;\r\n}\r\nnewMessage.hardware_serial=msg.hardware_serial;\r\nreturn {\r\n    msg: newMessage,\r\n    metadata: metadata,\r\n    msgType: 'POST_ATTRIBUTES_REQUEST'\r\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 477,
+          "layoutY": 617
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "alarma actividad",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1709,
+          "layoutY": 542
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "TTN",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msg.dev_id=metadata.ss_ttn_dev_id;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 2211,
+          "layoutY": 324
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "preparar atributos",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\nvar mensaje = {};\nif(msg.payload_raw.substring(0,6)==\"RkYwM0\"){\n    //Sólo cambio si se llega a enviar el tercer downlink\n    mensaje.apropiado=true;\n    return {\n    msg: mensaje,\n    metadata: metadata,\n    msgType: msgType\n};\n}else{\n    return null;\n}\n\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 2490,
+          "layoutY": 326
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
         "name": "guardar atributos",
@@ -177,210 +466,11 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1704,
-          "layoutY": 265
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "preparar atributos",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\n//Valido los atributos que admito modificar\nvar mensaje={};\nif(msg.hasOwnProperty('email')){\n    mensaje.email=msg.email;\n}\nif(msg.hasOwnProperty('token_telegram')){\n    mensaje.token_telegram=msg.token_telegram;\n}\nif(msg.hasOwnProperty('chatid_telegram')){\n    mensaje.chatid_telegram=msg.chatid_telegram;\n}\nif(msg.hasOwnProperty('token_webhook_ifttt')){\n    mensaje.token_webhook_ifttt=msg.token_webhook_ifttt;\n}\n\t\nreturn {msg: mensaje, metadata: metadata, msgType: msgType};\n"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1131,
-          "layoutY": 67
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "acciones",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "if (metadata.deviceType == \"SYSTEM\") {\n    if (msg.hasOwnProperty('accion')) {\n        if (msg.accion == 'editarPerfil') {\n            return ['editarPerfil'];\n        } else if (msg\n            .accion == 'tomarPosesion') {\n            if (msg\n                .hasOwnProperty('uuid') && msg\n                .hasOwnProperty(\n                    'payload')) {\n                return ['tomarPosesion'];\n            }\n        } else if (msg\n            .accion == 'enviarDownlink') {\n            if (msg\n                .hasOwnProperty('uuid') && msg\n                .hasOwnProperty(\n                    'payload')) {\n                return ['enviarDownlink'];\n            }\n        } else if (msg\n            .accion == 'reclamarDispositivo') {\n            if (msg.hasOwnProperty('idEntidad') && msg\n                .hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('subtipoEntidad') ) {\n                return ['reclamarDispositivo'];\n            }\n        } else if (msg\n            .accion == 'editarEntidad') {\n            if (msg.hasOwnProperty('idEntidad') && msg\n                .hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('tipoEntidad') && msg\n                .hasOwnProperty('subtipoEntidad') && msg\n                .hasOwnProperty('padreEntidad') && msg\n                .hasOwnProperty('tipoPadreEntidad')) {\n                return ['editarEntidad'];\n            }\n        } else if (msg\n            .accion == 'configurarEntidad') {\n            if (msg.hasOwnProperty('configuracion') ) {\n                return ['configurarEntidad'];\n            }\n        } else if (msg.accion == 'crearEntidad') {\n            if (msg.hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('tipoEntidad') && msg\n                .hasOwnProperty('subtipoEntidad') && msg\n                .hasOwnProperty('padreEntidadId') && msg\n                .hasOwnProperty('padreEntidadNombre')) {\n                return ['crearEntidad'];\n            }\n        } else if (msg.accion == 'borrarEntidad') {\n            if (msg.hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('tipoEntidad')) {\n                return ['borrarEntidad'];\n            }\n        }\n    }\n} else {\n    return false;\n}"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 888,
-          "layoutY": 182
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "TTN2JSON",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var newObj = JSON.parse(msg.payload_fields);\r\nvar obj = {};\r\n//Si el obj tiene propiedades que son, a su vez, objetos JSON\r\n//por ejemplo, el caso de un GPS\r\n//tengo que convertirlas a timeseries\r\n//Desafortunadamente, es posible que aquí tengamos que hacer algunas\r\n//conversiones porque ciertos widgets no admiten los datos en el formato\r\n//que los entregan los sensores; por ejemplo, el magnetómetro del RAK7200\r\n//entrega las mediciones en uT, pero el widget brújula requiere directamente un ángulo\r\n//Esto lo podemos resolver con una función de postprocesamiento en el propio alias\r\n//pero el Widget trip animation sólo admite timeseries (no attibutes), por lo que no\r\n//podemos cargar el cercado desde un atributo (o quizás sea mejor tratarlo en la regla del propio dispositivo)\r\nfor (var x in newObj) {\r\n    if (typeof(newObj[x]) === 'object') {\r\n        for (var y in newObj[x]) {\r\n            obj[x + '_' + y] = newObj[x][y];\r\n        }\r\n    } else {\r\n        obj[x] = newObj[x];\r\n    }\r\n}\r\nobj.metadata = msg.metadata;\r\nobj.downlink_url = msg.downlink_url;\r\nobj.ttn_dev_id = msg.dev_id;\r\nreturn {\r\n    msg: obj,\r\n    metadata: metadata,\r\n    msgType: msgType\r\n};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 481,
-          "layoutY": 391
-        },
-        "type": "org.thingsboard.rule.engine.rpc.TbSendRPCRequestNode",
-        "name": "RPC Call Request",
-        "debugMode": false,
-        "configuration": {
-          "timeoutInSeconds": 60
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 482,
-          "layoutY": 321
-        },
-        "type": "org.thingsboard.rule.engine.action.TbLogNode",
-        "name": "Log Other",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "return '\\nIncoming message:\\n' + JSON.stringify(msg) + '\\nIncoming metadata:\\n' + JSON.stringify(metadata);"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 496,
-          "layoutY": 234
-        },
-        "type": "org.thingsboard.rule.engine.action.TbLogNode",
-        "name": "Log RPC from Device",
-        "debugMode": false,
-        "configuration": {
-          "jsScript": "return '\\nIncoming message:\\n' + JSON.stringify(msg) + '\\nIncoming metadata:\\n' + JSON.stringify(metadata);"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 273,
-          "layoutY": 151
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbMsgTypeSwitchNode",
-        "name": "Message Type Switch",
-        "debugMode": true,
-        "configuration": {
-          "version": 0
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 490,
-          "layoutY": 35
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "Save Client Attributes",
-        "debugMode": false,
-        "configuration": {
-          "scope": "CLIENT_SCOPE"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 888,
-          "layoutY": 130
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
-        "name": "Save Timeseries",
-        "debugMode": true,
-        "configuration": {
-          "defaultTTL": 0
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1076,
-          "layoutY": 385
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "al dispositivo",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "return [metadata.deviceType];"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1080,
-          "layoutY": 312
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
-        "name": "dispositivo permitido?",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "if (metadata.hasOwnProperty('tiposDeDispositivos') &&\n    metadata.hasOwnProperty('deviceType')) {\n    return metadata.tiposDeDispositivos.split(\",\").indexOf(\n        metadata.deviceType) >= 0;\n} else {\n    return false;\n}"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1079,
-          "layoutY": 240
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerAttributeNode",
-        "name": "tiposDeDispositivos",
-        "debugMode": true,
-        "configuration": {
-          "attrMapping": {
-            "tiposDeDispositivos": "tiposDeDispositivos"
-          },
-          "telemetry": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 478,
-          "layoutY": 545
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "alarma inactividad",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "return {msg: msg, metadata: metadata, msgType: msgType};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1712,
-          "layoutY": 536
-        },
-        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
-        "name": "enviarDownlink",
-        "debugMode": true,
-        "configuration": {
-          "restEndpointUrlPattern": "${ss_downlink_url}",
-          "requestMethod": "POST",
-          "headers": {},
-          "useSimpleClientHttpFactory": false,
-          "readTimeoutMs": 0,
-          "maxParallelRequestsCount": 0,
-          "useRedisQueueForMsgPersistence": false,
-          "trimQueue": false,
-          "maxQueueSize": 0
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1711,
-          "layoutY": 471
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
-        "name": "downlink_url",
-        "debugMode": true,
-        "configuration": {
-          "clientAttributeNames": [],
-          "sharedAttributeNames": [],
-          "serverAttributeNames": [
-            "downlink_url",
-            "ttn_dev_id"
-          ],
-          "latestTsKeyNames": [],
-          "tellFailureIfAbsent": true,
-          "getLatestValueWithTs": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1445,
-          "layoutY": 385
+          "layoutX": 1447,
+          "layoutY": 327
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "Customer",
+        "name": "customer",
         "debugMode": true,
         "configuration": {
           "originatorSource": "CUSTOMER",
@@ -399,8 +489,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1960,
-          "layoutY": 391
+          "layoutX": 1959,
+          "layoutY": 325
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "Originator=Entidad",
@@ -422,280 +512,239 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1704,
-          "layoutY": 388
+          "layoutX": 620,
+          "layoutY": 150
         },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "idEntidad",
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "es TTN/CS?",
         "debugMode": true,
         "configuration": {
-          "jsScript": "metadata.idEntidad=msg.uuid;\nreturn {msg: JSON.parse(msg.payload), metadata: metadata, msgType: msgType};"
+          "jsScript": "if (msg.hasOwnProperty('payload_fields') &&\r\n    msg.hasOwnProperty('metadata') &&\r\n    msg.hasOwnProperty('dev_id')) {\r\n    return ['TTN'];\r\n}else if (msg.hasOwnProperty('data') &&\r\n    msg.hasOwnProperty('object') &&\r\n    msg.hasOwnProperty('rxInfo') &&\r\n    msg.hasOwnProperty('txInfo') &&\r\n    msg.hasOwnProperty('deviceName')) {\r\n    return ['CS'];\r\n\r\n} else {\r\n    return ['No_TTN_CS']\r\n}"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 888,
-          "layoutY": 69
+          "layoutX": 1956,
+          "layoutY": 608
         },
-        "type": "org.thingsboard.rule.engine.filter.TbCheckMessageNode",
-        "name": "es accion?",
+        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
+        "name": "borrarQueue",
         "debugMode": true,
         "configuration": {
-          "messageNames": [
-            "accion"
-          ],
-          "metadataNames": [],
-          "checkAllKeys": true
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1704,
-          "layoutY": 326
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "idEntidad",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "metadata.idEntidad=msg.uuid;\nreturn {msg: JSON.parse(msg.payload), metadata: metadata, msgType: msgType};"
+          "restEndpointUrlPattern": "${ss___cs_url}/api/devices/${ss_hardware_serial}/queue",
+          "requestMethod": "POST",
+          "headers": {
+            "Grpc-Metadata-Authorization": "${ss___cs_token}"
+          },
+          "useSimpleClientHttpFactory": false,
+          "readTimeoutMs": 0,
+          "maxParallelRequestsCount": 0,
+          "useRedisQueueForMsgPersistence": false,
+          "trimQueue": false,
+          "maxQueueSize": 0
         }
       }
     ],
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 13,
+        "toIndex": 35,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 29,
         "type": "TTN"
       },
       {
-        "fromIndex": 0,
-        "toIndex": 19,
-        "type": "NO_TTN"
-      },
-      {
-        "fromIndex": 1,
-        "toIndex": 4,
-        "type": "Success"
-      },
-      {
         "fromIndex": 2,
-        "toIndex": 30,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 28,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 4,
-        "toIndex": 3,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 24,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 6,
-        "toIndex": 22,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 7,
-        "toIndex": 8,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 9,
-        "toIndex": 11,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 11,
-        "toIndex": 10,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 26,
-        "type": "enviarDownlink"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 9,
-        "type": "editarPerfil"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 2,
-        "type": "tomarPosesion"
-      },
-      {
-        "fromIndex": 13,
-        "toIndex": 22,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 13,
-        "toIndex": 7,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 17,
-        "toIndex": 6,
-        "type": "Activity Event"
-      },
-      {
-        "fromIndex": 17,
-        "toIndex": 23,
-        "type": "Inactivity Event"
-      },
-      {
-        "fromIndex": 17,
-        "toIndex": 15,
-        "type": "Other"
-      },
-      {
-        "fromIndex": 17,
-        "toIndex": 18,
-        "type": "Post attributes"
-      },
-      {
-        "fromIndex": 17,
-        "toIndex": 16,
-        "type": "RPC Request from Device"
-      },
-      {
-        "fromIndex": 17,
-        "toIndex": 14,
-        "type": "RPC Request to Device"
-      },
-      {
-        "fromIndex": 17,
         "toIndex": 0,
-        "type": "Post telemetry"
+        "type": "CS"
       },
       {
-        "fromIndex": 19,
-        "toIndex": 29,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 21,
-        "toIndex": 20,
-        "type": "True"
-      },
-      {
-        "fromIndex": 22,
+        "fromIndex": 3,
         "toIndex": 21,
         "type": "Success"
       },
       {
-        "fromIndex": 23,
-        "toIndex": 22,
+        "fromIndex": 4,
+        "toIndex": 33,
         "type": "Success"
       },
       {
-        "fromIndex": 25,
+        "fromIndex": 5,
+        "toIndex": 22,
+        "type": "True"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 9,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 9,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 12,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 13,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 14,
+        "type": "True"
+      },
+      {
+        "fromIndex": 15,
         "toIndex": 5,
         "type": "Success"
       },
       {
-        "fromIndex": 26,
+        "fromIndex": 17,
         "toIndex": 28,
+        "type": "Activity Event"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 11,
+        "type": "Inactivity Event"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 19,
+        "type": "Other"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 16,
+        "type": "Post attributes"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 18,
+        "type": "RPC Request from Device"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 20,
+        "type": "RPC Request to Device"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 34,
+        "type": "Post telemetry"
+      },
+      {
+        "fromIndex": 21,
+        "toIndex": 12,
         "type": "Success"
       },
       {
-        "fromIndex": 27,
-        "toIndex": 25,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 28,
+        "fromIndex": 21,
         "toIndex": 27,
         "type": "Success"
       },
       {
-        "fromIndex": 29,
+        "fromIndex": 22,
+        "toIndex": 8,
+        "type": "enviarDownlink"
+      },
+      {
+        "fromIndex": 22,
+        "toIndex": 25,
+        "type": "editarPerfil"
+      },
+      {
+        "fromIndex": 22,
+        "toIndex": 32,
+        "type": "tomarPosesion"
+      },
+      {
+        "fromIndex": 23,
+        "toIndex": 24,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 25,
+        "toIndex": 23,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 27,
+        "toIndex": 26,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 28,
         "toIndex": 12,
-        "type": "True"
+        "type": "Success"
+      },
+      {
+        "fromIndex": 29,
+        "toIndex": 10,
+        "type": "Success"
       },
       {
         "fromIndex": 30,
+        "toIndex": 31,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 32,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 32,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 33,
+        "toIndex": 30,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 34,
+        "toIndex": 21,
+        "type": "TTN"
+      },
+      {
+        "fromIndex": 34,
+        "toIndex": 15,
+        "type": "NO_TTN_CS"
+      },
+      {
+        "fromIndex": 34,
+        "toIndex": 3,
+        "type": "CS"
+      },
+      {
+        "fromIndex": 35,
         "toIndex": 1,
         "type": "Success"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 12,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "2cbfb6b0-801d-11ea-b6f7-395813a5429b"
-        },
-        "additionalInfo": {
-          "layoutX": 1438,
-          "layoutY": 220,
-          "ruleChainNodeId": "rule-chain-node-39"
-        },
-        "type": "reclamarDispositivo"
-      },
-      {
-        "fromIndex": 12,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "e9c2b450-701f-11ea-b4a5-4f0127e83283"
-        },
-        "additionalInfo": {
-          "layoutX": 1436,
-          "layoutY": 109,
-          "ruleChainNodeId": "rule-chain-node-38"
-        },
-        "type": "borrarEntidad"
-      },
-      {
-        "fromIndex": 12,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "3e402ff0-68fd-11ea-a5d1-174bec7b16a7"
-        },
-        "additionalInfo": {
-          "layoutX": 1438,
-          "layoutY": 0,
-          "ruleChainNodeId": "rule-chain-node-37"
-        },
-        "type": "editarEntidad"
-      },
-      {
-        "fromIndex": 12,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "7b293490-6dce-11ea-a995-07b73292ce47"
-        },
-        "additionalInfo": {
-          "layoutX": 1437,
-          "layoutY": 56,
-          "ruleChainNodeId": "rule-chain-node-36"
-        },
-        "type": "crearEntidad"
-      },
-      {
-        "fromIndex": 12,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "cc9716b0-7587-11ea-b6f7-395813a5429b"
-        },
-        "additionalInfo": {
-          "layoutX": 1438,
-          "layoutY": 170,
-          "ruleChainNodeId": "rule-chain-node-35"
-        },
-        "type": "configurarEntidad"
-      },
-      {
-        "fromIndex": 20,
+        "fromIndex": 14,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "6c41cbf0-8ab0-11ea-bd86-8fe980b3e9ea"
@@ -703,12 +752,12 @@
         "additionalInfo": {
           "layoutX": 1370,
           "layoutY": 538,
-          "ruleChainNodeId": "rule-chain-node-34"
+          "ruleChainNodeId": "rule-chain-node-39"
         },
         "type": "RAK7200"
       },
       {
-        "fromIndex": 20,
+        "fromIndex": 14,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "9aa12820-7367-11ea-b6f7-395813a5429b"
@@ -716,9 +765,74 @@
         "additionalInfo": {
           "layoutX": 1366,
           "layoutY": 474,
-          "ruleChainNodeId": "rule-chain-node-33"
+          "ruleChainNodeId": "rule-chain-node-38"
         },
         "type": "V02_001"
+      },
+      {
+        "fromIndex": 22,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "2cbfb6b0-801d-11ea-b6f7-395813a5429b"
+        },
+        "additionalInfo": {
+          "layoutX": 1438,
+          "layoutY": 220,
+          "ruleChainNodeId": "rule-chain-node-44"
+        },
+        "type": "reclamarDispositivo"
+      },
+      {
+        "fromIndex": 22,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "e9c2b450-701f-11ea-b4a5-4f0127e83283"
+        },
+        "additionalInfo": {
+          "layoutX": 1436,
+          "layoutY": 109,
+          "ruleChainNodeId": "rule-chain-node-43"
+        },
+        "type": "borrarEntidad"
+      },
+      {
+        "fromIndex": 22,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "3e402ff0-68fd-11ea-a5d1-174bec7b16a7"
+        },
+        "additionalInfo": {
+          "layoutX": 1438,
+          "layoutY": 0,
+          "ruleChainNodeId": "rule-chain-node-42"
+        },
+        "type": "editarEntidad"
+      },
+      {
+        "fromIndex": 22,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "7b293490-6dce-11ea-a995-07b73292ce47"
+        },
+        "additionalInfo": {
+          "layoutX": 1437,
+          "layoutY": 56,
+          "ruleChainNodeId": "rule-chain-node-41"
+        },
+        "type": "crearEntidad"
+      },
+      {
+        "fromIndex": 22,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "cc9716b0-7587-11ea-b6f7-395813a5429b"
+        },
+        "additionalInfo": {
+          "layoutX": 1438,
+          "layoutY": 170,
+          "ruleChainNodeId": "rule-chain-node-40"
+        },
+        "type": "configurarEntidad"
       }
     ]
   }
