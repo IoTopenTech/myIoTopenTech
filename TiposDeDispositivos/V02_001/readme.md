@@ -104,7 +104,8 @@ Para preaprovisionar dispositivos de tipo V02_001 se requiere un archivo CSV que
 * tipoOriginal: Tipo original del dispositivo para recuperarlo si el usuario lo resetease; coincidirá con el type (V02_001)
 * claimingData: Objeto en formato JSON con la clave de reclamación del dispositivo; por ejemplo: {"secretKey": "ABCDEFGHIJKLMNOP", "expirationTime": "1640995200000"}
 * claimingDataOriginal: Copia del parámetro anterior porque el anterior será borrado si el usuario reclama el dispositivo, y necesitamos un modo de recuperar esa información si el usuario resetease el dispositivo.
-* apropiado: Atributo en el que se indica si el usuario a tomado posesión del dispositivo; contendrá el valor false
+* apropiable: Atributo en el que se indica si el usuario podría tomar posesión del dispositivo mediante downlinks; en este caso el valor será false.
+* apropiado: Atributo en el que se indica si el usuario ha tomado posesión del dispositivo; contendrá el valor false
 * __cs_url: Si el dispositivo está pre-aprovisionado en ChirpStack, aquí indicaremos el URL.
 * __cs_token: Si el dispositivo está pre-aprovisionado en ChirpStack, aquí indicaremos el JWT autorizado en la API.
 * admiteABP: Contendrá el valor false porque el tipo de nodo V02_001 no admite ABP
