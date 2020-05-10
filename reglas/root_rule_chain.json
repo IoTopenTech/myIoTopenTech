@@ -19,13 +19,13 @@
         "name": "formatoCS",
         "debugMode": true,
         "configuration": {
-          "jsScript": " /*\n Tengo que pasar de formato TTN:\n {\n    \"port\": 99,\n    \"confirmed\": true,\n    \"payload_raw\": \"BgBk/w==\",\n    \"dev_id\": \"nodo1\"\n}\na formato CS:\n {  \"deviceQueueItem\": { \n     \"confirmed\": true,  \n     \"data\": \"AQI=\",  \n     \"devEUI\": \"009494db3143aea3\",\n     \"fCnt\": 0,\n     \"fPort\": 99  \n   } \n }\n */\nvar newMsg={};\nnewMsg.deviceQueueItem={\"confirmed\": true,\"data\": msg.payload_raw,\"devEUI\": metadata.ss_hardware_serial,\"fPort\":99};\nreturn {msg: newMsg, metadata: metadata, msgType: msgType};"
+          "jsScript": " /*\n Tengo que pasar de formato TTN:\n {\n    \"port\": 99,\n    \"confirmed\": true,\n    \"payload_raw\": \"BgBk/w==\",\n    \"dev_id\": \"nodo1\"\n}\na formato CS:\n {  \"deviceQueueItem\": { \n     \"confirmed\": true,  \n     \"data\": \"AQI=\",  \n     \"devEUI\": \"009494db3143aea3\",\n     \"fCnt\": 0,\n     \"fPort\": 99  \n   } \n }\n */\n var newMsg = {};\n newMsg.deviceQueueItem = {\n     \"confirmed\": true,\n     \"data\": msg.payload_raw,\n     \"devEUI\": metadata.ss_hardware_serial,\n     \"fPort\": 99\n };\n \nmetadata.deviceQueueItem=JSON.stringify(newMsg);\n return {\n     msg: msg,\n     metadata: metadata,\n     msgType: msgType\n };"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 1958,
-          "layoutY": 681
+          "layoutX": 1950,
+          "layoutY": 740
         },
         "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
         "name": "enviarDownlink",
@@ -532,7 +532,7 @@
         "debugMode": true,
         "configuration": {
           "restEndpointUrlPattern": "${ss___cs_url}/api/devices/${ss_hardware_serial}/queue",
-          "requestMethod": "POST",
+          "requestMethod": "DELETE",
           "headers": {
             "Grpc-Metadata-Authorization": "${ss___cs_token}"
           },
@@ -542,6 +542,18 @@
           "useRedisQueueForMsgPersistence": false,
           "trimQueue": false,
           "maxQueueSize": 0
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1956,
+          "layoutY": 673
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "recuperoDownlinkDeMetadata",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\n msg=JSON.parse(metadata.deviceQueueItem);\n return {\n     msg: msg,\n     metadata: metadata,\n     msgType: msgType\n };"
         }
       }
     ],
@@ -738,6 +750,11 @@
       },
       {
         "fromIndex": 35,
+        "toIndex": 36,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 36,
         "toIndex": 1,
         "type": "Success"
       }
@@ -747,12 +764,12 @@
         "fromIndex": 14,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "6c41cbf0-8ab0-11ea-bd86-8fe980b3e9ea"
+          "id": "97ce8850-92f1-11ea-9b20-a96a9e8c2286"
         },
         "additionalInfo": {
           "layoutX": 1370,
           "layoutY": 538,
-          "ruleChainNodeId": "rule-chain-node-39"
+          "ruleChainNodeId": "rule-chain-node-45"
         },
         "type": "RAK7200"
       },
@@ -760,12 +777,12 @@
         "fromIndex": 14,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "9aa12820-7367-11ea-b6f7-395813a5429b"
+          "id": "7ed93840-92f1-11ea-9b20-a96a9e8c2286"
         },
         "additionalInfo": {
           "layoutX": 1366,
           "layoutY": 474,
-          "ruleChainNodeId": "rule-chain-node-38"
+          "ruleChainNodeId": "rule-chain-node-44"
         },
         "type": "V02_001"
       },
@@ -773,12 +790,12 @@
         "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "2cbfb6b0-801d-11ea-b6f7-395813a5429b"
+          "id": "c50a9480-92f1-11ea-9b20-a96a9e8c2286"
         },
         "additionalInfo": {
           "layoutX": 1438,
           "layoutY": 220,
-          "ruleChainNodeId": "rule-chain-node-44"
+          "ruleChainNodeId": "rule-chain-node-43"
         },
         "type": "reclamarDispositivo"
       },
@@ -786,12 +803,12 @@
         "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "e9c2b450-701f-11ea-b4a5-4f0127e83283"
+          "id": "a23b9990-92f1-11ea-9b20-a96a9e8c2286"
         },
         "additionalInfo": {
           "layoutX": 1436,
           "layoutY": 109,
-          "ruleChainNodeId": "rule-chain-node-43"
+          "ruleChainNodeId": "rule-chain-node-42"
         },
         "type": "borrarEntidad"
       },
@@ -799,12 +816,12 @@
         "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "3e402ff0-68fd-11ea-a5d1-174bec7b16a7"
+          "id": "aaa9a680-92f1-11ea-9b20-a96a9e8c2286"
         },
         "additionalInfo": {
           "layoutX": 1438,
           "layoutY": 0,
-          "ruleChainNodeId": "rule-chain-node-42"
+          "ruleChainNodeId": "rule-chain-node-41"
         },
         "type": "editarEntidad"
       },
@@ -812,12 +829,12 @@
         "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "7b293490-6dce-11ea-a995-07b73292ce47"
+          "id": "b403e830-92f1-11ea-9b20-a96a9e8c2286"
         },
         "additionalInfo": {
           "layoutX": 1437,
           "layoutY": 56,
-          "ruleChainNodeId": "rule-chain-node-41"
+          "ruleChainNodeId": "rule-chain-node-40"
         },
         "type": "crearEntidad"
       },
@@ -825,12 +842,12 @@
         "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "cc9716b0-7587-11ea-b6f7-395813a5429b"
+          "id": "baa39dc0-92f1-11ea-9b20-a96a9e8c2286"
         },
         "additionalInfo": {
           "layoutX": 1438,
           "layoutY": 170,
-          "ruleChainNodeId": "rule-chain-node-40"
+          "ruleChainNodeId": "rule-chain-node-39"
         },
         "type": "configurarEntidad"
       }
