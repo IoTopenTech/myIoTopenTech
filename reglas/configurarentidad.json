@@ -202,7 +202,7 @@
         "name": "Validacion",
         "debugMode": true,
         "configuration": {
-          "jsScript": "metadata.idEntidad = msg.idEntidad;\nif (msg.hasOwnProperty('configuracion')) {\n    metadata.configuracion = msg.configuracion;\n}\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "jsScript": "metadata.idEntidad = msg.idEntidad;\nif (msg.hasOwnProperty('configuracion')) {\n    metadata.configuracion = JSON.stringify(msg.configuracion);\n}\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       },
       {

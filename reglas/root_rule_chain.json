@@ -65,7 +65,7 @@
         "name": "CS2TTN",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var newMsg = {};\nnewMsg.app_id = msg.applicationName;\nnewMsg.dev_id = msg.deviceName;\nnewMsg.hardware_serial = msg.devEUI;\nnewMsg.adr = msg.adr;\nnewMsg.counter = msg.fCnt;\nnewMsg.port = msg.fPort;\nnewMsg.payload_raw = msg.data;\nvar newPayloadFields = JSON.parse(msg.object);\n//Desafortunadamente el Cayenne Codec de CS es muy diferente al de TTN\n//No obstante, lo utilizaré porque aquí se hace una vez, pero si hubiera que\n//hacerlo en CS implicaría actuar sobre cada aplicación\n//\"object\": \"{\\\"analogInput\\\":{\\\"1\\\":2.74},\\\"digitalInput\\\":{\\\"2\\\":1,\\\"3\\\":0}}\"\n//\"payload_fields\": \"{\\\"analog_in_1\\\":2.75,\\\"digital_in_2\\\":1,\\\"digital_in_3\\\":0}\"\nnewMsg.payload_fields = {};\nfor (var key in newPayloadFields) {\n    var prefijo = \"\";\n    switch (key) {\n        case 'analogInput':\n            prefijo = 'analog_in_';\n            break;\n        case 'digitalInput':\n            prefijo = 'digital_in_';\n            break;\n        case 'temperatureSensor':\n            prefijo = 'temperature_';\n            break;\n        case 'humiditySensor':\n            prefijo = 'relative_humidity_';\n            break;\n        case 'accelerometer':\n            prefijo = 'accelerometer_';\n            break;\n        case 'barometer':\n            prefijo = 'barometric_pressure_';\n            break;\n        case 'gyrometer':\n            prefijo = 'gyrometer_';\n            break;\n        case 'gpsLocation':\n            prefijo = 'gps_';\n            break;\n        case 'digitalOutput':\n            prefijo = 'digital_out_';\n            break;\n        case 'analogOutput':\n            prefijo = 'analog_out_';\n            break;\n        case 'illuminanceSensor':\n            prefijo = 'luminosity_';\n            break;\n        case 'presenceSensor':\n            prefijo = 'presence_';\n            break;\n\n    }\n    for (var key2 in newPayloadFields[key]) {\n        newMsg.payload_fields[prefijo + key2] =\n            newPayloadFields[key][key2];\n    }\n}\nnewMsg.payload_fields = JSON.stringify(newMsg\n    .payload_fields);\nnewMsg.metadata = {\n    'rxInfo': JSON.parse(msg.rxInfo),\n    'txInfo': JSON.parse(msg.txInfo)\n};\nnewMsg.metadata = JSON.stringify(newMsg.metadata);\nnewMsg.downlink_url = 'chirpstack';\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "jsScript": "var newMsg = {};\nnewMsg.app_id = msg.applicationName;\nnewMsg.dev_id = msg.deviceName;\nnewMsg.hardware_serial = msg.devEUI;\nnewMsg.adr = msg.adr;\nnewMsg.counter = msg.fCnt;\nnewMsg.port = msg.fPort;\nnewMsg.payload_raw = msg.data;\nvar newPayloadFields = msg.object;\n//Desafortunadamente el Cayenne Codec de CS es muy diferente al de TTN\n//No obstante, lo utilizaré porque aquí se hace una vez, pero si hubiera que\n//hacerlo en CS implicaría actuar sobre cada aplicación\n//\"object\": \"{\\\"analogInput\\\":{\\\"1\\\":2.74},\\\"digitalInput\\\":{\\\"2\\\":1,\\\"3\\\":0}}\"\n//\"payload_fields\": \"{\\\"analog_in_1\\\":2.75,\\\"digital_in_2\\\":1,\\\"digital_in_3\\\":0}\"\nnewMsg.payload_fields = {};\nfor (var key in newPayloadFields) {\n    var prefijo = \"\";\n    switch (key) {\n        case 'analogInput':\n            prefijo = 'analog_in_';\n            break;\n        case 'digitalInput':\n            prefijo = 'digital_in_';\n            break;\n        case 'temperatureSensor':\n            prefijo = 'temperature_';\n            break;\n        case 'humiditySensor':\n            prefijo = 'relative_humidity_';\n            break;\n        case 'accelerometer':\n            prefijo = 'accelerometer_';\n            break;\n        case 'barometer':\n            prefijo = 'barometric_pressure_';\n            break;\n        case 'gyrometer':\n            prefijo = 'gyrometer_';\n            break;\n        case 'gpsLocation':\n            prefijo = 'gps_';\n            break;\n        case 'digitalOutput':\n            prefijo = 'digital_out_';\n            break;\n        case 'analogOutput':\n            prefijo = 'analog_out_';\n            break;\n        case 'illuminanceSensor':\n            prefijo = 'luminosity_';\n            break;\n        case 'presenceSensor':\n            prefijo = 'presence_';\n            break;\n\n    }\n    for (var key2 in newPayloadFields[key]) {\n        newMsg.payload_fields[prefijo + key2] =\n            newPayloadFields[key][key2];\n    }\n}\nnewMsg.payload_fields = newMsg\n    .payload_fields;\nnewMsg.metadata = {\n    'rxInfo': msg.rxInfo,\n    'txInfo': msg.txInfo\n};\nnewMsg.metadata = newMsg.metadata;\nnewMsg.downlink_url = \"chirpstack\";\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       },
       {
@@ -174,7 +174,7 @@
             "__cs_url"
           ],
           "latestTsKeyNames": [],
-          "tellFailureIfAbsent": true,
+          "tellFailureIfAbsent": false,
           "getLatestValueWithTs": false
         }
       },
@@ -330,7 +330,7 @@
         "name": "TTN2JSON",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var newObj = JSON.parse(msg.payload_fields);\r\nvar obj = {};\r\n//Si el obj tiene propiedades que son, a su vez, objetos JSON\r\n//por ejemplo, el caso de un GPS\r\n//tengo que convertirlas a timeseries\r\n//Desafortunadamente, es posible que aquí tengamos que hacer algunas\r\n//conversiones porque ciertos widgets no admiten los datos en el formato\r\n//que los entregan los sensores; por ejemplo, el magnetómetro del RAK7200\r\n//entrega las mediciones en uT, pero el widget brújula requiere directamente un ángulo\r\n//Esto lo podemos resolver con una función de postprocesamiento en el propio alias\r\n//pero el Widget trip animation sólo admite timeseries (no attibutes), por lo que no\r\n//podemos cargar el cercado desde un atributo (o quizás sea mejor tratarlo en la regla del propio dispositivo)\r\nfor (var x in newObj) {\r\n    if (typeof(newObj[x]) === 'object') {\r\n        for (var y in newObj[x]) {\r\n            obj[x + '_' + y] = newObj[x][y];\r\n        }\r\n    } else {\r\n        obj[x] = newObj[x];\r\n    }\r\n}\r\nobj.metadata = msg.metadata;\r\nobj.downlink_url = msg.downlink_url;\r\nobj.ttn_dev_id = msg.dev_id;\r\nobj.hardware_serial = msg.hardware_serial;\r\nreturn {\r\n    msg: obj,\r\n    metadata: metadata,\r\n    msgType: msgType\r\n};"
+          "jsScript": "var newObj = msg.payload_fields;\r\nvar obj = {};\r\n//Si el obj tiene propiedades que son, a su vez, objetos JSON\r\n//por ejemplo, el caso de un GPS\r\n//tengo que convertirlas a timeseries\r\n//Desafortunadamente, es posible que aquí tengamos que hacer algunas\r\n//conversiones porque ciertos widgets no admiten los datos en el formato\r\n//que los entregan los sensores; por ejemplo, el magnetómetro del RAK7200\r\n//entrega las mediciones en uT, pero el widget brújula requiere directamente un ángulo\r\n//Esto lo podemos resolver con una función de postprocesamiento en el propio alias\r\n//pero el Widget trip animation sólo admite timeseries (no attibutes), por lo que no\r\n//podemos cargar el cercado desde un atributo (o quizás sea mejor tratarlo en la regla del propio dispositivo)\r\nfor (var x in newObj) {\r\n    if (typeof(newObj[x]) === 'object') {\r\n        for (var y in newObj[x]) {\r\n            obj[x + '_' + y] = newObj[x][y];\r\n        }\r\n    } else {\r\n        obj[x] = newObj[x];\r\n    }\r\n}\r\nobj.metadata = msg.metadata;\r\nobj.downlink_url = msg.downlink_url;\r\nobj.ttn_dev_id = msg.dev_id;\r\nobj.hardware_serial = msg.hardware_serial;\r\nreturn {\r\n    msg: obj,\r\n    metadata: metadata,\r\n    msgType: msgType\r\n};"
         }
       },
       {
@@ -764,7 +764,7 @@
         "fromIndex": 14,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "97ce8850-92f1-11ea-9b20-a96a9e8c2286"
+          "id": "bbaa6460-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1370,
@@ -777,7 +777,7 @@
         "fromIndex": 14,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "7ed93840-92f1-11ea-9b20-a96a9e8c2286"
+          "id": "6b51d980-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1366,
@@ -790,7 +790,7 @@
         "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "c50a9480-92f1-11ea-9b20-a96a9e8c2286"
+          "id": "9f6ca010-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1438,
@@ -803,7 +803,7 @@
         "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "a23b9990-92f1-11ea-9b20-a96a9e8c2286"
+          "id": "76f65950-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1436,
@@ -816,7 +816,7 @@
         "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "aaa9a680-92f1-11ea-9b20-a96a9e8c2286"
+          "id": "816edc40-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1438,
@@ -829,7 +829,7 @@
         "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "b403e830-92f1-11ea-9b20-a96a9e8c2286"
+          "id": "8964fa10-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1437,
@@ -842,7 +842,7 @@
         "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "baa39dc0-92f1-11ea-9b20-a96a9e8c2286"
+          "id": "9434ebd0-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1438,

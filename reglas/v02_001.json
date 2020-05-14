@@ -503,12 +503,12 @@
         "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "840e2670-7435-11ea-b6f7-395813a5429b"
+          "id": "56388b20-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1724,
           "layoutY": 443,
-          "ruleChainNodeId": "rule-chain-node-31"
+          "ruleChainNodeId": "rule-chain-node-29"
         },
         "type": "Success"
       },
@@ -516,12 +516,12 @@
         "fromIndex": 1,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "840e2670-7435-11ea-b6f7-395813a5429b"
+          "id": "56388b20-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1724,
           "layoutY": 443,
-          "ruleChainNodeId": "rule-chain-node-31"
+          "ruleChainNodeId": "rule-chain-node-29"
         },
         "type": "Success"
       },
@@ -529,7 +529,7 @@
         "fromIndex": 4,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "840e2670-7435-11ea-b6f7-395813a5429b"
+          "id": "56388b20-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1725,
@@ -542,7 +542,7 @@
         "fromIndex": 5,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "840e2670-7435-11ea-b6f7-395813a5429b"
+          "id": "56388b20-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1725,
@@ -555,12 +555,12 @@
         "fromIndex": 11,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "840e2670-7435-11ea-b6f7-395813a5429b"
+          "id": "56388b20-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1724,
           "layoutY": 206,
-          "ruleChainNodeId": "rule-chain-node-29"
+          "ruleChainNodeId": "rule-chain-node-31"
         },
         "type": "Success"
       },
@@ -568,12 +568,12 @@
         "fromIndex": 12,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "840e2670-7435-11ea-b6f7-395813a5429b"
+          "id": "56388b20-952b-11ea-ae2e-23829982d32e"
         },
         "additionalInfo": {
           "layoutX": 1724,
           "layoutY": 206,
-          "ruleChainNodeId": "rule-chain-node-29"
+          "ruleChainNodeId": "rule-chain-node-31"
         },
         "type": "Success"
       }

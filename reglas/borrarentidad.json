@@ -237,7 +237,7 @@
             "claimingDataOriginal"
           ],
           "latestTsKeyNames": [],
-          "tellFailureIfAbsent": true,
+          "tellFailureIfAbsent": false,
           "getLatestValueWithTs": false
         }
       },
