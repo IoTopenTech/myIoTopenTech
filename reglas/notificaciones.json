@@ -8,76 +8,60 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 6,
+    "firstNodeIndex": 2,
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 585,
-          "layoutY": 222
-        },
-        "type": "org.thingsboard.rule.engine.mail.TbSendEmailNode",
-        "name": "email",
-        "debugMode": false,
-        "configuration": {
-          "useSystemSmtpSettings": true,
-          "smtpHost": "localhost",
-          "smtpPort": 25,
-          "username": null,
-          "password": null,
-          "smtpProtocol": "smtp",
-          "timeout": 10000,
-          "enableTls": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 325,
+          "layoutX": 292,
           "layoutY": 221
         },
-        "type": "org.thingsboard.rule.engine.mail.TbMsgToEmailNode",
-        "name": "preparar",
-        "debugMode": false,
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "emailAdicionales?",
+        "debugMode": true,
         "configuration": {
-          "fromTemplate": "no-reply@iotopentech.io",
-          "toTemplate": "${customer_email}",
-          "ccTemplate": null,
-          "bccTemplate": null,
-          "subjectTemplate": "${asuntoEmail}",
-          "bodyTemplate": "${mensajeEmail}"
+          "jsScript": "metadata.lista_email = [];\nvar alarmaActual = JSON.parse(metadata.alarmaActual);\nif (alarmaActual.emailPrincipal === true) {\n    metadata.lista_email.push(metadata.customer_email);\n}\nif (alarmaActual.hasOwnProperty(\n        'emailsAdicionales')) {\n    for (var i = 0; i < alarmaActual.emailsAdicionales\n        .length; i++) {\n\n        metadata.lista_email.push(alarmaActual\n            .emailsAdicionales[i]);\n    }\n}\nmetadata.lista_email = metadata.lista_email.join(',');\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 588,
-          "layoutY": 300
+          "layoutX": 49,
+          "layoutY": 301
         },
-        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
-        "name": "Telegram",
-        "debugMode": false,
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "destinos?",
+        "debugMode": true,
         "configuration": {
-          "restEndpointUrlPattern": "https://api.telegram.org/bot${customer_token_telegram}/sendMessage",
-          "requestMethod": "POST",
-          "headers": {
-            "Content-Type": "application/json"
-          },
-          "useSimpleClientHttpFactory": false,
-          "readTimeoutMs": 0,
-          "maxParallelRequestsCount": 0,
-          "useRedisQueueForMsgPersistence": false,
-          "trimQueue": false,
-          "maxQueueSize": 0
+          "jsScript": "var obj=JSON.parse(metadata.alarmaActual);\nvar destinos = [];\nif (metadata.hasOwnProperty('customer_email') && obj.hasOwnProperty('email') && obj.email) {\n    destinos.push('email');\n}\nif (metadata.hasOwnProperty('customer_token_telegram') && metadata.hasOwnProperty('customer_chatid_telegram') && obj.hasOwnProperty('telegram') && obj.telegram) {\n    destinos.push('telegram');\n}\nif (metadata.hasOwnProperty('customer_token_webhook_ifttt')&& obj.hasOwnProperty('ifttt')&& obj.hasOwnProperty('iftttEvento') && obj.ifttt  ) {\n    destinos.push('ifttt');\n}\nreturn destinos;"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 323,
-          "layoutY": 305
+          "layoutX": 49,
+          "layoutY": 226
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerAttributeNode",
+        "name": "Atributos",
+        "debugMode": true,
+        "configuration": {
+          "attrMapping": {
+            "token_webhook_ifttt": "customer_token_webhook_ifttt",
+            "chatid_telegram": "customer_chatid_telegram",
+            "token_telegram": "customer_token_telegram",
+            "email": "customer_email"
+          },
+          "telemetry": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 324,
+          "layoutY": 379
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "TB to Telegram",
+        "name": "TB to IFTTT",
         "debugMode": false,
         "configuration": {
-          "jsScript": "return {msg:{\"text\":metadata.mensajeTelegram,\"chat_id\":metadata.customer_chatid_telegram},\n    metadata: metadata,\n    msgType: msgType\n}"
+          "jsScript": "//Parece que puede haber un límite para el tamaño de la metadata\n//por lo que cojo sólo lo que necesito\nvar newMetadata={};\nnewMetadata.iftttEvento=JSON.parse(metadata.alarmaActual).iftttEvento;\nnewMetadata.customer_token_webhook_ifttt=metadata.customer_token_webhook_ifttt;\nreturn {msg: JSON.parse(metadata.mensajeIfttt), metadata: newMetadata, msgType: msgType};"
         }
       },
       {
@@ -104,82 +88,115 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 324,
-          "layoutY": 379
+          "layoutX": 323,
+          "layoutY": 305
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "TB to IFTTT",
+        "name": "TB to Telegram",
         "debugMode": false,
         "configuration": {
-          "jsScript": "//Parece que puede haber un límite para el tamaño de la metadata\n//por lo que cojo sólo lo que necesito\nvar newMetadata={};\nnewMetadata.iftttEvento=JSON.parse(metadata.alarmaActual).iftttEvento;\nnewMetadata.customer_token_webhook_ifttt=metadata.customer_token_webhook_ifttt;\nreturn {msg: JSON.parse(metadata.mensajeIfttt), metadata: newMetadata, msgType: msgType};"
+          "jsScript": "return {msg:{\"text\":metadata.mensajeTelegram,\"chat_id\":metadata.customer_chatid_telegram},\n    metadata: metadata,\n    msgType: msgType\n}"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 49,
-          "layoutY": 226
+          "layoutX": 588,
+          "layoutY": 300
         },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerAttributeNode",
-        "name": "Atributos",
-        "debugMode": true,
+        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
+        "name": "Telegram",
+        "debugMode": false,
         "configuration": {
-          "attrMapping": {
-            "token_webhook_ifttt": "customer_token_webhook_ifttt",
-            "chatid_telegram": "customer_chatid_telegram",
-            "token_telegram": "customer_token_telegram",
-            "email": "customer_email"
+          "restEndpointUrlPattern": "https://api.telegram.org/bot${customer_token_telegram}/sendMessage",
+          "requestMethod": "POST",
+          "headers": {
+            "Content-Type": "application/json"
           },
-          "telemetry": false
+          "useSimpleClientHttpFactory": false,
+          "readTimeoutMs": 0,
+          "maxParallelRequestsCount": 0,
+          "useRedisQueueForMsgPersistence": false,
+          "trimQueue": false,
+          "maxQueueSize": 0
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 49,
-          "layoutY": 301
+          "layoutX": 531,
+          "layoutY": 221
         },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "destinos?",
+        "type": "org.thingsboard.rule.engine.mail.TbMsgToEmailNode",
+        "name": "preparar",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var obj=JSON.parse(metadata.alarmaActual);\nvar destinos = [];\nif (metadata.hasOwnProperty('customer_email') && obj.hasOwnProperty('email') && obj.email) {\n    destinos.push('email');\n}\nif (metadata.hasOwnProperty('customer_token_telegram') && metadata.hasOwnProperty('customer_chatid_telegram') && obj.hasOwnProperty('telegram') && obj.telegram) {\n    destinos.push('telegram');\n}\nif (metadata.hasOwnProperty('customer_token_webhook_ifttt')&& obj.hasOwnProperty('ifttt')&& obj.hasOwnProperty('iftttEvento') && obj.ifttt  ) {\n    destinos.push('ifttt');\n}\nreturn destinos;"
+          "fromTemplate": "no-reply@iotopentech.io",
+          "toTemplate": "${lista_email}",
+          "ccTemplate": null,
+          "bccTemplate": null,
+          "subjectTemplate": "${asuntoEmail}",
+          "bodyTemplate": "${mensajeEmail}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 765,
+          "layoutY": 219
+        },
+        "type": "org.thingsboard.rule.engine.mail.TbSendEmailNode",
+        "name": "email",
+        "debugMode": true,
+        "configuration": {
+          "useSystemSmtpSettings": true,
+          "smtpHost": "localhost",
+          "smtpPort": 25,
+          "username": null,
+          "password": null,
+          "smtpProtocol": "smtp",
+          "timeout": 10000,
+          "enableTls": false
         }
       }
     ],
     "connections": [
       {
-        "fromIndex": 1,
-        "toIndex": 0,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 3,
-        "toIndex": 2,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 4,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 6,
+        "fromIndex": 0,
         "toIndex": 7,
         "type": "Success"
       },
       {
-        "fromIndex": 7,
+        "fromIndex": 1,
         "toIndex": 5,
-        "type": "ifttt"
-      },
-      {
-        "fromIndex": 7,
-        "toIndex": 3,
         "type": "telegram"
       },
       {
-        "fromIndex": 7,
-        "toIndex": 1,
+        "fromIndex": 1,
+        "toIndex": 3,
+        "type": "ifttt"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 0,
         "type": "email"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 8,
+        "type": "Success"
       }
     ],
     "ruleChainConnections": null

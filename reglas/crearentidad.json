@@ -8,32 +8,8 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 13,
+    "firstNodeIndex": 11,
     "nodes": [
-      {
-        "additionalInfo": {
-          "layoutX": 1160,
-          "layoutY": 236
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "V02_001",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var newMsg = {};\nnewMsg.V02_001_config =\n    '<div class=\"md-body-1\" style=\"padding-bottom: 10px; color: rgba(0,0,0,0.57);\">Heartbeat</div><div class=\"body\"> <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"> <div class=\"row\" layout=\"row\"> <md-input-container flex class=\"md-block\"> <label>Número de minutos entre heartbeats</label> <input type=\"number\" size=\"10\" step=\"1\" min=\"0\" max=\"60\" ng-model=\"vm.configuracion.___0700\"> </md-input-container> </div> </div> </div></div><div class=\"md-body-1\" style=\"padding-bottom: 10px; color: rgba(0,0,0,0.57);\">Coordenadas</div><div class=\"body\"> <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"> <div class=\"row\" layout=\"row\"> <md-input-container flex class=\"md-block\"> <label>Posicion X</label> <input type=\"number\" size=\"10\" step=\".01\" min=\"0\" max=\"1\" ng-model=\"vm.configuracion.__xPos\"> </md-input-container> <md-input-container flex class=\"md-block\"> <label>Posicion Y</label> <input type=\"number\" size=\"10\" step=\"0.01\" min=\"0.00\" max=\"1.00\" ng-model=\"vm.configuracion.__yPos\"> </md-input-container> </div> </div> </div></div><div class=\"md-body-1\" style=\"padding-bottom: 10px; color: rgba(0,0,0,0.57);\">Alarmas</div><div class=\"body\"> <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"> <div flex layout=\"column\"> <label class=\"checkbox-label\">Activar alarma de cambio de estado</label> <md-checkbox ng-model=\"vm.configuracion.__alarmas.cambioDeEstado.enable\" style=\"margin-bottom: 10px;\">{{(vm.configuracion.__alarmas.cambioDeEstado.enable ? \"value.true\" : \"value.false\") | translate}}</md-checkbox> </div> <div class=\"row\" layout=\"row\"> <md-input-container class=\"md-block\" style=\"min-width: 100px;\"> <label>Disparar al </label> <md-select ng-disabled=\"!vm.configuracion.__alarmas.cambioDeEstado.enable\" ng-required=\"vm.configuracion.__alarmas.cambioDeEstado.enable\" name=\"cambioDeEstadoTrigger\" ng-model=\"vm.configuracion.__alarmas.cambioDeEstado.trigger\"> <md-option value=\"abrir\"> abrir </md-option> <md-option value=\"cerrar\"> cerrar </md-option> </md-select> <div ng-messages=\"editEntityForm.cambioDeEstadoTrigger.$error\"> <div ng-message=\"required\">Este dato es obligatorio. </div> </div> </md-input-container> <sustituir-notificaciones class=\"ng-scope\">cambioDeEstado</sustituir-notificaciones> </div> </div> </div></div><div class=\"body\"> <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"> <div flex layout=\"column\"> <label class=\"checkbox-label\">Activar alarma de nivel bajo de batería</label> <md-checkbox ng-model=\"vm.configuracion.__alarmas.nivelDeBateria.enable\" style=\"margin-bottom: 10px;\">{{(vm.configuracion.__alarmas.nivelDeBateria.enable ? \"value.true\" : \"value.false\") | translate}}</md-checkbox> </div> <div class=\"row\" layout=\"row\"> <md-input-container flex class=\"md-block\"> <label>Umbral (V)</label> <input type=\"decimal\" size=\"10\" ng-disabled=\"!vm.configuracion.__alarmas.nivelDeBateria.enable \" ng-model=\"vm.configuracion.__alarmas.nivelDeBateria.umbralBateria\" ng-required=\"vm.configuracion.__alarmas.nivelDeBateria.enable\"> </md-input-container> <sustituir-notificaciones class=\"ng-scope\">nivelDeBateria</sustituir-notificaciones> </div> </div> </div></div><div class=\"body\"> <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"> <div flex layout=\"column\"> <label class=\"checkbox-label\">Activar alarma de inactividad</label> <md-checkbox ng-model=\"vm.configuracion.__alarmas.inactividad.enable\" style=\"margin-bottom: 10px;\">{{(vm.configuracion.__alarmas.inactividad.enable ? \"value.true\" : \"value.false\") | translate}}</md-checkbox> </div> <div class=\"row\" layout=\"row\"> <md-input-container flex class=\"md-block\"> <label>Umbral en segundos</label> <input type=\"number\" size=\"10\" ng-disabled=\"!vm.configuracion.__alarmas.inactividad.enable \" ng-model=\"vm.configuracion.__alarmas.inactividad.umbralInactividad\" ng-required=\"vm.configuracion.__alarmas.inactividad.enable\"> </md-input-container> <sustituir-notificaciones class=\"ng-scope\">inactividad</sustituir-notificaciones> </div> </div> </div></div>';\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: 'POST_ATTRIBUTES_REQUEST'\n};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1433,
-          "layoutY": 295
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "guardarConfig",
-        "debugMode": true,
-        "configuration": {
-          "scope": "SERVER_SCOPE"
-        }
-      },
       {
         "additionalInfo": {
           "layoutX": 0,
@@ -142,8 +118,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 215,
-          "layoutY": 300
+          "layoutX": 268,
+          "layoutY": 290
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "prefijo nombreCustomer",
@@ -243,8 +219,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 575,
-          "layoutY": 147
+          "layoutX": 544,
+          "layoutY": 142
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "Customer",
@@ -278,8 +254,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 0,
-          "layoutY": 295
+          "layoutX": 299,
+          "layoutY": 223
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
         "name": "Nombre del originador",
@@ -330,86 +306,36 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 829,
-          "layoutY": 207
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
-        "name": "cargarConfig",
-        "debugMode": true,
-        "configuration": {
-          "clientAttributeNames": [],
-          "sharedAttributeNames": [],
-          "serverAttributeNames": [
-            "${comodin}"
-          ],
-          "latestTsKeyNames": [],
-          "tellFailureIfAbsent": false,
-          "getLatestValueWithTs": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 838,
-          "layoutY": 142
+          "layoutX": 545,
+          "layoutY": 221
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "comodinConfig",
         "debugMode": true,
         "configuration": {
-          "jsScript": "metadata.comodin=metadata.subtipoEntidadNuevo+\"_config\";\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 831,
-          "layoutY": 289
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "resolver config",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "if (!metadata.hasOwnProperty(\"ss_\" + metadata.comodin) ||\n    metadata[\"ss_\" + metadata.comodin] === \"\") {\n    return [metadata.comodin];\n}\nreturn ['EXISTE'];"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1159,
-          "layoutY": 188
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "IMAGE01",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var newMsg = {};\nnewMsg.IMAGE01_config =\n    '<div class=\"body\"> <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"> <div class=\"row\" layout=\"row\"> <md-input-container flex class=\"md-block\"> <label>URL imagen fondo</label> <input type=\"string\" size=\"50\" ng-model=\"vm.configuracion.__urlImagenFondo\" ng-required=\"true\"> </md-input-container> </div> </div> </div> </div>';\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: 'POST_ATTRIBUTES_REQUEST'\n};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1161,
-          "layoutY": 283
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "RAK7200",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var newMsg = {};\nnewMsg.RAK7200_config =\n    '<div class=\"md-body-1\" style=\"padding-bottom: 10px; color: rgba(0,0,0,0.57);\">Geocercado</div><div class=\"body\"> <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"> <div class=\"row\" layout=\"row\"> <md-input-container flex class=\"md-block\"> <label>Pol&iacute;gono del geocercado en formato [[lat1,lon1],[lat2,lon2], ... ,[latN,lonN]]</label> <input type=\"text\" size=\"30\" pattern=\"^\\[(\\[([-+]?)([\\d]{1,2})(((\\.)(\\d+)(,)))(\\s*)(([-+]?)([\\d]{1,3})((\\.)(\\d+))?)\\],){2,}(\\[([-+]?)([\\d]{1,2})(((\\.)(\\d+)(,)))(\\s*)(([-+]?)([\\d]{1,3})((\\.)(\\d+))?)\\]){1}\\]$\" maxlength=\"1500\" ng-model=\"vm.configuracion.__geocercado\"> </md-input-container> </div> </div> </div></div><div class=\"md-body-1\" style=\"padding-bottom: 10px; color: rgba(0,0,0,0.57);\">Alarmas</div><div class=\"body\"> <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"> <div flex layout=\"column\"> <label class=\"checkbox-label\">Activar alarma de geocercado</label> <md-checkbox ng-model=\"vm.configuracion.__alarmas.geocercado.enable\" style=\"margin-bottom: 10px;\">{{(vm.configuracion.__alarmas.geocercado.enable ? \"value.true\" : \"value.false\") | translate}}</md-checkbox> </div> <div class=\"row\" layout=\"row\"> <md-input-container class=\"md-block\" style=\"min-width: 100px;\"> <label>Disparar al </label> <md-select ng-disabled=\"!vm.configuracion.__alarmas.geocercado.enable\" ng-required=\"vm.configuracion.__alarmas.geocercado.enable\" name=\"geocercadoTrigger\" ng-model=\"vm.configuracion.__alarmas.geocercado.trigger\"> <md-option value=\"entrar\"> entrar </md-option> <md-option value=\"salir\"> salir </md-option> </md-select> <div ng-messages=\"editEntityForm.cambioDeEstadoTrigger.$error\"> <div ng-message=\"required\">Este dato es obligatorio. </div> </div> </md-input-container> <sustituir-notificaciones class=\"ng-scope\">geocercado</sustituir-notificaciones> </div> </div> </div></div><div class=\"body\"> <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"><div flex layout=\"column\"> <label class=\"checkbox-label\">Activar alarma de nivel bajo de batería</label> <md-checkbox ng-model=\"vm.configuracion.__alarmas.nivelDeBateria.enable\" style=\"margin-bottom: 10px;\">{{(vm.configuracion.__alarmas.nivelDeBateria.enable ? \"value.true\" : \"value.false\") | translate}}</md-checkbox> </div> <div class=\"row\" layout=\"row\"> <md-input-container flex class=\"md-block\"> <label>Umbral (V)</label> <input type=\"decimal\" size=\"10\" ng-disabled=\"!vm.configuracion.__alarmas.nivelDeBateria.enable \" ng-model=\"vm.configuracion.__alarmas.nivelDeBateria.umbralBateria\" ng-required=\"vm.configuracion.__alarmas.nivelDeBateria.enable\"> </md-input-container> <sustituir-notificaciones class=\"ng-scope\">nivelDeBateria</sustituir-notificaciones> </div> </div> </div></div><div class=\"body\"> <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"> <div flex layout=\"column\"> <label class=\"checkbox-label\">Activar alarma de inactividad</label> <md-checkbox ng-model=\"vm.configuracion.__alarmas.inactividad.enable\" style=\"margin-bottom: 10px;\">{{(vm.configuracion.__alarmas.inactividad.enable ? \"value.true\" : \"value.false\") | translate}}</md-checkbox> </div> <div class=\"row\" layout=\"row\"> <md-input-container flex class=\"md-block\"> <label>Umbral en segundos</label> <input type=\"number\" size=\"10\" ng-disabled=\"!vm.configuracion.__alarmas.inactividad.enable \" ng-model=\"vm.configuracion.__alarmas.inactividad.umbralInactividad\" ng-required=\"vm.configuracion.__alarmas.inactividad.enable\"> </md-input-container> <sustituir-notificaciones class=\"ng-scope\">inactividad</sustituir-notificaciones> </div> </div> </div></div>';\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: 'POST_ATTRIBUTES_REQUEST'\n};"
+          "jsScript": "var newMsg={};\nvar newMetadata={};\nnewMetadata.customerName=metadata.customerName;\nnewMetadata.subtipoEntidad=metadata.subtipoEntidadNuevo;\nreturn {msg: newMsg, metadata: newMetadata, msgType: msgType};"
         }
       }
     ],
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 1,
+        "toIndex": 14,
         "type": "Success"
       },
       {
-        "fromIndex": 2,
-        "toIndex": 16,
+        "fromIndex": 1,
+        "toIndex": 5,
         "type": "Success"
       },
       {
         "fromIndex": 3,
-        "toIndex": 7,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 6,
         "type": "Success"
       },
       {
@@ -419,32 +345,32 @@
       },
       {
         "fromIndex": 6,
-        "toIndex": 8,
+        "toIndex": 3,
         "type": "Success"
       },
       {
         "fromIndex": 7,
-        "toIndex": 6,
+        "toIndex": 12,
         "type": "Success"
       },
       {
         "fromIndex": 8,
-        "toIndex": 5,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 9,
-        "toIndex": 14,
+        "toIndex": 17,
         "type": "Success"
       },
       {
         "fromIndex": 10,
-        "toIndex": 19,
+        "toIndex": 9,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 13,
         "type": "Success"
       },
       {
         "fromIndex": 12,
-        "toIndex": 11,
+        "toIndex": 0,
         "type": "Success"
       },
       {
@@ -454,85 +380,54 @@
       },
       {
         "fromIndex": 14,
-        "toIndex": 2,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 15,
-        "toIndex": 22,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 15,
-        "toIndex": 17,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 16,
-        "toIndex": 3,
+        "toIndex": 1,
         "type": "Dispositivo"
       },
       {
-        "fromIndex": 16,
-        "toIndex": 10,
+        "fromIndex": 14,
+        "toIndex": 8,
         "type": "Activo"
       },
       {
-        "fromIndex": 17,
-        "toIndex": 9,
+        "fromIndex": 15,
+        "toIndex": 7,
         "type": "Success"
       },
       {
-        "fromIndex": 18,
-        "toIndex": 20,
+        "fromIndex": 15,
+        "toIndex": 19,
         "type": "Success"
       },
       {
-        "fromIndex": 19,
+        "fromIndex": 16,
         "toIndex": 18,
         "type": "Success"
       },
       {
-        "fromIndex": 20,
-        "toIndex": 12,
+        "fromIndex": 17,
+        "toIndex": 16,
         "type": "Success"
       },
       {
-        "fromIndex": 21,
-        "toIndex": 23,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 22,
-        "toIndex": 21,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 23,
-        "toIndex": 25,
-        "type": "RAK7200_config"
-      },
-      {
-        "fromIndex": 23,
-        "toIndex": 24,
-        "type": "IMAGE01_config"
-      },
-      {
-        "fromIndex": 23,
-        "toIndex": 0,
-        "type": "V02_001_config"
-      },
-      {
-        "fromIndex": 24,
-        "toIndex": 1,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 25,
-        "toIndex": 1,
+        "fromIndex": 18,
+        "toIndex": 10,
         "type": "Success"
       }
     ],
-    "ruleChainConnections": null
+    "ruleChainConnections": [
+      {
+        "fromIndex": 13,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "280782f0-9991-11ea-b635-e9b9d187c660"
+        },
+        "additionalInfo": {
+          "layoutX": 836,
+          "layoutY": 136,
+          "ruleChainNodeId": "rule-chain-node-22"
+        },
+        "type": "Success"
+      }
+    ]
   }
 }

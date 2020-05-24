@@ -420,7 +420,7 @@
         "type": "alarm",
         "title": "New widget",
         "sizeX": 24,
-        "sizeY": 10,
+        "sizeY": 11,
         "config": {
           "timewindow": {
             "realtime": {
@@ -521,14 +521,14 @@
         },
         "id": "59d678c9-f9c1-b54c-a024-7d38c9af50c3"
       },
-      "c03ead73-2a16-7928-5c58-2d865b7345cc": {
+      "c5c5ea63-7d76-8939-f171-914489eea2f8": {
         "isSystemType": true,
         "bundleAlias": "iotopentech",
-        "typeAlias": "downlink_digital",
+        "typeAlias": "downlink_digital2",
         "type": "latest",
         "title": "New widget",
         "sizeX": 7,
-        "sizeY": 7,
+        "sizeY": 8,
         "config": {
           "datasources": [
             {
@@ -540,7 +540,7 @@
                   "label": "digital_in_3",
                   "color": "#2196f3",
                   "settings": {},
-                  "_hash": 0.4521971134543328
+                  "_hash": 0.7325395322015935
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -558,7 +558,7 @@
           "settings": {
             "outputChannel": 6
           },
-          "title": "Downlink",
+          "title": "LED",
           "showTitleIcon": false,
           "titleIcon": null,
           "iconColor": "rgba(0, 0, 0, 0.87)",
@@ -576,7 +576,7 @@
           "showLegend": false,
           "actions": {}
         },
-        "id": "c03ead73-2a16-7928-5c58-2d865b7345cc"
+        "id": "c5c5ea63-7d76-8939-f171-914489eea2f8"
       }
     },
     "states": {
@@ -614,13 +614,13 @@
               },
               "59d678c9-f9c1-b54c-a024-7d38c9af50c3": {
                 "sizeX": 24,
-                "sizeY": 10,
+                "sizeY": 11,
                 "row": 11,
                 "col": 0
               },
-              "c03ead73-2a16-7928-5c58-2d865b7345cc": {
+              "c5c5ea63-7d76-8939-f171-914489eea2f8": {
                 "sizeX": 7,
-                "sizeY": 7,
+                "sizeY": 8,
                 "row": 0,
                 "col": 17
               }
