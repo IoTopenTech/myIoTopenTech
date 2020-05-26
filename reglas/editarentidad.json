@@ -290,6 +290,21 @@
           "customerCacheExpiration": 300,
           "createCustomerIfNotExists": false
         }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1390,
+          "layoutY": 413,
+          "description": "Esto he tenido que hacerlo porque a veces perdía la asignación."
+        },
+        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
+        "name": "reasignar al cliente",
+        "debugMode": true,
+        "configuration": {
+          "customerNamePattern": "${customerName}",
+          "customerCacheExpiration": 300,
+          "createCustomerIfNotExists": false
+        }
       }
     ],
     "connections": [
@@ -369,6 +384,11 @@
         "type": "Success"
       },
       {
+        "fromIndex": 15,
+        "toIndex": 18,
+        "type": "Success"
+      },
+      {
         "fromIndex": 16,
         "toIndex": 0,
         "type": "Success"
@@ -384,7 +404,7 @@
         "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "280782f0-9991-11ea-b635-e9b9d187c660"
+          "id": "7509c3e0-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
           "layoutX": 1167,
