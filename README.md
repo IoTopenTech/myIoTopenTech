@@ -61,15 +61,16 @@ Procedimiento para crear el entorno de desarrollo en una cuenta tenant de tb IoT
 Tampoco en necesario importar todas las reglas, bastaría con las siguientes, pero es importante hacerlo en el siguiente orden (durante la importación de la reglas, ThingsBoard pierde la vinculación que hay de unas reglas a otras; concretamente tendrá que revincular manualmente los vínculos de las reglas Root Rule Chain y V02_001; en la regla Root Rule Chain además deberá borrar los nodos que hagan referencia a reglas que no haya importado, como RAK7200):
 
   1. notificaciones
-  2. V02_001
-  3. borrarEntidad
-  4. editarEntidad
-  5. crearEntidad
-  6. configurarEntidad
-  7. reclamarDispositivo
-  8. Root Rule Chain (convertir esta regla en la nueva regla raíz, y borrar la Root Rule Chain original).
+  2. actualizarconfigdashboardsingular
+  3. V02_001
+  4. borrarEntidad
+  5. editarEntidad
+  6. crearEntidad
+  7. configurarEntidad
+  8. reclamarDispositivo
+  9. Root Rule Chain (convertir esta regla en la nueva regla raíz, y borrar la Root Rule Chain original).
  
- Concretamente la regla Root Rule Chain deberá quedar vinculada a las demás reglas del siguiente modo:
+ Concretamente la regla Root Rule Chain deberá quedar vinculada a las demás reglas del siguiente modo (es posible que tenga que borrar algún nodo si ha decidido no importar todas las reglas/dashboards, sino sólo los indicados como imprescindibles en este documento):
  
  ![](.//media/readme_01.png)
  
