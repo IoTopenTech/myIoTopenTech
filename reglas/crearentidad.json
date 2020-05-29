@@ -12,21 +12,23 @@
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 323,
-          "layoutY": 808
+          "layoutX": 320,
+          "layoutY": 815
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "Cambiar a tenant",
+        "name": "patron",
         "debugMode": true,
         "configuration": {
-          "originatorSource": "TENANT",
+          "originatorSource": "RELATED",
           "relationsQuery": {
-            "direction": "FROM",
+            "direction": "TO",
             "maxLevel": 1,
             "filters": [
               {
-                "relationType": "Contains",
-                "entityTypes": []
+                "relationType": "${customerID}",
+                "entityTypes": [
+                  "CUSTOMER"
+                ]
               }
             ],
             "fetchLastLevelOnly": false
@@ -609,7 +611,7 @@
         "additionalInfo": {
           "layoutX": 836,
           "layoutY": 136,
-          "ruleChainNodeId": "rule-chain-node-31"
+          "ruleChainNodeId": "rule-chain-node-32"
         },
         "type": "Success"
       }
