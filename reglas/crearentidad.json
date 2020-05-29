@@ -8,8 +8,76 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 11,
+    "firstNodeIndex": 15,
     "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 323,
+          "layoutY": 808
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Cambiar a tenant",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "TENANT",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 596,
+          "layoutY": 806
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "accounting",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "accounting"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": false,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 868,
+          "layoutY": 807
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "actualizarAccounting",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var accounting={};\nif(metadata.hasOwnProperty('ss_accounting')){\n    accounting=JSON.parse(metadata.ss_accounting);\n}\naccounting[metadata.customerID]={'dispositivosActivos':msg.dispositivosActivos};\nreturn {msg: {\"accounting\":accounting}, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 54,
+          "layoutY": 741
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "customerID",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "id": "customerID"
+          }
+        }
+      },
       {
         "additionalInfo": {
           "layoutX": 0,
@@ -60,7 +128,7 @@
           "entityTypePattern": null,
           "entityCacheExpiration": 300,
           "createEntityIfNotExists": false,
-          "changeOriginatorToRelatedEntity": false,
+          "changeOriginatorToRelatedEntity": true,
           "removeCurrentRelations": false
         }
       },
@@ -315,32 +383,104 @@
         "configuration": {
           "jsScript": "var newMsg={};\nvar newMetadata={};\nnewMetadata.customerName=metadata.customerName;\nnewMetadata.subtipoEntidad=metadata.subtipoEntidadNuevo;\nreturn {msg: newMsg, metadata: newMetadata, msgType: msgType};"
         }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 53,
+          "layoutY": 808
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar dispositivosActivos",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 868,
+          "layoutY": 737
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "POST ATTRIBUTES",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\nvar msg={'dispositivosActivos':parseInt(metadata.ss_dispositivosActivos)+1};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 590,
+          "layoutY": 695
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "primerDispositivoActivo",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\nmetadata.ss_dispositivosActivos=0;\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 322,
+          "layoutY": 736
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "dispositivosActivos",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "dispositivosActivos"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": true,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 45,
+          "layoutY": 896
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
       }
     ],
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 14,
+        "toIndex": 1,
         "type": "Success"
       },
       {
         "fromIndex": 1,
-        "toIndex": 5,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 3,
         "toIndex": 2,
         "type": "Success"
       },
       {
+        "fromIndex": 2,
+        "toIndex": 28,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 27,
+        "type": "Success"
+      },
+      {
         "fromIndex": 4,
-        "toIndex": 6,
+        "toIndex": 18,
         "type": "Success"
       },
       {
         "fromIndex": 5,
-        "toIndex": 4,
+        "toIndex": 9,
         "type": "Success"
       },
       {
@@ -350,81 +490,126 @@
       },
       {
         "fromIndex": 7,
-        "toIndex": 12,
+        "toIndex": 6,
         "type": "Success"
       },
       {
         "fromIndex": 8,
-        "toIndex": 17,
+        "toIndex": 10,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 9,
+        "toIndex": 8,
         "type": "Success"
       },
       {
         "fromIndex": 10,
-        "toIndex": 9,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 11,
-        "toIndex": 13,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 0,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 13,
-        "toIndex": 15,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 14,
-        "toIndex": 1,
-        "type": "Dispositivo"
-      },
-      {
-        "fromIndex": 14,
-        "toIndex": 8,
-        "type": "Activo"
-      },
-      {
-        "fromIndex": 15,
         "toIndex": 7,
         "type": "Success"
       },
       {
-        "fromIndex": 15,
-        "toIndex": 19,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 16,
-        "toIndex": 18,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 17,
+        "fromIndex": 11,
         "toIndex": 16,
         "type": "Success"
       },
       {
-        "fromIndex": 18,
-        "toIndex": 10,
+        "fromIndex": 12,
+        "toIndex": 21,
         "type": "Success"
+      },
+      {
+        "fromIndex": 14,
+        "toIndex": 13,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 17,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 16,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 19,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 18,
+        "toIndex": 5,
+        "type": "Dispositivo"
+      },
+      {
+        "fromIndex": 18,
+        "toIndex": 12,
+        "type": "Activo"
+      },
+      {
+        "fromIndex": 19,
+        "toIndex": 11,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 19,
+        "toIndex": 23,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 20,
+        "toIndex": 22,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 21,
+        "toIndex": 20,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 22,
+        "toIndex": 14,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 24,
+        "toIndex": 0,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 25,
+        "toIndex": 24,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 26,
+        "toIndex": 25,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 27,
+        "toIndex": 25,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 27,
+        "toIndex": 26,
+        "type": "Failure"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 13,
+        "fromIndex": 17,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "280782f0-9991-11ea-b635-e9b9d187c660"
+          "id": "7509c3e0-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
           "layoutX": 836,
           "layoutY": 136,
-          "ruleChainNodeId": "rule-chain-node-22"
+          "ruleChainNodeId": "rule-chain-node-31"
         },
         "type": "Success"
       }
