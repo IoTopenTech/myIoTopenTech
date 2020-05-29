@@ -160,6 +160,65 @@
           "actions": {}
         },
         "id": "58b27f5a-e29a-7c88-111f-586d8b32a086"
+      },
+      "74f06f8b-d82d-d5c4-b438-da0472ecf7e8": {
+        "isSystemType": true,
+        "bundleAlias": "cards",
+        "typeAlias": "simple_card",
+        "type": "latest",
+        "title": "New widget",
+        "sizeX": 7,
+        "sizeY": 5,
+        "config": {
+          "datasources": [
+            {
+              "type": "entity",
+              "dataKeys": [
+                {
+                  "name": "dispositivosActivos",
+                  "type": "attribute",
+                  "label": "Nº Dispositivos",
+                  "color": "#2196f3",
+                  "settings": {},
+                  "_hash": 0.3293255185306406
+                }
+              ],
+              "entityAliasId": "d5716c46-7e3f-d8a7-163b-c9a265a4ea0f"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#ff5722",
+          "color": "rgba(255, 255, 255, 0.87)",
+          "padding": "16px",
+          "settings": {
+            "labelPosition": "top"
+          },
+          "title": "",
+          "dropShadow": true,
+          "enableFullscreen": true,
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400
+          },
+          "units": "",
+          "decimals": 0,
+          "useDashboardTimewindow": true,
+          "showLegend": false,
+          "widgetStyle": {},
+          "actions": {},
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "displayTimewindow": true
+        },
+        "id": "74f06f8b-d82d-d5c4-b438-da0472ecf7e8"
       }
     },
     "states": {
@@ -186,6 +245,12 @@
                 "sizeY": 6,
                 "row": 0,
                 "col": 16
+              },
+              "74f06f8b-d82d-d5c4-b438-da0472ecf7e8": {
+                "sizeX": 7,
+                "sizeY": 5,
+                "row": 6,
+                "col": 16
               }
             },
             "gridSettings": {
@@ -211,6 +276,18 @@
           "resolveMultiple": true,
           "assetType": "ROOT",
           "assetNameFilter": ""
+        }
+      },
+      "d5716c46-7e3f-d8a7-163b-c9a265a4ea0f": {
+        "id": "d5716c46-7e3f-d8a7-163b-c9a265a4ea0f",
+        "alias": "customer",
+        "filter": {
+          "type": "singleEntity",
+          "resolveMultiple": false,
+          "singleEntity": {
+            "entityType": "CURRENT_CUSTOMER",
+            "id": "5334c2d0-88bb-11ea-823d-a96a9e8c2286"
+          }
         }
       }
     },
