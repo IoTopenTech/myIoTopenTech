@@ -16,7 +16,7 @@
 3.  Crear un bloque de HTML para la configuración del dispositivo. Por
     ejemplo, para configurar, el periodo de tiempo de los heartbeat, las coordenadas, o los umbrales de las alarmas. Este bloque
     de código se almacenará en un atributo de cada customer con el
-    nombre, por ejemplo, config\_V02\_002, y el sistema lo tomará de ahí para
+    nombre, por ejemplo, V02\_002\_config, y el sistema lo tomará de ahí para
     mostrarlo en el panel de configuración de este nodo. Cada parámetro será una propiedad del objeto vm.configuracion.
     Existen 3 tipos de parámetros configurables:
     
