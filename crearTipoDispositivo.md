@@ -22,7 +22,7 @@
     
     * Los que simplemente se almacenan en un atributo del dispositivo, que deben empezar con doble guión bajo, como __xPos o __yPos que se utilizan para posicionar un dispositivo en un widget de tipo IMAGE.
     * Los de alarmas, que se agrupan dentro del atributo __alarmas, como __alarmas.cambioDeEstado, para distinguirlos de los demás y poder gestionarlos en las reglas para determinar si es necesario enviar algún tipo de notificación.
-    * Los que además de almacenarse en un atributo, se envían por downlink al dispositivo, que deben empezar con triple guión bajo,  como ___0700. Éstos deben empezar por tres guiones bajos, seguidos del canal y el tipo de dato (en concordancia con el formato Cayenne LPP).
+    * Los que no se almacenan en un atributo, sino que se envían por downlink al dispositivo, que deben empezar con triple guión bajo,  como ___0700. Éstos deben empezar por tres guiones bajos, seguidos de la carga de pago expresada en hexadecimal).
 
 ![](.//media/image1.png)
 
