@@ -124,8 +124,18 @@ de nodo V02\_001 que puede servir como referencia:
     </div>
 </div>
 ```
+Fundamentalmente está compuesto por 4 secciones:
 
-Básicamente, hay que inventarse un nombre para cada alarma; por ejemplo,
+* Funciones: Deben aparecer al principio del bloque de configuración. Es un array JSON con objetos que se convertirán en funciones al acceder al panel de configuración. Generalmente utilizaremos estas funciones para realizar conversiones de datos. Por ejemplo, si queremos configurar el periodo de heartbeats enviando un downlink al dispositivo necesitaremos 2 parámetros:
+
+ * __heartbeat: Este parámetro (empieza con doble guión bajo) se almacenará en un atributo del dispositivo y contendrá el valor decimal en segundos del periodo del heartbeat, que es como le resultará más cómodo al usuario expresarlo. Está asociado a un control input de tipo number del bloque de configuración.
+  * ____0700: Este parámetro (empieza con triple guión bajo) se enviará por downlink al dispositivo, que requiere que el valor del periodo esté expresado en hexadecimal. Está asociado a un control input de tipo hidden del bloque de configuración. Cuando el usuario modifique el parámetro __heartbeat, se ejecutará la función actualizarHeartbeat(), que convertirá el valor a hexadecimal y lo almacenará en ___0700.
+  
+* Sustituciones: Son bloques de código genéricos para la mayoría de tipos de dispositivos y que reemplaza automáticamente el sistema por el código correspondiente. Por ejemplo "<sustituir-coordenadas class="ng-scope"></sustituir-coordenadas>" será sustituido por el código necesario para que el usuario seleccione el tipo de coordenadas (imagen o mapa) que quiere asignar al dispositivo. Actualmente sólo existen 3 sustituciones posibles (coordenadas, chirpstack y notificaciones), pero poco a poco iremos añadiendo más, especialmente relacionadas con las alarmas.
+* Parámetros: Son bloques de código para configurar parámetros concretos, como __heartbeat.
+* Alarmas: Son los bloques de código para configurar las alarmas, que se explican con más detalle a continuación.
+
+Para crear una alarma hay que elegir un nombre para ella; por ejemplo,
 cambioDeEstado
 
 ![](.//media/image2.png)
@@ -144,7 +154,7 @@ nivelDeBateria y la variable para su umbral se ha llamado umbralBateria.
 Y lo único peculiar que queda por explicar de este bloque de código es
 que, al final de cada alarma, se tiene que incluir un elemento de este
 tipo en el que el texto debe coincidir con el nombre que se eligió para
-la alarma; en este caso nivelDeBateria.
+la alarma; en este caso nivelDeBateria. Es uno de los tipos de sustituiciones que se explicaron anteriormente.
 
 ![](.//media/image5.png)
 
