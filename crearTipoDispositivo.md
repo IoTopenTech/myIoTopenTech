@@ -23,6 +23,8 @@
     * Los que simplemente se almacenan en un atributo del dispositivo, que deben empezar con doble guión bajo, como __xPos o __yPos que se utilizan para posicionar un dispositivo en un widget de tipo IMAGE.
     * Los de alarmas, que se agrupan dentro del atributo __alarmas, como __alarmas.cambioDeEstado, para distinguirlos de los demás y poder gestionarlos en las reglas para determinar si es necesario enviar algún tipo de notificación.
     * Los que no se almacenan en un atributo, sino que se envían por downlink al dispositivo, que deben empezar con triple guión bajo,  como ___0700. El valor de estos atributos debe estar expresado en hexadecimal. El sistema tomará como carga de pago completa para el donwlink todo lo que haya a continuación de los tres guiones bajo concatenado con el valor del propio atributo; por ejemplo, si el atributo se llama ___01 y su valor es 64 (100 expresado en hexadecimal), la plataforma enviará un downlink con la carga de pago 0164.
+    
+> Debemos tener en cuenta que si almacenamos en un atributo un valor que puede convertirse en un entero, ThingsBoard lo convertirá en un entero aunque no lo sea; por ejemplo, si queremos almacenar la cadena de texto "07", ThingsBoard la almacenará en el atributo como el entero 7.
 
 ![](.//media/image1.png)
 
