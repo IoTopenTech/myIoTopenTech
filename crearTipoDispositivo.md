@@ -32,34 +32,36 @@ A continuación, se muestra el bloque de código correspondiente al tipo
 de nodo V02\_001 que puede servir como referencia:
 
 ```html
-<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0,0,0,0.57);">Heartbeat</div>
-<div class="body">
-    <div class="row" layout="row" layout-align="start center">
-        <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
-            <div class="row" layout="row">
-                <md-input-container flex class="md-block">
-                    <label>Número de minutos entre heartbeats</label>
-                    <input type="number" size="10" step="1" min="0" max="60" ng-model="vm.configuracion.___0700"> </md-input-container>
+<funciones>[{"nombre":"actualizarHeartbeat","codigo":"$scope.vm.configuracion.___0700=parseInt($scope.vm.configuracion.__heartbeat).toString(16);console.log($scope.vm.configuracion.___0700);"}]</funciones>
+<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0, 0, 0, 0.57);">Par&aacute;metros configurables mediante downlink</div>
+<div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
+    <div class="md-body-1" style="padding-bottom: 10px; color: rgba(0, 0, 0, 0.57);">Heartbeat</div>
+    <div class="body">
+        <div class="row" layout="row" layout-align="start center">
+            <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
+                <div class="row" layout="row">
+                    <md-input-container flex class="md-block">
+                        <label>Número de minutos entre heartbeats</label> <input type="number" size="10" step="1" min="0" max="60" ng-model="vm.configuracion.__heartbeat" ng-change="actualizarHeartbeat()" />
+                        <input type="hidden" ng-model="vm.configuracion.___0700" />
+                        <md-button aria-label="CONFIGURAR" type="submit" ng-click="vm.configuracion.__ultimoDownlink='heartbeat'"> <md-icon>check</md-icon> <md-tooltip md-direction="top"> Configurar heartbeat </md-tooltip> </md-button>
+                    </md-input-container>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0,0,0,0.57);">Coordenadas</div>
+<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0, 0, 0, 0.57);">Coordenadas</div>
 <div class="body">
     <div class="row" layout="row" layout-align="start center">
         <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
             <div class="row" layout="row">
-                <md-input-container flex class="md-block">
-                    <label>Posicion X</label>
-                    <input type="number" size="10" step=".01" min="0" max="1" ng-model="vm.configuracion.__xPos"> </md-input-container>
-                <md-input-container flex class="md-block">
-                    <label>Posicion Y</label>
-                    <input type="number" size="10" step="0.01" min="0.00" max="1.00" ng-model="vm.configuracion.__yPos"> </md-input-container>
+                <md-input-container flex class="md-block"> <label>Posicion X</label> <input type="number" size="10" step=".01" min="0" max="1" ng-model="vm.configuracion.__xPos" /> </md-input-container>
+                <md-input-container flex class="md-block"> <label>Posicion Y</label> <input type="number" size="10" step="0.01" min="0.00" max="1.00" ng-model="vm.configuracion.__yPos" /> </md-input-container>
             </div>
         </div>
     </div>
 </div>
-<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0,0,0,0.57);">Alarmas</div>
+<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0, 0, 0, 0.57);">Alarmas</div>
 <div class="body">
     <div class="row" layout="row" layout-align="start center">
         <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
@@ -70,13 +72,15 @@ de nodo V02\_001 que puede servir como referencia:
             <div class="row" layout="row">
                 <md-input-container class="md-block" style="min-width: 100px;">
                     <label>Disparar al </label>
-                    <md-select ng-disabled="!vm.configuracion.__alarmas.cambioDeEstado.enable" ng-required="vm.configuracion.__alarmas.cambioDeEstado.enable" name="cambioDeEstadoTrigger" ng-model="vm.configuracion.__alarmas.cambioDeEstado.trigger">
-                        <md-option value="abrir"> abrir </md-option>
-                        <md-option value="cerrar"> cerrar </md-option>
+                    <md-select
+                        ng-disabled="!vm.configuracion.__alarmas.cambioDeEstado.enable"
+                        ng-required="vm.configuracion.__alarmas.cambioDeEstado.enable"
+                        name="cambioDeEstadoTrigger"
+                        ng-model="vm.configuracion.__alarmas.cambioDeEstado.trigger"
+                    >
+                        <md-option value="abrir"> abrir </md-option> <md-option value="cerrar"> cerrar </md-option>
                     </md-select>
-                    <div ng-messages="editEntityForm.cambioDeEstadoTrigger.$error">
-                        <div ng-message="required">Este dato es obligatorio. </div>
-                    </div>
+                    <div ng-messages="editEntityForm.cambioDeEstadoTrigger.$error"><div ng-message="required">Este dato es obligatorio.</div></div>
                 </md-input-container>
                 <sustituir-notificaciones class="ng-scope">cambioDeEstado</sustituir-notificaciones>
             </div>
@@ -93,7 +97,14 @@ de nodo V02\_001 que puede servir como referencia:
             <div class="row" layout="row">
                 <md-input-container flex class="md-block">
                     <label>Umbral (V)</label>
-                    <input type="decimal" size="10" ng-disabled="!vm.configuracion.__alarmas.nivelDeBateria.enable " ng-model="vm.configuracion.__alarmas.nivelDeBateria.umbralBateria" ng-required="vm.configuracion.__alarmas.nivelDeBateria.enable"> </md-input-container>
+                    <input
+                        type="decimal"
+                        size="10"
+                        ng-disabled="!vm.configuracion.__alarmas.nivelDeBateria.enable "
+                        ng-model="vm.configuracion.__alarmas.nivelDeBateria.umbralBateria"
+                        ng-required="vm.configuracion.__alarmas.nivelDeBateria.enable"
+                    />
+                </md-input-container>
                 <sustituir-notificaciones class="ng-scope">nivelDeBateria</sustituir-notificaciones>
             </div>
         </div>
@@ -109,12 +120,20 @@ de nodo V02\_001 que puede servir como referencia:
             <div class="row" layout="row">
                 <md-input-container flex class="md-block">
                     <label>Umbral en segundos</label>
-                    <input type="number" size="10" ng-disabled="!vm.configuracion.__alarmas.inactividad.enable " ng-model="vm.configuracion.__alarmas.inactividad.umbralInactividad" ng-required="vm.configuracion.__alarmas.inactividad.enable"> </md-input-container>
+                    <input
+                        type="number"
+                        size="10"
+                        ng-disabled="!vm.configuracion.__alarmas.inactividad.enable "
+                        ng-model="vm.configuracion.__alarmas.inactividad.umbralInactividad"
+                        ng-required="vm.configuracion.__alarmas.inactividad.enable"
+                    />
+                </md-input-container>
                 <sustituir-notificaciones class="ng-scope">inactividad</sustituir-notificaciones>
             </div>
         </div>
     </div>
 </div>
+
 ```
 
 Básicamente, hay que inventarse un nombre para cada alarma; por ejemplo,
