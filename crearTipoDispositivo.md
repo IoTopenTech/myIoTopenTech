@@ -33,6 +33,7 @@ de nodo V02\_001 que puede servir como referencia:
 
 ```html
 <funciones>[{"nombre":"actualizarHeartbeat","codigo":"$scope.vm.configuracion.___0700=parseInt($scope.vm.configuracion.__heartbeat).toString(16);console.log($scope.vm.configuracion.___0700);"}]</funciones>
+<sustituir-coordenadas class="ng-scope"></sustituir-coordenadas>
 <div class="md-body-1" style="padding-bottom: 10px; color: rgba(0, 0, 0, 0.57);">Par&aacute;metros configurables mediante downlink</div>
 <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
     <div class="md-body-1" style="padding-bottom: 10px; color: rgba(0, 0, 0, 0.57);">Heartbeat</div>
@@ -46,17 +47,6 @@ de nodo V02\_001 que puede servir como referencia:
                         <md-button aria-label="CONFIGURAR" type="submit" ng-click="vm.configuracion.__ultimoDownlink='heartbeat'"> <md-icon>check</md-icon> <md-tooltip md-direction="top"> Configurar heartbeat </md-tooltip> </md-button>
                     </md-input-container>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0, 0, 0, 0.57);">Coordenadas</div>
-<div class="body">
-    <div class="row" layout="row" layout-align="start center">
-        <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
-            <div class="row" layout="row">
-                <md-input-container flex class="md-block"> <label>Posicion X</label> <input type="number" size="10" step=".01" min="0" max="1" ng-model="vm.configuracion.__xPos" /> </md-input-container>
-                <md-input-container flex class="md-block"> <label>Posicion Y</label> <input type="number" size="10" step="0.01" min="0.00" max="1.00" ng-model="vm.configuracion.__yPos" /> </md-input-container>
             </div>
         </div>
     </div>
@@ -133,7 +123,6 @@ de nodo V02\_001 que puede servir como referencia:
         </div>
     </div>
 </div>
-
 ```
 
 Básicamente, hay que inventarse un nombre para cada alarma; por ejemplo,
