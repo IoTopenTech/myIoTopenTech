@@ -1,2 +1,2 @@
-name;type;nombreOriginal;tipoOriginal;claimingData;claimingDataOriginal;apropiable;apropiado;__cs_url;__cs_token;admiteABP;___0700
+name;type;nombreOriginal;tipoOriginal;claimingData;claimingDataOriginal;apropiable;apropiado;__cs_url;__cs_token;admiteABP;__heartbeat
 P0000000100000001;V02_001;P0000000100000001;V02_001;{"secretKey": "ABCDEFGHIJKLMNOP", "expirationTime": "1640995200000"};{"secretKey": "ABCDEFGHIJKLMNOP", "expirationTime": "1640995200000"};true;false;[URL de ChirpStack];[JWT ChirpStack];false;5
