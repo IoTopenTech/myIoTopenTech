@@ -53,15 +53,15 @@ Canal | Tipo | Valor
 
 El cambio de credenciales implica el envío de 3 downlinks, uno para cada credencial (DEV EUI, APP EUI y APP KEY). No pueden enviarse en un sólo downlink porque se superaría la longitud de carga de pago de LoRaWAN para los spread factors más lentos.
 
-Cada downlink comenzará con 0x46 0x46.
+Cada downlink comenzará con 0x46 0x46 (caracteres "FF" ASCII expresados en hexadecimal).
 
 A continuación se utilizará el siguiente par de bytes para indicar el tipo de credencial:
 
 Byte 3 y 4 | Tipo de credencial
 ---------- | ------------------
-0x30 0x31 | DEV EUI
-0x30 0x32 | APP EUI
-0x30 0x33 | APP KEY
+0x30 0x31 ("01" ASCII2HEX) | DEV EUI
+0x30 0x32 ("02" ASCII2HEX) | APP EUI
+0x30 0x33 ("03" ASCII2HEX) | APP KEY
 
 A continuación se utilizará un byte para indicar el tipo de activación (O de OTAA o A de ABP); en este caso sólo se admite OTAA, por lo que el 5º byte será 0x4F.
 
