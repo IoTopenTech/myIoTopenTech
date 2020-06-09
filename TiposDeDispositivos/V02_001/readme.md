@@ -109,4 +109,4 @@ Para preaprovisionar dispositivos de tipo V02_001 se requiere un archivo CSV que
 * __cs_url: Si el dispositivo está pre-aprovisionado en ChirpStack, aquí indicaremos el URL.
 * __cs_token: Si el dispositivo está pre-aprovisionado en ChirpStack, aquí indicaremos el JWT autorizado en la API.
 * admiteABP: Contendrá el valor false porque el tipo de nodo V02_001 no admite ABP
-* ___0700: Este parámetro corresponde al periodo de envío de heartbeats y contendrá el valor 1 (que es el predeterminado para el tipo V02_001).
+* __heartbeat: Este parámetro corresponde al periodo de envío de heartbeats y contendrá el valor 1 (que es el predeterminado para el tipo V02_001).
