@@ -1,5 +1,5 @@
 {
-  "title": "Dispositivo_RAK7204",
+  "title": "Dispositivo_LHT65",
   "configuration": {
     "widgets": {
       "71519cb3-d9c1-cae4-a2cb-7d9a796518fa": {
@@ -16,12 +16,12 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "analog_in_8",
+                  "name": "BatV",
                   "type": "timeseries",
-                  "label": "Nivel de batería",
+                  "label": "BatV",
                   "color": "#2196f3",
                   "settings": {},
-                  "_hash": 0.2731452186012622
+                  "_hash": 0.44444261633405135
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -139,9 +139,9 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "analog_in_8",
+                  "name": "BatV",
                   "type": "timeseries",
-                  "label": "analog_in_8",
+                  "label": "BatV",
                   "color": "#2196f3",
                   "settings": {
                     "excludeFromStacking": false,
@@ -160,13 +160,18 @@
                     "axisTitle": "",
                     "axisPosition": "left",
                     "axisTicksFormatter": "",
+                    "thresholds": [
+                      {
+                        "thresholdValueSource": "predefinedValue"
+                      }
+                    ],
                     "comparisonSettings": {
                       "showValuesForComparison": true,
                       "comparisonValuesLabel": "",
                       "color": ""
                     }
                   },
-                  "_hash": 0.5092714623524404
+                  "_hash": 0.9512565647847968
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -356,9 +361,9 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "temperature_2",
+                  "name": "TempC_SHT",
                   "type": "timeseries",
-                  "label": "temperature_2",
+                  "label": "TempC_SHT",
                   "color": "#2196f3",
                   "settings": {
                     "excludeFromStacking": false,
@@ -377,13 +382,18 @@
                     "axisTitle": "",
                     "axisPosition": "left",
                     "axisTicksFormatter": "",
+                    "thresholds": [
+                      {
+                        "thresholdValueSource": "predefinedValue"
+                      }
+                    ],
                     "comparisonSettings": {
                       "showValuesForComparison": true,
                       "comparisonValuesLabel": "",
                       "color": ""
                     }
                   },
-                  "_hash": 0.4712126576336262
+                  "_hash": 0.7441767777859107
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -460,9 +470,9 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "barometric_pressure_6",
+                  "name": "TempC_DS",
                   "type": "timeseries",
-                  "label": "barometric_pressure_6",
+                  "label": "TempC_DS",
                   "color": "#2196f3",
                   "settings": {
                     "excludeFromStacking": false,
@@ -481,13 +491,18 @@
                     "axisTitle": "",
                     "axisPosition": "left",
                     "axisTicksFormatter": "",
+                    "thresholds": [
+                      {
+                        "thresholdValueSource": "predefinedValue"
+                      }
+                    ],
                     "comparisonSettings": {
                       "showValuesForComparison": true,
                       "comparisonValuesLabel": "",
                       "color": ""
                     }
                   },
-                  "_hash": 0.7769006504134044
+                  "_hash": 0.30429734990217727
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -529,7 +544,7 @@
               "showLabels": true
             }
           },
-          "title": "Presión barométrica",
+          "title": "Sensor externo",
           "dropShadow": true,
           "enableFullscreen": true,
           "titleStyle": {
@@ -564,9 +579,9 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "relative_humidity_7",
+                  "name": "Hum_SHT",
                   "type": "timeseries",
-                  "label": "relative_humidity_7",
+                  "label": "Hum_SHT",
                   "color": "#2196f3",
                   "settings": {
                     "excludeFromStacking": false,
@@ -585,13 +600,18 @@
                     "axisTitle": "",
                     "axisPosition": "left",
                     "axisTicksFormatter": "",
+                    "thresholds": [
+                      {
+                        "thresholdValueSource": "predefinedValue"
+                      }
+                    ],
                     "comparisonSettings": {
                       "showValuesForComparison": true,
                       "comparisonValuesLabel": "",
                       "color": ""
                     }
                   },
-                  "_hash": 0.052189734307773405
+                  "_hash": 0.2769358444722103
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -668,12 +688,12 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "temperature_2",
+                  "name": "TempC_SHT",
                   "type": "timeseries",
-                  "label": "temperature_2",
+                  "label": "TempC_SHT",
                   "color": "#2196f3",
                   "settings": {},
-                  "_hash": 0.3547607341926179
+                  "_hash": 0.9843095527154229
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -689,7 +709,7 @@
           "color": "rgba(255, 254, 254, 0.87)",
           "padding": "0px",
           "settings": {
-            "maxValue": 60,
+            "maxValue": 80,
             "minValue": -20,
             "donutStartAngle": 90,
             "showValue": true,
@@ -771,12 +791,12 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "barometric_pressure_6",
+                  "name": "TempC_DS",
                   "type": "timeseries",
-                  "label": "barometric_pressure_6",
+                  "label": "TempC_DS",
                   "color": "#2196f3",
                   "settings": {},
-                  "_hash": 0.34962164476445234
+                  "_hash": 0.22948857093511332
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -792,8 +812,8 @@
           "color": "rgba(255, 254, 254, 0.87)",
           "padding": "0px",
           "settings": {
-            "maxValue": 1200,
-            "minValue": 800,
+            "maxValue": 80,
+            "minValue": -20,
             "donutStartAngle": 90,
             "showValue": true,
             "showMinMax": true,
@@ -830,7 +850,7 @@
             },
             "neonGlowBrightness": 40,
             "dashThickness": 1.5,
-            "unitTitle": "hPa",
+            "unitTitle": "ºC",
             "showUnitTitle": true,
             "gaugeColor": "#171a1c",
             "gaugeType": "arc",
@@ -841,7 +861,7 @@
             "showTimestamp": true,
             "useFixedLevelColor": false
           },
-          "title": "Presión barométrica",
+          "title": "Sensor externo",
           "dropShadow": true,
           "enableFullscreen": true,
           "titleStyle": {
@@ -875,12 +895,12 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "relative_humidity_7",
+                  "name": "Hum_SHT",
                   "type": "timeseries",
-                  "label": "relative_humidity_7",
+                  "label": "Hum_SHT",
                   "color": "#2196f3",
                   "settings": {},
-                  "_hash": 0.24164940826071013
+                  "_hash": 0.8775809162030224
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -964,64 +984,6 @@
           "displayTimewindow": true
         },
         "id": "b12e824f-968e-53fd-ccf0-66120000e355"
-      },
-      "672ee576-1d9b-d663-a337-f2811aadb0fd": {
-        "isSystemType": true,
-        "bundleAlias": "iotopentech",
-        "typeAlias": "iaq",
-        "type": "latest",
-        "title": "New widget",
-        "sizeX": 7,
-        "sizeY": 3,
-        "config": {
-          "datasources": [
-            {
-              "type": "entity",
-              "dataKeys": [
-                {
-                  "name": "iaq",
-                  "type": "timeseries",
-                  "label": "iaq",
-                  "color": "#2196f3",
-                  "settings": {},
-                  "_hash": 0.7366675146454194
-                }
-              ],
-              "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
-            }
-          ],
-          "timewindow": {
-            "realtime": {
-              "timewindowMs": 60000
-            }
-          },
-          "showTitle": false,
-          "backgroundColor": "#fff",
-          "color": "rgba(0, 0, 0, 0.87)",
-          "padding": "0px",
-          "settings": {
-            "cardCss": ".card {\n   width: 100%;\n   height: 100%;\n   border: 2px solid #ccc;\n   box-sizing: border-box;\n}\n\n.card .content {\n   padding: 20px;\n   display: flex;\n   flex-direction: row;\n   align-items: center;\n   justify-content: space-around;\n   height: 100%;\n   box-sizing: border-box;\n}\n\n.card .content .column {\n   display: flex;\n   flex-direction: column;    \n   justify-content: space-around;\n   height: 100%;\n}\n\n.card h1 {\n    text-transform: uppercase;\n    color: #999;\n    font-size: 20px;\n    font-weight: bold;\n    margin: 0;\n    padding-bottom: 10px;\n    line-height: 32px;\n}\n\n.card .value {\n    font-size: 38px;\n    font-weight: 200;\n}\n\n.card .description {\n    font-size: 20px;\n    color: #999;\n}\n",
-            "cardHtml": "\n<div class='card' style=\"background-color: jf{colorIAQ};\">\n    <div class='content' >\n        <div class='column'>\n            <h1>IAQ</h1>\n            <div class='value'>\n                <strong></strong>${iaq:0}</strong>\n            </div>    \n            <div class='description'>\n                <strong>${textoIAQ}</strong>\n            </div>\n        </div>\n        <img height=\"120px\" src=\"${imagenIAQ}\" />\n\n    </div>\n</div>"
-          },
-          "title": "New IAQ",
-          "dropShadow": false,
-          "enableFullscreen": true,
-          "widgetStyle": {},
-          "titleStyle": {
-            "fontSize": "16px",
-            "fontWeight": 400
-          },
-          "useDashboardTimewindow": true,
-          "showLegend": false,
-          "actions": {},
-          "showTitleIcon": false,
-          "titleIcon": null,
-          "iconColor": "rgba(0, 0, 0, 0.87)",
-          "iconSize": "24px",
-          "titleTooltip": "",
-          "displayTimewindow": true
-        },
-        "id": "672ee576-1d9b-d663-a337-f2811aadb0fd"
       }
     },
     "states": {
@@ -1061,14 +1023,14 @@
                 "sizeX": 12,
                 "sizeY": 6,
                 "mobileHeight": null,
-                "row": 6,
+                "row": 12,
                 "col": 0
               },
               "d445814f-e46e-0cad-3450-762e85409831": {
                 "sizeX": 12,
                 "sizeY": 6,
                 "mobileHeight": null,
-                "row": 12,
+                "row": 6,
                 "col": 0
               },
               "aa55ece5-c73f-2299-5ffe-c70b7b2322cd": {
@@ -1080,20 +1042,14 @@
               "6c5b0060-245f-8d85-c110-85d807b3c226": {
                 "sizeX": 5,
                 "sizeY": 6,
-                "row": 6,
+                "row": 12,
                 "col": 12
               },
               "b12e824f-968e-53fd-ccf0-66120000e355": {
                 "sizeX": 5,
                 "sizeY": 6,
-                "row": 12,
+                "row": 6,
                 "col": 12
-              },
-              "672ee576-1d9b-d663-a337-f2811aadb0fd": {
-                "sizeX": 7,
-                "sizeY": 3,
-                "row": 0,
-                "col": 17
               }
             },
             "gridSettings": {
@@ -1145,5 +1101,5 @@
       "toolbarAlwaysOpen": true
     }
   },
-  "name": "Dispositivo_RAK7204"
+  "name": "Dispositivo_LHT65"
 }

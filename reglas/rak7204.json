@@ -8,8 +8,80 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 62,
+    "firstNodeIndex": 0,
     "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 46,
+          "layoutY": 207
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "es telemetria?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if(msgType=='POST_TELEMETRY_REQUEST') {\n    return ['telemetria'];\n}else if(msgType=='INACTIVITY_EVENT'||msgType=='ACTIVITY_EVENT'){\n    return['alarma'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 882,
+          "layoutY": 667
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "C[r/l]ear",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if ( msg.temperature_2> msg.alarma.umbralMaxima) {\n    return ['crear'];\n} else if(msg.temperature_2 < msg.alarma.umbralMaxima-msg.alarma.histeresisMaxima){\n    return ['clear'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 614,
+          "layoutY": 669
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "tipoAlarma muyAlta",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.tipoAlarma = \"Temperatura muy alta\";\nmetadata.umbralMinima=msg.alarma.umbralMinima;\nmetadata.histeresisMinima=msg.alarma.histeresisMinima;\nmetadata.umbralMaxima=msg.alarma.umbralMaxima;\nmetadata.histeresisMaxima=msg.alarma.histeresisMaxima;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 336,
+          "layoutY": 661
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Activada?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var obj = JSON.parse(metadata.ss___alarma_RAK7204);\n\nif (obj.temperatura.enable===true){\n    msg.alarma=obj.temperatura;\n    //Cargo los datos de interés en los metadatos para construir los mensaje de alarma\n    metadata.temperatura=msg.temperature_2;\n    //alarmaActual se usa en la cadena de reglas de Notificaciones\n    //Para extraer información. No puede ir por msg porque se\n    //pierde en el nodo de generación de alarma\n    metadata.alarmaActual=JSON.stringify(obj.temperatura);\n    \n   return {\n        msg: msg,\n        metadata: metadata,\n        msgType: msgType\n    };\n}\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1433,
+          "layoutY": 845
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.split(\"_\")[1]+\" ha anulado una alarma de tipo temperatura muy baja. La temperatura actual es \"+metadata.temperatura+\" ºC, y el umbral está fijado en \"+metadata.umbralMinima+\" ºC.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.split(\"_\")[1]+'\",\"value2\":\"'+metadata.temperatura+'\",\"value3\":\"'+metadata.analog_in_8+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.split(\"_\")[1]+\": Alarma anulada \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1433,
+          "layoutY": 793
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.split(\"_\")[1]+\" ha generado una alarma de tipo temperatura muy baja. La temperatura actual es \"+metadata.temperatura+\" ºC, y el umbral está fijado en \"+metadata.umbralMinima+\" ºC.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.split(\"_\")[1]+'\",\"value2\":\"'+metadata.temperatura+'\",\"value3\":\"'+metadata.analog_in_8+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.split(\"_\")[1]+\": Alarma \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
       {
         "additionalInfo": {
           "layoutX": 624,
@@ -598,7 +670,7 @@
         "name": "calcularIAQ",
         "debugMode": true,
         "configuration": {
-          "jsScript": "//Uso esta referencia para calcular el IAQ\n//https://github.com/G6EJD/BME680-Example\n//David Bird 2018\n//Asumo rango de resistencia de 0 a 50000\n//Doy un peso del 10% a la humedad\n//y otro 10% a la temperatura\n\nif (msg.hasOwnProperty('relative_humidity_7') && msg\n    .hasOwnProperty('temperature_2') && msg\n    .hasOwnProperty('analog_in_4')) {\n    msg.latitude = msg.gps_1_latitude;\n    msg.longitude = msg.gps_1_longitude;\n}\n\n\nmsg.analog_in_4 = Math.min(50000, msg.analog_in_4*1000);\nvar resistencia=100.0-(msg.analog_in_4*100.0/50000.0);\nvar temperatura;\nif(msg.temperature_2<21){\n    temperatura=(msg.temperature_2-21.0)*100.0/(-41.0);\n}else{\n    temperatura=(msg.temperature_2-21.0)*100.0/79.0;\n}\nvar humedad;\nif(msg.relative_humidity_7<40){\n    humedad=(msg.relative_humidity_7-40.0)*100.0/(-40.0);\n}else{\n    humedad=(msg.relative_humidity_7-40.0)*100.0/60.0;\n}\nmsg.iaq=0.8*resistencia + 0.1 * temperatura + 0.1 * humedad; //en porcentaje\nmsg.iaq=5.0 * msg.iaq;\n\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: 'POST_TELEMETRY_REQUEST'\n};"
+          "jsScript": "//Uso esta referencia para calcular el IAQ\n//https://github.com/G6EJD/BME680-Example\n//David Bird 2018\n//Asumo rango de resistencia de 0 a 50000\n//Doy un peso del 10% a la humedad\n//y otro 10% a la temperatura\n\nif (msg.hasOwnProperty('relative_humidity_7') && msg\n    .hasOwnProperty('temperature_2') && msg\n    .hasOwnProperty('analog_in_4')) {\n    msg.latitude = msg.gps_1_latitude;\n    msg.longitude = msg.gps_1_longitude;\n}\n\n\nmsg.analog_in_4 = Math.min(50000, Math.abs(msg.analog_in_4*1000));\nvar resistencia=100.0-(msg.analog_in_4*100.0/50000.0);\nvar temperatura;\nif(msg.temperature_2<21){\n    temperatura=(msg.temperature_2-21.0)*100.0/(-41.0);\n}else{\n    temperatura=(msg.temperature_2-21.0)*100.0/79.0;\n}\nvar humedad;\nif(msg.relative_humidity_7<40){\n    humedad=(msg.relative_humidity_7-40.0)*100.0/(-40.0);\n}else{\n    humedad=(msg.relative_humidity_7-40.0)*100.0/60.0;\n}\nmsg.iaq=0.8*resistencia + 0.1 * temperatura + 0.1 * humedad; //en porcentaje\nmsg.iaq=5.0 * msg.iaq;\n\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: 'POST_TELEMETRY_REQUEST'\n};"
         }
       },
       {
@@ -770,7 +842,7 @@
         "name": "Alarmas",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var respuesta = [];\nif (metadata.hasOwnProperty('ss___alarma_RAK7204')) {\n    var obj = JSON.parse(metadata.ss___alarma_RAK7204);\n    if (obj.hasOwnProperty('iaq')&&msg.hasOwnProperty('iaq')&&obj.iaq.hasOwnProperty('umbral')&&obj.iaq.hasOwnProperty('histeresis')) {\n        respuesta.push('iaq');\n    }\n    if (obj.hasOwnProperty('nivelDeBateria')&&msg.hasOwnProperty('analog_in_8')) {\n        respuesta.push('nivelDeBateria');\n    }\n    if (obj.hasOwnProperty('inactividad')&&(msgType=='INACTIVITY_EVENT'||msgType=='ACTIVITY_EVENT')) {\n        \n        respuesta.push('inactividad');\n    }\n    if (obj.hasOwnProperty('temperatura')&&msg.hasOwnProperty('temperature_2')&&obj.temperatura.hasOwnProperty('umbralMinima')&&obj.temperatura.hasOwnProperty('histeresisMinima')&&obj.temperatura.hasOwnProperty('umbralMaxima')&&obj.temperatura.hasOwnProperty('histeresisMaxima')) {\n        respuesta.push('temperatura');\n    }\n    if (obj.hasOwnProperty('presion')&&msg.hasOwnProperty('barometric_pressure_6')&&obj.temperatura.hasOwnProperty('umbralMinima')&&obj.temperatura.hasOwnProperty('histeresisMinima')&&obj.temperatura.hasOwnProperty('umbralMaxima')&&obj.temperatura.hasOwnProperty('histeresisMaxima')) {\n        respuesta.push('presion');\n    }\n    if (obj.hasOwnProperty('humedad')&&msg.hasOwnProperty('relative_humidity_7')&&obj.temperatura.hasOwnProperty('umbralMinima')&&obj.temperatura.hasOwnProperty('histeresisMinima')&&obj.temperatura.hasOwnProperty('umbralMaxima')&&obj.temperatura.hasOwnProperty('histeresisMaxima')) {\n        respuesta.push('humedad');\n    }\n}\n\nreturn respuesta;"
+          "jsScript": "var respuesta = [];\nif (metadata.hasOwnProperty('ss___alarma_RAK7204')) {\n    var obj = JSON.parse(metadata.ss___alarma_RAK7204);\n    if (obj.hasOwnProperty('iaq')&&msg.hasOwnProperty('iaq')&&obj.iaq.hasOwnProperty('umbral')&&obj.iaq.hasOwnProperty('histeresis')) {\n        respuesta.push('iaq');\n    }\n    if (obj.hasOwnProperty('nivelDeBateria')&&msg.hasOwnProperty('analog_in_8')) {\n        respuesta.push('nivelDeBateria');\n    }\n    if (obj.hasOwnProperty('inactividad')&&(msgType=='INACTIVITY_EVENT'||msgType=='ACTIVITY_EVENT')) {\n        \n        respuesta.push('inactividad');\n    }\n    if (obj.hasOwnProperty('temperatura')&&msg.hasOwnProperty('temperature_2')&&obj.temperatura.hasOwnProperty('umbralMinima')&&obj.temperatura.hasOwnProperty('histeresisMinima')&&obj.temperatura.hasOwnProperty('umbralMaxima')&&obj.temperatura.hasOwnProperty('histeresisMaxima')) {\n        respuesta.push('temperatura');\n    }\n    if (obj.hasOwnProperty('presion')&&msg.hasOwnProperty('barometric_pressure_6')&&obj.presion.hasOwnProperty('umbralMinima')&&obj.presion.hasOwnProperty('histeresisMinima')&&obj.presion.hasOwnProperty('umbralMaxima')&&obj.presion.hasOwnProperty('histeresisMaxima')) {\n        respuesta.push('presion');\n    }\n    if (obj.hasOwnProperty('humedad')&&msg.hasOwnProperty('relative_humidity_7')&&obj.humedad.hasOwnProperty('umbralMinima')&&obj.humedad.hasOwnProperty('histeresisMinima')&&obj.humedad.hasOwnProperty('umbralMaxima')&&obj.humedad.hasOwnProperty('histeresisMaxima')) {\n        respuesta.push('humedad');\n    }\n}\n\nreturn respuesta;"
         }
       },
       {
@@ -811,8 +883,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 580,
-          "layoutY": 134
+          "layoutX": 824,
+          "layoutY": 254
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
         "name": "guardarTooltip",
@@ -823,269 +895,207 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 306,
-          "layoutY": 135
+          "layoutX": 786,
+          "layoutY": 149
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "tooltip",
         "debugMode": true,
         "configuration": {
-          "jsScript": "// unix timestamp\nvar ts = metadata.ts;\n\n// convert unix timestamp to milliseconds\nvar ts_ms = ts * 1;\n\n// initialize new Date object\nvar date_ob = new Date(ts_ms);\n\n// year as 4 digits (YYYY)\nvar year = date_ob.getFullYear();\n\n// month as 2 digits (MM)\nvar month = (\"0\" + (date_ob.getMonth() + 1)).slice(-2);\n\n// date as 2 digits (DD)\nvar date = (\"0\" + date_ob.getDate()).slice(-2);\n\n// hours as 2 digits (hh)\nvar hours = (\"0\" + date_ob.getHours()).slice(-2);\n\n// minutes as 2 digits (mm)\nvar minutes = (\"0\" + date_ob.getMinutes()).slice(-2);\n\n// seconds as 2 digits (ss)\nvar seconds = (\"0\" + date_ob.getSeconds()).slice(-2);\n\n\nmsg = {\n    'tooltip': \"<b>\" + year + \"-\" + month + \"-\" + date +\n        \" \" + hours + \":\" + minutes + \":\" + seconds +\n        \"</b><br/>\" + \"<b>Lat: </b>\" + (msg\n            .gps_1_latitude) +\n        \"<br/><b>Lon: </b>\" + (msg.gps_1_longitude) +\n        \"<br/><b>Batería: </b>\" + (msg.analog_in_8) +\n        \" V\"\n};\nmsgType = \"POST_ATTRIBUTES_REQUEST\";\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 46,
-          "layoutY": 207
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "es telemetria?",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "if(msgType=='POST_TELEMETRY_REQUEST') {\n    return ['telemetria'];\n}else if(msgType=='INACTIVITY_EVENT'||msgType=='ACTIVITY_EVENT'){\n    return['alarma'];\n}"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 882,
-          "layoutY": 667
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "C[r/l]ear",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "if ( msg.temperature_2> msg.alarma.umbralMaxima) {\n    return ['crear'];\n} else if(msg.temperature_2 < msg.alarma.umbralMaxima-msg.alarma.histeresisMaxima){\n    return ['clear'];\n}"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 614,
-          "layoutY": 669
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "tipoAlarma muyAlta",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "metadata.tipoAlarma = \"Temperatura muy alta\";\nmetadata.umbralMinima=msg.alarma.umbralMinima;\nmetadata.histeresisMinima=msg.alarma.histeresisMinima;\nmetadata.umbralMaxima=msg.alarma.umbralMaxima;\nmetadata.histeresisMaxima=msg.alarma.histeresisMaxima;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 336,
-          "layoutY": 661
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "Activada?",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var obj = JSON.parse(metadata.ss___alarma_RAK7204);\n\nif (obj.temperatura.enable===true){\n    msg.alarma=obj.temperatura;\n    //Cargo los datos de interés en los metadatos para construir los mensaje de alarma\n    metadata.temperatura=msg.temperature_2;\n    //alarmaActual se usa en la cadena de reglas de Notificaciones\n    //Para extraer información. No puede ir por msg porque se\n    //pierde en el nodo de generación de alarma\n    metadata.alarmaActual=JSON.stringify(obj.temperatura);\n    \n   return {\n        msg: msg,\n        metadata: metadata,\n        msgType: msgType\n    };\n}\n"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1433,
-          "layoutY": 845
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "construir mensaje",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.split(\"_\")[1]+\" ha anulado una alarma de tipo temperatura muy baja. La temperatura actual es \"+metadata.temperatura+\" ºC, y el umbral está fijado en \"+metadata.umbralMinima+\" ºC.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.split(\"_\")[1]+'\",\"value2\":\"'+metadata.temperatura+'\",\"value3\":\"'+metadata.analog_in_8+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.split(\"_\")[1]+\": Alarma anulada \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1433,
-          "layoutY": 793
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "construir mensaje",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.split(\"_\")[1]+\" ha generado una alarma de tipo temperatura muy baja. La temperatura actual es \"+metadata.temperatura+\" ºC, y el umbral está fijado en \"+metadata.umbralMinima+\" ºC.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.split(\"_\")[1]+'\",\"value2\":\"'+metadata.temperatura+'\",\"value3\":\"'+metadata.analog_in_8+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.split(\"_\")[1]+\": Alarma \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+          "jsScript": "// unix timestamp\nvar ts = metadata.ts;\n\n// convert unix timestamp to milliseconds\nvar ts_ms = ts * 1;\n\n// initialize new Date object\nvar date_ob = new Date(ts_ms);\n\n// year as 4 digits (YYYY)\nvar year = date_ob.getFullYear();\n\n// month as 2 digits (MM)\nvar month = (\"0\" + (date_ob.getMonth() + 1)).slice(-2);\n\n// date as 2 digits (DD)\nvar date = (\"0\" + date_ob.getDate()).slice(-2);\n\n// hours as 2 digits (hh)\nvar hours = (\"0\" + date_ob.getHours()).slice(-2);\n\n// minutes as 2 digits (mm)\nvar minutes = (\"0\" + date_ob.getMinutes()).slice(-2);\n\n// seconds as 2 digits (ss)\nvar seconds = (\"0\" + date_ob.getSeconds()).slice(-2);\n\n\nmsg = {\n    'tooltip': \"<b>\" + year + \"-\" + month + \"-\" + date +\n        \" \" + hours + \":\" + minutes + \":\" + seconds +\n        \"</b><br/>\" + \"<b>Temp: </b>\" + (msg\n            .temperature_2) +\n        \" ºC<br/><b>Hum: </b>\" + (msg.relative_humidity_7) +\n        \" %<br/><b>IAQ: </b>\"+msg.iaq+\"<b>Batería: </b>\" + (msg.analog_in_8) +\n        \" V\"\n};\n\n\n\nmsgType = \"POST_ATTRIBUTES_REQUEST\";\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       }
     ],
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 52,
-        "type": "Success"
+        "toIndex": 61,
+        "type": "alarma"
+      },
+      {
+        "fromIndex": 0,
+        "toIndex": 48,
+        "type": "telemetria"
       },
       {
         "fromIndex": 1,
-        "toIndex": 50,
-        "type": "Created"
+        "toIndex": 15,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 14,
+        "type": "crear"
       },
       {
         "fromIndex": 2,
-        "toIndex": 0,
+        "toIndex": 1,
         "type": "Success"
       },
       {
         "fromIndex": 3,
-        "toIndex": 67,
-        "type": "Created"
-      },
-      {
-        "fromIndex": 4,
-        "toIndex": 66,
-        "type": "Cleared"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 4,
-        "type": "clear"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 3,
-        "type": "crear"
-      },
-      {
-        "fromIndex": 8,
-        "toIndex": 7,
-        "type": "Created"
-      },
-      {
-        "fromIndex": 9,
-        "toIndex": 6,
-        "type": "Cleared"
-      },
-      {
-        "fromIndex": 10,
-        "toIndex": 5,
+        "toIndex": 16,
         "type": "Success"
       },
       {
+        "fromIndex": 3,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 58,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 56,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 9,
+        "toIndex": 5,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 10,
+        "toIndex": 4,
+        "type": "Cleared"
+      },
+      {
         "fromIndex": 11,
-        "toIndex": 22,
+        "toIndex": 10,
         "type": "clear"
       },
       {
         "fromIndex": 11,
-        "toIndex": 21,
+        "toIndex": 9,
         "type": "crear"
       },
       {
-        "fromIndex": 12,
+        "fromIndex": 14,
+        "toIndex": 13,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 12,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 16,
         "toIndex": 11,
         "type": "Success"
       },
       {
-        "fromIndex": 13,
-        "toIndex": 23,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 13,
-        "toIndex": 12,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 16,
-        "toIndex": 15,
-        "type": "Created"
+        "fromIndex": 17,
+        "toIndex": 28,
+        "type": "clear"
       },
       {
         "fromIndex": 17,
-        "toIndex": 14,
-        "type": "Cleared"
+        "toIndex": 27,
+        "type": "crear"
       },
       {
         "fromIndex": 18,
         "toIndex": 17,
-        "type": "clear"
+        "type": "Success"
       },
       {
-        "fromIndex": 18,
-        "toIndex": 16,
-        "type": "crear"
+        "fromIndex": 19,
+        "toIndex": 29,
+        "type": "Success"
       },
       {
-        "fromIndex": 21,
-        "toIndex": 20,
-        "type": "Created"
-      },
-      {
-        "fromIndex": 22,
-        "toIndex": 19,
-        "type": "Cleared"
-      },
-      {
-        "fromIndex": 23,
+        "fromIndex": 19,
         "toIndex": 18,
         "type": "Success"
       },
       {
+        "fromIndex": 22,
+        "toIndex": 21,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 23,
+        "toIndex": 20,
+        "type": "Cleared"
+      },
+      {
         "fromIndex": 24,
-        "toIndex": 35,
+        "toIndex": 23,
         "type": "clear"
       },
       {
         "fromIndex": 24,
-        "toIndex": 34,
+        "toIndex": 22,
         "type": "crear"
       },
       {
-        "fromIndex": 25,
+        "fromIndex": 27,
+        "toIndex": 26,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 28,
+        "toIndex": 25,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 29,
         "toIndex": 24,
         "type": "Success"
       },
       {
-        "fromIndex": 26,
-        "toIndex": 36,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 26,
-        "toIndex": 25,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 29,
-        "toIndex": 28,
-        "type": "Created"
-      },
-      {
         "fromIndex": 30,
-        "toIndex": 27,
-        "type": "Cleared"
-      },
-      {
-        "fromIndex": 31,
-        "toIndex": 30,
+        "toIndex": 41,
         "type": "clear"
       },
       {
-        "fromIndex": 31,
-        "toIndex": 29,
-        "type": "crear"
-      },
-      {
-        "fromIndex": 34,
-        "toIndex": 33,
-        "type": "Created"
-      },
-      {
-        "fromIndex": 35,
-        "toIndex": 32,
-        "type": "Cleared"
-      },
-      {
-        "fromIndex": 36,
-        "toIndex": 31,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 37,
+        "fromIndex": 30,
         "toIndex": 40,
         "type": "crear"
       },
       {
+        "fromIndex": 31,
+        "toIndex": 30,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 32,
+        "toIndex": 42,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 32,
+        "toIndex": 31,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 34,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 36,
+        "toIndex": 33,
+        "type": "Cleared"
+      },
+      {
         "fromIndex": 37,
-        "toIndex": 41,
+        "toIndex": 36,
         "type": "clear"
+      },
+      {
+        "fromIndex": 37,
+        "toIndex": 35,
+        "type": "crear"
       },
       {
         "fromIndex": 40,
@@ -1099,143 +1109,133 @@
       },
       {
         "fromIndex": 42,
-        "toIndex": 43,
-        "type": "si"
-      },
-      {
-        "fromIndex": 42,
-        "toIndex": 44,
-        "type": "no"
-      },
-      {
-        "fromIndex": 43,
-        "toIndex": 44,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 44,
-        "toIndex": 55,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 47,
-        "toIndex": 46,
-        "type": "Created"
-      },
-      {
-        "fromIndex": 48,
-        "toIndex": 45,
-        "type": "Cleared"
-      },
-      {
-        "fromIndex": 51,
-        "toIndex": 49,
-        "type": "Cleared"
-      },
-      {
-        "fromIndex": 52,
-        "toIndex": 1,
-        "type": "crear"
-      },
-      {
-        "fromIndex": 52,
-        "toIndex": 51,
-        "type": "clear"
-      },
-      {
-        "fromIndex": 53,
         "toIndex": 37,
         "type": "Success"
       },
       {
-        "fromIndex": 54,
-        "toIndex": 53,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 55,
-        "toIndex": 56,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 56,
-        "toIndex": 65,
-        "type": "temperatura"
-      },
-      {
-        "fromIndex": 56,
-        "toIndex": 2,
-        "type": "nivelDeBateria"
-      },
-      {
-        "fromIndex": 56,
-        "toIndex": 54,
-        "type": "iaq"
-      },
-      {
-        "fromIndex": 56,
-        "toIndex": 59,
-        "type": "inactividad"
-      },
-      {
-        "fromIndex": 56,
-        "toIndex": 13,
-        "type": "presion"
-      },
-      {
-        "fromIndex": 56,
-        "toIndex": 26,
-        "type": "humedad"
-      },
-      {
-        "fromIndex": 57,
-        "toIndex": 47,
+        "fromIndex": 43,
+        "toIndex": 46,
         "type": "crear"
       },
       {
-        "fromIndex": 57,
-        "toIndex": 48,
+        "fromIndex": 43,
+        "toIndex": 47,
         "type": "clear"
+      },
+      {
+        "fromIndex": 46,
+        "toIndex": 45,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 47,
+        "toIndex": 44,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 48,
+        "toIndex": 49,
+        "type": "si"
+      },
+      {
+        "fromIndex": 48,
+        "toIndex": 50,
+        "type": "no"
+      },
+      {
+        "fromIndex": 49,
+        "toIndex": 67,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 49,
+        "toIndex": 50,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 50,
+        "toIndex": 61,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 53,
+        "toIndex": 52,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 54,
+        "toIndex": 51,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 57,
+        "toIndex": 55,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 58,
+        "toIndex": 7,
+        "type": "crear"
       },
       {
         "fromIndex": 58,
         "toIndex": 57,
-        "type": "Success"
+        "type": "clear"
       },
       {
         "fromIndex": 59,
-        "toIndex": 58,
+        "toIndex": 43,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 60,
+        "toIndex": 59,
         "type": "Success"
       },
       {
         "fromIndex": 61,
-        "toIndex": 60,
+        "toIndex": 62,
         "type": "Success"
       },
       {
         "fromIndex": 62,
-        "toIndex": 55,
-        "type": "alarma"
+        "toIndex": 3,
+        "type": "temperatura"
       },
       {
         "fromIndex": 62,
-        "toIndex": 61,
-        "type": "telemetria"
-      },
-      {
-        "fromIndex": 62,
-        "toIndex": 42,
-        "type": "telemetria"
-      },
-      {
-        "fromIndex": 63,
-        "toIndex": 9,
-        "type": "clear"
-      },
-      {
-        "fromIndex": 63,
         "toIndex": 8,
+        "type": "nivelDeBateria"
+      },
+      {
+        "fromIndex": 62,
+        "toIndex": 60,
+        "type": "iaq"
+      },
+      {
+        "fromIndex": 62,
+        "toIndex": 65,
+        "type": "inactividad"
+      },
+      {
+        "fromIndex": 62,
+        "toIndex": 19,
+        "type": "presion"
+      },
+      {
+        "fromIndex": 62,
+        "toIndex": 32,
+        "type": "humedad"
+      },
+      {
+        "fromIndex": 63,
+        "toIndex": 53,
         "type": "crear"
+      },
+      {
+        "fromIndex": 63,
+        "toIndex": 54,
+        "type": "clear"
       },
       {
         "fromIndex": 64,
@@ -1244,21 +1244,47 @@
       },
       {
         "fromIndex": 65,
-        "toIndex": 10,
+        "toIndex": 64,
         "type": "Success"
       },
       {
-        "fromIndex": 65,
-        "toIndex": 64,
+        "fromIndex": 67,
+        "toIndex": 66,
         "type": "Success"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 6,
+        "fromIndex": 4,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1720,
+          "layoutY": 814,
+          "ruleChainNodeId": "rule-chain-node-78"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1720,
+          "layoutY": 814,
+          "ruleChainNodeId": "rule-chain-node-78"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 12,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
           "layoutX": 1723,
@@ -1268,54 +1294,15 @@
         "type": "Success"
       },
       {
-        "fromIndex": 7,
+        "fromIndex": 13,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
           "layoutX": 1723,
           "layoutY": 694,
           "ruleChainNodeId": "rule-chain-node-77"
-        },
-        "type": "Success"
-      },
-      {
-        "fromIndex": 14,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
-        },
-        "additionalInfo": {
-          "layoutX": 1724,
-          "layoutY": 1064,
-          "ruleChainNodeId": "rule-chain-node-76"
-        },
-        "type": "Success"
-      },
-      {
-        "fromIndex": 15,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
-        },
-        "additionalInfo": {
-          "layoutX": 1724,
-          "layoutY": 1064,
-          "ruleChainNodeId": "rule-chain-node-76"
-        },
-        "type": "Success"
-      },
-      {
-        "fromIndex": 19,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
-        },
-        "additionalInfo": {
-          "layoutX": 1727,
-          "layoutY": 944,
-          "ruleChainNodeId": "rule-chain-node-75"
         },
         "type": "Success"
       },
@@ -1323,7 +1310,33 @@
         "fromIndex": 20,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1724,
+          "layoutY": 1064,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 21,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1724,
+          "layoutY": 1064,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 25,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
           "layoutX": 1727,
@@ -1333,41 +1346,15 @@
         "type": "Success"
       },
       {
-        "fromIndex": 27,
+        "fromIndex": 26,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
-          "layoutX": 1722,
-          "layoutY": 1312,
-          "ruleChainNodeId": "rule-chain-node-74"
-        },
-        "type": "Success"
-      },
-      {
-        "fromIndex": 28,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
-        },
-        "additionalInfo": {
-          "layoutX": 1722,
-          "layoutY": 1312,
-          "ruleChainNodeId": "rule-chain-node-74"
-        },
-        "type": "Success"
-      },
-      {
-        "fromIndex": 32,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
-        },
-        "additionalInfo": {
-          "layoutX": 1725,
-          "layoutY": 1192,
-          "ruleChainNodeId": "rule-chain-node-73"
+          "layoutX": 1727,
+          "layoutY": 944,
+          "ruleChainNodeId": "rule-chain-node-75"
         },
         "type": "Success"
       },
@@ -1375,7 +1362,33 @@
         "fromIndex": 33,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1722,
+          "layoutY": 1312,
+          "ruleChainNodeId": "rule-chain-node-74"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 34,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1722,
+          "layoutY": 1312,
+          "ruleChainNodeId": "rule-chain-node-74"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 38,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
           "layoutX": 1725,
@@ -1385,23 +1398,23 @@
         "type": "Success"
       },
       {
-        "fromIndex": 38,
+        "fromIndex": 39,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
-          "layoutX": 1724,
-          "layoutY": 574,
-          "ruleChainNodeId": "rule-chain-node-72"
+          "layoutX": 1725,
+          "layoutY": 1192,
+          "ruleChainNodeId": "rule-chain-node-73"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 39,
+        "fromIndex": 44,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
           "layoutX": 1724,
@@ -1414,7 +1427,20 @@
         "fromIndex": 45,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1724,
+          "layoutY": 574,
+          "ruleChainNodeId": "rule-chain-node-72"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 51,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
           "layoutX": 1724,
@@ -1424,10 +1450,10 @@
         "type": "Success"
       },
       {
-        "fromIndex": 46,
+        "fromIndex": 52,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
           "layoutX": 1724,
@@ -1437,10 +1463,10 @@
         "type": "Success"
       },
       {
-        "fromIndex": 49,
+        "fromIndex": 55,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
           "layoutX": 1725,
@@ -1450,41 +1476,15 @@
         "type": "Success"
       },
       {
-        "fromIndex": 50,
+        "fromIndex": 56,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
           "layoutX": 1725,
           "layoutY": 317,
           "ruleChainNodeId": "rule-chain-node-70"
-        },
-        "type": "Success"
-      },
-      {
-        "fromIndex": 66,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
-        },
-        "additionalInfo": {
-          "layoutX": 1720,
-          "layoutY": 814,
-          "ruleChainNodeId": "rule-chain-node-78"
-        },
-        "type": "Success"
-      },
-      {
-        "fromIndex": 67,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "1088f310-961d-11ea-a693-d543988542ac"
-        },
-        "additionalInfo": {
-          "layoutX": 1720,
-          "layoutY": 814,
-          "ruleChainNodeId": "rule-chain-node-78"
         },
         "type": "Success"
       }
