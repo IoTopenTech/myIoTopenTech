@@ -8,8 +8,116 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 28,
+    "firstNodeIndex": 2,
     "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 808,
+          "layoutY": 7
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "name": "Save Timeseries",
+        "debugMode": true,
+        "configuration": {
+          "defaultTTL": 0
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 492,
+          "layoutY": 46
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "Save Client Attributes",
+        "debugMode": false,
+        "configuration": {
+          "scope": "CLIENT_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 273,
+          "layoutY": 151
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbMsgTypeSwitchNode",
+        "name": "Message Type Switch",
+        "debugMode": true,
+        "configuration": {
+          "version": 0
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 496,
+          "layoutY": 234
+        },
+        "type": "org.thingsboard.rule.engine.action.TbLogNode",
+        "name": "Log RPC from Device",
+        "debugMode": false,
+        "configuration": {
+          "jsScript": "return '\\nIncoming message:\\n' + JSON.stringify(msg) + '\\nIncoming metadata:\\n' + JSON.stringify(metadata);"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 482,
+          "layoutY": 321
+        },
+        "type": "org.thingsboard.rule.engine.action.TbLogNode",
+        "name": "Log Other",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return '\\nIncoming message:\\n' + JSON.stringify(msg) + '\\nIncoming metadata:\\n' + JSON.stringify(metadata);"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 481,
+          "layoutY": 391
+        },
+        "type": "org.thingsboard.rule.engine.rpc.TbSendRPCRequestNode",
+        "name": "RPC Call Request",
+        "debugMode": false,
+        "configuration": {
+          "timeoutInSeconds": 60
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 845,
+          "layoutY": 202
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "TTN2JSON",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var newObj = msg.payload_fields;\r\nvar obj = {};\r\n//Si el obj tiene propiedades que son, a su vez, objetos JSON\r\n//por ejemplo, el caso de un GPS\r\n//tengo que convertirlas a timeseries\r\n//Desafortunadamente, es posible que aquí tengamos que hacer algunas\r\n//conversiones porque ciertos widgets no admiten los datos en el formato\r\n//que los entregan los sensores; por ejemplo, el magnetómetro del RAK7200\r\n//entrega las mediciones en uT, pero el widget brújula requiere directamente un ángulo\r\n//Esto lo podemos resolver con una función de postprocesamiento en el propio alias\r\n//pero el Widget trip animation sólo admite timeseries (no attibutes), por lo que no\r\n//podemos cargar el cercado desde un atributo (o quizás sea mejor tratarlo en la regla del propio dispositivo)\r\nfor (var x in newObj) {\r\n    if (typeof(newObj[x]) === 'object') {\r\n        for (var y in newObj[x]) {\r\n            obj[x + '_' + y] = newObj[x][y];\r\n        }\r\n    } else {\r\n        obj[x] = newObj[x];\r\n    }\r\n}\r\nobj.metadata = msg.metadata;\r\nobj.downlink_url = msg.downlink_url;\r\nobj.ttn_dev_id = msg.dev_id;\r\nobj.hardware_serial = msg.hardware_serial;\r\nreturn {\r\n    msg: obj,\r\n    metadata: metadata,\r\n    msgType: msgType\r\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1130,
+          "layoutY": 4
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "acciones",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (metadata.deviceType == \"SYSTEM\") {\n    if (msg.hasOwnProperty('accion')) {\n       \n        if (msg.accion == 'editarPerfil') {\n            return ['editarPerfil'];\n        } else if (msg\n            .accion == 'tomarPosesion') {\n            if (msg\n                .hasOwnProperty('uuid') && msg\n                .hasOwnProperty(\n                    'payload')) {\n                return ['tomarPosesion'];\n            }\n        } else if (msg\n            .accion == 'enviarDownlink') {\n            if (msg\n                .hasOwnProperty('uuid') && msg\n                .hasOwnProperty(\n                    'payload')) {\n                return ['enviarDownlink'];\n            }\n        } else if (msg\n            .accion == 'reclamarDispositivo') {\n            if (msg.hasOwnProperty('idEntidad') && msg\n                .hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('subtipoEntidad') ) {\n                return ['reclamarDispositivo'];\n            }\n        } else if (msg\n            .accion == 'editarEntidad') {\n            if (msg.hasOwnProperty('idEntidad') && msg\n                .hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('tipoEntidad') && msg\n                .hasOwnProperty('subtipoEntidad') && msg\n                .hasOwnProperty('padreEntidad') && msg\n                .hasOwnProperty('tipoPadreEntidad')) {\n                return ['editarEntidad'];\n            }\n        } else if (msg\n            .accion == 'configurarEntidad') {\n            if (msg.hasOwnProperty('configuracion') ) {\n                return ['configurarEntidad'];\n            }\n        } else if (msg.accion == 'crearEntidad') {\n            if (msg.hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('tipoEntidad') && msg\n                .hasOwnProperty('subtipoEntidad') && msg\n                .hasOwnProperty('padreEntidadId') && msg\n                .hasOwnProperty('padreEntidadNombre')) {\n                return ['crearEntidad'];\n            }\n        } else if (msg.accion == 'borrarEntidad') {\n            if (msg.hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('tipoEntidad')) {\n                return ['borrarEntidad'];\n            }\n        }\n    }\n} else {\n    return false;\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1760,
+          "layoutY": 360
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "preparar atributos",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\n//Valido los atributos que admito modificar\nvar mensaje={};\nif(msg.hasOwnProperty('email')){\n    mensaje.email=msg.email;\n}\nif(msg.hasOwnProperty('token_telegram')){\n    mensaje.token_telegram=msg.token_telegram;\n}\nif(msg.hasOwnProperty('chatid_telegram')){\n    mensaje.chatid_telegram=msg.chatid_telegram;\n}\nif(msg.hasOwnProperty('token_webhook_ifttt')){\n    mensaje.token_webhook_ifttt=msg.token_webhook_ifttt;\n}\n\t\nreturn {msg: mensaje, metadata: metadata, msgType: msgType};\n"
+        }
+      },
       {
         "additionalInfo": {
           "layoutX": 1419,
@@ -72,8 +180,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 2490,
-          "layoutY": 326
+          "layoutX": 2268,
+          "layoutY": 493
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
         "name": "guardar atributos",
@@ -149,10 +257,10 @@
         "name": "borrarQueue",
         "debugMode": true,
         "configuration": {
-          "restEndpointUrlPattern": "${ss___cs_url}/api/devices/${ss_hardware_serial}/queue",
+          "restEndpointUrlPattern": "${ss__cs_url}/api/devices/${ss_hardware_serial}/queue",
           "requestMethod": "DELETE",
           "headers": {
-            "Grpc-Metadata-Authorization": "${ss___cs_token}"
+            "Grpc-Metadata-Authorization": "${ss__cs_token}"
           },
           "useSimpleClientHttpFactory": false,
           "readTimeoutMs": 0,
@@ -195,10 +303,10 @@
         "name": "enviarDownlink",
         "debugMode": true,
         "configuration": {
-          "restEndpointUrlPattern": "${ss___cs_url}/api/devices/${ss_hardware_serial}/queue",
+          "restEndpointUrlPattern": "${ss__cs_url}/api/devices/${ss_hardware_serial}/queue",
           "requestMethod": "POST",
           "headers": {
-            "Grpc-Metadata-Authorization": "${ss___cs_token}"
+            "Grpc-Metadata-Authorization": "${ss__cs_token}"
           },
           "useSimpleClientHttpFactory": false,
           "readTimeoutMs": 0,
@@ -415,114 +523,6 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 808,
-          "layoutY": 7
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
-        "name": "Save Timeseries",
-        "debugMode": true,
-        "configuration": {
-          "defaultTTL": 0
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 492,
-          "layoutY": 46
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "Save Client Attributes",
-        "debugMode": false,
-        "configuration": {
-          "scope": "CLIENT_SCOPE"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 273,
-          "layoutY": 151
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbMsgTypeSwitchNode",
-        "name": "Message Type Switch",
-        "debugMode": true,
-        "configuration": {
-          "version": 0
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 496,
-          "layoutY": 234
-        },
-        "type": "org.thingsboard.rule.engine.action.TbLogNode",
-        "name": "Log RPC from Device",
-        "debugMode": false,
-        "configuration": {
-          "jsScript": "return '\\nIncoming message:\\n' + JSON.stringify(msg) + '\\nIncoming metadata:\\n' + JSON.stringify(metadata);"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 482,
-          "layoutY": 321
-        },
-        "type": "org.thingsboard.rule.engine.action.TbLogNode",
-        "name": "Log Other",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "return '\\nIncoming message:\\n' + JSON.stringify(msg) + '\\nIncoming metadata:\\n' + JSON.stringify(metadata);"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 481,
-          "layoutY": 391
-        },
-        "type": "org.thingsboard.rule.engine.rpc.TbSendRPCRequestNode",
-        "name": "RPC Call Request",
-        "debugMode": false,
-        "configuration": {
-          "timeoutInSeconds": 60
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 845,
-          "layoutY": 202
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "TTN2JSON",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var newObj = msg.payload_fields;\r\nvar obj = {};\r\n//Si el obj tiene propiedades que son, a su vez, objetos JSON\r\n//por ejemplo, el caso de un GPS\r\n//tengo que convertirlas a timeseries\r\n//Desafortunadamente, es posible que aquí tengamos que hacer algunas\r\n//conversiones porque ciertos widgets no admiten los datos en el formato\r\n//que los entregan los sensores; por ejemplo, el magnetómetro del RAK7200\r\n//entrega las mediciones en uT, pero el widget brújula requiere directamente un ángulo\r\n//Esto lo podemos resolver con una función de postprocesamiento en el propio alias\r\n//pero el Widget trip animation sólo admite timeseries (no attibutes), por lo que no\r\n//podemos cargar el cercado desde un atributo (o quizás sea mejor tratarlo en la regla del propio dispositivo)\r\nfor (var x in newObj) {\r\n    if (typeof(newObj[x]) === 'object') {\r\n        for (var y in newObj[x]) {\r\n            obj[x + '_' + y] = newObj[x][y];\r\n        }\r\n    } else {\r\n        obj[x] = newObj[x];\r\n    }\r\n}\r\nobj.metadata = msg.metadata;\r\nobj.downlink_url = msg.downlink_url;\r\nobj.ttn_dev_id = msg.dev_id;\r\nobj.hardware_serial = msg.hardware_serial;\r\nreturn {\r\n    msg: obj,\r\n    metadata: metadata,\r\n    msgType: msgType\r\n};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1130,
-          "layoutY": 4
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "acciones",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "if (metadata.deviceType == \"SYSTEM\") {\n    if (msg.hasOwnProperty('accion')) {\n       \n        if (msg.accion == 'editarPerfil') {\n            return ['editarPerfil'];\n        } else if (msg\n            .accion == 'tomarPosesion') {\n            if (msg\n                .hasOwnProperty('uuid') && msg\n                .hasOwnProperty(\n                    'payload')) {\n                return ['tomarPosesion'];\n            }\n        } else if (msg\n            .accion == 'enviarDownlink') {\n            if (msg\n                .hasOwnProperty('uuid') && msg\n                .hasOwnProperty(\n                    'payload')) {\n                return ['enviarDownlink'];\n            }\n        } else if (msg\n            .accion == 'reclamarDispositivo') {\n            if (msg.hasOwnProperty('idEntidad') && msg\n                .hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('subtipoEntidad') ) {\n                return ['reclamarDispositivo'];\n            }\n        } else if (msg\n            .accion == 'editarEntidad') {\n            if (msg.hasOwnProperty('idEntidad') && msg\n                .hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('tipoEntidad') && msg\n                .hasOwnProperty('subtipoEntidad') && msg\n                .hasOwnProperty('padreEntidad') && msg\n                .hasOwnProperty('tipoPadreEntidad')) {\n                return ['editarEntidad'];\n            }\n        } else if (msg\n            .accion == 'configurarEntidad') {\n            if (msg.hasOwnProperty('configuracion') ) {\n                return ['configurarEntidad'];\n            }\n        } else if (msg.accion == 'crearEntidad') {\n            if (msg.hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('tipoEntidad') && msg\n                .hasOwnProperty('subtipoEntidad') && msg\n                .hasOwnProperty('padreEntidadId') && msg\n                .hasOwnProperty('padreEntidadNombre')) {\n                return ['crearEntidad'];\n            }\n        } else if (msg.accion == 'borrarEntidad') {\n            if (msg.hasOwnProperty('nombreEntidad') && msg\n                .hasOwnProperty('tipoEntidad')) {\n                return ['borrarEntidad'];\n            }\n        }\n    }\n} else {\n    return false;\n}"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1760,
-          "layoutY": 360
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "preparar atributos",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\n//Valido los atributos que admito modificar\nvar mensaje={};\nif(msg.hasOwnProperty('email')){\n    mensaje.email=msg.email;\n}\nif(msg.hasOwnProperty('token_telegram')){\n    mensaje.token_telegram=msg.token_telegram;\n}\nif(msg.hasOwnProperty('chatid_telegram')){\n    mensaje.chatid_telegram=msg.chatid_telegram;\n}\nif(msg.hasOwnProperty('token_webhook_ifttt')){\n    mensaje.token_webhook_ifttt=msg.token_webhook_ifttt;\n}\n\t\nreturn {msg: mensaje, metadata: metadata, msgType: msgType};\n"
-        }
-      },
-      {
-        "additionalInfo": {
           "layoutX": 2020,
           "layoutY": 364
         },
@@ -571,266 +571,214 @@
     ],
     "connections": [
       {
-        "fromIndex": 1,
-        "toIndex": 37,
+        "fromIndex": 0,
+        "toIndex": 25,
         "type": "Success"
       },
       {
         "fromIndex": 2,
-        "toIndex": 23,
-        "type": "Success"
+        "toIndex": 11,
+        "type": "Activity Event"
       },
       {
-        "fromIndex": 3,
-        "toIndex": 21,
-        "type": "Success"
+        "fromIndex": 2,
+        "toIndex": 31,
+        "type": "Inactivity Event"
       },
       {
-        "fromIndex": 4,
-        "toIndex": 5,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 6,
-        "toIndex": 15,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 6,
-        "toIndex": 17,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 7,
+        "fromIndex": 2,
         "toIndex": 4,
+        "type": "Other"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 1,
+        "type": "Post attributes"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 3,
+        "type": "RPC Request from Device"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 5,
+        "type": "RPC Request to Device"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 17,
+        "type": "Post telemetry"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 32,
         "type": "Success"
       },
       {
-        "fromIndex": 8,
-        "toIndex": 32,
-        "type": "TTN"
-      },
-      {
-        "fromIndex": 8,
-        "toIndex": 26,
-        "type": "NO_TTN_CS"
-      },
-      {
-        "fromIndex": 8,
-        "toIndex": 14,
-        "type": "CS"
-      },
-      {
-        "fromIndex": 9,
+        "fromIndex": 6,
         "toIndex": 10,
         "type": "Success"
       },
       {
-        "fromIndex": 10,
-        "toIndex": 12,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 11,
-        "toIndex": 9,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 13,
-        "toIndex": 3,
-        "type": "TTN"
-      },
-      {
-        "fromIndex": 13,
-        "toIndex": 11,
-        "type": "CS"
-      },
-      {
-        "fromIndex": 14,
-        "toIndex": 32,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 15,
-        "toIndex": 7,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 16,
-        "toIndex": 33,
-        "type": "True"
-      },
-      {
-        "fromIndex": 17,
-        "toIndex": 18,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 18,
-        "toIndex": 20,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 19,
-        "toIndex": 17,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 20,
-        "toIndex": 13,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 22,
-        "toIndex": 23,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 23,
-        "toIndex": 24,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 24,
-        "toIndex": 25,
-        "type": "True"
-      },
-      {
-        "fromIndex": 25,
-        "toIndex": 0,
-        "type": "BIR"
-      },
-      {
-        "fromIndex": 26,
-        "toIndex": 16,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 28,
-        "toIndex": 2,
-        "type": "Activity Event"
-      },
-      {
-        "fromIndex": 28,
-        "toIndex": 22,
-        "type": "Inactivity Event"
-      },
-      {
-        "fromIndex": 28,
-        "toIndex": 30,
-        "type": "Other"
-      },
-      {
-        "fromIndex": 28,
-        "toIndex": 27,
-        "type": "Post attributes"
-      },
-      {
-        "fromIndex": 28,
-        "toIndex": 29,
-        "type": "RPC Request from Device"
-      },
-      {
-        "fromIndex": 28,
-        "toIndex": 31,
-        "type": "RPC Request to Device"
-      },
-      {
-        "fromIndex": 28,
-        "toIndex": 8,
-        "type": "Post telemetry"
-      },
-      {
-        "fromIndex": 32,
-        "toIndex": 23,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 32,
-        "toIndex": 1,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 33,
-        "toIndex": 19,
+        "fromIndex": 7,
+        "toIndex": 28,
         "type": "enviarDownlink"
       },
       {
-        "fromIndex": 33,
+        "fromIndex": 7,
         "toIndex": 36,
         "type": "editarPerfil"
       },
       {
-        "fromIndex": 33,
-        "toIndex": 6,
+        "fromIndex": 7,
+        "toIndex": 15,
         "type": "tomarPosesion"
       },
       {
-        "fromIndex": 34,
+        "fromIndex": 8,
         "toIndex": 35,
         "type": "Success"
       },
       {
-        "fromIndex": 36,
+        "fromIndex": 10,
+        "toIndex": 37,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 32,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 30,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 14,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 24,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 26,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 16,
+        "toIndex": 13,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 6,
+        "type": "TTN"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 0,
+        "type": "NO_TTN_CS"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 23,
+        "type": "CS"
+      },
+      {
+        "fromIndex": 18,
+        "toIndex": 19,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 19,
+        "toIndex": 21,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 20,
+        "toIndex": 18,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 22,
+        "toIndex": 12,
+        "type": "TTN"
+      },
+      {
+        "fromIndex": 22,
+        "toIndex": 20,
+        "type": "CS"
+      },
+      {
+        "fromIndex": 23,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 24,
+        "toIndex": 16,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 25,
+        "toIndex": 7,
+        "type": "True"
+      },
+      {
+        "fromIndex": 26,
+        "toIndex": 27,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 27,
+        "toIndex": 29,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 28,
+        "toIndex": 26,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 29,
+        "toIndex": 22,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 31,
+        "toIndex": 32,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 32,
+        "toIndex": 33,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 33,
         "toIndex": 34,
+        "type": "True"
+      },
+      {
+        "fromIndex": 34,
+        "toIndex": 9,
+        "type": "BIR"
+      },
+      {
+        "fromIndex": 36,
+        "toIndex": 8,
         "type": "Success"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 25,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "b012f640-a579-11ea-b825-09d866a6d73c"
-        },
-        "additionalInfo": {
-          "layoutX": 1418,
-          "layoutY": 693,
-          "ruleChainNodeId": "rule-chain-node-48"
-        },
-        "type": "LHT65"
-      },
-      {
-        "fromIndex": 25,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "0a108d70-9de5-11ea-abf5-9397c4646ed8"
-        },
-        "additionalInfo": {
-          "layoutX": 1419,
-          "layoutY": 637,
-          "ruleChainNodeId": "rule-chain-node-47"
-        },
-        "type": "RAK7204"
-      },
-      {
-        "fromIndex": 25,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "3e25d5c0-9de5-11ea-abf5-9397c4646ed8"
-        },
-        "additionalInfo": {
-          "layoutX": 1417,
-          "layoutY": 537,
-          "ruleChainNodeId": "rule-chain-node-46"
-        },
-        "type": "V02_001"
-      },
-      {
-        "fromIndex": 25,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "dabec0a0-9de4-11ea-abf5-9397c4646ed8"
-        },
-        "additionalInfo": {
-          "layoutX": 1418,
-          "layoutY": 587,
-          "ruleChainNodeId": "rule-chain-node-45"
-        },
-        "type": "RAK7200"
-      },
-      {
-        "fromIndex": 33,
+        "fromIndex": 7,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "14156700-9de5-11ea-abf5-9397c4646ed8"
@@ -838,12 +786,12 @@
         "additionalInfo": {
           "layoutX": 1548,
           "layoutY": 225,
-          "ruleChainNodeId": "rule-chain-node-44"
+          "ruleChainNodeId": "rule-chain-node-48"
         },
         "type": "reclamarDispositivo"
       },
       {
-        "fromIndex": 33,
+        "fromIndex": 7,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "7e6a4720-9de4-11ea-abf5-9397c4646ed8"
@@ -851,12 +799,12 @@
         "additionalInfo": {
           "layoutX": 1546,
           "layoutY": 114,
-          "ruleChainNodeId": "rule-chain-node-43"
+          "ruleChainNodeId": "rule-chain-node-47"
         },
         "type": "borrarEntidad"
       },
       {
-        "fromIndex": 33,
+        "fromIndex": 7,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "be86c8b0-9de4-11ea-abf5-9397c4646ed8"
@@ -864,12 +812,12 @@
         "additionalInfo": {
           "layoutX": 1548,
           "layoutY": 5,
-          "ruleChainNodeId": "rule-chain-node-42"
+          "ruleChainNodeId": "rule-chain-node-46"
         },
         "type": "editarEntidad"
       },
       {
-        "fromIndex": 33,
+        "fromIndex": 7,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "a59d3870-9de4-11ea-abf5-9397c4646ed8"
@@ -877,12 +825,12 @@
         "additionalInfo": {
           "layoutX": 1547,
           "layoutY": 61,
-          "ruleChainNodeId": "rule-chain-node-41"
+          "ruleChainNodeId": "rule-chain-node-45"
         },
         "type": "crearEntidad"
       },
       {
-        "fromIndex": 33,
+        "fromIndex": 7,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "870816a0-9de4-11ea-abf5-9397c4646ed8"
@@ -890,9 +838,61 @@
         "additionalInfo": {
           "layoutX": 1548,
           "layoutY": 175,
-          "ruleChainNodeId": "rule-chain-node-40"
+          "ruleChainNodeId": "rule-chain-node-44"
         },
         "type": "configurarEntidad"
+      },
+      {
+        "fromIndex": 34,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "b012f640-a579-11ea-b825-09d866a6d73c"
+        },
+        "additionalInfo": {
+          "layoutX": 1418,
+          "layoutY": 693,
+          "ruleChainNodeId": "rule-chain-node-43"
+        },
+        "type": "LHT65"
+      },
+      {
+        "fromIndex": 34,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "0a108d70-9de5-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1419,
+          "layoutY": 637,
+          "ruleChainNodeId": "rule-chain-node-42"
+        },
+        "type": "RAK7204"
+      },
+      {
+        "fromIndex": 34,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "3e25d5c0-9de5-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1417,
+          "layoutY": 537,
+          "ruleChainNodeId": "rule-chain-node-41"
+        },
+        "type": "V02_001"
+      },
+      {
+        "fromIndex": 34,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "dabec0a0-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1418,
+          "layoutY": 587,
+          "ruleChainNodeId": "rule-chain-node-40"
+        },
+        "type": "RAK7200"
       }
     ]
   }
