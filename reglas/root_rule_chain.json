@@ -8,8 +8,196 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 2,
+    "firstNodeIndex": 13,
     "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 2015,
+          "layoutY": 482
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Originator=Entidad",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${idEntidad}",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1501,
+          "layoutY": 480
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Customer",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "CUSTOMER",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1767,
+          "layoutY": 566
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "downlink_url[_chripstack]",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "downlink_url",
+            "ttn_dev_id",
+            "downlink_chirpstack",
+            "hardware_serial",
+            "__cs_token",
+            "__cs_url"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": false,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1769,
+          "layoutY": 705
+        },
+        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
+        "name": "enviarDownlink",
+        "debugMode": true,
+        "configuration": {
+          "restEndpointUrlPattern": "${ss_downlink_url}",
+          "requestMethod": "POST",
+          "headers": {},
+          "useSimpleClientHttpFactory": false,
+          "readTimeoutMs": 0,
+          "maxParallelRequestsCount": 0,
+          "useRedisQueueForMsgPersistence": false,
+          "trimQueue": false,
+          "maxQueueSize": 0
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 478,
+          "layoutY": 545
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "alarma inactividad",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1079,
+          "layoutY": 240
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerAttributeNode",
+        "name": "tiposDeDispositivos",
+        "debugMode": true,
+        "configuration": {
+          "attrMapping": {
+            "tiposDeDispositivos": "tiposDeDispositivos"
+          },
+          "telemetry": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1080,
+          "layoutY": 312
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "dispositivo permitido?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (metadata.hasOwnProperty('tiposDeDispositivos') &&\n    metadata.hasOwnProperty('deviceType')) {\n    return metadata.tiposDeDispositivos.split(\",\").indexOf(\n        metadata.deviceType) >= 0;\n} else {\n    return false;\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1076,
+          "layoutY": 385
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "al dispositivo",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return [metadata.deviceType];"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 2020,
+          "layoutY": 364
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar atributos",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1500,
+          "layoutY": 368
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Customer",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "CUSTOMER",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 708,
+          "layoutY": 335
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar downlink url",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
       {
         "additionalInfo": {
           "layoutX": 808,
@@ -250,8 +438,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 2012,
-          "layoutY": 703
+          "layoutX": 2257,
+          "layoutY": 695
         },
         "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
         "name": "borrarQueue",
@@ -291,7 +479,7 @@
         "name": "formatoCS",
         "debugMode": true,
         "configuration": {
-          "jsScript": " /*\n Tengo que pasar de formato TTN:\n {\n    \"port\": 99,\n    \"confirmed\": true,\n    \"payload_raw\": \"BgBk/w==\",\n    \"dev_id\": \"nodo1\"\n}\na formato CS:\n {  \"deviceQueueItem\": { \n     \"confirmed\": true,  \n     \"data\": \"AQI=\",  \n     \"devEUI\": \"009494db3143aea3\",\n     \"fCnt\": 0,\n     \"fPort\": 99  \n   } \n }\n */\n var newMsg = {};\n newMsg.deviceQueueItem = {\n     \"confirmed\": true,\n     \"data\": msg.payload_raw,\n     \"devEUI\": metadata.ss_hardware_serial,\n     \"fPort\": 99\n };\n \nmetadata.deviceQueueItem=JSON.stringify(newMsg);\n return {\n     msg: msg,\n     metadata: metadata,\n     msgType: msgType\n };"
+          "jsScript": " /*\n Tengo que pasar de formato TTN:\n {\n    \"port\": 99,\n    \"confirmed\": true,\n    \"schedule\": \"last\",\n    \"payload_raw\": \"BgBk/w==\",\n    \"dev_id\": \"nodo1\"\n}\na formato CS:\n {  \"deviceQueueItem\": { \n     \"confirmed\": true,  \n     \"data\": \"AQI=\",  \n     \"devEUI\": \"009494db3143aea3\",\n     \"fCnt\": 0,\n     \"fPort\": 99  \n   } \n }\n Parece que CS no tiene la opción de schedule first (sólo replace borrando el queue o last)\n */\n var newMsg = {};\n newMsg.deviceQueueItem = {\n     \"confirmed\": true,\n     \"data\": msg.payload_raw,\n     \"devEUI\": metadata.ss_hardware_serial,\n     \"fPort\": 99\n };\n \nmetadata.deviceQueueItem=JSON.stringify(newMsg);\n return {\n     msg: msg,\n     metadata: metadata,\n     msgType: msgType\n };"
         }
       },
       {
@@ -325,7 +513,7 @@
         "name": "TTN-CS",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var respuesta=[];\nif (metadata.hasOwnProperty('ss_downlink_url') &&\n    metadata.hasOwnProperty('ss_ttn_dev_id')) {\n    respuesta.push('TTN');\n}\nif (metadata.hasOwnProperty('ss_downlink_chirpstack') &&\n    metadata.ss_downlink_chirpstack === \"true\" &&\n    metadata.hasOwnProperty('ss___cs_token') &&\n    metadata.hasOwnProperty('ss___cs_url')&&\n    metadata.hasOwnProperty('ss_hardware_serial')) {\n    respuesta.push('CS');\n}\n\nreturn respuesta;"
+          "jsScript": "var respuesta=[];\nif (metadata.hasOwnProperty('ss_downlink_url') &&\n    metadata.hasOwnProperty('ss_ttn_dev_id')) {\n    respuesta.push('TTN');\n}\nif (metadata.hasOwnProperty('ss_downlink_chirpstack') &&\n    metadata.ss_downlink_chirpstack === \"true\" &&\n    metadata.hasOwnProperty('ss__cs_token') &&\n    metadata.hasOwnProperty('ss__cs_url')&&\n    metadata.hasOwnProperty('ss_hardware_serial')) {\n    respuesta.push('CS');\n}\n\nreturn respuesta;"
         }
       },
       {
@@ -370,6 +558,18 @@
       },
       {
         "additionalInfo": {
+          "layoutX": 2009,
+          "layoutY": 696
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "[last] or replace",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if(msg.hasOwnProperty(\"schedule\")&&msg.schedule=='replace'){\n    return [\"replace\"];\n}else{\n    return [\"last\"];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
           "layoutX": 1760,
           "layoutY": 483
         },
@@ -379,400 +579,222 @@
         "configuration": {
           "jsScript": "metadata.idEntidad=msg.uuid;\nreturn {msg: JSON.parse(msg.payload), metadata: metadata, msgType: msgType};"
         }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 2015,
-          "layoutY": 482
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "Originator=Entidad",
-        "debugMode": true,
-        "configuration": {
-          "originatorSource": "RELATED",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "${idEntidad}",
-                "entityTypes": []
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1501,
-          "layoutY": 480
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "Customer",
-        "debugMode": true,
-        "configuration": {
-          "originatorSource": "CUSTOMER",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "Contains",
-                "entityTypes": []
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1767,
-          "layoutY": 566
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
-        "name": "downlink_url[_chripstack]",
-        "debugMode": true,
-        "configuration": {
-          "clientAttributeNames": [],
-          "sharedAttributeNames": [],
-          "serverAttributeNames": [
-            "downlink_url",
-            "ttn_dev_id",
-            "downlink_chirpstack",
-            "hardware_serial",
-            "__cs_token",
-            "__cs_url"
-          ],
-          "latestTsKeyNames": [],
-          "tellFailureIfAbsent": false,
-          "getLatestValueWithTs": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1769,
-          "layoutY": 705
-        },
-        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
-        "name": "enviarDownlink",
-        "debugMode": true,
-        "configuration": {
-          "restEndpointUrlPattern": "${ss_downlink_url}",
-          "requestMethod": "POST",
-          "headers": {},
-          "useSimpleClientHttpFactory": false,
-          "readTimeoutMs": 0,
-          "maxParallelRequestsCount": 0,
-          "useRedisQueueForMsgPersistence": false,
-          "trimQueue": false,
-          "maxQueueSize": 0
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 478,
-          "layoutY": 545
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "alarma inactividad",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "return {msg: msg, metadata: metadata, msgType: msgType};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1079,
-          "layoutY": 240
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerAttributeNode",
-        "name": "tiposDeDispositivos",
-        "debugMode": true,
-        "configuration": {
-          "attrMapping": {
-            "tiposDeDispositivos": "tiposDeDispositivos"
-          },
-          "telemetry": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1080,
-          "layoutY": 312
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
-        "name": "dispositivo permitido?",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "if (metadata.hasOwnProperty('tiposDeDispositivos') &&\n    metadata.hasOwnProperty('deviceType')) {\n    return metadata.tiposDeDispositivos.split(\",\").indexOf(\n        metadata.deviceType) >= 0;\n} else {\n    return false;\n}"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1076,
-          "layoutY": 385
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "al dispositivo",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "return [metadata.deviceType];"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 2020,
-          "layoutY": 364
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "guardar atributos",
-        "debugMode": true,
-        "configuration": {
-          "scope": "SERVER_SCOPE"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1500,
-          "layoutY": 368
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "Customer",
-        "debugMode": true,
-        "configuration": {
-          "originatorSource": "CUSTOMER",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "Contains",
-                "entityTypes": []
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 708,
-          "layoutY": 335
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "guardar downlink url",
-        "debugMode": true,
-        "configuration": {
-          "scope": "SERVER_SCOPE"
-        }
       }
     ],
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 25,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 38,
         "type": "Success"
       },
       {
         "fromIndex": 2,
-        "toIndex": 11,
-        "type": "Activity Event"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 31,
-        "type": "Inactivity Event"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 4,
-        "type": "Other"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 1,
-        "type": "Post attributes"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 3,
-        "type": "RPC Request from Device"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 5,
-        "type": "RPC Request to Device"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 17,
-        "type": "Post telemetry"
-      },
-      {
-        "fromIndex": 6,
-        "toIndex": 32,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 6,
-        "toIndex": 10,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 7,
-        "toIndex": 28,
-        "type": "enviarDownlink"
-      },
-      {
-        "fromIndex": 7,
-        "toIndex": 36,
-        "type": "editarPerfil"
-      },
-      {
-        "fromIndex": 7,
-        "toIndex": 15,
-        "type": "tomarPosesion"
-      },
-      {
-        "fromIndex": 8,
-        "toIndex": 35,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 10,
-        "toIndex": 37,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 11,
-        "toIndex": 32,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 30,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 13,
-        "toIndex": 14,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 15,
-        "toIndex": 24,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 15,
-        "toIndex": 26,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 16,
-        "toIndex": 13,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 17,
-        "toIndex": 6,
-        "type": "TTN"
-      },
-      {
-        "fromIndex": 17,
-        "toIndex": 0,
-        "type": "NO_TTN_CS"
-      },
-      {
-        "fromIndex": 17,
-        "toIndex": 23,
-        "type": "CS"
-      },
-      {
-        "fromIndex": 18,
-        "toIndex": 19,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 19,
-        "toIndex": 21,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 20,
-        "toIndex": 18,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 22,
-        "toIndex": 12,
-        "type": "TTN"
-      },
-      {
-        "fromIndex": 22,
-        "toIndex": 20,
-        "type": "CS"
-      },
-      {
-        "fromIndex": 23,
-        "toIndex": 6,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 24,
-        "toIndex": 16,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 25,
-        "toIndex": 7,
-        "type": "True"
-      },
-      {
-        "fromIndex": 26,
-        "toIndex": 27,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 27,
-        "toIndex": 29,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 28,
-        "toIndex": 26,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 29,
-        "toIndex": 22,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 31,
-        "toIndex": 32,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 32,
         "toIndex": 33,
         "type": "Success"
       },
       {
-        "fromIndex": 33,
-        "toIndex": 34,
+        "fromIndex": 4,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 7,
         "type": "True"
       },
       {
-        "fromIndex": 34,
-        "toIndex": 9,
+        "fromIndex": 7,
+        "toIndex": 20,
         "type": "BIR"
       },
       {
-        "fromIndex": 36,
+        "fromIndex": 9,
+        "toIndex": 19,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 36,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 22,
+        "type": "Activity Event"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 4,
+        "type": "Inactivity Event"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 15,
+        "type": "Other"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 12,
+        "type": "Post attributes"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 14,
+        "type": "RPC Request from Device"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 16,
+        "type": "RPC Request to Device"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 28,
+        "type": "Post telemetry"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 21,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 18,
+        "toIndex": 1,
+        "type": "enviarDownlink"
+      },
+      {
+        "fromIndex": 18,
+        "toIndex": 9,
+        "type": "editarPerfil"
+      },
+      {
+        "fromIndex": 18,
+        "toIndex": 26,
+        "type": "tomarPosesion"
+      },
+      {
+        "fromIndex": 19,
         "toIndex": 8,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 21,
+        "toIndex": 10,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 22,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 23,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 24,
+        "toIndex": 25,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 26,
+        "toIndex": 35,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 26,
+        "toIndex": 38,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 27,
+        "toIndex": 24,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 28,
+        "toIndex": 17,
+        "type": "TTN"
+      },
+      {
+        "fromIndex": 28,
+        "toIndex": 11,
+        "type": "NO_TTN_CS"
+      },
+      {
+        "fromIndex": 28,
+        "toIndex": 34,
+        "type": "CS"
+      },
+      {
+        "fromIndex": 29,
+        "toIndex": 30,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 30,
+        "toIndex": 32,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 31,
+        "toIndex": 37,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 33,
+        "toIndex": 23,
+        "type": "TTN"
+      },
+      {
+        "fromIndex": 33,
+        "toIndex": 31,
+        "type": "CS"
+      },
+      {
+        "fromIndex": 34,
+        "toIndex": 17,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 27,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 36,
+        "toIndex": 18,
+        "type": "True"
+      },
+      {
+        "fromIndex": 37,
+        "toIndex": 29,
+        "type": "replace"
+      },
+      {
+        "fromIndex": 37,
+        "toIndex": 30,
+        "type": "last"
+      },
+      {
+        "fromIndex": 38,
+        "toIndex": 0,
         "type": "Success"
       }
     ],
@@ -781,82 +803,17 @@
         "fromIndex": 7,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "14156700-9de5-11ea-abf5-9397c4646ed8"
-        },
-        "additionalInfo": {
-          "layoutX": 1548,
-          "layoutY": 225,
-          "ruleChainNodeId": "rule-chain-node-48"
-        },
-        "type": "reclamarDispositivo"
-      },
-      {
-        "fromIndex": 7,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "7e6a4720-9de4-11ea-abf5-9397c4646ed8"
-        },
-        "additionalInfo": {
-          "layoutX": 1546,
-          "layoutY": 114,
-          "ruleChainNodeId": "rule-chain-node-47"
-        },
-        "type": "borrarEntidad"
-      },
-      {
-        "fromIndex": 7,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "be86c8b0-9de4-11ea-abf5-9397c4646ed8"
-        },
-        "additionalInfo": {
-          "layoutX": 1548,
-          "layoutY": 5,
-          "ruleChainNodeId": "rule-chain-node-46"
-        },
-        "type": "editarEntidad"
-      },
-      {
-        "fromIndex": 7,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "a59d3870-9de4-11ea-abf5-9397c4646ed8"
-        },
-        "additionalInfo": {
-          "layoutX": 1547,
-          "layoutY": 61,
-          "ruleChainNodeId": "rule-chain-node-45"
-        },
-        "type": "crearEntidad"
-      },
-      {
-        "fromIndex": 7,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "870816a0-9de4-11ea-abf5-9397c4646ed8"
-        },
-        "additionalInfo": {
-          "layoutX": 1548,
-          "layoutY": 175,
-          "ruleChainNodeId": "rule-chain-node-44"
-        },
-        "type": "configurarEntidad"
-      },
-      {
-        "fromIndex": 34,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
           "id": "b012f640-a579-11ea-b825-09d866a6d73c"
         },
         "additionalInfo": {
           "layoutX": 1418,
           "layoutY": 693,
-          "ruleChainNodeId": "rule-chain-node-43"
+          "ruleChainNodeId": "rule-chain-node-48"
         },
         "type": "LHT65"
       },
       {
-        "fromIndex": 34,
+        "fromIndex": 7,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "0a108d70-9de5-11ea-abf5-9397c4646ed8"
@@ -864,12 +821,12 @@
         "additionalInfo": {
           "layoutX": 1419,
           "layoutY": 637,
-          "ruleChainNodeId": "rule-chain-node-42"
+          "ruleChainNodeId": "rule-chain-node-47"
         },
         "type": "RAK7204"
       },
       {
-        "fromIndex": 34,
+        "fromIndex": 7,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "3e25d5c0-9de5-11ea-abf5-9397c4646ed8"
@@ -877,12 +834,12 @@
         "additionalInfo": {
           "layoutX": 1417,
           "layoutY": 537,
-          "ruleChainNodeId": "rule-chain-node-41"
+          "ruleChainNodeId": "rule-chain-node-46"
         },
         "type": "V02_001"
       },
       {
-        "fromIndex": 34,
+        "fromIndex": 7,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "dabec0a0-9de4-11ea-abf5-9397c4646ed8"
@@ -890,9 +847,74 @@
         "additionalInfo": {
           "layoutX": 1418,
           "layoutY": 587,
-          "ruleChainNodeId": "rule-chain-node-40"
+          "ruleChainNodeId": "rule-chain-node-45"
         },
         "type": "RAK7200"
+      },
+      {
+        "fromIndex": 18,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "14156700-9de5-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1548,
+          "layoutY": 225,
+          "ruleChainNodeId": "rule-chain-node-44"
+        },
+        "type": "reclamarDispositivo"
+      },
+      {
+        "fromIndex": 18,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "7e6a4720-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1546,
+          "layoutY": 114,
+          "ruleChainNodeId": "rule-chain-node-43"
+        },
+        "type": "borrarEntidad"
+      },
+      {
+        "fromIndex": 18,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "be86c8b0-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1548,
+          "layoutY": 5,
+          "ruleChainNodeId": "rule-chain-node-42"
+        },
+        "type": "editarEntidad"
+      },
+      {
+        "fromIndex": 18,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "a59d3870-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1547,
+          "layoutY": 61,
+          "ruleChainNodeId": "rule-chain-node-41"
+        },
+        "type": "crearEntidad"
+      },
+      {
+        "fromIndex": 18,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "870816a0-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1548,
+          "layoutY": 175,
+          "ruleChainNodeId": "rule-chain-node-40"
+        },
+        "type": "configurarEntidad"
       }
     ]
   }
