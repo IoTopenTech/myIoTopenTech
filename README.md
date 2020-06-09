@@ -1,3 +1,11 @@
+# To-Do
+- [ ] Permitir indicar en los downlinks cómo es el schedulink (replace, first o last)
+- [ ] Trasladar la rama Tomar posesión a la cadena de reglas de cada tipo de nodo
+- [ ] Permitir que un dispositivo pueda delegar en otro de un cliente diferente. Al delegar se preaprovisiona un nuevo dispositivo delegado vinculado al original mediante una relación de tipo haDelegadoEn. El propietario podrá indicar qué telemetrías, parámetros de configuración configurables por downlink y canales de downlink quiere delegar.
+- [ ] Integración con Everynet
+- [ ] Skill de Alexa
+
+
 # ThingsBoard TTN Edition
 
 Las instrucciones siguientes están dirigidas a los usuarios que quieran desarrollar nuevos tipos de activos y dispositivos en My IoT open Tech. Si es su caso, solicite en contacto@iotopentech.io una cuenta de nivel tenant.
