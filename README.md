@@ -33,7 +33,8 @@ Procedimiento para crear el entorno de desarrollo en una cuenta tenant de tb IoT
         <div class="body"> <div class="row" layout="row" layout-align="start center"> <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;"> <div class="row" layout="row"> <md-input-container flex class="md-block"> <label>URL imagen fondo</label> <input type="string" size="50" ng-model="vm.configuracion.__urlImagenFondo" ng-required="true"> </md-input-container> </div> </div> </div> </div>
         ```
     
-3. Crear un activo que comience con el nombre del customer seguido de \_ROOT; por ejemplo: 00001\_ROOT. Este activo nos permitirá seleccionar (para mostrarlos en los widgets de los dashboards) mediante relaciones de tipo CONTAINS todos los demás activos y dispositivos que cree el customer a través del dashboard Configuración.
+3. Crear un customer llamado cliente_patron. Utilizaremos este customer para almacenar los atributos de configuración de los distintos tipos de activos y dispositivos (como V02_001_config e IMAGE01_config), de modo que cuando un usuario cree por primera vez una entidad, se obtenga su atributo de configuración copiándolo del cliente_patron. Crear una relación desde el cliente_patron al cliente 00001 cuyo tipo coincida con el id del customer 00001. Actualmente también usamos el cliente_patron para almacenar un atributo llamado accounting en el que se guarda el número de dispositivos activos y créditos de cada cliente a modo de copia de seguridad (en cada customer existen dos atributos llamados dispositivosActivos y credito con esta misma información), o facilidad para acceder a toda la información de contabilidad de un modo más rápido; no obstante, es posible que en versiones posteriores se revise esta el uso de la propiedad accounting y se elimine si no es necesaria.
+4. Crear un activo que comience con el nombre del customer seguido de \_ROOT; por ejemplo: 00001\_ROOT. Este activo nos permitirá seleccionar (para mostrarlos en los widgets de los dashboards) mediante relaciones de tipo CONTAINS todos los demás activos y dispositivos que cree el customer a través del dashboard Configuración.
     * Indicar como tipo del activo: ROOT
     * Crear en el activo los 2 atributos del lado del servidor siguientes:    
         * nombreEntidad
@@ -50,9 +51,9 @@ Procedimiento para crear el entorno de desarrollo en una cuenta tenant de tb IoT
     
     * Copiar el Asset ID del activo creado (será del tipo ffeabc0-6ffa-121a-b4b5-4bbff7e83283) y crear en el activo una relación de tipo TO hacia el Customer y que utilice este ID como Relation type.
       
-4. Crear un dispositivo que comience con el nombre del customer seguido de \_CONTROL; por ejemplo: 00001\_CONTROL. Mediante telemetrías que enviaremos a este dispositivo desde los widgets de los dashboard podremos realizar operaciones de gestión, como crear dispositivos o configurarlos (ver la regla Root Rule Chain).
+5. Crear un dispositivo que comience con el nombre del customer seguido de \_CONTROL; por ejemplo: 00001\_CONTROL. Mediante telemetrías que enviaremos a este dispositivo desde los widgets de los dashboard podremos realizar operaciones de gestión, como crear dispositivos o configurarlos (ver la regla Root Rule Chain).
     * Indicar como tipo del dispositivo SYSTEM.
-5. Importar las reglas y los dashboards de este repositorio (no es necesario importar los widgets porque ya están disponibles a nivel de sistema). No es necesario importar todos los dashboards; bastaría con los siguientes (el orden de importación es indiferente):
+6. Importar las reglas y los dashboards de este repositorio (no es necesario importar los widgets porque ya están disponibles a nivel de sistema). No es necesario importar todos los dashboards; bastaría con los siguientes (el orden de importación es indiferente):
     * activo_image01
 	* configuracion
 	* dispositivo_v02_001
@@ -74,7 +75,7 @@ Tampoco en necesario importar todas las reglas, bastaría con las siguientes, pe
  
  ![](.//media/readme_01.png)
  
- 6. Asignar al customer (00001) el activo ROOT, el dispositivo CONTROL y todos los dashboards.
+ 7. Asignar al customer (00001) el activo ROOT, el dispositivo CONTROL y todos los dashboards.
 
 Si desea crear un tipo de dispositivo puede consultar el siguiente documento:
 
