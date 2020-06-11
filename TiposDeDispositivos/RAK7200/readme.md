@@ -70,6 +70,6 @@ Para preaprovisionar dispositivos de tipo RAK7200 se requiere un archivo CSV que
 * tipoOriginal: Tipo original del dispositivo para recuperarlo si el usuario lo resetease; coincidirá con el type (RAK7200)
 * claimingData: Objeto en formato JSON con la clave de reclamación del dispositivo; por ejemplo: {"secretKey": "ABCDEFGHIJKLMNOP", "expirationTime": "1640995200000"}
 * claimingDataOriginal: Copia del parámetro anterior porque el anterior será borrado si el usuario reclama el dispositivo, y necesitamos un modo de recuperar esa información si el usuario resetease el dispositivo.
-* apropiable: Atributo en el que se indica si el usuario podría tomar posesión del dispositivo mediante downlinks; en este caso el valor será false.
+* apropiable: Atributo en el que se indica si el usuario podría tomar posesión del dispositivo mediante downlinks; en este caso el valor será false porque el RAK7200 no admite esta opción.
 * __cs_url: Si el dispositivo está pre-aprovisionado en ChirpStack, aquí indicaremos el URL.
 * __cs_token: Si el dispositivo está pre-aprovisionado en ChirpStack, aquí indicaremos el JWT autorizado en la API.
