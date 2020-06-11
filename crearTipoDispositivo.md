@@ -32,165 +32,160 @@ A continuación, se muestra el bloque de código correspondiente al tipo
 de nodo V02\_001 que puede servir como referencia:
 
 ```html
-<funciones>[{"nombre":"actualizarHeartbeat","codigo":"$scope.vm.configuracion.___0700=parseInt($scope.vm.configuracion.__heartbeat).toString(16);console.log($scope.vm.configuracion.___0700);"}]</funciones>
-    <md-expansion-panel-group>
-        <md-expansion-panel md-component-id="panelGeneral" id="panelGeneral">
-            <md-expansion-panel-collapsed>
-                <div class="md-title" translate>Configuraci&oacute;n general</div>
-                <div class="md-summary">Configurar atributos de la entidad</div>
-                <md-expansion-panel-icon></md-expansion-panel-icon>
-            </md-expansion-panel-collapsed>
-            <md-expansion-panel-expanded>
-                <md-expansion-panel-header ng-click="$panel.collapse()">
+<funciones>[{"nombre":"actualizarHeartbeat","codigo":"var valor=parseInt($scope.vm.configuracion.___heartbeat).toString(16);var pad='00';$scope.vm.configuracion.___0700=pad.substring(0, pad.length - valor.length) + valor;"}]</funciones>
+<md-dialog-content>
+    <div class="md-dialog-content" flex>
+        <md-expansion-panel-group>
+            <md-expansion-panel md-component-id="panelGeneral" id="panelGeneral">
+                <md-expansion-panel-collapsed>
+                    <div class="md-title" translate>Configuraci&oacute;n general</div>
+                    <div class="md-summary">Configurar atributos de la entidad</div>
+                    <md-expansion-panel-icon></md-expansion-panel-icon>
+                </md-expansion-panel-collapsed>
+                <md-expansion-panel-expanded>
+                    <md-expansion-panel-header ng-click="$panel.collapse()">
+                        <div class="md-title" translate>Configuraci&oacute;n general</div>
+                        <div class="md-summary">Configurar atributos de la entidad</div>
+                        <md-expansion-panel-icon></md-expansion-panel-icon>
+                    </md-expansion-panel-header>
+                    <md-expansion-panel-content>
+                        <form name="form.configuracionGeneral" class="configure-entity-form" ng-submit="vm.configurar()">
+                            <sustituir-coordenadas class="ng-scope"></sustituir-coordenadas>
+                            <sustituir-chirpstack class="ng-scope"></sustituir-chirpstack>
+                            <div class="md-body-1" style="padding-bottom: 10px; color: rgba(0, 0, 0, 0.57);">Alarmas</div>
+                            <div class="body">
+                                <div class="row" layout="row" layout-align="start center">
+                                    <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
+                                        <div flex layout="column">
+                                            <label class="checkbox-label">Activar alarma de cambio de estado</label>
+                                            <md-checkbox ng-model="vm.configuracion.__alarmas.cambioDeEstado.enable" style="margin-bottom: 10px;">
+                                                {{(vm.configuracion.__alarmas.cambioDeEstado.enable ? "value.true" : "value.false") | translate}}
+                                            </md-checkbox>
+                                        </div>
+                                        <div class="row" layout="row">
+                                            <md-input-container class="md-block" style="min-width: 100px;">
+                                                <label>Disparar al </label>
+                                                <md-select
+                                                    ng-disabled="!vm.configuracion.__alarmas.cambioDeEstado.enable"
+                                                    ng-required="vm.configuracion.__alarmas.cambioDeEstado.enable"
+                                                    name="cambioDeEstadoTrigger"
+                                                    ng-model="vm.configuracion.__alarmas.cambioDeEstado.trigger"
+                                                >
+                                                    <md-option value="abrir"> abrir </md-option> <md-option value="cerrar"> cerrar </md-option>
+                                                </md-select>
+                                                <div ng-messages="editEntityForm.cambioDeEstadoTrigger.$error"><div ng-message="required">Este dato es obligatorio.</div></div>
+                                            </md-input-container>
+                                            <sustituir-notificaciones class="ng-scope">cambioDeEstado</sustituir-notificaciones>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="body">
+                                <div class="row" layout="row" layout-align="start center">
+                                    <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
+                                        <div flex layout="column">
+                                            <label class="checkbox-label">Activar alarma de nivel bajo de batería</label>
+                                            <md-checkbox ng-model="vm.configuracion.__alarmas.nivelDeBateria.enable" style="margin-bottom: 10px;">
+                                                {{(vm.configuracion.__alarmas.nivelDeBateria.enable ? "value.true" : "value.false") | translate}}
+                                            </md-checkbox>
+                                        </div>
+                                        <div class="row" layout="row">
+                                            <md-input-container flex class="md-block">
+                                                <label>Umbral (V)</label>
+                                                <input
+                                                    type="decimal"
+                                                    size="10"
+                                                    ng-disabled="!vm.configuracion.__alarmas.nivelDeBateria.enable "
+                                                    ng-model="vm.configuracion.__alarmas.nivelDeBateria.umbralBateria"
+                                                    ng-required="vm.configuracion.__alarmas.nivelDeBateria.enable"
+                                                />
+                                            </md-input-container>
+                                            <sustituir-notificaciones class="ng-scope">nivelDeBateria</sustituir-notificaciones>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="body">
+                                <div class="row" layout="row" layout-align="start center">
+                                    <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
+                                        <div flex layout="column">
+                                            <label class="checkbox-label">Activar alarma de inactividad</label>
+                                            <md-checkbox ng-model="vm.configuracion.__alarmas.inactividad.enable" style="margin-bottom: 10px;">
+                                                {{(vm.configuracion.__alarmas.inactividad.enable ? "value.true" : "value.false") | translate}}
+                                            </md-checkbox>
+                                        </div>
+                                        <div class="row" layout="row">
+                                            <md-input-container flex class="md-block">
+                                                <label>Umbral en segundos</label>
+                                                <input
+                                                    type="number"
+                                                    size="10"
+                                                    ng-disabled="!vm.configuracion.__alarmas.inactividad.enable "
+                                                    ng-model="vm.configuracion.__alarmas.inactividad.umbralInactividad"
+                                                    ng-required="vm.configuracion.__alarmas.inactividad.enable"
+                                                />
+                                            </md-input-container>
+                                            <sustituir-notificaciones class="ng-scope">inactividad</sustituir-notificaciones>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <md-button type="submit" ng-disabled="form.configuracionGeneral.$invalid || !form.configuracionGeneral.$dirty" class="md-raised md-primary">
+                                Configurar
+                            </md-button>
+                        </form>
+                    </md-expansion-panel-content>
+                </md-expansion-panel-expanded>
+            </md-expansion-panel>
+
+            <md-expansion-panel md-component-id="panelHeartbeat" id="panelHeartbeat">
+                <md-expansion-panel-collapsed>
                     <div class="md-title" translate>Hearbeat</div>
                     <div class="md-summary">Configurar periodo de envío de heartbeat</div>
                     <md-expansion-panel-icon></md-expansion-panel-icon>
-                </md-expansion-panel-header>
-                <md-expansion-panel-content>
-                    <form name="form.configuracionGeneral" class="configure-entity-form" ng-submit="vm.configurar()">
-                        <sustituir-coordenadas class="ng-scope"></sustituir-coordenadas>
+                </md-expansion-panel-collapsed>
+                <md-expansion-panel-expanded>
+                    <md-expansion-panel-header ng-click="$panel.collapse()">
+                        <div class="md-title" translate>Hearbeat</div>
+                        <div class="md-summary">Configurar periodo de envío de heartbeat</div>
+                        <md-expansion-panel-icon></md-expansion-panel-icon>
+                    </md-expansion-panel-header>
+                    <md-expansion-panel-content>
+                        <form name="form.configuracionDownlink" class="configure-entity-form" ng-submit="vm.configurar()">
+                            <div class="row" layout="row">
+                                <md-input-container flex class="md-block">
+                                    <label>Número de minutos entre heartbeats</label> <input type="number" size="10" step="1" min="0" max="60" ng-model="vm.configuracion.___heartbeat" ng-change="actualizarHeartbeat()" />
+                                    <input type="hidden" ng-model="vm.configuracion.___0700" />
 
-                        <div class="md-body-1" style="padding-bottom: 10px; color: rgba(0, 0, 0, 0.57);">Alarmas</div>
-                        <div class="body">
-                            <div class="row" layout="row" layout-align="start center">
-                                <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
-                                    <div flex layout="column">
-                                        <label class="checkbox-label">Activar alarma de cambio de estado</label>
-                                        <md-checkbox ng-model="vm.configuracion.__alarmas.cambioDeEstado.enable" style="margin-bottom: 10px;">
-                                            {{(vm.configuracion.__alarmas.cambioDeEstado.enable ? "value.true" : "value.false") | translate}}
-                                        </md-checkbox>
-                                    </div>
-                                    <div class="row" layout="row">
-                                        <md-input-container class="md-block" style="min-width: 100px;">
-                                            <label>Disparar al </label>
-                                            <md-select
-                                                ng-disabled="!vm.configuracion.__alarmas.cambioDeEstado.enable"
-                                                ng-required="vm.configuracion.__alarmas.cambioDeEstado.enable"
-                                                name="cambioDeEstadoTrigger"
-                                                ng-model="vm.configuracion.__alarmas.cambioDeEstado.trigger"
-                                            >
-                                                <md-option value="abrir"> abrir </md-option> <md-option value="cerrar"> cerrar </md-option>
-                                            </md-select>
-                                            <div ng-messages="editEntityForm.cambioDeEstadoTrigger.$error"><div ng-message="required">Este dato es obligatorio.</div></div>
-                                        </md-input-container>
-                                        <sustituir-notificaciones class="ng-scope">cambioDeEstado</sustituir-notificaciones>
-                                    </div>
-                                </div>
+                                    <md-button type="submit" ng-disabled="form.configuracionDownlink.$invalid || !form.configuracionDownlink.$dirty" class="md-raised md-primary" ng-click="vm.configuracion.___ultimoDownlink='heartbeat'">
+                                        Configurar
+                                    </md-button>
+                                </md-input-container>
                             </div>
-                        </div>
-                        <div class="body">
-                            <div class="row" layout="row" layout-align="start center">
-                                <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
-                                    <div flex layout="column">
-                                        <label class="checkbox-label">Activar alarma de nivel bajo de batería</label>
-                                        <md-checkbox ng-model="vm.configuracion.__alarmas.nivelDeBateria.enable" style="margin-bottom: 10px;">
-                                            {{(vm.configuracion.__alarmas.nivelDeBateria.enable ? "value.true" : "value.false") | translate}}
-                                        </md-checkbox>
-                                    </div>
-                                    <div class="row" layout="row">
-                                        <md-input-container flex class="md-block">
-                                            <label>Umbral (V)</label>
-                                            <input
-                                                type="decimal"
-                                                size="10"
-                                                ng-disabled="!vm.configuracion.__alarmas.nivelDeBateria.enable "
-                                                ng-model="vm.configuracion.__alarmas.nivelDeBateria.umbralBateria"
-                                                ng-required="vm.configuracion.__alarmas.nivelDeBateria.enable"
-                                            />
-                                        </md-input-container>
-                                        <sustituir-notificaciones class="ng-scope">nivelDeBateria</sustituir-notificaciones>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="body">
-                            <div class="row" layout="row" layout-align="start center">
-                                <div class="md-whiteframe-1dp" flex layout="column" style="padding-left: 5px; margin-bottom: 3px;">
-                                    <div flex layout="column">
-                                        <label class="checkbox-label">Activar alarma de inactividad</label>
-                                        <md-checkbox ng-model="vm.configuracion.__alarmas.inactividad.enable" style="margin-bottom: 10px;">
-                                            {{(vm.configuracion.__alarmas.inactividad.enable ? "value.true" : "value.false") | translate}}
-                                        </md-checkbox>
-                                    </div>
-                                    <div class="row" layout="row">
-                                        <md-input-container flex class="md-block">
-                                            <label>Umbral en segundos</label>
-                                            <input
-                                                type="number"
-                                                size="10"
-                                                ng-disabled="!vm.configuracion.__alarmas.inactividad.enable "
-                                                ng-model="vm.configuracion.__alarmas.inactividad.umbralInactividad"
-                                                ng-required="vm.configuracion.__alarmas.inactividad.enable"
-                                            />
-                                        </md-input-container>
-                                        <sustituir-notificaciones class="ng-scope">inactividad</sustituir-notificaciones>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <md-button type="submit" ng-disabled="form.configuracionGeneral.$invalid || !form.configuracionGeneral.$dirty" class="md-raised md-primary">
-                            Configurar
-                        </md-button>
-                    </form>
-                </md-expansion-panel-content>
-            </md-expansion-panel-expanded>
-        </md-expansion-panel>
-
-        <md-expansion-panel md-component-id="panelHeartbeat" id="panelHeartbeat">
-            <md-expansion-panel-collapsed>
-                <div class="md-title" translate>Hearbeat</div>
-                <div class="md-summary">Configurar periodo de envío de heartbeat</div>
-                <md-expansion-panel-icon></md-expansion-panel-icon>
-            </md-expansion-panel-collapsed>
-            <md-expansion-panel-expanded>
-                <md-expansion-panel-header ng-click="$panel.collapse()">
-                    <div class="md-title" translate>Hearbeat</div>
-                    <div class="md-summary">Configurar periodo de envío de heartbeat</div>
-                    <md-expansion-panel-icon></md-expansion-panel-icon>
-                </md-expansion-panel-header>
-                <md-expansion-panel-content>
-                    <form name="form.configuracionDownlink" class="configure-entity-form" ng-submit="vm.configurar()">
-                        <div class="row" layout="row">
-                            <md-input-container flex class="md-block">
-                                <label>Número de minutos entre heartbeats</label> <input type="number" size="10" step="1" min="0" max="60" ng-model="vm.configuracion.__heartbeat" ng-change="actualizarHeartbeat()" />
-                                <input type="hidden" ng-model="vm.configuracion.___0700" />
-
-                                <md-button
-                                    
-                                    type="submit"
-                                    ng-disabled="form.configuracionDownlink.$invalid || !form.configuracionDownlink.$dirty"
-                                    class="md-raised md-primary"
-                                    ng-click="vm.configuracion.__ultimoDownlink='___0700'"
-                                >
-                                    Configurar
-                                </md-button>
-                            </md-input-container>
-                        </div>
-                    </form>
-                </md-expansion-panel-content>
-            </md-expansion-panel-expanded>
-        </md-expansion-panel>
-        <md-expansion-panel md-component-id="panelTomarPosesion" id="panelTomarPosesion" ng-if="vm.entityType.toLowerCase()=='device' && vm.attributes.hasOwnProperty('apropiable') && vm.attributes.apropiable==true">
-            <md-expansion-panel-collapsed>
-                <div class="md-title" translate>Credenciales LoRaWAN</div>
-                <div class="md-summary">Configurar las credenciales LoRaWAN del dispositivo</div>
-                <md-expansion-panel-icon></md-expansion-panel-icon>
-            </md-expansion-panel-collapsed>
-            <md-expansion-panel-expanded>
-                <md-expansion-panel-header ng-click="$panel.collapse()">
+                        </form>
+                    </md-expansion-panel-content>
+                </md-expansion-panel-expanded>
+            </md-expansion-panel>
+            <md-expansion-panel md-component-id="panelTomarPosesion" id="panelTomarPosesion" ng-if="vm.entityType.toLowerCase()=='device' && vm.attributes.hasOwnProperty('apropiable') && vm.attributes.apropiable==true">
+                <md-expansion-panel-collapsed>
                     <div class="md-title" translate>Credenciales LoRaWAN</div>
                     <div class="md-summary">Configurar las credenciales LoRaWAN del dispositivo</div>
                     <md-expansion-panel-icon></md-expansion-panel-icon>
-                </md-expansion-panel-header>
-                <md-expansion-panel-content>
-                    <md-dialog-content>
+                </md-expansion-panel-collapsed>
+                <md-expansion-panel-expanded>
+                    <md-expansion-panel-header ng-click="$panel.collapse()">
+                        <div class="md-title" translate>Credenciales LoRaWAN</div>
+                        <div class="md-summary">Configurar las credenciales LoRaWAN del dispositivo</div>
+                        <md-expansion-panel-icon></md-expansion-panel-icon>
+                    </md-expansion-panel-header>
+                    <md-expansion-panel-content>
                         <form name="form.configuracionEspecifica" class="configure-entity-form" ng-submit="vm.configurar()">
                             <div class="md-dialog-content">
                                 <div layout="row">
                                     <md-input-container flex class="md-block" style="min-width: 100px; width: 150px;">
                                         <label>Método de activación</label>
-                                        <md-select ng-model="vm.configuracion.__operacionesEspecificas.tomarPosesionMetodoActivacion">
+                                        <md-select ng-model="vm.configuracion.___tomarPosesionMetodoActivacion" required>
                                             <md-option ng-if="vm.attributes.hasOwnProperty('admiteABP') && vm.attributes.admiteABP==true" value="A" ng-selected="">
                                                 ABP
                                             </md-option>
@@ -201,66 +196,52 @@ de nodo V02\_001 que puede servir como referencia:
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <md-input-container flex ng-if="vm.configuracion.__operacionesEspecificas.tomarPosesionMetodoActivacion=='A' " class="md-block" style="min-width: 100px; width: 150px;">
+                                    <md-input-container flex ng-if="vm.configuracion.___tomarPosesionMetodoActivacion=='A' " class="md-block" style="min-width: 100px; width: 150px;">
                                         <label>Device Address (msb)</label>
-                                        <input type="text" ng-pattern="[0-9a-fA-F]{8}" autocomplete="off" ng-model="vm.configuracion.__operacionesEspecificas.tomarPosesionParam1" />
+                                        <input type="text" pattern="[0-9a-fA-F]{8}" autocomplete="off" ng-model="vm.configuracion.___tomarPosesionParam1" required />
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <md-input-container flex ng-if="vm.configuracion.__operacionesEspecificas.tomarPosesionMetodoActivacion=='A'" class="md-block" style="min-width: 100px; width: 150px;">
+                                    <md-input-container flex ng-if="vm.configuracion.___tomarPosesionMetodoActivacion=='A'" class="md-block" style="min-width: 100px; width: 150px;">
                                         <label>Network Session Key (msb)</label>
-                                        <input type="text" ng-pattern="[0-9a-fA-F]{32}" autocomplete="off" ng-model="vm.configuracion.__operacionesEspecificas.tomarPosesionParam2" />
+                                        <input type="text" pattern="[0-9a-fA-F]{32}" autocomplete="off" ng-model="vm.configuracion.___tomarPosesionParam2" required />
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <md-input-container flex ng-if="vm.configuracion.__operacionesEspecificas.tomarPosesionMetodoActivacion=='A' " class="md-block" style="min-width: 100px; width: 150px;">
+                                    <md-input-container flex ng-if="vm.configuracion.___tomarPosesionMetodoActivacion=='A' " class="md-block" style="min-width: 100px; width: 150px;">
                                         <label>Application Session Key (msb)</label>
-                                        <input type="text" ng-pattern="[0-9a-fA-F]{32}" autocomplete="off" ng-model="vm.configuracion.__operacionesEspecificas.tomarPosesionParam3" />
+                                        <input type="text" pattern="[0-9a-fA-F]{32}" autocomplete="off" ng-model="vm.configuracion.___tomarPosesionParam3" required />
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <md-input-container flex ng-if="vm.configuracion.__operacionesEspecificas.tomarPosesionMetodoActivacion=='O' " class="md-block" style="min-width: 100px; width: 150px;">
+                                    <md-input-container flex ng-if="vm.configuracion.___tomarPosesionMetodoActivacion=='O' " class="md-block" style="min-width: 100px; width: 150px;">
                                         <label>Device EUI (msb)</label>
-                                        <input
-                                            type="text"
-                                            ng-pattern="[0-9a-fA-F]{16}"
-                                            pattern="[0-9a-fA-F]{16}"
-                                            autocomplete="off"
-                                            ng-model="vm.configuracion.__operacionesEspecificas.tomarPosesionParam1"
-                                            name="vm.configuracion.__operacionesEspecificas.tomarPosesionParam1"
-                                        />
+                                        <input type="text" pattern="[0-9a-fA-F]{16}" autocomplete="off" ng-model="vm.configuracion.___tomarPosesionParam1" name="vm.configuracion.___tomarPosesionParam1" required />
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <md-input-container flex ng-if="vm.configuracion.__operacionesEspecificas.tomarPosesionMetodoActivacion=='O'" class="md-block" style="min-width: 100px; width: 150px;">
+                                    <md-input-container flex ng-if="vm.configuracion.___tomarPosesionMetodoActivacion=='O'" class="md-block" style="min-width: 100px; width: 150px;">
                                         <label>Application EUI (msb)</label>
-                                        <input type="text" ng-pattern="[0-9a-fA-F]{16}" autocomplete="off" ng-model="vm.configuracion.__operacionesEspecificas.tomarPosesionParam2" />
+                                        <input type="text" pattern="[0-9a-fA-F]{16}" autocomplete="off" ng-model="vm.configuracion.___tomarPosesionParam2" required />
                                     </md-input-container>
                                 </div>
                                 <div layout="row">
-                                    <md-input-container flex ng-if="vm.configuracion.__operacionesEspecificas.tomarPosesionMetodoActivacion=='O'" class="md-block" style="min-width: 100px; width: 150px;">
+                                    <md-input-container flex ng-if="vm.configuracion.___tomarPosesionMetodoActivacion=='O'" class="md-block" style="min-width: 100px; width: 150px;">
                                         <label>Application Key (msb)</label>
-                                        <input type="text" ng-pattern="[0-9a-fA-F]{32}" autocomplete="off" ng-model="vm.configuracion.__operacionesEspecificas.tomarPosesionParam3" />
+                                        <input type="text" pattern="[0-9a-fA-F]{32}" autocomplete="off" ng-model="vm.configuracion.___tomarPosesionParam3" required />
                                     </md-input-container>
                                 </div>
-								<md-button
-                                
-                                type="submit"
-                                ng-disabled="form.configuracionEspecifica.$invalid || !form.configuracionEspecifica.$dirty"
-                                class="md-raised md-primary"
-                                ng-click="vm.configuracion.__ultimoDownlink='___0700'"
-                            >
-                                Configurar
-                            </md-button>
-                                
+                                <md-button type="submit" ng-disabled="form.configuracionEspecifica.$invalid || !form.configuracionEspecifica.$dirty" class="md-raised md-primary" ng-click="vm.configuracion.___ultimoDownlink='tomarPosesion'">
+                                    Configurar
+                                </md-button>
                             </div>
-                            
                         </form>
-                    </md-dialog-content>
-                </md-expansion-panel-content>
-            </md-expansion-panel-expanded>
-        </md-expansion-panel>
-    </md-expansion-panel-group>
+                    </md-expansion-panel-content>
+                </md-expansion-panel-expanded>
+            </md-expansion-panel>
+        </md-expansion-panel-group>
+    </div>
+</md-dialog-content>
 
 <md-dialog-actions>
     <md-button ng-click="vm.cancel()" class="md-primary">Cancelar </md-button>
@@ -319,8 +300,10 @@ el código que permite configurar las notificaciones:
 Esto realmente es muy sencillo; básicamente lo único que hace es cargar
 las alarmas (cuando el customer configura una alarma usando el
 formulario que se creó en el paso anterior, se añade automáticamente un
-atributo en el dispositivo llamado alarma\_V02\_001). Por eso, el primer
-nodo carga ese atributo.
+atributo en el dispositivo llamado alarma\_V02\_001), guardar las telemetrías y, opcionalmente, actualizar el tooltip o gestionar los downlinks. 
+
+Para la gestión de las alarmas, el primer
+nodo carga el atributo __alarma.
 
 ![](.//media/image8.png)
 
