@@ -8,8 +8,80 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 1,
+    "firstNodeIndex": 7,
     "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 1201,
+          "layoutY": 313
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararDownlink2",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var payload = {};\n   \n    payload.port = 99; //Cayenne mydevices manda los downlink por el port 99\n    payload.confirmed = true;\n    payload.schedule='last';\n    payload.payload_raw=\"FF02\"+ msg.___tomarPosesionParam2;\n    \n    \nmsg={\"payload\":JSON.stringify(payload),\"uuid\": msg.uuid};\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1201,
+          "layoutY": 372
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararDownlink3",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var payload = {};\n   \n    payload.port = 99; //Cayenne mydevices manda los downlink por el port 99\n    payload.confirmed = true;\n    payload.schedule='last';\n    payload.payload_raw=\"FF03\"+ msg.___tomarPosesionParam3;\n    \n    \nmsg={\"payload\":JSON.stringify(payload),\"uuid\": msg.uuid};\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1200,
+          "layoutY": 142
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararDownlink",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var payload = {};\n   \n    payload.port = 99; //Cayenne mydevices manda los downlink por el port 99\n    payload.confirmed = true;\n    payload.schedule='replace';\n    var valor=parseInt(msg.___heartbeat).toString(16);\n    var pad='00';\n    \n    payload.payload_raw=\"0700\"+ pad.substring(0, pad.length - valor.length) + valor;\n    \n    \nmsg={\"payload\":JSON.stringify(payload),\"uuid\": msg.uuid};\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 889,
+          "layoutY": 141
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "operaciones",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\n    return ['guardarAtributo','enviarDownlink'];\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1195,
+          "layoutY": 65
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "preparar atributos",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msg={\"___heartbeat\":msg.___heartbeat};\nmsgType = \"POST_ATTRIBUTES_REQUEST\";\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1459,
+          "layoutY": 63
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
       {
         "additionalInfo": {
           "layoutX": 343,
@@ -31,7 +103,7 @@
         "name": "es telemetria?",
         "debugMode": true,
         "configuration": {
-          "jsScript": "if(msgType=='POST_TELEMETRY_REQUEST') {\n    return ['telemetria','alarma'];\n}else if(msgType=='INACTIVITY_EVENT'||msgType=='ACTIVITY_EVENT'){\n    return ['alarma'];\n}"
+          "jsScript": "if (msgType == 'POST_TELEMETRY_REQUEST') {\n    if (msg.hasOwnProperty('___ultimoDownlink')) {\n        return ['downlink'];\n    } else {\n        return ['telemetria', 'alarma'];\n    }\n} else if (msgType == 'INACTIVITY_EVENT' || msgType ==\n    'ACTIVITY_EVENT') {\n    return ['alarma'];\n}"
         }
       },
       {
@@ -60,8 +132,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 340,
-          "layoutY": 445
+          "layoutX": 320,
+          "layoutY": 669
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "Activada?",
@@ -72,8 +144,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 620,
-          "layoutY": 444
+          "layoutX": 600,
+          "layoutY": 668
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "tipoAlarma",
@@ -84,8 +156,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 887,
-          "layoutY": 441
+          "layoutX": 867,
+          "layoutY": 665
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
         "name": "C[r/l]ear",
@@ -96,8 +168,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 879,
-          "layoutY": 238
+          "layoutX": 859,
+          "layoutY": 462
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
         "name": "C[r/l]ear",
@@ -108,8 +180,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1170,
-          "layoutY": 217
+          "layoutX": 1152,
+          "layoutY": 496
         },
         "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
         "name": "Clear alarma",
@@ -152,8 +224,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 332,
-          "layoutY": 238
+          "layoutX": 312,
+          "layoutY": 462
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "Activada?",
@@ -164,8 +236,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1170,
-          "layoutY": 156
+          "layoutX": 1152,
+          "layoutY": 435
         },
         "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
         "name": "Crear alarma",
@@ -183,8 +255,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 620,
-          "layoutY": 239
+          "layoutX": 600,
+          "layoutY": 463
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "tipoAlarma",
@@ -195,8 +267,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1435,
-          "layoutY": 156
+          "layoutX": 1417,
+          "layoutY": 435
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "construir mensaje",
@@ -207,8 +279,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1436,
-          "layoutY": 219
+          "layoutX": 1418,
+          "layoutY": 498
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "construir mensaje",
@@ -219,8 +291,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 883,
-          "layoutY": 362
+          "layoutX": 863,
+          "layoutY": 586
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
         "name": "C[r/l]ear",
@@ -231,8 +303,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1174,
-          "layoutY": 341
+          "layoutX": 1156,
+          "layoutY": 620
         },
         "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
         "name": "Clear alarma",
@@ -244,8 +316,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 336,
-          "layoutY": 362
+          "layoutX": 316,
+          "layoutY": 586
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "Activada?",
@@ -256,8 +328,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1174,
-          "layoutY": 280
+          "layoutX": 1156,
+          "layoutY": 559
         },
         "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
         "name": "Crear alarma",
@@ -275,8 +347,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 624,
-          "layoutY": 363
+          "layoutX": 604,
+          "layoutY": 587
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "tipoAlarma",
@@ -287,8 +359,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1438,
-          "layoutY": 296
+          "layoutX": 1420,
+          "layoutY": 575
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "construir mensaje",
@@ -299,8 +371,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1438,
-          "layoutY": 348
+          "layoutX": 1420,
+          "layoutY": 627
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "construir mensaje",
@@ -311,8 +383,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1173,
-          "layoutY": 467
+          "layoutX": 1155,
+          "layoutY": 746
         },
         "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
         "name": "Clear alarma",
@@ -324,8 +396,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1173,
-          "layoutY": 406
+          "layoutX": 1155,
+          "layoutY": 685
         },
         "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
         "name": "Crear alarma",
@@ -343,8 +415,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1437,
-          "layoutY": 422
+          "layoutX": 1419,
+          "layoutY": 701
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "construir mensaje",
@@ -355,8 +427,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1437,
-          "layoutY": 474
+          "layoutX": 1419,
+          "layoutY": 753
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "construir mensaje",
@@ -364,28 +436,90 @@
         "configuration": {
           "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.split(\"_\")[1]+\" ha anulado una alarma de tipo inactividad.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.split(\"_\")[1]+'\",\"value2\":\"'+metadata.digital_in_2+'\",\"value3\":\"'+metadata.analog_in_1+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.split(\"_\")[1]+\": Alarma anulada \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
         }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 617,
+          "layoutY": 251
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "tipoDonwlink?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if(msg.___ultimoDownlink=='heartbeat'){\n    return['heartbeat'];\n}else if(msg.___ultimoDownlink=='tomarPosesion'){\n    return['tomarPosesion'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 341,
+          "layoutY": 251
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "uuid",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msg.uuid=metadata.idEntidad;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1201,
+          "layoutY": 256
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararDownlink1",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var payload = {};\n   \n    payload.port = 99; //Cayenne mydevices manda los downlink por el port 99\n    payload.confirmed = true;\n    payload.schedule='last';\n    payload.payload_raw=\"FF01\"+ msg.___tomarPosesionParam1;\n    \n    \nmsg={\"payload\":JSON.stringify(payload),\"uuid\": msg.uuid};\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 882,
+          "layoutY": 343
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "operaciones",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\n    return ['guardarAtributo','enviarDownlink'];\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1200,
+          "layoutY": 198
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "preparar atributos",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\nmsg={\"___tomarPosesionMetodoActivacion\":msg.___tomarPosesionMetodoActivacion,\n    \"___tomarPosesionParam1\":msg.___tomarPosesionParam1,\n    \"___tomarPosesionParam2\":msg.___tomarPosesionParam2,\n    \"___tomarPosesionParam3\":msg.___tomarPosesionParam3\n};\nmsgType = \"POST_ATTRIBUTES_REQUEST\";\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1464,
+          "layoutY": 196
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
       }
     ],
     "connections": [
       {
-        "fromIndex": 1,
-        "toIndex": 10,
-        "type": "alarma"
+        "fromIndex": 3,
+        "toIndex": 4,
+        "type": "guardarAtributo"
       },
       {
-        "fromIndex": 1,
+        "fromIndex": 3,
         "toIndex": 2,
-        "type": "telemetria"
-      },
-      {
-        "fromIndex": 1,
-        "toIndex": 0,
-        "type": "telemetria"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 3,
-        "type": "Success"
+        "type": "enviarDownlink"
       },
       {
         "fromIndex": 4,
@@ -393,135 +527,231 @@
         "type": "Success"
       },
       {
-        "fromIndex": 5,
-        "toIndex": 6,
-        "type": "Success"
+        "fromIndex": 7,
+        "toIndex": 34,
+        "type": "downlink"
       },
       {
-        "fromIndex": 6,
-        "toIndex": 23,
-        "type": "clear"
-      },
-      {
-        "fromIndex": 6,
-        "toIndex": 24,
-        "type": "crear"
+        "fromIndex": 7,
+        "toIndex": 16,
+        "type": "alarma"
       },
       {
         "fromIndex": 7,
         "toIndex": 8,
-        "type": "clear"
+        "type": "telemetria"
       },
       {
         "fromIndex": 7,
-        "toIndex": 12,
-        "type": "crear"
+        "toIndex": 6,
+        "type": "telemetria"
       },
       {
         "fromIndex": 8,
-        "toIndex": 15,
-        "type": "Cleared"
-      },
-      {
-        "fromIndex": 9,
-        "toIndex": 4,
-        "type": "inactividad"
-      },
-      {
-        "fromIndex": 9,
-        "toIndex": 11,
-        "type": "cambioDeEstado"
-      },
-      {
-        "fromIndex": 9,
-        "toIndex": 18,
-        "type": "nivelDeBateria"
-      },
-      {
-        "fromIndex": 10,
         "toIndex": 9,
         "type": "Success"
       },
       {
+        "fromIndex": 10,
+        "toIndex": 11,
+        "type": "Success"
+      },
+      {
         "fromIndex": 11,
-        "toIndex": 13,
+        "toIndex": 12,
         "type": "Success"
       },
       {
         "fromIndex": 12,
-        "toIndex": 14,
-        "type": "Created"
-      },
-      {
-        "fromIndex": 13,
-        "toIndex": 7,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 16,
-        "toIndex": 17,
+        "toIndex": 29,
         "type": "clear"
       },
       {
-        "fromIndex": 16,
-        "toIndex": 19,
+        "fromIndex": 12,
+        "toIndex": 30,
         "type": "crear"
       },
       {
-        "fromIndex": 17,
-        "toIndex": 22,
+        "fromIndex": 13,
+        "toIndex": 14,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 18,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 14,
+        "toIndex": 21,
         "type": "Cleared"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 10,
+        "type": "inactividad"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 17,
+        "type": "cambioDeEstado"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 24,
+        "type": "nivelDeBateria"
+      },
+      {
+        "fromIndex": 16,
+        "toIndex": 15,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 19,
+        "type": "Success"
       },
       {
         "fromIndex": 18,
         "toIndex": 20,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 19,
-        "toIndex": 21,
         "type": "Created"
       },
       {
-        "fromIndex": 20,
-        "toIndex": 16,
+        "fromIndex": 19,
+        "toIndex": 13,
         "type": "Success"
       },
       {
+        "fromIndex": 22,
+        "toIndex": 23,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 22,
+        "toIndex": 25,
+        "type": "crear"
+      },
+      {
         "fromIndex": 23,
-        "toIndex": 26,
+        "toIndex": 28,
         "type": "Cleared"
       },
       {
         "fromIndex": 24,
-        "toIndex": 25,
+        "toIndex": 26,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 25,
+        "toIndex": 27,
         "type": "Created"
+      },
+      {
+        "fromIndex": 26,
+        "toIndex": 22,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 29,
+        "toIndex": 32,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 30,
+        "toIndex": 31,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 33,
+        "toIndex": 36,
+        "type": "tomarPosesion"
+      },
+      {
+        "fromIndex": 33,
+        "toIndex": 3,
+        "type": "heartbeat"
+      },
+      {
+        "fromIndex": 34,
+        "toIndex": 33,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 36,
+        "toIndex": 37,
+        "type": "guardarAtributo"
+      },
+      {
+        "fromIndex": 36,
+        "toIndex": 35,
+        "type": "enviarDownlink"
+      },
+      {
+        "fromIndex": 36,
+        "toIndex": 0,
+        "type": "enviarDownlink"
+      },
+      {
+        "fromIndex": 36,
+        "toIndex": 1,
+        "type": "enviarDownlink"
+      },
+      {
+        "fromIndex": 37,
+        "toIndex": 38,
+        "type": "Success"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 14,
+        "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
+          "id": "f48eef20-abc0-11ea-b825-09d866a6d73c"
         },
         "additionalInfo": {
-          "layoutX": 1724,
-          "layoutY": 206,
-          "ruleChainNodeId": "rule-chain-node-31"
+          "layoutX": 1475,
+          "layoutY": 309,
+          "ruleChainNodeId": "rule-chain-node-41"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 15,
+        "fromIndex": 1,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "f48eef20-abc0-11ea-b825-09d866a6d73c"
+        },
+        "additionalInfo": {
+          "layoutX": 1475,
+          "layoutY": 309,
+          "ruleChainNodeId": "rule-chain-node-41"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "f48eef20-abc0-11ea-b825-09d866a6d73c"
+        },
+        "additionalInfo": {
+          "layoutX": 1463,
+          "layoutY": 144,
+          "ruleChainNodeId": "rule-chain-node-45"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 20,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
-          "layoutX": 1724,
-          "layoutY": 206,
-          "ruleChainNodeId": "rule-chain-node-31"
+          "layoutX": 1706,
+          "layoutY": 485,
+          "ruleChainNodeId": "rule-chain-node-44"
         },
         "type": "Success"
       },
@@ -532,48 +762,74 @@
           "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
-          "layoutX": 1725,
-          "layoutY": 317,
-          "ruleChainNodeId": "rule-chain-node-30"
+          "layoutX": 1706,
+          "layoutY": 485,
+          "ruleChainNodeId": "rule-chain-node-44"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 22,
+        "fromIndex": 27,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
-          "layoutX": 1725,
-          "layoutY": 317,
-          "ruleChainNodeId": "rule-chain-node-30"
+          "layoutX": 1707,
+          "layoutY": 596,
+          "ruleChainNodeId": "rule-chain-node-43"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 25,
+        "fromIndex": 28,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
-          "layoutX": 1724,
-          "layoutY": 443,
-          "ruleChainNodeId": "rule-chain-node-29"
+          "layoutX": 1707,
+          "layoutY": 596,
+          "ruleChainNodeId": "rule-chain-node-43"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 26,
+        "fromIndex": 31,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
         },
         "additionalInfo": {
-          "layoutX": 1724,
-          "layoutY": 443,
-          "ruleChainNodeId": "rule-chain-node-29"
+          "layoutX": 1706,
+          "layoutY": 722,
+          "ruleChainNodeId": "rule-chain-node-42"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 32,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "61d05910-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 1706,
+          "layoutY": 722,
+          "ruleChainNodeId": "rule-chain-node-42"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 35,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "f48eef20-abc0-11ea-b825-09d866a6d73c"
+        },
+        "additionalInfo": {
+          "layoutX": 1475,
+          "layoutY": 309,
+          "ruleChainNodeId": "rule-chain-node-41"
         },
         "type": "Success"
       }

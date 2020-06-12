@@ -1,0 +1,301 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "enviarDownlink",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 12,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 824,
+          "layoutY": 433
+        },
+        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
+        "name": "borrarQueue",
+        "debugMode": true,
+        "configuration": {
+          "restEndpointUrlPattern": "${ss__cs_url}/api/devices/${ss_hardware_serial}/queue",
+          "requestMethod": "DELETE",
+          "headers": {
+            "Grpc-Metadata-Authorization": "${ss__cs_token}"
+          },
+          "useSimpleClientHttpFactory": false,
+          "readTimeoutMs": 0,
+          "maxParallelRequestsCount": 0,
+          "useRedisQueueForMsgPersistence": false,
+          "trimQueue": false,
+          "maxQueueSize": 0
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 579,
+          "layoutY": 506
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "recuperoDownlinkDeMetadata",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\n msg=JSON.parse(metadata.deviceQueueItem);\n return {\n     msg: msg,\n     metadata: metadata,\n     msgType: msgType\n };"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 581,
+          "layoutY": 372
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "formatoCS",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": " /*\n Tengo que pasar de formato TTN:\n {\n    \"port\": 99,\n    \"confirmed\": true,\n    \"schedule\": \"last\",\n    \"payload_raw\": \"BgBk/w==\",\n    \"dev_id\": \"nodo1\"\n}\na formato CS:\n {  \"deviceQueueItem\": { \n     \"confirmed\": true,  \n     \"data\": \"AQI=\",  \n     \"devEUI\": \"009494db3143aea3\",\n     \"fCnt\": 0,\n     \"fPort\": 99  \n   } \n }\n Parece que CS no tiene la opción de schedule first (sólo replace borrando el queue o last)\n */\n var newMsg = {};\n newMsg.deviceQueueItem = {\n     \"confirmed\": true,\n     \"data\": msg.payload_raw,\n     \"devEUI\": metadata.ss_hardware_serial,\n     \"fPort\": 99\n };\n \nmetadata.deviceQueueItem=JSON.stringify(newMsg);\n return {\n     msg: msg,\n     metadata: metadata,\n     msgType: msgType\n };"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 573,
+          "layoutY": 573
+        },
+        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
+        "name": "enviarDownlink",
+        "debugMode": true,
+        "configuration": {
+          "restEndpointUrlPattern": "${ss__cs_url}/api/devices/${ss_hardware_serial}/queue",
+          "requestMethod": "POST",
+          "headers": {
+            "Grpc-Metadata-Authorization": "${ss__cs_token}"
+          },
+          "useSimpleClientHttpFactory": false,
+          "readTimeoutMs": 0,
+          "maxParallelRequestsCount": 0,
+          "useRedisQueueForMsgPersistence": false,
+          "trimQueue": false,
+          "maxQueueSize": 0
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 574,
+          "layoutY": 305
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "TTN-CS",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var respuesta=[];\nif (metadata.hasOwnProperty('ss_downlink_url') &&\n    metadata.hasOwnProperty('ss_ttn_dev_id')) {\n    respuesta.push('TTN');\n}\nif (metadata.hasOwnProperty('ss_downlink_chirpstack') &&\n    metadata.ss_downlink_chirpstack === \"true\" &&\n    metadata.hasOwnProperty('ss__cs_token') &&\n    metadata.hasOwnProperty('ss__cs_url')&&\n    metadata.hasOwnProperty('ss_hardware_serial')) {\n    respuesta.push('CS');\n}\n\nreturn respuesta;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 576,
+          "layoutY": 434
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "[last] or replace",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if(msg.hasOwnProperty(\"schedule\")&&msg.schedule=='replace'){\n    return [\"replace\"];\n}else{\n    return [\"last\"];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 327,
+          "layoutY": 221
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "idEntidad",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.idEntidad=msg.uuid;\nreturn {msg: msg.payload, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 582,
+          "layoutY": 220
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Originator=Entidad",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${idEntidad}",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 581,
+          "layoutY": 150
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Customer",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "CUSTOMER",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 334,
+          "layoutY": 304
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "downlink_url[_chripstack]",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "downlink_url",
+            "ttn_dev_id",
+            "downlink_chirpstack",
+            "hardware_serial",
+            "__cs_token",
+            "__cs_url"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": false,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 336,
+          "layoutY": 443
+        },
+        "type": "org.thingsboard.rule.engine.rest.TbRestApiCallNode",
+        "name": "enviarDownlink",
+        "debugMode": true,
+        "configuration": {
+          "restEndpointUrlPattern": "${ss_downlink_url}",
+          "requestMethod": "POST",
+          "headers": {},
+          "useSimpleClientHttpFactory": false,
+          "readTimeoutMs": 0,
+          "maxParallelRequestsCount": 0,
+          "useRedisQueueForMsgPersistence": false,
+          "trimQueue": false,
+          "maxQueueSize": 0
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 332,
+          "layoutY": 375
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "TTN",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msg.dev_id=metadata.ss_ttn_dev_id;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 325,
+          "layoutY": 150
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Base64",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msg.payload=JSON.parse(msg.payload);\n    var dst = \"\";\n    var i;\n    var b64x =\n        \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\" // base64 dictionary\n    var b64pad = '='\n    var dataOriginal = msg.payload.payload_raw ;\n        \n    var data = \"\";\n    for (i = 0; i < dataOriginal.length/2; i ++) {\n        data += String.fromCharCode(parseInt(dataOriginal.substr( i * 2,\n            2), 16));\n    }\n\n    for (i = 0; i <= data.length - 3; i += 3) {\n        dst += b64x.charAt(data.charCodeAt(i) >>> 2)\n        dst += b64x.charAt(((data.charCodeAt(i) & 3) << 4) |\n            (data.charCodeAt(i + 1) >>> 4))\n        dst += b64x.charAt(((data.charCodeAt(i + 1) & 15) <<\n            2) | (data.charCodeAt(i + 2) >>> 6))\n        dst += b64x.charAt(data.charCodeAt(i + 2) & 63)\n    }\n\n    if (data.length % 3 == 2) {\n        dst += b64x.charAt(data.charCodeAt(i) >>> 2)\n        dst += b64x.charAt(((data.charCodeAt(i) & 3) << 4) |\n            (data.charCodeAt(i + 1) >>> 4))\n        dst += b64x.charAt(((data.charCodeAt(i + 1) & 15) <<\n            2))\n        dst += b64pad\n    } else if (data.length % 3 == 1) {\n        dst += b64x.charAt(data.charCodeAt(i) >>> 2)\n        dst += b64x.charAt(((data.charCodeAt(i) & 3) << 4))\n        dst += b64pad\n        dst += b64pad\n    }\n    msg.payload.payload_raw = dst;\n\n\n    return {\n        msg: msg,\n        metadata: metadata,\n        msgType: msgType\n    };\n"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 11,
+        "type": "TTN"
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 2,
+        "type": "CS"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 0,
+        "type": "replace"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 1,
+        "type": "last"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 9,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 9,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 10,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 8,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}
