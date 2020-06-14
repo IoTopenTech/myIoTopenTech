@@ -201,7 +201,7 @@
                 {
                   "name": "digital_in_2",
                   "type": "timeseries",
-                  "label": "digital_in_2",
+                  "label": "Estado de la puerta",
                   "color": "#2196f3",
                   "settings": {
                     "excludeFromStacking": false,
@@ -215,15 +215,10 @@
                     "pointShapeFormatter": "var size = radius * Math.sqrt(Math.PI) / 2;\nctx.moveTo(x - size, y - size);\nctx.lineTo(x + size, y + size);\nctx.moveTo(x - size, y + size);\nctx.lineTo(x + size, y - size);",
                     "showPointsLineWidth": 5,
                     "showPointsRadius": 3,
-                    "tooltipValueFormatter": "",
                     "showSeparateAxis": false,
-                    "axisTitle": "",
                     "axisPosition": "left",
-                    "axisTicksFormatter": "",
                     "comparisonSettings": {
-                      "showValuesForComparison": true,
-                      "comparisonValuesLabel": "",
-                      "color": ""
+                      "showValuesForComparison": true
                     }
                   },
                   "_hash": 0.03213885279324091
@@ -257,7 +252,7 @@
             "yaxis": {
               "showLabels": true,
               "color": "#545454",
-              "ticksFormatter": "if (value > 0 && value <= 1) {\n    return 'On';\n} else if (value === 0) {\n    return 'Off';\n} else {\n    return '';\n}"
+              "ticksFormatter": "if (value === 1) {\n    return 'ABIERTA';\n} else if (value === 0) {\n    return 'CERRADA';\n} else {\n    return '';\n}"
             },
             "grid": {
               "color": "#545454",
@@ -285,7 +280,7 @@
           },
           "mobileHeight": null,
           "widgetStyle": {},
-          "useDashboardTimewindow": false,
+          "useDashboardTimewindow": true,
           "showLegend": true,
           "actions": {},
           "legendConfig": {
@@ -300,7 +295,7 @@
           "iconColor": "rgba(0, 0, 0, 0.87)",
           "iconSize": "24px",
           "titleTooltip": "",
-          "displayTimewindow": true
+          "displayTimewindow": false
         },
         "id": "a3c0c2e3-fd0f-c25d-c593-bd81f0f0f72e"
       },
@@ -320,7 +315,7 @@
                 {
                   "name": "analog_in_1",
                   "type": "timeseries",
-                  "label": "analog_in_1",
+                  "label": "Nivel de batería",
                   "color": "#2196f3",
                   "settings": {
                     "excludeFromStacking": false,
@@ -334,15 +329,10 @@
                     "pointShapeFormatter": "var size = radius * Math.sqrt(Math.PI) / 2;\nctx.moveTo(x - size, y - size);\nctx.lineTo(x + size, y + size);\nctx.moveTo(x - size, y + size);\nctx.lineTo(x + size, y - size);",
                     "showPointsLineWidth": 5,
                     "showPointsRadius": 3,
-                    "tooltipValueFormatter": "",
                     "showSeparateAxis": false,
-                    "axisTitle": "",
                     "axisPosition": "left",
-                    "axisTicksFormatter": "",
                     "comparisonSettings": {
-                      "showValuesForComparison": true,
-                      "comparisonValuesLabel": "",
-                      "color": ""
+                      "showValuesForComparison": true
                     }
                   },
                   "_hash": 0.9021615965263892
@@ -375,7 +365,10 @@
             },
             "yaxis": {
               "showLabels": true,
-              "color": "#545454"
+              "color": "#545454",
+              "min": 0,
+              "max": 4,
+              "tickDecimals": 1
             },
             "grid": {
               "color": "#545454",
@@ -407,7 +400,7 @@
           "titleTooltip": "",
           "widgetStyle": {},
           "useDashboardTimewindow": false,
-          "displayTimewindow": true,
+          "displayTimewindow": false,
           "showLegend": true,
           "actions": {}
         },
