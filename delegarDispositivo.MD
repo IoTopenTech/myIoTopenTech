@@ -9,3 +9,5 @@ Los dispositivos delegados no se pueden sub-delegar.
 El dispositivo delegado se pre-aprovisiona, para que el segundo usuario pueda reclamarlo con las credenciales que le proporcionará el propietario.
 
 El nombre del dispositivo delegado utilizará como prefijo D00000001_ (D + número de cliente del propietario + _)
+
+Si se cambia el tipo del dispositivo original habrá que cambiar también el de los delegados.
