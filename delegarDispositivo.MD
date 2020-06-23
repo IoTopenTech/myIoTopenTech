@@ -1,6 +1,6 @@
 El propietario de un dispositivo puede delegarlo en otros usuarios.
 
-La delegación entraña crear un dispositivo nuevo relacionado con el dispositivo original a través de una relación cuyo tipo conincide con el id del nuevo dispositivo.
+La delegación consiste en crear un dispositivo nuevo relacionado con el dispositivo original a través de una relación cuyo tipo conincide con el id del nuevo dispositivo.
 
 El propietario del dispositivo podrá decidir qué telemetrías/atributos permite en el dispositivo delegado.
 
