@@ -2,7 +2,7 @@ El propietario de un dispositivo puede delegarlo en otros usuarios.
 
 La delegación consiste en crear un dispositivo nuevo relacionado con el dispositivo original a través de una relación de tipo "DelegaEn" desde el original hacia el dispositivo delegado.
 
-En el dispositivo original se crea el atributo del lado del servidor delegado, con el siguiente formato:
+En el dispositivo original se crea el atributo del lado del servidor delegados, con el siguiente formato:
 
 [{"nombre":"D00000001_PuertaDelegada", "estado": "sinReclamar", "delegaciones":[...lista de telemetrías/atributos delegados...]}]
 
