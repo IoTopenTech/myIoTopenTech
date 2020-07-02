@@ -18,4 +18,4 @@ El nombre del dispositivo delegado utilizará como prefijo D00000001_ (D + núme
 
 Si se cambia el tipo del dispositivo original habrá que cambiar también el de los delegados.
 
-Respecto al accounting: hay que encontrar la forma de que quién delega pueda hacerse cargo a perpetuidad de los créditos del dispositivo delegado (ej. una empresa que delega un sensor en su cliente, pero no desea que el cliente tenga que afrontar pagos a myIoT).
+Respecto al accounting: hay que encontrar la forma de que quién delega pueda hacerse cargo a perpetuidad de los créditos del dispositivo delegado (ej. una empresa que delega un sensor en su cliente, pero no desea que el cliente tenga que afrontar pagos a myIoT). Al crear el delegado el usuario podría decidir entre cederle un crédito inicial, que vaya por cuenta suya, o que vaya por cuenta del delegado. Si va por cuenta suya se incrementaría su atributo/telemetría dispositivosConCargo.
