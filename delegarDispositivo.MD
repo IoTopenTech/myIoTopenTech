@@ -17,3 +17,5 @@ El dispositivo delegado se pre-aprovisiona, para que el segundo usuario pueda re
 El nombre del dispositivo delegado utilizará como prefijo D00000001_ (D + número de cliente del propietario + _)
 
 Si se cambia el tipo del dispositivo original habrá que cambiar también el de los delegados.
+
+Respecto al accounting: hay que encontrar la forma de que quién delega pueda hacerse cargo a perpetuidad de los créditos del dispositivo delegado (ej. una empresa que delega un sensor en su cliente, pero no desea que el cliente tenga que afrontar pagos a myIoT).
