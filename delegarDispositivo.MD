@@ -1,8 +1,8 @@
 El propietario de un dispositivo puede delegarlo en otros usuarios.
 
-La delegación consiste en crear un dispositivo nuevo relacionado con el dispositivo original a través de una relación de tipo "DelegaEn" desde el original hacia el dispositivo delegado.
+La delegación consiste en crear un dispositivo nuevo relacionado con el dispositivo original a través de una relación de tipo "id_del_delegado" desde el original delegador hacia el dispositivo delegado.
 
-En el dispositivo original se crea el atributo del lado del servidor delegados, con el siguiente formato:
+En el dispositivo original delegador se crea el atributo del lado del servidor delegados, con el siguiente formato:
 
 [{"nombre":"D00000001_Delegado2","id":"753be600-bed6-11ea-b825-09d866a6d73c","delegaciones":{"leerBateria":false,"leerLED":false,"escribirHeartbeat":false,"leerHall":false,"escribirLED":false}},{"nombre":"D00000001_Delegado3","id":"9a8a38d0-bed6-11ea-b825-09d866a6d73c","delegaciones":{"leerBateria":true,"leerHall":true,"escribirLED":true,"leerLED":true,"escribirHeartbeat":true}}]
 
