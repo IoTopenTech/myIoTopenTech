@@ -4,7 +4,7 @@ La delegación consiste en crear un dispositivo nuevo relacionado con el disposi
 
 En el dispositivo original se crea el atributo del lado del servidor delegados, con el siguiente formato:
 
-[{"nombre":"D00000001_PuertaDelegada", "estado": "sinReclamar", "delegaciones":[...lista de telemetrías/atributos delegados...]}]
+[{"nombre":"D00000001_Delegado2","id":"753be600-bed6-11ea-b825-09d866a6d73c","delegaciones":{"leerBateria":false,"leerLED":false,"escribirHeartbeat":false,"leerHall":false,"escribirLED":false}},{"nombre":"D00000001_Delegado3","id":"9a8a38d0-bed6-11ea-b825-09d866a6d73c","delegaciones":{"leerBateria":true,"leerHall":true,"escribirLED":true,"leerLED":true,"escribirHeartbeat":true}}]
 
 En el dispositivo delegado se crea el atributo del lado del servidor esDelegado con el valor true;
 
