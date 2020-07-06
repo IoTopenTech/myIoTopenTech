@@ -11,3 +11,4 @@
 - [ ] Skill de Alexa
 - [ ] Modificar el dashboard del RAK7204 para que muestre la evolución del IAQ, y para que al mostrar el card de IAQ a pantalla completa escale el tamaño de la imagen.
 - [ ] Evitar que se pueda indicar un token que comience por cero al crear un delegado (ThingsBoard los elimina e intenta convertirlo en un número)
+- [ ] Cuando un customer reclama un dispositivo, asignarle el dashboard correspondiente si no lo tiene ya asignado.
