@@ -6,9 +6,9 @@ En el dispositivo original delegador se crea el atributo del lado del servidor d
 
 [{"nombre":"D00000001_Delegado2","id":"753be600-bed6-11ea-b825-09d866a6d73c","delegaciones":{"leerBateria":false,"leerLED":false,"escribirHeartbeat":false,"leerHall":false,"escribirLED":false}},{"nombre":"D00000001_Delegado3","id":"9a8a38d0-bed6-11ea-b825-09d866a6d73c","delegaciones":{"leerBateria":true,"leerHall":true,"escribirLED":true,"leerLED":true,"escribirHeartbeat":true}}]
 
-En el dispositivo delegado se crea el atributo del lado del servidor esDelegado con el valor true;
+En el dispositivo delegado se crea el atributo del lado del servidor esDelegado con el valor true, y otro llamado delegación que contiene su delegación en particular (ver formato anterior).
 
-El propietario del dispositivo podrá decidir qué telemetrías/atributos permite en el dispositivo delegado.
+El propietario del dispositivo podrá decidir qué telemetrías/funcionalidades permite en el dispositivo delegado.
 
 Los dispositivos delegados no se pueden sub-delegar.
 
@@ -16,7 +16,7 @@ El dispositivo delegado se pre-aprovisiona, para que el segundo usuario pueda re
 
 El nombre del dispositivo delegado utilizará como prefijo D00000001_ (D + número de cliente del propietario + _)
 
-Si se cambia el tipo del dispositivo original habrá que cambiar también el de los delegados.
+No está permitido cambiar el tipo de los dispositivos delegaos ni delegador.
 
 Respecto al accounting: hay que encontrar la forma de que quién delega pueda hacerse cargo a perpetuidad de los créditos del dispositivo delegado (ej. una empresa que delega un sensor en su cliente, pero no desea que el cliente tenga que afrontar pagos a myIoT). Al crear el delegado el usuario podría decidir entre cederle un crédito inicial, que vaya por cuenta suya, o que vaya por cuenta del delegado. Si va por cuenta suya se incrementaría su atributo/telemetría dispositivosConCargo.
 
