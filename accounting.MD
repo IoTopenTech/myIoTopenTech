@@ -12,8 +12,8 @@ Como medida de backup voy a mantener en el cliente_patron un atributo llamado ac
 
 "5334c2d0-88bb-11ea-823d-a96a9e8c2286":{"dispositivosAsumidos":0,"dispositivosPropios":20,"credito":306}
 
-Al crear un dispositivo (o reclamarlo) se resta inmediatamente un crédito. Al borrar un dispositivo se recupera automáticamente un crédito.
+Al crear un dispositivo (o reclamarlo, si es un delegado por cuenta propia) se resta inmediatamente un crédito. Al borrar un dispositivo, si es por cuenta propia, se recupera automáticamente un crédito.
 
 Si un usuario no posee créditos, no podrá crear más dispositivos.
 
-Si el balance de créditos de un usuario pasa a ser negativo, ése será el último día en el que se tramiten sus telemetrías. Convendría avisar de esta eventualidad por email unos días antes.
+Si el balance de créditos de un usuario pasa a ser negativo (rojo), ése será el último día en el que se tramiten sus telemetrías. Convendría avisar de esta eventualidad por email unos días antes. Podrá añadir créditos para poner su cuenta en "negro" de nuevo.
