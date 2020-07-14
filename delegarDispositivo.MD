@@ -18,6 +18,10 @@ El nombre del dispositivo delegado utilizará como prefijo D00000001_ (D + núme
 
 No está permitido cambiar el tipo de los dispositivos delegados ni delegador.
 
+No está permitido borrar un dispositivo que tiene delegados.
+
 Respecto al accounting: hay que encontrar la forma de que quién delega pueda hacerse cargo a perpetuidad de los créditos del dispositivo delegado (ej. una empresa que delega un sensor en su cliente, pero no desea que el cliente tenga que afrontar pagos a myIoT). Al crear el delegado el usuario podría decidir entre que vaya por cuenta suya, o que vaya por cuenta del delegado. Si va por cuenta suya se incrementaría su atributo/telemetría dispositivosAsumidos. No se empezará a cobrar el dispositivo hasta que no haya sido reclamado.
 
 Cuando llega una telemetría al dispositivo Delegador, en la regla del propio tipo de dispositivo, se carga el atributo delegados (ss_delegados) que se mantendrá inalterado durante el envío de las telemetrías a todos los delegados, se duplica en el metadata.delegadosArray del que se irán extrayendo los delegados de uno en uno para enviarles la telemetría, se extrae el primero de los delegados de metadata.delegadosArray y se almacena el metadata.idDelegadoActual. Además se almacena en metadata.msgOriginal el stringifycado del msg original. 
+
+¿Qué debería ocurrir al borrar una delegación? ¿Si la borra el delegado? ¿Si la borra el delegador? De momento, para simplificar, la borre quien la borre (delegador o delegado), se borrará el dispositivo delegado y se les comunicará a los customers por email. Además hay que actualizar el accounting.
