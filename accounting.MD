@@ -16,4 +16,4 @@ Al crear un dispositivo (o reclamarlo, si es un delegado por cuenta propia) se r
 
 Si un usuario tiene un saldo nulo o negativo de créditos, no podrá crear más dispositivos ni delegaciones (ni por cuenta propia ni por cuenta del delegado).
 
-Si el balance de créditos de un usuario pasa a ser negativo (rojo) dejarán de tramitarse sus telemetrías. Convendría avisar de esta eventualidad por email unos días antes. Podrá añadir créditos para poner su cuenta en "negro" de nuevo.
+Si el balance de créditos de un usuario pasa a ser negativo (rojo) dejarán de tramitarse sus telemetrías. Convendría avisar de esta eventualidad por email unos días antes. Podrá añadir créditos para poner su cuenta en "negro" de nuevo. Aquí podría valorarse una medida de gracia del estilo "el primer día que pase a negativo siguen procesándose sus telemetrías, pero el segundo ya no".
