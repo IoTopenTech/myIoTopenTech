@@ -4,7 +4,7 @@ Cada usuario puede incrementar su crédito por algún sistema a determinar (inic
 
 Un usuario puede tener dispositivos propios y/o dispositivos a su cargo (por ejemplo, un delegador decide hacerse cargo del coste de la delegación).
 
-Todos los días se descuentan automáticamente los créditos de los dispositivo propios y a cargo de cada usuario.
+Todos los días se descuentan automáticamente los créditos de los dispositivo propios y a cargo de cada usuario por adelantado si el saldo de créditos es mayoro igual que 0 (se cobra el día por adelantado). Si es menor que 0, no se resta, porque ya tiene anuladas las telemetrías para ese día. En otras palabras: al tener un saldo deudor, no se sigue cobrando porque tampoco se presta servicio de telemetrías.
 
 Cada customer posee 3 atributos **(credito, dispositivosPropios y dispositivosAsumidos)**, y sus correspondientes telemetrías (duplico los atributos en telemetrías para poder mostrar la evolución en gráficos del dashboard Configuracion).
 
@@ -16,4 +16,4 @@ Al crear un dispositivo (o reclamarlo, si es un delegado por cuenta propia) se r
 
 Si un usuario tiene un saldo nulo o negativo de créditos, no podrá crear más dispositivos ni delegaciones (ni por cuenta propia ni por cuenta del delegado).
 
-Si el balance de créditos de un usuario pasa a ser negativo (rojo) dejarán de tramitarse sus telemetrías. Convendría avisar de esta eventualidad por email unos días antes. Podrá añadir créditos para poner su cuenta en "negro" de nuevo. Aquí podría valorarse una medida de gracia del estilo "el primer día que pase a negativo siguen procesándose sus telemetrías, pero el segundo ya no".
+El saldo de créditos puede pasar a negativo al comienzo del día o si un delegado reclama su dispositivo por cuenta del delegador. No puede pasar a negativo por la creación de dispositivos ni de delegados por cuenta propia porque no está permitido. Si el balance de créditos de un usuario pasa a ser negativo (rojo) se actualizará su atributo fechaDeudora y se le avisará por mail. Podrá añadir créditos para poner su cuenta en "negro" de nuevo y borrar el atributo fechaDeudora. El día siguiente a la fechaDeudora dejarán de tramitarse sus telemetrías.
