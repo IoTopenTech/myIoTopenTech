@@ -4,7 +4,7 @@ La delegación consiste en crear un dispositivo nuevo relacionado con el disposi
 
 En el dispositivo original delegador se crea el atributo del lado del servidor delegados, con el siguiente formato:
 
-[{"nombre":"D00000001_PuertaDelegada3","claimingData":{"secretKey":"7qg55y6qy98lq0as5i34hi2rpy","expirationTime":"1640995200000"},"id":"e0e9b240-c6df-11ea-b825-09d866a6d73c","delegaciones":{}}]
+[{"nombre":"D00000001_PuertaDelegada3","reclamado":false,"claimingData":{"secretKey":"7qg55y6qy98lq0as5i34hi2rpy","expirationTime":"1640995200000"},"id":"e0e9b240-c6df-11ea-b825-09d866a6d73c","delegaciones":{}}]
 
 En el dispositivo delegado se crea el atributo del lado del servidor esDelegado con el valor true, y otro llamado delegación que contiene su delegación en particular (ver formato anterior).
 
