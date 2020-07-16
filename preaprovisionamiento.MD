@@ -13,5 +13,5 @@ Para preaprovisionar dispositivos se requiere un archivo CSV que use como separa
 * claimingData: Objeto en formato JSON con la clave de reclamación del dispositivo; por ejemplo: {"secretKey": "ABCDEFGHIJKLMNOP", "expirationTime": "1640995200000"}
 * claimingDataOriginal: Copia del parámetro anterior porque el anterior será borrado si el usuario reclama el dispositivo, y necesitamos un modo de recuperar esa información si el usuario resetease el dispositivo.
 
-Opcionalmente, un proveedor puede decidir incluir un numero de créditos con el dispositivo; en este caso se añadirá el campo *creditos*.
+Opcionalmente, un proveedor puede decidir incluir un numero de créditos con el dispositivo; en este caso se añadirá el campo **credito**.
 
