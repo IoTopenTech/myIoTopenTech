@@ -13,4 +13,4 @@
 - [x] Evitar que se pueda indicar un token que comience por cero al crear un delegado (ThingsBoard los elimina e intenta convertirlo en un número)
 - [ ] Cuando un customer reclama un dispositivo, asignarle el dashboard correspondiente si no lo tiene ya asignado.
 - [ ] En el widget personalizado de IoT 	PuertaABIERTA_CERRADA, hacer que en cada actualización adquiera el parámetro delegación en lugar de usar el recibido en los parámetros al abrir el widget
-- [ ] ¿Cómo se van a desplegar las nuevas versiones de config, delegate y dashboards a los clientes?
+- [ ] ¿Cómo se van a desplegar las nuevas versiones de config, delegate y dashboards a los clientes? Podrían comprobarse las versiones (de config, delegate y dashboard) al recibir cada telemetría, y actualizarlas si fuera necesario.
