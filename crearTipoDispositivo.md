@@ -6,7 +6,7 @@ Actualmente un tipo de dispositivo en myIoT está compuesto por los siguientes e
 
   * Telemetrías, que deberán almacenarse y someterse a las condiciones de disparo de las alarmas configuradas por el usuario.
   
-   * Para dispositivos LoRaWAN, se almacenan al menos los siguientes valores: app_id, dv_id, hardware_serial, counter, port, payload_raw y metadata. La información de downlink se gestiona por separado para cada servidor de red: TTN, CS, Everynet, Helium...
+    * Para dispositivos LoRaWAN, se almacenan al menos los siguientes valores: app_id, dv_id, hardware_serial, counter, port, payload_raw y metadata. La información de downlink se gestiona por separado para cada servidor de red: TTN, CS, Everynet, Helium...
   
   * Alarmas de inactividad, que son directamente gestionadas por ThingsBoard.
   * Solicitudes para enviar un downlink que permita configurar un atributo del dispositivo (por ejemplo, borrar un contador, o cambiar la frecuencia de heartbeats).
