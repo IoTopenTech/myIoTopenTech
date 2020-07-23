@@ -47,8 +47,8 @@ El dispositivo sólo atiende los downlinks que lleguen por el puerto 99, y usa u
 
 Canal | Tipo | Valor
 ----- | ---- | -----
-0x06  |Entrada digital [0x00] | Cambiar el estado del LED: 100 (0x64) encender; cualquier otro valor apagar
-0x07|Entrada digital [0x00] | Cambiar el periodo de envío de heartbeats (expresado en minutos)
+0x06  |Salida digital [0x01] | Cambiar el estado del LED: 100 (0x64) encender; cualquier otro valor apagar
+0x07|Salida digital [0x01] | Cambiar el periodo de envío de heartbeats (expresado en minutos)
 0x46 | 0x46 (no estándar LPP) | Cambio de credenciales OTAA
 
 El cambio de credenciales implica el envío de 3 downlinks, uno para cada credencial (DEV EUI, APP EUI y APP KEY). No pueden enviarse en un sólo downlink porque se superaría la longitud de carga de pago de LoRaWAN para los spread factors más lentos.
