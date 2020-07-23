@@ -1,3 +1,5 @@
+> Se procurará aplicar la metodología KISS en el desarrollo de nuevos tipos de dispositivos. Téngase en cuenta que deberán ser revisados por la autoridad antes de integrarlos en el sistema, y ésta podría rechazarlos por excesiva complejidad.
+
 Actualmente un tipo de dispositivo en myIoT está compuesto por los siguientes elementos (puede utilizarse como referencia el tipo de dispositivo V02_001):
 
 * Una cadena de reglas para gestionar la funcionalidad del dispositivo, en la que generalmente se recibirán 3 tipos de mensajes:
