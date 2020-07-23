@@ -2,11 +2,12 @@
 
 Actualmente un tipo de dispositivo en myIoT está compuesto por los siguientes elementos (puede utilizarse como referencia el tipo de dispositivo V02_001):
 
-* Una cadena de reglas para gestionar la funcionalidad del dispositivo, en la que generalmente se recibirán 3 tipos de mensajes:
+* Una cadena de reglas para gestionar la funcionalidad del dispositivo, en la que generalmente se recibirán 4 tipos de mensajes:
 
   * Telemetrías, que deberán almacenarse y someterse a las condiciones de disparo de las alarmas configuradas por el usuario.
   * Alarmas de inactividad, que son directamente gestionadas por ThingsBoard.
   * Solicitudes para enviar un downlink que permita configurar un atributo del dispositivo (por ejemplo, borrar un contador, o cambiar la frecuencia de heartbeats).
+  * Petición de guardar un atributo "disfrazada" de telemetría. Al configurar algunas funciones de los dispositivos, por ejemplo el periodo de heartbeat del tipo de dispositivo V02_001, se le envía un downlink con la orden, pero además se almacena el valor en un atributo. Si se trata de un dispositivo con subordinados, habrá que actualizar ese atributo en el delegador y todos los delegados que tengan permitida esa funcionalidad.
   
 * Un dashboard que cumplirá 2 misiones:
 
