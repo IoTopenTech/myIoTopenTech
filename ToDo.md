@@ -15,3 +15,4 @@
 - [ ] En el widget personalizado de IoT PuertaABIERTA_CERRADA, hacer que en cada actualización adquiera el parámetro delegación en lugar de usar el recibido en los parámetros al abrir el widget
 - [ ] ¿Cómo se van a desplegar las nuevas versiones de config, delegate y dashboards a los clientes? Podrían comprobarse las versiones (de config, delegate y dashboard) al recibir cada telemetría, y actualizarlas si fuera necesario.
 - [ ] Al reclamar un dispositivo subordinado o al configurar su delegación, deberían actualizarse ciertos parámetros como ___heartbeat en el caso del V02_001.
+- [ ] En las cadenas de reglas específicas para cada tipo de dispositivo podría explorarse que a los subordinados les llegase la telemetría en formato procesado (Cayenne), para evitar repetir la misma operación en cada uno de ellos.
