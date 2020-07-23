@@ -1,3 +1,24 @@
+Actualmente un tipo de dispositivo en myIoT está compuesto por los siguientes elementos (puede utilizarse como referencia el tipo de dispositivo V02_001):
+
+* Una cadena de reglas para gestionar la funcionalidad del dispositivo, en la que generalmente se recibirán 3 tipos de mensajes:
+
+  * Telemetrías, que deberán almacenarse y someterse a las condiciones de disparo de las alarmas configuradas por el usuario.
+  * Alarmas de inactividad, que son directamente gestionadas por ThingsBoard.
+  * Solicitudes para enviar un downlink que permita configurar un atributo del dispositivo (por ejemplo, borrar un contador, o cambiar la frecuencia de heartbeats).
+  
+* Un dashboard que cumplirá 2 misiones:
+
+  * Representar las telemetrías.
+  * Ofrecer al usuario opciones de interacción con el dispositivo.
+
+> En principio habrá un único dashboard por dispositivo, que servirá tanto para el usuario propietario como para los delegados. En el futuro podría estudiarse crear dashboards específicos para cada tipo de delegación.
+
+* Un bloque de código de configuración que permita al usuario establecer los parámetros del dispositivo, como sus coordenadas sobre un activo de tipo IMAGE_01, su frecuencia de heartbeast, o sus alarmas.
+
+* Un bloque de código de delegación que permita al propietario establecer qué funcionalidades de su dispositivo desea delegar en otro usuario.
+
+El procedimiento general para desarrollar un tipo de dispositivo nuevo sería:
+
 1.  Notificar que quieres integrar un tipo de dispositivo nuevo para que
     se te asigne un [identificador] de dispositivo, del tipo VXX\_XXX (por
     ejemplo, V02\_002).
