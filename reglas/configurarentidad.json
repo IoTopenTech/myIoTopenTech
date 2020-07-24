@@ -192,11 +192,11 @@
         "fromIndex": 8,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "7cadfbb0-9de5-11ea-abf5-9397c4646ed8"
+          "id": "572010d0-cbe5-11ea-8dcf-e3657ee9cbba"
         },
         "additionalInfo": {
-          "layoutX": 583,
-          "layoutY": 407,
+          "layoutX": 577,
+          "layoutY": 397,
           "ruleChainNodeId": "rule-chain-node-11"
         },
         "type": "Success"

@@ -1,5 +1,5 @@
 {
-  "title": "Dispositivo_V02_001",
+  "title": "Dispositivo_LDS01",
   "configuration": {
     "widgets": {
       "71519cb3-d9c1-cae4-a2cb-7d9a796518fa": {
@@ -16,9 +16,9 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "analog_in_1",
+                  "name": "BAT_V",
                   "type": "timeseries",
-                  "label": "analog_in_1",
+                  "label": "Batería",
                   "color": "#2196f3",
                   "settings": {},
                   "_hash": 0.11135200794403222
@@ -139,7 +139,7 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "digital_in_2",
+                  "name": "DOOR_OPEN_STATUS",
                   "type": "timeseries",
                   "label": "Puerta",
                   "color": "#2196f3",
@@ -199,7 +199,7 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "digital_in_2",
+                  "name": "DOOR_OPEN_STATUS",
                   "type": "timeseries",
                   "label": "Estado de la puerta",
                   "color": "#2196f3",
@@ -318,7 +318,7 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "analog_in_1",
+                  "name": "BAT_V",
                   "type": "timeseries",
                   "label": "Nivel de batería",
                   "color": "#2196f3",
@@ -420,7 +420,7 @@
         "type": "alarm",
         "title": "New widget",
         "sizeX": 24,
-        "sizeY": 11,
+        "sizeY": 10,
         "config": {
           "timewindow": {
             "realtime": {
@@ -521,26 +521,26 @@
         },
         "id": "59d678c9-f9c1-b54c-a024-7d38c9af50c3"
       },
-      "c5c5ea63-7d76-8939-f171-914489eea2f8": {
+      "054db6ee-db1c-eb28-561d-b34f7fe009b7": {
         "isSystemType": true,
         "bundleAlias": "iotopentech",
-        "typeAlias": "downlink_digital2",
+        "typeAlias": "simple_card",
         "type": "latest",
         "title": "New widget",
         "sizeX": 7,
-        "sizeY": 8,
+        "sizeY": 5,
         "config": {
           "datasources": [
             {
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "digital_in_3",
+                  "name": "DOOR_OPEN_TIMES",
                   "type": "timeseries",
-                  "label": "digital_in_3",
+                  "label": "Nº de aperturas",
                   "color": "#2196f3",
                   "settings": {},
-                  "_hash": 0.7325395322015935
+                  "_hash": 0.7007079582079607
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -552,31 +552,92 @@
             }
           },
           "showTitle": true,
-          "backgroundColor": "#fff",
-          "color": "rgba(0, 0, 0, 0.87)",
-          "padding": "8px",
+          "backgroundColor": "#ff5722",
+          "color": "rgba(255, 255, 255, 0.87)",
+          "padding": "16px",
           "settings": {
-            "outputChannel": 6
+            "labelPosition": "none"
           },
-          "title": "LED",
+          "title": "Nº de aperturas",
+          "dropShadow": true,
+          "enableFullscreen": false,
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400
+          },
+          "units": "",
+          "decimals": 0,
+          "useDashboardTimewindow": true,
+          "showLegend": false,
+          "widgetStyle": {},
+          "actions": {},
           "showTitleIcon": false,
           "titleIcon": null,
           "iconColor": "rgba(0, 0, 0, 0.87)",
           "iconSize": "24px",
           "titleTooltip": "",
+          "displayTimewindow": true
+        },
+        "id": "054db6ee-db1c-eb28-561d-b34f7fe009b7"
+      },
+      "1e3e0bf1-9725-b7a3-e2b4-b54e0a196dc3": {
+        "isSystemType": true,
+        "bundleAlias": "iotopentech",
+        "typeAlias": "simple_card",
+        "type": "latest",
+        "title": "New widget",
+        "sizeX": 7,
+        "sizeY": 6,
+        "config": {
+          "datasources": [
+            {
+              "type": "entity",
+              "dataKeys": [
+                {
+                  "name": "LAST_DOOR_OPEN_DURATION",
+                  "type": "timeseries",
+                  "label": "LAST_DOOR_OPEN_DURATION",
+                  "color": "#2196f3",
+                  "settings": {},
+                  "_hash": 0.7984385758022179
+                }
+              ],
+              "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#ff5722",
+          "color": "rgba(255, 255, 255, 0.87)",
+          "padding": "16px",
+          "settings": {
+            "labelPosition": "none"
+          },
+          "title": "Duración última apertura",
           "dropShadow": true,
-          "enableFullscreen": true,
-          "widgetStyle": {},
+          "enableFullscreen": false,
           "titleStyle": {
             "fontSize": "16px",
             "fontWeight": 400
           },
+          "units": "min",
+          "decimals": 0,
           "useDashboardTimewindow": true,
-          "displayTimewindow": true,
           "showLegend": false,
-          "actions": {}
+          "widgetStyle": {},
+          "actions": {},
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "displayTimewindow": true
         },
-        "id": "c5c5ea63-7d76-8939-f171-914489eea2f8"
+        "id": "1e3e0bf1-9725-b7a3-e2b4-b54e0a196dc3"
       }
     },
     "states": {
@@ -614,14 +675,20 @@
               },
               "59d678c9-f9c1-b54c-a024-7d38c9af50c3": {
                 "sizeX": 24,
-                "sizeY": 11,
+                "sizeY": 10,
                 "row": 11,
                 "col": 0
               },
-              "c5c5ea63-7d76-8939-f171-914489eea2f8": {
+              "054db6ee-db1c-eb28-561d-b34f7fe009b7": {
                 "sizeX": 7,
-                "sizeY": 8,
+                "sizeY": 5,
                 "row": 0,
+                "col": 17
+              },
+              "1e3e0bf1-9725-b7a3-e2b4-b54e0a196dc3": {
+                "sizeX": 7,
+                "sizeY": 6,
+                "row": 5,
                 "col": 17
               }
             },
@@ -674,5 +741,5 @@
       "toolbarAlwaysOpen": true
     }
   },
-  "name": "Dispositivo_V02_001"
+  "name": "Dispositivo_LDS01"
 }

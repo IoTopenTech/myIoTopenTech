@@ -27,9 +27,9 @@ byte DEVEUI[8] ;
 byte APPEUI[8] ;
 byte APPKEY[16];
 boolean nuevasCredenciales[3] = {false, false, false};
-static const PROGMEM u1_t DEVEUI_INICIAL[8] = { 0x00,0x94,0x94,0xdb,0x31,0x43,0xae,0xa3 };
-static const PROGMEM u1_t APPEUI_INICIAL[8] = { 0x67, 0xDC, 0x02, 0xD0, 0x7E, 0xD5, 0xB3, 0x70 };
-static const PROGMEM u1_t APPKEY_INICIAL[16] = { 0xa6,0x3e,0xaa,0xc2,0xf5,0x5b,0xad,0x23,0xda,0xf8,0x9a,0x41,0x67,0x56,0x01,0x31 };
+static const PROGMEM u1_t DEVEUI_INICIAL[8] = {  }; //LSB
+static const PROGMEM u1_t APPEUI_INICIAL[8] = {  }; //LSB
+static const PROGMEM u1_t APPKEY_INICIAL[16] = {  }; //MSB
 boolean resetearTrasSiguienteUplink = false;
 
 //Si el byte 0 de la eeprom contiene 0xFF querrá decir que el cliente aún no ha tomado posesión del nodo
@@ -233,7 +233,7 @@ void onEvent (ev_t ev) {
         //Sólo voy a atender los downlink que entren por el puerto 99
         //Serial.println(LMIC.dataLen);
         if (LMIC.frame[LMIC.dataBeg - 1] == 99) {
-          if (LMIC.frame[LMIC.dataBeg + 0] == 0x06 && LMIC.frame[LMIC.dataBeg + 1] == 0x00) {
+          if (LMIC.frame[LMIC.dataBeg + 0] == 0x06 && LMIC.frame[LMIC.dataBeg + 1] == 0x01) {
             //downlink para el LED por el canal 6
             nuevasCredenciales[0] = false;
             nuevasCredenciales[1] = false;
@@ -243,7 +243,7 @@ void onEvent (ev_t ev) {
             } else {
               digitalWrite(4, LOW);
             }
-          } else if (LMIC.frame[LMIC.dataBeg + 0] == 0x07 && LMIC.frame[LMIC.dataBeg + 1] == 0x00) {
+          } else if (LMIC.frame[LMIC.dataBeg + 0] == 0x07 && LMIC.frame[LMIC.dataBeg + 1] == 0x01) {
             //downlink para establecer el periodo del heartbeat
             nuevasCredenciales[0] = false;
             nuevasCredenciales[1] = false;
@@ -346,7 +346,7 @@ void do_send(osjob_t* j) {
     lpp.addAnalogInput(1, readVcc() / 1000.F);
     lpp.addDigitalInput(2, puertaAbierta);
     lpp.addDigitalInput(3, digitalRead(4));
-    //lpp.addDigitalOutput(6, digitalRead(4));
+    lpp.addDigitalOutput(6, digitalRead(4));
     LMIC_setTxData2(1, lpp.getBuffer(), lpp.getSize(), 0);
     Serial.println(F("Packet queued"));
   }
