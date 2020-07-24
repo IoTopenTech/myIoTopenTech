@@ -1,3 +1,30 @@
+> Se procurará aplicar la metodología KISS en el desarrollo de nuevos tipos de dispositivos. Téngase en cuenta que deberán ser revisados por la autoridad antes de integrarlos en el sistema, y ésta podría rechazarlos por excesiva complejidad.
+
+Actualmente un tipo de dispositivo en myIoT está compuesto por los siguientes elementos (puede utilizarse como referencia el tipo de dispositivo V02_001):
+
+* Una cadena de reglas para gestionar la funcionalidad del dispositivo, en la que generalmente se recibirán 4 tipos de mensajes:
+
+  * Telemetrías, que deberán almacenarse y someterse a las condiciones de disparo de las alarmas configuradas por el usuario.
+  
+    * Para dispositivos LoRaWAN, se almacenan al menos los siguientes valores: app_id, dev_id, hardware_serial, counter, port, payload_raw y metadata. La información de downlink se gestiona por separado para cada servidor de red: TTN, CS, Everynet, Helium...
+  
+  * Alarmas de inactividad, que son directamente gestionadas por ThingsBoard.
+  * Solicitudes para enviar un downlink que permita configurar un atributo del dispositivo (por ejemplo, borrar un contador, o cambiar la frecuencia de heartbeats).
+  * Petición de guardar un atributo "disfrazada" de telemetría. Al configurar algunas funciones de los dispositivos, por ejemplo el periodo de heartbeat del tipo de dispositivo V02_001, se le envía un downlink con la orden, pero además se almacena el valor en un atributo. Si se trata de un dispositivo con subordinados, habrá que actualizar ese atributo en el delegador y todos los delegados que tengan permitida esa funcionalidad.
+  
+* Un dashboard que cumplirá 2 misiones:
+
+  * Representar las telemetrías.
+  * Ofrecer al usuario opciones de interacción con el dispositivo.
+
+> En principio habrá un único dashboard por dispositivo, que servirá tanto para el usuario propietario como para los delegados. En el futuro podría estudiarse crear dashboards específicos para cada tipo de delegación.
+
+* Un bloque de código de configuración que permita al usuario establecer los parámetros del dispositivo, como sus coordenadas sobre un activo de tipo IMAGE_01, su frecuencia de heartbeast, o sus alarmas.
+
+* Un bloque de código de delegación que permita al propietario establecer qué funcionalidades de su dispositivo desea delegar en otro usuario.
+
+El procedimiento general para desarrollar un tipo de dispositivo nuevo sería:
+
 1.  Notificar que quieres integrar un tipo de dispositivo nuevo para que
     se te asigne un [identificador] de dispositivo, del tipo VXX\_XXX (por
     ejemplo, V02\_002).
@@ -22,7 +49,7 @@
     
     * Los que simplemente se almacenan en un atributo del dispositivo, que deben empezar con doble guión bajo, como __xPos o __yPos que se utilizan para posicionar un dispositivo en un widget de tipo IMAGE.
     * Los de alarmas, que se agrupan dentro del atributo __alarmas, como __alarmas.cambioDeEstado, para distinguirlos de los demás y poder gestionarlos en las reglas para determinar si es necesario enviar algún tipo de notificación.
-    * Los que requieren un tratamiento adicional específico para cada tipo de entidad, como enviar un downlink, que deben empezar con triple guión bajo, como ___fechaHora. Estos parámetros se gestionan individualmente, es decir, el usuario sólo puede cambiarlos de uno en uno (esto se enfatiza en el cuadro de diálogo de configuración con paneles desplegables para cada uno de ellos; cuando el usuario despliega uno se pliegan todos los demás). Su gestión depende de la existencia de un parámetro llamado ___ultimoDownlink, que indica qué atributo quiere cambiar el usuario. Cuando la cadena de reglas configurarEntidad encuentra el atributo ___ultimoDownlink, envía todos los parámetros con triple guión bajo como un mensaje de telemetría a la cadena de reglas raíz. En la cadena de reglas raíz se detecta la presencia del atributo ___ultimoDownlink y se redirige el mensaje a la cadena de reglas de la entidad específica (por ejemplo, a la cadena V02_001). En la cadena de reglas específica se gestiona la operación, por ejemplo, realizando los cambios de unidades o de codificacion (HEX, DEC, BIN...) y enviando los downlinks correspondientes.
+    * Los que requieren un tratamiento adicional específico para cada tipo de entidad, como enviar un downlink, que deben empezar con triple guión bajo, como ___fechaHora. Estos parámetros se gestionan individualmente, es decir, el usuario sólo puede cambiarlos de uno en uno (esto se enfatiza en el cuadro de diálogo de configuración con paneles desplegables para cada uno de ellos; cuando el usuario despliega uno se pliegan todos los demás). Su gestión depende de la existencia de un parámetro llamado ___ultimoDownlink, que indica qué atributo quiere cambiar el usuario. Cuando la cadena de reglas configurarEntidad encuentra el atributo ___ultimoDownlink, envía todos los parámetros con triple guión bajo como un mensaje de telemetría a la cadena de reglas raíz. En la cadena de reglas raíz se detecta la presencia del atributo ___ultimoDownlink y se redirige el mensaje a la cadena de reglas de la entidad específica (por ejemplo, a la cadena V02_001). En la cadena de reglas específica se gestiona la operación, por ejemplo, realizando los cambios de unidades o de codificacion (HEX, DEC, BIN...), enviando los downlinks correspondientes y guardando los atributos (por ejemplo ___heartbeat).
     
 > Debemos tener en cuenta que si almacenamos en un atributo un valor que puede convertirse en un entero, ThingsBoard lo convertirá en un entero aunque no lo sea; por ejemplo, si queremos almacenar la cadena de texto "08", ThingsBoard la almacenará en el atributo como el entero 8.
 
