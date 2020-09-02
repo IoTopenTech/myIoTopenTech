@@ -12,6 +12,7 @@ Para preaprovisionar dispositivos se requiere un archivo CSV que use como separa
 * tipoOriginal: Tipo original del dispositivo para recuperarlo si el usuario lo resetease; coincidirá con el type (V02_001)
 * claimingData: Objeto en formato JSON con la clave de reclamación del dispositivo; por ejemplo: {"secretKey": "ABCDEFGHIJKLMNOP", "expirationTime": "1640995200000"}
 * claimingDataOriginal: Copia del parámetro anterior porque el anterior será borrado si el usuario reclama el dispositivo, y necesitamos un modo de recuperar esa información si el usuario resetease el dispositivo.
+* devEUI: Si es un dispositivo LoRaWAN, podemos indicar su devEUI de modo que la integración pueda realizarse a través del dispositivo control de cualquier cliente (el objetivo es facilitar que un integrador pueda dar de alta los dispositivos en el Network Server, y entregar los datos de aprovisionamiento al cliente para evitarle este trabajo que puede resultar complicado para usuarios poco experimentados).
 
 Opcionalmente, un proveedor puede decidir incluir un numero de créditos con el dispositivo; en este caso se añadirá el campo **credito** (el sistema lo replicará en un atributo llamado **creditoOriginal** antes de ponerlo a cero, para que si se reclama nuevamente no se sume de nuevo el crédito y quede constancia del crédito.
 
