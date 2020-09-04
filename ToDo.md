@@ -11,9 +11,9 @@
 - [ ] Skill de Alexa
 - [ ] Modificar el dashboard del RAK7204 para que muestre la evolución del IAQ, y para que al mostrar el card de IAQ a pantalla completa escale el tamaño de la imagen.
 - [x] Evitar que se pueda indicar un token que comience por cero al crear un delegado (ThingsBoard los elimina e intenta convertirlo en un número)
-- [ ] Cuando un customer reclama un dispositivo, asignarle el dashboard correspondiente si no lo tiene ya asignado.
+- [x] Cuando un customer reclama un dispositivo, asignarle el dashboard correspondiente si no lo tiene ya asignado.
 - [ ] En el widget personalizado de IoT PuertaABIERTA_CERRADA, hacer que en cada actualización adquiera el parámetro delegación en lugar de usar el recibido en los parámetros al abrir el widget
-- [ ] ¿Cómo se van a desplegar las nuevas versiones de config, delegate y dashboards a los clientes? Podrían comprobarse las versiones (de config, delegate y dashboard) al recibir cada telemetría, y actualizarlas si fuera necesario.
+- [ ] ¿Cómo se van a desplegar las nuevas versiones de config, delegate y dashboards a los clientes? Podrían comprobarse las versiones (de config, delegate y dashboard) al recibir cada telemetría, y actualizarlas si fuera necesario. Ahora mismo disponemos de las reglas actualizarCustomers_for y actualizarCustomers_next que copian atributos en todos los clientes y les asignan dashboards (usa el atributo accounting del cliente_patron para obtener un listado de todos los customers del sistema)
 - [ ] Al reclamar un dispositivo subordinado o al configurar su delegación, deberían actualizarse ciertos parámetros como ___heartbeat en el caso del V02_001.
-- [ ] En las cadenas de reglas específicas para cada tipo de dispositivo podría explorarse que a los subordinados les llegase la telemetría en formato procesado (Cayenne), para evitar repetir la misma operación en cada uno de ellos.
+- [ ] En las cadenas de reglas específicas para cada tipo de dispositivo podría explorarse que a los subordinados (no a los principales, en los que la recomendación sigue siendo usar el formato RAW porque algunos proveedores como Everynet no ofrecen conversores de cargas de pago) les llegase la telemetría en formato procesado (Cayenne), para evitar repetir la misma operación en cada uno de ellos.
 - [ ] ~~Impedir que los nombres de dispositivos y activos puedan contener el carácter guión bajo.~~
