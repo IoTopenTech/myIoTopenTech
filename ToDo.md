@@ -17,3 +17,4 @@
 - [ ] Al reclamar un dispositivo subordinado o al configurar su delegación, deberían actualizarse ciertos parámetros como ___heartbeat en el caso del V02_001.
 - [ ] En las cadenas de reglas específicas para cada tipo de dispositivo podría explorarse que a los subordinados (no a los principales, en los que la recomendación sigue siendo usar el formato RAW porque algunos proveedores como Everynet no ofrecen conversores de cargas de pago) les llegase la telemetría en formato procesado (Cayenne), para evitar repetir la misma operación en cada uno de ellos.
 - [ ] ~~Impedir que los nombres de dispositivos y activos puedan contener el carácter guión bajo.~~
+- [ ] Permitir alternar fácilmente entre los paneles Configuración y Control... o estudiar unificarlos en uno solo.
