@@ -18,4 +18,4 @@
 - [ ] En las cadenas de reglas específicas para cada tipo de dispositivo podría explorarse que a los subordinados (no a los principales, en los que la recomendación sigue siendo usar el formato RAW porque algunos proveedores como Everynet no ofrecen conversores de cargas de pago) les llegase la telemetría en formato procesado (Cayenne), para evitar repetir la misma operación en cada uno de ellos.
 - [ ] ~~Impedir que los nombres de dispositivos y activos puedan contener el carácter guión bajo.~~
 - [ ] Permitir alternar fácilmente entre los paneles Configuración y Control... o estudiar unificarlos en uno solo.
-- [ ] Permitir que la notificación de una alarma sea el envío de una telemetría a otro dispositivo. De este modo podríamos, por ejemplo, cerrar una válvula de agua cuando un sensor de suelo detecte una fuga.
+- [ ] Permitir que la notificación de una alarma sea el envío de ~~una telemetría~~ un comando (dependiendo del tipo de dispositivo podría ser a través de un downlink, una telemetría, un atributo comparido...) a otro dispositivo. De este modo podríamos, por ejemplo, cerrar una válvula de agua cuando un sensor de suelo detecte una fuga.
