@@ -89,3 +89,6 @@ Tampoco en necesario importar todas las reglas, bastaría con las siguientes, pe
 Si desea crear un tipo de dispositivo puede consultar el siguiente documento:
 
 https://github.com/IoTopenTech/MyIoTopenTech/blob/master/crearTipoDispositivo.md
+
+A continuación encontrará los diagramas de flujo correspondientes a las principales cadenas de reglas
+ ![](.//media/root_rule_chain.png)
