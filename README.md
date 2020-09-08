@@ -91,5 +91,5 @@ Si desea crear un tipo de dispositivo puede consultar el siguiente documento:
 https://github.com/IoTopenTech/MyIoTopenTech/blob/master/crearTipoDispositivo.md
 
 A continuación encontrará los diagramas de flujo correspondientes a las principales cadenas de reglas
-##Root Rule Chain
+ #Root Rule Chain
  ![](.//media/root_rule_chain.png)
