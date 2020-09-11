@@ -1,6 +1,6 @@
 El propietario de un dispositivo puede delegarlo en otros usuarios.
 
-La delegación consiste en crear un dispositivo nuevo relacionado con el dispositivo original a través de una relación de tipo "id_del_delegado" desde el original delegador hacia el dispositivo delegado. Aviso a desarrolladores: Tenemos una relación del mismo tipo desde el customer a cada uno de sus dispositivos; en el casode un delegado tendríamos 2 relacionea idénticas hacia él: una desde su delegador y otra desde su cliente cuando sea reclamado.
+La delegación consiste en crear un dispositivo nuevo relacionado con el dispositivo original a través de una relación de tipo "id_del_delegado" desde el original delegador hacia el dispositivo delegado. Aviso a desarrolladores: Tenemos una relación del mismo tipo desde el customer a cada uno de sus dispositivos; en el caso de un delegado tendríamos 2 relacionea idénticas hacia él: una desde su delegador y otra desde su cliente cuando sea reclamado.
 
 En el dispositivo original delegador se crea el atributo del lado del servidor delegados, con el siguiente formato:
 
