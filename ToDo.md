@@ -19,3 +19,4 @@
 - [ ] ~~Impedir que los nombres de dispositivos y activos puedan contener el carácter guión bajo.~~
 - [ ] Permitir alternar fácilmente entre los paneles Configuración y Control... o estudiar unificarlos en uno solo.
 - [ ] Permitir que la notificación de una alarma sea el envío de ~~una telemetría~~ un comando (dependiendo del tipo de dispositivo podría ser a través de un downlink, una telemetría, un atributo compartido...) a otro dispositivo. De este modo podríamos, por ejemplo, cerrar una válvula de agua cuando un sensor de suelo detecte una fuga. Cada dispositivo debería publicar de algún modo (otro atributo de configuración?) los comandos que puede admitir.
+- [ ] Al crear una delegación con un mismo nombre que ya se ha utilizado anteriormente, puede producirse un error al crear la relación auxiliar de la regla crearDelegado (habría que buscar alguna forma de que los nombres de las delegaciones fueran únicos).
