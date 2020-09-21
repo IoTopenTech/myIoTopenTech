@@ -39,7 +39,7 @@ Canal | Tipo | Valor
 ----- | ---- | -----
 0x01 | Entrada analógica [0x02] | Tensión de la batería en cV (centivoltios)
 0x02 | Entrada digital [0x00] | Estado del sensor hall: 0 cerrado y 1 abierto
-0x03  |Entrada digital [0x00] | Estado del LED: 0 apagado y 1 encendido
+0x03  |Entrada digital [0x00] | Estado del LED: 0 apagado y 1 encendido.  Obsérvese que se distingue el canal para indicar el estado del LED (éste) del canal para cambiar el estado del LED (0x06; ver sección siguiente)
 
 ## Carga de pago para downlinks
 
