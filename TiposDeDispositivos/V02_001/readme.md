@@ -40,7 +40,7 @@ Canal | Tipo | Valor
 0x01 | Entrada analógica [0x02] | Tensión de la batería en cV (centivoltios)
 0x02 | Entrada digital [0x00] | Estado del sensor hall: 0 cerrado y 1 abierto
 0x03  |Entrada digital [0x00] | Estado del LED: 0 apagado y 1 encendido.  Obsérvese que se distingue el canal para indicar el estado del LED (éste) del canal para cambiar el estado del LED (0x06; ver siguiente)
-0x04 | Salida digital [0x01] | Canal para cambiar el estado del LED
+0x04 | Salida digital [0x01] | Canal para cambiar el estado del LED. myDevices necesita que sea de tipo 0x01 para mostrar el botón, pero el downlink que envía es de tipo 0x00?
 
 ## Carga de pago para downlinks
 
@@ -48,7 +48,7 @@ El dispositivo sólo atiende los downlinks que lleguen por el puerto 99, y usa u
 
 Canal | Tipo | Valor
 ----- | ---- | -----
-0x04  |Salida digital [0x01] | Cambiar el estado del LED: 100 (0x64) encender; cualquier otro valor apagar
+0x04  |Entrada digital [0x00] | Cambiar el estado del LED: 100 (0x64) encender; cualquier otro valor apagar
 0x07|Entrada digital [0x00] | Cambiar el periodo de envío de heartbeats (expresado en minutos; máximo 60)
 0x46 | 0x46 (no estándar LPP) | Cambio de credenciales OTAA
 
