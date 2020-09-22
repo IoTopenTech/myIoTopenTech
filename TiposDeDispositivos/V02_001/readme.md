@@ -72,6 +72,7 @@ Por último se incluirá la credencial correspondiente en el mismo formato que l
 El tipo de dispositivo V02_001 ofrece los siguientes parámetros de configuración en la interfaz de My IoT open Tech:
 
 * Número de minutos entre heartbeats.
+* DevEUI, para poder recibir telemetrías a través de un dispositivo de control (tipo SYSTEM).
 * Coordenadas para mostrarlo sobre la imagen de un activo de tipo IMAGE01 (corresponden al porcentaje respecto a la esquina superior izquierda; sólo se admiten valores positivos).
 * Alarmas: En todas las alarmas el usuario puede elegir por qué vía desea que le sean notificadas (email, IFTTT, Telegram...)
   * Cambio de estado: Se puede activar al abrir el sensor hall o al cerrarlo.
