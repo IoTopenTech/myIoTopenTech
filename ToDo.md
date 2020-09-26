@@ -23,3 +23,4 @@
 - [ ] En los dispositivos LoRaWAN, permitir al usuario indicar el devEUI. Al hacerlo se creará una relación de su dispositivo SYSTEM a este dispositivo, de modo que el dispositivo SYSTEM pueda hacer entregas de telemetrías/downlinks en nombre del propio dispositivo (con el objeto de poder tener muchos dispositivos en una sola integración en sistemas en los que la integración es a nivel de aplicación, como The Things Network).
 - [ ] Explorar la posibilidad de que una delegación pueda ser pública, de forma que un usuario pueda compartir públicamente un dashboard parcial de sus dispositivos (podría ser una forma de superar la imposibilidad de crear vistas de entidad desde las reglas)
 - [ ] Integración con https://api.spontit.com/
+- [ ] Valorar usar esta librería para leer códigos QR (https://blog.minhazav.dev/HTML5-QR-Code-scanning-launched-v1.0.1/)
