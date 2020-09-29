@@ -2,7 +2,7 @@
 <myIoT>
 	<panel titulo="" resumen="">
 		<item tipo="coordenadas/chirpstack/alarma/atributoCompartido" 
-			nombreAlarma="" labelAlarma="" tipoAlarma="opciones/umbralMinimo/umbralMaximo/biUmbral" labelAuxAlarma="Disparar al/expresado en segundos..." histeresis="no/min/max/bi"
+			nombreAlarma="" telemetria="" labelAlarma="" tipoAlarma="opciones/umbralMinimo/umbralMaximo/biUmbral" labelAuxAlarma="Disparar al/expresado en segundos..." histeresis="no/min/max/bi"
 				opciones="A/B/C"
 				min_UmbralMinimo="" max_UmbralMinimo="" step_UmbralMinimo="" --> atributos estándar HTML con sufijo
 				min_UmbralMaximo="" max_UmbralMaximo="" step_UmbralMaximo="" --> atributos estándar HTML con sufijo
