@@ -14,3 +14,4 @@
 	</panel>
 </myIoT>
 ```
+telemetria se usa para saber si el usuario posee la delegación necesaria. Si llegamos a implementar alarmas que impliquen simultáneamente varias telemetrías, el atributo telemetría pasaría a ser un array como opciones.
