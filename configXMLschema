@@ -1,6 +1,6 @@
 ```
 <myIoT>
-	<panel titulo="" resumen="" nombreFormulario="">
+	<panel titulo="" resumen="" nombreFormulario="" botonSubmit="true/false">
 		<item tipo="coordenadas/chirpstack/alarma/atributoCompartido" 
 			nombreAlarma="" telemetria="" labelAlarma="" tipoAlarma="opciones/umbralMinimo/umbralMaximo/biUmbral" labelAuxAlarma="Disparar al/expresado en segundos..." histeresis="no/min/max/bi"
 				opciones valores="A/B/C"
