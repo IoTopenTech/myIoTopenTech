@@ -3,7 +3,7 @@
 	<panel titulo="" resumen="" nombreFormulario="" labelBotonSubmit="[Configurar]" ultimoDownlink="">
 		<item tipo="coordenadas/chirpstack/alarma/atributoCompartido" 
 			nombreAlarma="" telemetria="" labelAlarma="" tipoAlarma="opciones/umbralMinimo/umbralMaximo/biUmbral" labelAuxAlarma="Disparar al/expresado en segundos..." histeresis="no/min/max/bi"
-				opciones valores="A/B/C"
+				 valores="A/B/C"
 				nombreAtributoCompartido="" labelAtributoCompartido="" tipoAtributoCompartido="opciones/texto/numero/boton">
 				
 				<umbralMinimo min="" max="" step="" --> atributos estándar HTML />
