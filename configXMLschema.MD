@@ -12,6 +12,7 @@
 			
 		      	nombreAtributoCompartido=""
 		      	labelAtributoCompartido=""
+		      	labelAuxAtributoCompartido=""
 		      	tipoAtributoCompartido="opciones/texto/numero/boton">
 				
 				<umbralMinimo min="" max="" step="" --> atributos estándar HTML />
