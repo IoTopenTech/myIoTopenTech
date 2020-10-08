@@ -2,9 +2,17 @@
 <myIoT>
 	<panel titulo="" resumen="" nombreFormulario="" labelBotonSubmit="[Configurar]" ultimoDownlink="">
 		<item tipo="coordenadas/chirpstack/alarma/atributoCompartido" 
-			nombreAlarma="" telemetria="" labelAlarma="" tipoAlarma="opciones/umbralMinimo/umbralMaximo/biUmbral" labelAuxAlarma="Disparar al/expresado en segundos..." histeresis="no/min/max/bi"
-				 valores="A/B/C"
-				nombreAtributoCompartido="" labelAtributoCompartido="" tipoAtributoCompartido="opciones/texto/numero/boton">
+		      
+			nombreAlarma="" telemetria=""
+		     	labelAlarma=""
+		      	tipoAlarma="opciones/umbralMinimo/umbralMaximo/biUmbral"
+		      	labelAuxAlarma="Disparar al/expresado en segundos..." 
+		      	histeresis="no/min/max/bi"
+			valores="A/B/C"
+			
+		      	nombreAtributoCompartido=""
+		      	labelAtributoCompartido=""
+		      	tipoAtributoCompartido="opciones/texto/numero/boton">
 				
 				<umbralMinimo min="" max="" step="" --> atributos estándar HTML />
 				<umbralMaximo min="" max="" step="" --> atributos estándar HTML />
@@ -12,6 +20,7 @@
 				<histeresisMaximo min="" max="" step="" --> atributos estándar HTML />
 				
 				<atributoCompartido min="" max="" step="" size="" pattern="" --> atributos estándar HTML />
+					
 		</item>
 	</panel>
 </myIoT>
