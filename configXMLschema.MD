@@ -8,7 +8,7 @@
 		      	tipoAlarma="opciones/umbralMinimo/umbralMaximo/biUmbral"
 		      	labelAuxAlarma="Disparar al/expresado en segundos..." 
 		      	histeresis="no/min/max/bi"
-			valores="A/B/C"
+			opciones="A/B/C"
 			
 		      	nombreAtributoCompartido=""
 		      	labelAtributoCompartido=""
