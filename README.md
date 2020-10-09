@@ -17,7 +17,7 @@ Si desea utilizar my IoT open Tech como usuario final, siga las instrucciones de
 
 Si desea desarrollar nuevos tipos de activos y dispositivos en my IoT open Tech, solicite en contacto@iotopentech.io una cuenta de nivel tenant, y siga estas instrucciones:
 
-![](.//media/Notas Curso creacion de tipos de dispositivos para myIoT_sesion 1.pdf)
+![](media/Notas Curso creacion de tipos de dispositivos para myIoT_sesion 1.pdf)
 
 
 ## Root Rule Chain
