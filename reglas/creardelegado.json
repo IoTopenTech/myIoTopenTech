@@ -8,199 +8,12 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 10,
+    "firstNodeIndex": 8,
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 591,
-          "layoutY": 526
-        },
-        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
-        "name": "asignacionTemporal",
-        "debugMode": true,
-        "configuration": {
-          "customerNamePattern": "${customerName}",
-          "customerCacheExpiration": 300,
-          "createCustomerIfNotExists": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 856,
-          "layoutY": 435
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "Extraer nombre customer",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "metadata.customerName=metadata.deviceName.split(\"_\")[0];\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 584,
-          "layoutY": 928
-        },
-        "type": "org.thingsboard.rule.engine.action.TbUnassignFromCustomerNode",
-        "name": "desasignar",
-        "debugMode": true,
-        "configuration": {
-          "customerNamePattern": "${customerName}",
-          "customerCacheExpiration": 300
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 587,
-          "layoutY": 848
-        },
-        "type": "org.thingsboard.rule.engine.action.TbDeleteRelationNode",
-        "name": "borrar DelegaEn",
-        "debugMode": true,
-        "configuration": {
-          "direction": "FROM",
-          "relationType": "DelegaEn",
-          "entityType": "DEVICE",
-          "entityNamePattern": "${nombreDispositivoPadre}",
-          "entityTypePattern": null,
-          "entityCacheExpiration": 300,
-          "deleteForSingleEntity": true
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 594,
-          "layoutY": 434
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
-        "name": "id del delegado",
-        "debugMode": true,
-        "configuration": {
-          "fieldsMapping": {
-            "id": "idDelDelegado"
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 595,
-          "layoutY": 606
-        },
-        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
-        "name": "Relacion id",
-        "debugMode": true,
-        "configuration": {
-          "direction": "FROM",
-          "relationType": "${idDelDelegado}",
-          "entityType": "DEVICE",
-          "entityNamePattern": "${nombreDispositivoPadre}",
-          "entityTypePattern": "${subtipoDispositivo}",
-          "entityCacheExpiration": 300,
-          "createEntityIfNotExists": false,
-          "changeOriginatorToRelatedEntity": false,
-          "removeCurrentRelations": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 306,
-          "layoutY": 437,
-          "description": "Esta relación es auxiliar para poder seleccionar el dispositivo y crearle la relación id que realmente me permitirá seleccionarlo de forma específica. La borro al final de la regla."
-        },
-        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
-        "name": "Relacion con Dispositivo padre",
-        "debugMode": true,
-        "configuration": {
-          "direction": "TO",
-          "relationType": "DelegaEn",
-          "entityType": "DEVICE",
-          "entityNamePattern": "${nombreDispositivo}",
-          "entityTypePattern": "${subtipoDispositivo}",
-          "entityCacheExpiration": 300,
-          "createEntityIfNotExists": false,
-          "changeOriginatorToRelatedEntity": true,
-          "removeCurrentRelations": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 851,
-          "layoutY": 350
-        },
-        "type": "org.thingsboard.rule.engine.action.TbCreateEntityNode",
-        "name": "crear",
-        "debugMode": true,
-        "configuration": {
-          "claveNombreEntidad": "nombreDispositivo",
-          "claveTipoEntidad": "tipoEntidadNuevo",
-          "claveSubtipoEntidad": "subtipoDispositivo"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 593,
-          "layoutY": 773
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "Guardar Atributos",
-        "debugMode": true,
-        "configuration": {
-          "scope": "SERVER_SCOPE"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 598,
-          "layoutY": 687
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "POST ATTRIBUTES",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var secretKey;\nif(!metadata.hasOwnProperty('tokenDelegado') || metadata.tokenDelegado==\"\"|| metadata.tokenDelegado==\"undefined\"){\n    secretKey=Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);\n}else{\n    secretKey=msg.tokenDelegado;\n}\nvar expirationTime=String(Date.now()+(100*365*24*60*60*1000)); //Fecha actual + 100 años\nvar msg={'nombreOriginal':String(metadata.nombreDispositivo),\n'tipoOriginal':metadata.subtipoDispositivo,\n'claimingData':{\"secretKey\": secretKey, \"expirationTime\": \"1640995200000\"},\n'claimingDataOriginal':{\"secretKey\": secretKey, \"expirationTime\": \"1640995200000\"},\n'esDelegado':true,\n'delegacion':{},\n'delegacionPorCargoDe':msg.delegacionPorCargoDe\n};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 302,
-          "layoutY": 148
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "Validacion",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "//Vamos a usar como prefijo para el nombre D000000001_ (D seguido de número de customer)\nmsg.nombreDispositivo='D'+msg.nombreDispositivoPadre.split('_')[0]+'_'+msg.nombreDispositivo;\nmsg.tipoEntidadNuevo='device';\nmetadata.subtipoDispositivo=msg.subtipoDispositivo;\nmetadata.nombreDispositivoPadre=msg.nombreDispositivoPadre;\nmetadata.nombreDispositivo=msg.nombreDispositivo;\nmetadata.delegacionPorCargoDe=msg.delegacionPorCargoDe;\nif (msg.hasOwnProperty('tokenDelegado')){\n    metadata.tokenDelegado=msg.tokenDelegado;\n}else{\n    metadata.tokenDelegado=\"\";\n}\nmetadata.idDispositivoPadre=msg.idDispositivoPadre;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 297,
-          "layoutY": 240
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "Dispositivo que se va a delegar",
-        "debugMode": true,
-        "configuration": {
-          "originatorSource": "RELATED",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "${idDispositivoPadre}",
-                "entityTypes": [
-                  "DEVICE"
-                ]
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 587,
-          "layoutY": 145
+          "layoutX": 852,
+          "layoutY": 691
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "customer",
@@ -218,62 +31,6 @@
             ],
             "fetchLastLevelOnly": false
           }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 308,
-          "layoutY": 349
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
-        "name": "delegados",
-        "debugMode": true,
-        "configuration": {
-          "clientAttributeNames": [],
-          "sharedAttributeNames": [],
-          "serverAttributeNames": [
-            "delegados",
-            "esDelegado"
-          ],
-          "latestTsKeyNames": [],
-          "tellFailureIfAbsent": false,
-          "getLatestValueWithTs": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1148,
-          "layoutY": 772
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "Guardar Delegados",
-        "debugMode": true,
-        "configuration": {
-          "scope": "SERVER_SCOPE"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 855,
-          "layoutY": 771
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "atributos dispositivo Delegador",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "newMsg={};\n\nif (metadata.hasOwnProperty('ss_delegados')){\n    newMsg.delegados=JSON.parse(metadata.ss_delegados);\n}else{\n    newMsg.delegados=[]\n}\nnewMsg.delegados.push({'nombre':metadata.nombreDispositivo,'delegacionPorCargoDe':msg.delegacionPorCargoDe,'reclamado':false,'claimingData':msg.claimingData,'id':metadata.idDelDelegado,'delegaciones':{}});\n\nreturn {msg: newMsg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 592,
-          "layoutY": 349
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
-        "name": "es delegable?",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "return (metadata.hasOwnProperty('ss_esDelegado')&&metadata.ss_esDelegado==\"false\")"
         }
       },
       {
@@ -303,8 +60,65 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 852,
-          "layoutY": 691
+          "layoutX": 592,
+          "layoutY": 349,
+          "description": "Si no tiene el atributo esDelegado, o si lo tiene con valor false es delegable"
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "es delegable?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return (!metadata.hasOwnProperty('ss_esDelegado')||(metadata.hasOwnProperty('ss_esDelegado')&&metadata.ss_esDelegado==\"false\"))"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 855,
+          "layoutY": 771
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "atributos dispositivo Delegador",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "newMsg={};\n\nif (metadata.hasOwnProperty('ss_delegados')){\n    newMsg.delegados=JSON.parse(metadata.ss_delegados);\n}else{\n    newMsg.delegados=[]\n}\nnewMsg.delegados.push({'nombre':metadata.nombreDispositivo,'delegacionPorCargoDe':msg.delegacionPorCargoDe,'reclamado':false,'claimingData':msg.claimingData,'id':metadata.idDelDelegado,'delegaciones':{}});\n\nreturn {msg: newMsg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1148,
+          "layoutY": 772
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "Guardar Delegados",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 308,
+          "layoutY": 349
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "delegados",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "delegados",
+            "esDelegado"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": false,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 587,
+          "layoutY": 145
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "customer",
@@ -323,97 +137,284 @@
             "fetchLastLevelOnly": false
           }
         }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 297,
+          "layoutY": 240
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Dispositivo que se va a delegar",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${idDispositivoPadre}",
+                "entityTypes": [
+                  "DEVICE"
+                ]
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 302,
+          "layoutY": 148
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Validacion",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "//Vamos a usar como prefijo para el nombre D000000001_ (D seguido de número de customer)\nmsg.nombreDispositivo='D'+msg.nombreDispositivoPadre.split('_')[0]+'_'+msg.nombreDispositivo;\nmsg.tipoEntidadNuevo='device';\nmetadata.subtipoDispositivo=msg.subtipoDispositivo;\nmetadata.nombreDispositivoPadre=msg.nombreDispositivoPadre;\nmetadata.nombreDispositivo=msg.nombreDispositivo;\nmetadata.delegacionPorCargoDe=msg.delegacionPorCargoDe;\nif (msg.hasOwnProperty('tokenDelegado')){\n    metadata.tokenDelegado=msg.tokenDelegado;\n}else{\n    metadata.tokenDelegado=\"\";\n}\nmetadata.idDispositivoPadre=msg.idDispositivoPadre;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 598,
+          "layoutY": 687
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "POST ATTRIBUTES",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var secretKey;\nif(!metadata.hasOwnProperty('tokenDelegado') || metadata.tokenDelegado==\"\"|| metadata.tokenDelegado==\"undefined\"){\n    secretKey=Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);\n}else{\n    secretKey=msg.tokenDelegado;\n}\nvar expirationTime=String(Date.now()+(100*365*24*60*60*1000)); //Fecha actual + 100 años\nvar msg={'nombreOriginal':String(metadata.nombreDispositivo),\n'tipoOriginal':metadata.subtipoDispositivo,\n'claimingData':{\"secretKey\": secretKey, \"expirationTime\": \"1640995200000\"},\n'claimingDataOriginal':{\"secretKey\": secretKey, \"expirationTime\": \"1640995200000\"},\n'esDelegado':true,\n'delegacion':{},\n'delegacionPorCargoDe':msg.delegacionPorCargoDe\n};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 593,
+          "layoutY": 773
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "Guardar Atributos",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 851,
+          "layoutY": 350
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateEntityNode",
+        "name": "crear",
+        "debugMode": true,
+        "configuration": {
+          "claveNombreEntidad": "nombreDispositivo",
+          "claveTipoEntidad": "tipoEntidadNuevo",
+          "claveSubtipoEntidad": "subtipoDispositivo"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 306,
+          "layoutY": 437,
+          "description": "Esta relación es auxiliar para poder seleccionar el dispositivo y crearle la relación id que realmente me permitirá seleccionarlo de forma específica. La borro al final de la regla. Aquí parece que hay problemas si ya se ha utilizado anteriormente el mismo nombre de delegado."
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
+        "name": "Relacion con Dispositivo padre",
+        "debugMode": true,
+        "configuration": {
+          "direction": "TO",
+          "relationType": "DelegaEn",
+          "entityType": "DEVICE",
+          "entityNamePattern": "${nombreDispositivo}",
+          "entityTypePattern": "${subtipoDispositivo}",
+          "entityCacheExpiration": 300,
+          "createEntityIfNotExists": false,
+          "changeOriginatorToRelatedEntity": true,
+          "removeCurrentRelations": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 595,
+          "layoutY": 606
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
+        "name": "Relacion id",
+        "debugMode": true,
+        "configuration": {
+          "direction": "FROM",
+          "relationType": "${idDelDelegado}",
+          "entityType": "DEVICE",
+          "entityNamePattern": "${nombreDispositivoPadre}",
+          "entityTypePattern": "${subtipoDispositivo}",
+          "entityCacheExpiration": 300,
+          "createEntityIfNotExists": false,
+          "changeOriginatorToRelatedEntity": false,
+          "removeCurrentRelations": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 594,
+          "layoutY": 434
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "id del delegado",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "id": "idDelDelegado"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 587,
+          "layoutY": 848
+        },
+        "type": "org.thingsboard.rule.engine.action.TbDeleteRelationNode",
+        "name": "borrar DelegaEn",
+        "debugMode": true,
+        "configuration": {
+          "direction": "FROM",
+          "relationType": "DelegaEn",
+          "entityType": "DEVICE",
+          "entityNamePattern": "${nombreDispositivoPadre}",
+          "entityTypePattern": null,
+          "entityCacheExpiration": 300,
+          "deleteForSingleEntity": true
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 584,
+          "layoutY": 928
+        },
+        "type": "org.thingsboard.rule.engine.action.TbUnassignFromCustomerNode",
+        "name": "desasignar",
+        "debugMode": true,
+        "configuration": {
+          "customerNamePattern": "${customerName}",
+          "customerCacheExpiration": 300
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 856,
+          "layoutY": 435
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Extraer nombre customer",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.customerName=metadata.deviceName.split(\"_\")[0];\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 591,
+          "layoutY": 526
+        },
+        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
+        "name": "asignacionTemporal",
+        "debugMode": true,
+        "configuration": {
+          "customerNamePattern": "${customerName}",
+          "customerCacheExpiration": 300,
+          "createCustomerIfNotExists": false
+        }
       }
     ],
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 5,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 1,
-        "toIndex": 0,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 3,
-        "toIndex": 2,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 4,
         "toIndex": 1,
         "type": "Success"
       },
       {
-        "fromIndex": 5,
-        "toIndex": 9,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 6,
-        "toIndex": 4,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 7,
-        "toIndex": 6,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 8,
+        "fromIndex": 1,
         "toIndex": 3,
         "type": "Success"
       },
       {
-        "fromIndex": 9,
-        "toIndex": 8,
+        "fromIndex": 2,
+        "toIndex": 11,
+        "type": "True"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 6,
         "type": "Success"
       },
       {
         "fromIndex": 9,
-        "toIndex": 18,
+        "toIndex": 0,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 9,
+        "toIndex": 10,
         "type": "Success"
       },
       {
         "fromIndex": 10,
-        "toIndex": 12,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 11,
-        "toIndex": 13,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 11,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 13,
-        "toIndex": 16,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 15,
-        "toIndex": 14,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 16,
-        "toIndex": 7,
-        "type": "True"
-      },
-      {
-        "fromIndex": 17,
         "toIndex": 15,
         "type": "Success"
       },
       {
-        "fromIndex": 18,
+        "fromIndex": 11,
+        "toIndex": 12,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 14,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 9,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 14,
         "toIndex": 17,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 16,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 18,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 18,
+        "toIndex": 13,
         "type": "Success"
       }
     ],

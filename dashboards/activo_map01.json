@@ -325,7 +325,7 @@
     },
     "states": {
       "default": {
-        "name": "Activo_IMAGE01",
+        "name": "Activo_MAP01",
         "root": true,
         "layouts": {
           "main": {

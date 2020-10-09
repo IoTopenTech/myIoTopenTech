@@ -21,7 +21,8 @@
                   "label": "Batería",
                   "color": "#2196f3",
                   "settings": {},
-                  "_hash": 0.11135200794403222
+                  "_hash": 0.11135200794403222,
+                  "postFuncBody": "if (value == 'No delegado') {\n    return -1;\n} else {\n    return value;\n}"
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -61,7 +62,6 @@
             "colorMinorTicks": "#666",
             "minorTicks": 2,
             "valueInt": 1,
-            "minValue": 0,
             "highlightsWidth": 15,
             "valueBox": true,
             "animation": true,
@@ -103,7 +103,8 @@
             "colorValueBoxRectEnd": "#666",
             "colorValueBoxBackground": "#babab2",
             "colorValueBoxShadow": "rgba(0,0,0,1)",
-            "unitTitle": "V"
+            "unitTitle": "V",
+            "minValue": 0
           },
           "title": "Batería",
           "dropShadow": true,
@@ -221,7 +222,8 @@
                       "showValuesForComparison": true
                     }
                   },
-                  "_hash": 0.03213885279324091
+                  "_hash": 0.03213885279324091,
+                  "postFuncBody": "if (value == 'No delegado') {\n    return -1;\n} else {\n    return value;\n}"
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -340,7 +342,8 @@
                       "showValuesForComparison": true
                     }
                   },
-                  "_hash": 0.9021615965263892
+                  "_hash": 0.9021615965263892,
+                  "postFuncBody": "if (value == 'No delegado') {\n    return -1;\n} else {\n    return value;\n}"
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -374,7 +377,7 @@
               "min": -1,
               "max": 4,
               "tickDecimals": 1,
-              "ticksFormatter": "if(value==-1){\n    return 'NO DELEGADO';\n}else{\n    return value;\n}"
+              "ticksFormatter": "\nif(value==-1){\n    return 'NO DELEGADO';\n}else{\n    return value;\n}\n"
             },
             "grid": {
               "color": "#545454",
@@ -420,7 +423,7 @@
         "type": "alarm",
         "title": "New widget",
         "sizeX": 24,
-        "sizeY": 10,
+        "sizeY": 11,
         "config": {
           "timewindow": {
             "realtime": {
@@ -513,7 +516,7 @@
           "iconSize": "24px",
           "titleTooltip": "",
           "widgetStyle": {},
-          "displayTimewindow": true,
+          "displayTimewindow": false,
           "actions": {},
           "datasources": [],
           "alarmsMaxCountLoad": 0,
@@ -586,8 +589,8 @@
         "typeAlias": "simple_card",
         "type": "latest",
         "title": "New widget",
-        "sizeX": 7,
-        "sizeY": 6,
+        "sizeX": 8,
+        "sizeY": 5,
         "config": {
           "datasources": [
             {
@@ -638,6 +641,122 @@
           "displayTimewindow": true
         },
         "id": "1e3e0bf1-9725-b7a3-e2b4-b54e0a196dc3"
+      },
+      "fd639f42-e8b4-44c5-75e5-3eca5902eeea": {
+        "isSystemType": true,
+        "bundleAlias": "charts",
+        "typeAlias": "timeseries_bars_flot",
+        "type": "timeseries",
+        "title": "New widget",
+        "sizeX": 9,
+        "sizeY": 5,
+        "config": {
+          "datasources": [
+            {
+              "type": "entity",
+              "dataKeys": [
+                {
+                  "name": "LAST_DOOR_OPEN_DURATION",
+                  "type": "timeseries",
+                  "label": "LAST_DOOR_OPEN_DURATION",
+                  "color": "#2196f3",
+                  "settings": {
+                    "excludeFromStacking": false,
+                    "hideDataByDefault": false,
+                    "disableDataHiding": false,
+                    "removeFromLegend": false,
+                    "showLines": false,
+                    "fillLines": false,
+                    "showPoints": false,
+                    "showPointShape": "circle",
+                    "pointShapeFormatter": "var size = radius * Math.sqrt(Math.PI) / 2;\nctx.moveTo(x - size, y - size);\nctx.lineTo(x + size, y + size);\nctx.moveTo(x - size, y + size);\nctx.lineTo(x + size, y - size);",
+                    "showPointsLineWidth": 5,
+                    "showPointsRadius": 3,
+                    "showSeparateAxis": false,
+                    "axisPosition": "left",
+                    "thresholds": [
+                      {
+                        "thresholdValueSource": "predefinedValue"
+                      }
+                    ],
+                    "comparisonSettings": {
+                      "showValuesForComparison": true
+                    }
+                  },
+                  "_hash": 0.671710160017812,
+                  "postFuncBody": "if (value == 'No delegado') {\n    return -1;\n} else {\n    return value;\n}"
+                }
+              ],
+              "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            },
+            "aggregation": {
+              "limit": 200,
+              "type": "AVG"
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#fff",
+          "color": "rgba(0, 0, 0, 0.87)",
+          "padding": "8px",
+          "settings": {
+            "shadowSize": 4,
+            "fontColor": "#545454",
+            "fontSize": 10,
+            "xaxis": {
+              "showLabels": true,
+              "color": "#545454"
+            },
+            "yaxis": {
+              "showLabels": true,
+              "color": "#545454",
+              "ticksFormatter": "if (value === -1){\n    return 'NO DELEGADO';\n}else{\n    return value;\n}",
+              "min": -1,
+              "tickDecimals": 0,
+              "tickSize": 1
+            },
+            "grid": {
+              "color": "#545454",
+              "tickColor": "#DDDDDD",
+              "verticalLines": true,
+              "horizontalLines": true,
+              "outlineWidth": 1
+            },
+            "stack": false,
+            "tooltipIndividual": false,
+            "defaultBarWidth": 60000,
+            "barAlignment": "left",
+            "timeForComparison": "months",
+            "xaxisSecond": {
+              "axisPosition": "top",
+              "showLabels": true
+            },
+            "tooltipValueFormatter": "\nif (value === -1){\n    return 'NO DELEGADO';\n}else{\n    return value;\n}\n"
+          },
+          "title": "Duración última apertura",
+          "dropShadow": true,
+          "enableFullscreen": true,
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400
+          },
+          "mobileHeight": null,
+          "widgetStyle": {},
+          "useDashboardTimewindow": true,
+          "showLegend": false,
+          "actions": {},
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "displayTimewindow": true
+        },
+        "id": "fd639f42-e8b4-44c5-75e5-3eca5902eeea"
       }
     },
     "states": {
@@ -650,7 +769,7 @@
               "71519cb3-d9c1-cae4-a2cb-7d9a796518fa": {
                 "sizeX": 8,
                 "sizeY": 6,
-                "row": 5,
+                "row": 10,
                 "col": 9
               },
               "3a4f97f3-8e24-d36b-6ecb-ece617101135": {
@@ -670,13 +789,13 @@
                 "sizeX": 9,
                 "sizeY": 6,
                 "mobileHeight": null,
-                "row": 5,
+                "row": 10,
                 "col": 0
               },
               "59d678c9-f9c1-b54c-a024-7d38c9af50c3": {
                 "sizeX": 24,
-                "sizeY": 10,
-                "row": 11,
+                "sizeY": 11,
+                "row": 16,
                 "col": 0
               },
               "054db6ee-db1c-eb28-561d-b34f7fe009b7": {
@@ -686,10 +805,17 @@
                 "col": 17
               },
               "1e3e0bf1-9725-b7a3-e2b4-b54e0a196dc3": {
-                "sizeX": 7,
-                "sizeY": 6,
+                "sizeX": 8,
+                "sizeY": 5,
                 "row": 5,
-                "col": 17
+                "col": 9
+              },
+              "fd639f42-e8b4-44c5-75e5-3eca5902eeea": {
+                "sizeX": 9,
+                "sizeY": 5,
+                "mobileHeight": null,
+                "row": 5,
+                "col": 0
               }
             },
             "gridSettings": {

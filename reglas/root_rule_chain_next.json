@@ -1,0 +1,43 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "Root Rule Chain Next",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 0,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 189,
+          "layoutY": 287
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "placeHolder",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      }
+    ],
+    "connections": null,
+    "ruleChainConnections": [
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "e5d20f00-07c6-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 428,
+          "layoutY": 205,
+          "ruleChainNodeId": "rule-chain-node-3"
+        },
+        "type": "Success"
+      }
+    ]
+  }
+}

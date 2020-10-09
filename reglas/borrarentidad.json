@@ -8,8 +8,237 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 28,
+    "firstNodeIndex": 41,
     "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 792,
+          "layoutY": 530
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "preparar accounting",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var newMsg={};\nnewMsg.deltaCredito=1;\nnewMsg.deltaDispositivosPropios=-1;\nnewMsg.deltaDispositivosAsumidos=0;\nreturn {msg: newMsg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1187,
+          "layoutY": 305
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerDetailsNode",
+        "name": "customer Email",
+        "debugMode": true,
+        "configuration": {
+          "detailsList": [
+            "EMAIL"
+          ],
+          "addToMetadata": true
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1484,
+          "layoutY": 303
+        },
+        "type": "org.thingsboard.rule.engine.mail.TbMsgToEmailNode",
+        "name": "enviarAviso",
+        "debugMode": true,
+        "configuration": {
+          "fromTemplate": "no-reply@iotopentech.io",
+          "toTemplate": "${customer_email}",
+          "ccTemplate": null,
+          "bccTemplate": null,
+          "subjectTemplate": "[myIoT] Delegado borrado",
+          "bodyTemplate": "Estimado usuario:\nSe ha borrado el delegado ${ss_nombreOriginal}.\nSaludos"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1749,
+          "layoutY": 299
+        },
+        "type": "org.thingsboard.rule.engine.mail.TbSendEmailNode",
+        "name": "Aviso al principal",
+        "debugMode": true,
+        "configuration": {
+          "useSystemSmtpSettings": true,
+          "smtpHost": "localhost",
+          "smtpPort": 25,
+          "username": null,
+          "password": null,
+          "smtpProtocol": "smtp",
+          "timeout": 10000,
+          "enableTls": false,
+          "tlsVersion": "TLSv1.2"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 564,
+          "layoutY": 480
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "customer",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "CUSTOMER",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 949,
+          "layoutY": 388,
+          "description": "Aquí es un poco lioso porque tengo que actualizar el accounting antes de borrar el dispositivo, pues de otro modo no puedo volver al originador de un dispositivo ya borrado para actualizar el accounting o enviar los avisos."
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "delegado",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${idEntidad}",
+                "entityTypes": [
+                  "DEVICE"
+                ]
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 557,
+          "layoutY": 596
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Originator=Entidad",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${idEntidad}",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 53,
+          "layoutY": 217
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "customer",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "CUSTOMER",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "Si tiene claimingData, no ha sido reclamado => es un delegado sin reclamar. Añado el originatorName por si en el futuro quiero poder borrar pre-aprovisionados. Un pre-aprovisionado que no fuera un delegado, no se borraría a través de esta regla.",
+          "layoutX": 586,
+          "layoutY": 147
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbCheckMessageNode",
+        "name": "claimingData/originatorName",
+        "debugMode": true,
+        "configuration": {
+          "messageNames": [],
+          "metadataNames": [
+            "ss_claimingData",
+            "originatorName"
+          ],
+          "checkAllKeys": true
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 588,
+          "layoutY": 219
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerDetailsNode",
+        "name": "customer Email",
+        "debugMode": true,
+        "configuration": {
+          "detailsList": [
+            "EMAIL"
+          ],
+          "addToMetadata": true
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 827,
+          "layoutY": 157
+        },
+        "type": "org.thingsboard.rule.engine.mail.TbMsgToEmailNode",
+        "name": "enviarAviso",
+        "debugMode": true,
+        "configuration": {
+          "fromTemplate": "no-reply@iotopentech.io",
+          "toTemplate": "${customer_email}",
+          "ccTemplate": null,
+          "bccTemplate": null,
+          "subjectTemplate": "[myIoT] Delegado borrado",
+          "bodyTemplate": "Estimado usuario:\nSe ha borrado el delegado ${originatorName}.\nSaludos"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1123,
+          "layoutY": 152
+        },
+        "type": "org.thingsboard.rule.engine.mail.TbSendEmailNode",
+        "name": "Aviso al subordinado",
+        "debugMode": true,
+        "configuration": {
+          "useSystemSmtpSettings": true,
+          "smtpHost": "localhost",
+          "smtpPort": 25,
+          "username": null,
+          "password": null,
+          "smtpProtocol": "smtp",
+          "timeout": 10000,
+          "enableTls": false,
+          "tlsVersion": "TLSv1.2"
+        }
+      },
       {
         "additionalInfo": {
           "layoutX": 319,
@@ -175,6 +404,57 @@
       },
       {
         "additionalInfo": {
+          "layoutX": 838,
+          "layoutY": 230
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "delegador",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "TO",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${idEntidad}",
+                "entityTypes": [
+                  "DEVICE"
+                ]
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 716,
+          "layoutY": 381,
+          "description": "Aquí es un poco lioso porque tengo que actualizar el accounting antes de borrar el dispositivo, pues de otro modo no puedo volver al originador de un dispositivo ya borrado para actualizar el accounting o enviar los avisos."
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "delegado",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${idEntidad}",
+                "entityTypes": [
+                  "DEVICE"
+                ]
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
           "layoutX": 1482,
           "layoutY": 27
         },
@@ -217,8 +497,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1417,
-          "layoutY": 386
+          "layoutX": 1431,
+          "layoutY": 228
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "actualizarDelegados",
@@ -229,8 +509,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1419,
-          "layoutY": 462
+          "layoutX": 1723,
+          "layoutY": 226
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
         "name": "guardar",
@@ -241,8 +521,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1414,
-          "layoutY": 297
+          "layoutX": 1124,
+          "layoutY": 232
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
         "name": "delegados",
@@ -256,31 +536,6 @@
           "latestTsKeyNames": [],
           "tellFailureIfAbsent": true,
           "getLatestValueWithTs": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1132,
-          "layoutY": 297
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "delegador",
-        "debugMode": true,
-        "configuration": {
-          "originatorSource": "RELATED",
-          "relationsQuery": {
-            "direction": "TO",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "${idEntidad}",
-                "entityTypes": [
-                  "DEVICE"
-                ]
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
         }
       },
       {
@@ -619,251 +874,17 @@
           "entityCacheExpiration": 300,
           "deleteForSingleEntity": false
         }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 792,
-          "layoutY": 530
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "preparar accounting",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var newMsg={};\nnewMsg.deltaCredito=1;\nnewMsg.deltaDispositivosPropios=-1;\nnewMsg.deltaDispositivosAsumidos=0;\nreturn {msg: newMsg, metadata: metadata, msgType: msgType};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 839,
-          "layoutY": 230
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerDetailsNode",
-        "name": "customer Email",
-        "debugMode": true,
-        "configuration": {
-          "detailsList": [
-            "EMAIL"
-          ],
-          "addToMetadata": true
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1136,
-          "layoutY": 228
-        },
-        "type": "org.thingsboard.rule.engine.mail.TbMsgToEmailNode",
-        "name": "enviarAviso",
-        "debugMode": true,
-        "configuration": {
-          "fromTemplate": "no-reply@iotopentech.io",
-          "toTemplate": "${customer_email}",
-          "ccTemplate": null,
-          "bccTemplate": null,
-          "subjectTemplate": "[myIoT] Delegado borrado",
-          "bodyTemplate": "Estimado usuario:\nSe ha borrado el delegado ${ss_nombreOriginal}.\nSaludos"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1412,
-          "layoutY": 231
-        },
-        "type": "org.thingsboard.rule.engine.mail.TbSendEmailNode",
-        "name": "Enviar",
-        "debugMode": true,
-        "configuration": {
-          "useSystemSmtpSettings": true,
-          "smtpHost": "localhost",
-          "smtpPort": 25,
-          "username": null,
-          "password": null,
-          "smtpProtocol": "smtp",
-          "timeout": 10000,
-          "enableTls": false,
-          "tlsVersion": "TLSv1.2"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 563,
-          "layoutY": 390
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "customer",
-        "debugMode": true,
-        "configuration": {
-          "originatorSource": "CUSTOMER",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "Contains",
-                "entityTypes": []
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 949,
-          "layoutY": 388,
-          "description": "Aquí es un poco lioso porque tengo que actualizar el accounting antes de borrar el dispositivo, pues de otro modo no puedo volver al originador de un dispositivo ya borrado para actualizar el accounting o enviar los avisos."
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "delegado",
-        "debugMode": true,
-        "configuration": {
-          "originatorSource": "RELATED",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "${idEntidad}",
-                "entityTypes": [
-                  "DEVICE"
-                ]
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 557,
-          "layoutY": 596
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "Originator=Entidad",
-        "debugMode": true,
-        "configuration": {
-          "originatorSource": "RELATED",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "${idEntidad}",
-                "entityTypes": []
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 53,
-          "layoutY": 217
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "customer",
-        "debugMode": true,
-        "configuration": {
-          "originatorSource": "CUSTOMER",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "Contains",
-                "entityTypes": []
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "description": "Si tiene claimingData, no ha sido reclamado => es un delegado sin reclamar. Añado el originatorName por si en el futuro quiero poder borrar pre-aprovisionados",
-          "layoutX": 586,
-          "layoutY": 147
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbCheckMessageNode",
-        "name": "claimingData",
-        "debugMode": true,
-        "configuration": {
-          "messageNames": [],
-          "metadataNames": [
-            "ss_claimingData",
-            "originatorName"
-          ],
-          "checkAllKeys": true
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 588,
-          "layoutY": 219
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerDetailsNode",
-        "name": "customer Email",
-        "debugMode": true,
-        "configuration": {
-          "detailsList": [
-            "EMAIL"
-          ],
-          "addToMetadata": true
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 827,
-          "layoutY": 157
-        },
-        "type": "org.thingsboard.rule.engine.mail.TbMsgToEmailNode",
-        "name": "enviarAviso",
-        "debugMode": true,
-        "configuration": {
-          "fromTemplate": "no-reply@iotopentech.io",
-          "toTemplate": "${customer_email}",
-          "ccTemplate": null,
-          "bccTemplate": null,
-          "subjectTemplate": "[myIoT] Delegado borrado",
-          "bodyTemplate": "Estimado usuario:\nSe ha borrado el delegado ${originatorName}.\nSaludos"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1123,
-          "layoutY": 152
-        },
-        "type": "org.thingsboard.rule.engine.mail.TbSendEmailNode",
-        "name": "Enviar",
-        "debugMode": true,
-        "configuration": {
-          "useSystemSmtpSettings": true,
-          "smtpHost": "localhost",
-          "smtpPort": 25,
-          "username": null,
-          "password": null,
-          "smtpProtocol": "smtp",
-          "timeout": 10000,
-          "enableTls": false,
-          "tlsVersion": "TLSv1.2"
-        }
       }
     ],
     "connections": [
       {
-        "fromIndex": 0,
-        "toIndex": 50,
-        "type": "True"
-      },
-      {
         "fromIndex": 1,
-        "toIndex": 3,
+        "toIndex": 2,
         "type": "Success"
       },
       {
-        "fromIndex": 3,
-        "toIndex": 2,
+        "fromIndex": 2,
+        "toIndex": 3,
         "type": "Success"
       },
       {
@@ -872,24 +893,34 @@
         "type": "Success"
       },
       {
+        "fromIndex": 4,
+        "toIndex": 0,
+        "type": "Success"
+      },
+      {
         "fromIndex": 5,
-        "toIndex": 4,
+        "toIndex": 45,
         "type": "Success"
       },
       {
         "fromIndex": 6,
-        "toIndex": 1,
+        "toIndex": 45,
         "type": "Success"
       },
       {
         "fromIndex": 7,
-        "toIndex": 5,
+        "toIndex": 26,
         "type": "Success"
       },
       {
         "fromIndex": 8,
-        "toIndex": 11,
-        "type": "Success"
+        "toIndex": 20,
+        "type": "True"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 7,
+        "type": "False"
       },
       {
         "fromIndex": 9,
@@ -898,167 +929,162 @@
       },
       {
         "fromIndex": 10,
-        "toIndex": 7,
+        "toIndex": 11,
         "type": "Success"
       },
       {
-        "fromIndex": 11,
+        "fromIndex": 12,
         "toIndex": 9,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 33,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 0,
-        "type": "Success"
+        "type": "True"
       },
       {
         "fromIndex": 13,
-        "toIndex": 14,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 15,
-        "toIndex": 17,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 15,
-        "toIndex": 13,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 16,
-        "toIndex": 42,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 16,
         "toIndex": 15,
         "type": "Success"
       },
       {
-        "fromIndex": 16,
-        "toIndex": 46,
+        "fromIndex": 15,
+        "toIndex": 14,
         "type": "Success"
       },
       {
-        "fromIndex": 17,
+        "fromIndex": 16,
         "toIndex": 18,
         "type": "Success"
       },
       {
-        "fromIndex": 19,
-        "toIndex": 20,
-        "type": "True"
-      },
-      {
-        "fromIndex": 19,
-        "toIndex": 26,
-        "type": "False"
-      },
-      {
-        "fromIndex": 20,
-        "toIndex": 45,
-        "type": "False"
-      },
-      {
-        "fromIndex": 20,
-        "toIndex": 21,
-        "type": "True"
-      },
-      {
-        "fromIndex": 21,
-        "toIndex": 45,
-        "type": "delegado"
-      },
-      {
-        "fromIndex": 21,
+        "fromIndex": 17,
         "toIndex": 16,
-        "type": "delegador"
-      },
-      {
-        "fromIndex": 22,
-        "toIndex": 23,
         "type": "Success"
       },
       {
-        "fromIndex": 23,
-        "toIndex": 36,
+        "fromIndex": 18,
+        "toIndex": 13,
         "type": "Success"
       },
       {
-        "fromIndex": 24,
-        "toIndex": 29,
+        "fromIndex": 19,
+        "toIndex": 17,
         "type": "Success"
       },
       {
-        "fromIndex": 25,
-        "toIndex": 31,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 26,
-        "toIndex": 27,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 27,
+        "fromIndex": 20,
         "toIndex": 25,
         "type": "Success"
       },
       {
-        "fromIndex": 28,
-        "toIndex": 49,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 29,
-        "toIndex": 30,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 31,
-        "toIndex": 24,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 32,
-        "toIndex": 38,
-        "type": "liberar"
-      },
-      {
-        "fromIndex": 32,
-        "toIndex": 26,
-        "type": "borrar"
-      },
-      {
-        "fromIndex": 33,
-        "toIndex": 19,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 35,
-        "toIndex": 39,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 36,
-        "toIndex": 35,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 37,
+        "fromIndex": 21,
         "toIndex": 22,
         "type": "Success"
       },
       {
+        "fromIndex": 22,
+        "toIndex": 19,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 23,
+        "toIndex": 29,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 23,
+        "toIndex": 34,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 23,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 24,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 25,
+        "toIndex": 21,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 26,
+        "toIndex": 46,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 26,
+        "toIndex": 12,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 27,
+        "toIndex": 28,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 29,
+        "toIndex": 27,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 30,
+        "toIndex": 31,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 32,
+        "toIndex": 33,
+        "type": "True"
+      },
+      {
+        "fromIndex": 32,
+        "toIndex": 39,
+        "type": "False"
+      },
+      {
+        "fromIndex": 33,
+        "toIndex": 23,
+        "type": "True"
+      },
+      {
+        "fromIndex": 33,
+        "toIndex": 4,
+        "type": "False"
+      },
+      {
+        "fromIndex": 34,
+        "toIndex": 5,
+        "type": "delegador"
+      },
+      {
+        "fromIndex": 34,
+        "toIndex": 30,
+        "type": "delegador"
+      },
+      {
+        "fromIndex": 34,
+        "toIndex": 24,
+        "type": "delegado"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 36,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 36,
+        "toIndex": 49,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 37,
+        "toIndex": 42,
+        "type": "Success"
+      },
+      {
         "fromIndex": 38,
-        "toIndex": 37,
+        "toIndex": 44,
         "type": "Success"
       },
       {
@@ -1068,7 +1094,12 @@
       },
       {
         "fromIndex": 40,
-        "toIndex": 34,
+        "toIndex": 38,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 41,
+        "toIndex": 8,
         "type": "Success"
       },
       {
@@ -1077,19 +1108,19 @@
         "type": "Success"
       },
       {
-        "fromIndex": 43,
-        "toIndex": 44,
+        "fromIndex": 44,
+        "toIndex": 37,
         "type": "Success"
       },
       {
         "fromIndex": 45,
-        "toIndex": 47,
-        "type": "Success"
+        "toIndex": 51,
+        "type": "liberar"
       },
       {
         "fromIndex": 45,
-        "toIndex": 41,
-        "type": "Success"
+        "toIndex": 39,
+        "type": "borrar"
       },
       {
         "fromIndex": 46,
@@ -1097,60 +1128,60 @@
         "type": "Success"
       },
       {
-        "fromIndex": 47,
-        "toIndex": 32,
-        "type": "Success"
-      },
-      {
         "fromIndex": 48,
-        "toIndex": 12,
+        "toIndex": 52,
         "type": "Success"
-      },
-      {
-        "fromIndex": 49,
-        "toIndex": 8,
-        "type": "True"
       },
       {
         "fromIndex": 49,
         "toIndex": 48,
-        "type": "False"
+        "type": "Success"
       },
       {
         "fromIndex": 50,
-        "toIndex": 51,
+        "toIndex": 35,
         "type": "Success"
       },
       {
         "fromIndex": 51,
-        "toIndex": 52,
+        "toIndex": 50,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 52,
+        "toIndex": 53,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 53,
+        "toIndex": 47,
         "type": "Success"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 18,
+        "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "519363d0-cbe3-11ea-8dcf-e3657ee9cbba"
+          "id": "08f4d6a0-07c4-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1189,
           "layoutY": 528,
-          "ruleChainNodeId": "rule-chain-node-55"
+          "ruleChainNodeId": "rule-chain-node-56"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 41,
+        "fromIndex": 31,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "519363d0-cbe3-11ea-8dcf-e3657ee9cbba"
+          "id": "08f4d6a0-07c4-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1189,
           "layoutY": 528,
-          "ruleChainNodeId": "rule-chain-node-55"
+          "ruleChainNodeId": "rule-chain-node-56"
         },
         "type": "Success"
       }

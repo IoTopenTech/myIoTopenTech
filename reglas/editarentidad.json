@@ -8,12 +8,40 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 9,
+    "firstNodeIndex": 11,
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 1390,
-          "layoutY": 413,
+          "layoutX": 895,
+          "layoutY": 509
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "permitido?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\nreturn (metadata.tipoEntidad==\"DEVICE\" && metadata.tiposDeDispositivos.split(\",\").indexOf(\n           metadata.tipoEntidadNuevo) >= 0) || (metadata.tipoEntidad==\"ASSET\" && metadata.tiposDeActivos.split(\",\").indexOf(\n            metadata.tipoEntidadNuevo) >= 0);"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 891,
+          "layoutY": 427
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerAttributeNode",
+        "name": "tipos",
+        "debugMode": true,
+        "configuration": {
+          "attrMapping": {
+            "tiposDeDispositivos": "tiposDeDispositivos",
+            "tiposDeActivos": "tiposDeActivos"
+          },
+          "telemetry": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1701,
+          "layoutY": 511,
           "description": "Esto he tenido que hacerlo porque a veces perdía la asignación."
         },
         "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
@@ -42,8 +70,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 873,
-          "layoutY": 415
+          "layoutX": 1190,
+          "layoutY": 515
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "prepararMensaje",
@@ -54,8 +82,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1131,
-          "layoutY": 419
+          "layoutX": 1442,
+          "layoutY": 517
         },
         "type": "org.thingsboard.rule.engine.action.TbRetypeEntityNode",
         "name": "retipar",
@@ -285,8 +313,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 873,
-          "layoutY": 503
+          "layoutX": 1184,
+          "layoutY": 601
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "customer",
@@ -309,107 +337,117 @@
     ],
     "connections": [
       {
-        "fromIndex": 2,
-        "toIndex": 3,
-        "type": "Success"
+        "fromIndex": 0,
+        "toIndex": 4,
+        "type": "True"
       },
       {
-        "fromIndex": 2,
-        "toIndex": 18,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 3,
+        "fromIndex": 1,
         "toIndex": 0,
         "type": "Success"
       },
       {
-        "fromIndex": 5,
-        "toIndex": 4,
+        "fromIndex": 4,
+        "toIndex": 5,
         "type": "Success"
       },
       {
-        "fromIndex": 6,
-        "toIndex": 8,
+        "fromIndex": 4,
+        "toIndex": 20,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 2,
         "type": "Success"
       },
       {
         "fromIndex": 7,
-        "toIndex": 14,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 8,
-        "toIndex": 7,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 9,
-        "toIndex": 10,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 10,
         "toIndex": 6,
         "type": "Success"
       },
       {
-        "fromIndex": 11,
-        "toIndex": 17,
+        "fromIndex": 8,
+        "toIndex": 10,
         "type": "Success"
       },
       {
-        "fromIndex": 12,
-        "toIndex": 5,
-        "type": "cambiarPadre"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 11,
-        "type": "guardarAtributos"
-      },
-      {
-        "fromIndex": 13,
-        "toIndex": 12,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 14,
-        "toIndex": 13,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 15,
+        "fromIndex": 9,
         "toIndex": 16,
         "type": "Success"
       },
       {
+        "fromIndex": 10,
+        "toIndex": 9,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 12,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 8,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 19,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 14,
+        "toIndex": 7,
+        "type": "cambiarPadre"
+      },
+      {
+        "fromIndex": 14,
+        "toIndex": 13,
+        "type": "guardarAtributos"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 14,
+        "type": "Success"
+      },
+      {
         "fromIndex": 16,
-        "toIndex": 1,
+        "toIndex": 15,
         "type": "Success"
       },
       {
         "fromIndex": 17,
-        "toIndex": 15,
+        "toIndex": 18,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 18,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 19,
+        "toIndex": 17,
         "type": "renombrar"
       },
       {
-        "fromIndex": 17,
-        "toIndex": 2,
+        "fromIndex": 19,
+        "toIndex": 1,
         "type": "retipar"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 18,
+        "fromIndex": 20,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "29d9b650-cbe3-11ea-8dcf-e3657ee9cbba"
+          "id": "ab975c20-07c4-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
-          "layoutX": 1167,
-          "layoutY": 500,
-          "ruleChainNodeId": "rule-chain-node-21"
+          "layoutX": 1478,
+          "layoutY": 598,
+          "ruleChainNodeId": "rule-chain-node-23"
         },
         "type": "Success"
       }

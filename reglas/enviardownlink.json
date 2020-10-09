@@ -19,10 +19,10 @@
         "name": "borrarQueue",
         "debugMode": true,
         "configuration": {
-          "restEndpointUrlPattern": "${ss__cs_url}/api/devices/${hardware_serial}/queue",
+          "restEndpointUrlPattern": "${ss___cs_url}/api/devices/${hardware_serial}/queue",
           "requestMethod": "DELETE",
           "headers": {
-            "Grpc-Metadata-Authorization": "${ss__cs_token}"
+            "Grpc-Metadata-Authorization": "${ss___cs_token}"
           },
           "useSimpleClientHttpFactory": false,
           "readTimeoutMs": 0,
@@ -53,7 +53,7 @@
         "name": "formatoCS",
         "debugMode": true,
         "configuration": {
-          "jsScript": " /*\n Tengo que pasar de formato TTN:\n {\n    \"port\": 99,\n    \"confirmed\": true,\n    \"schedule\": \"last\",\n    \"payload_raw\": \"BgBk/w==\",\n    \"dev_id\": \"nodo1\"\n}\na formato CS:\n {  \"deviceQueueItem\": { \n     \"confirmed\": true,  \n     \"data\": \"AQI=\",  \n     \"devEUI\": \"009494db3143aea3\",\n     \"fCnt\": 0,\n     \"fPort\": 99  \n   } \n }\n Parece que CS no tiene la opción de schedule first (sólo replace borrando el queue o last)\n */\n var newMsg = {};\n newMsg.deviceQueueItem = {\n     \"confirmed\": true,\n     \"data\": msg.payload_raw,\n     \"devEUI\": JSON.parse(metadata.ss_infoDownlink)\n         .hardware_serial,\n     \"fPort\": 99\n };\n metadata.hardware_serial = newMsg.deviceQueueItem\n     .hardware_serial;\n metadata.deviceQueueItem = JSON.stringify(newMsg);\n return {\n     msg: msg,\n     metadata: metadata,\n     msgType: msgType\n };"
+          "jsScript": " /*\n Tengo que pasar de formato TTN:\n {\n    \"port\": 99,\n    \"confirmed\": true,\n    \"schedule\": \"last\",\n    \"payload_raw\": \"BgBk/w==\",\n    \"dev_id\": \"nodo1\"\n}\na formato CS:\n {  \"deviceQueueItem\": { \n     \"confirmed\": true,  \n     \"data\": \"AQI=\",  \n     \"devEUI\": \"009494db3143aea3\",\n     \"fCnt\": 0,\n     \"fPort\": 99  \n   } \n }\n Parece que CS no tiene la opción de schedule first (sólo replace borrando el queue o last)\n */\n var newMsg = {};\n newMsg.deviceQueueItem = {\n     \"confirmed\": true,\n     \"data\": msg.payload_raw,\n     \"devEUI\": JSON.parse(metadata.ss_infoDownlink)\n         .hardware_serial,\n     \"fPort\": 99\n };\n metadata.hardware_serial = newMsg.deviceQueueItem\n     .devEUI;\n metadata.deviceQueueItem = JSON.stringify(newMsg);\n return {\n     msg: msg,\n     metadata: metadata,\n     msgType: msgType\n };"
         }
       },
       {
@@ -65,10 +65,10 @@
         "name": "enviarDownlink",
         "debugMode": true,
         "configuration": {
-          "restEndpointUrlPattern": "${ss__cs_url}/api/devices/${ss_hardware_serial}/queue",
+          "restEndpointUrlPattern": "${ss___cs_url}/api/devices/${hardware_serial}/queue",
           "requestMethod": "POST",
           "headers": {
-            "Grpc-Metadata-Authorization": "${ss__cs_token}"
+            "Grpc-Metadata-Authorization": "${ss___cs_token}"
           },
           "useSimpleClientHttpFactory": false,
           "readTimeoutMs": 0,

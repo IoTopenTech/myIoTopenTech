@@ -8,145 +8,18 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 0,
+    "firstNodeIndex": 11,
     "nodes": [
       {
         "additionalInfo": {
-          "description": "Se espera que el originador sea ya el customer al que hay que actualizar el accounting",
-          "layoutX": 290,
-          "layoutY": 152
+          "layoutX": 820,
+          "layoutY": 332
         },
-        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
-        "name": "validacion",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "if(msg.hasOwnProperty('deltaCredito') &&\nmsg.hasOwnProperty('deltaDispositivosPropios') &&\nmsg.hasOwnProperty('deltaDispositivosAsumidos')){\n    return true;\n}else{\n    return false;\n}"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 533,
-          "layoutY": 341
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "POST_TELEMETRY_REQUEST",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "return {\n    msg: msg,\n    metadata: metadata,\n    msgType: 'POST_TELEMETRY_REQUEST'\n};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 256,
-          "layoutY": 330
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
         "name": "guardar credito/dispositivosActivos",
         "debugMode": true,
         "configuration": {
-          "scope": "SERVER_SCOPE"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 823,
-          "layoutY": 412
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "guardar",
-        "debugMode": true,
-        "configuration": {
-          "scope": "SERVER_SCOPE"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 768,
-          "layoutY": 149
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
-        "name": "dispositivosPropios",
-        "debugMode": true,
-        "configuration": {
-          "clientAttributeNames": [],
-          "sharedAttributeNames": [],
-          "serverAttributeNames": [
-            "credito",
-            "dispositivosPropios",
-            "dispositivosAsumidos"
-          ],
-          "latestTsKeyNames": [],
-          "tellFailureIfAbsent": true,
-          "getLatestValueWithTs": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1029,
-          "layoutY": 147
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "primerDispositivoActivo",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "\nmetadata.ss_dispositivosPropios=0;\nmetadata.ss_dispositivosAsumidos=0;\nmetadata.ss_credito=365;\n\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1028,
-          "layoutY": 232
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "POST_ATTRIBUTES_REQUEST",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var msg = {\n    'dispositivosPropios': parseInt(metadata\n        .ss_dispositivosPropios) + parseInt(msg.deltaDispositivosPropios),\n        'dispositivosAsumidos': parseInt(metadata\n        .ss_dispositivosAsumidos) + parseInt(msg.deltaDispositivosAsumidos),\n    'credito': parseInt(metadata.ss_credito) +parseInt(msg.deltaCredito)\n};\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: 'POST_ATTRIBUTES_REQUEST'\n};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 529,
-          "layoutY": 150
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
-        "name": "customerID",
-        "debugMode": true,
-        "configuration": {
-          "fieldsMapping": {
-            "id": "customerID"
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 530,
-          "layoutY": 413
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "actualizarAccounting",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var accounting={};\nif(metadata.hasOwnProperty('ss_accounting')){\n    accounting=JSON.parse(metadata.ss_accounting);\n}\naccounting[metadata.customerID]={'dispositivosPropios':msg.dispositivosPropios,'dispositivosAsumidos':msg.dispositivosAsumidos,\"credito\":msg.credito};\nreturn {msg: {\"accounting\":accounting}, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 256,
-          "layoutY": 411
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
-        "name": "accounting",
-        "debugMode": true,
-        "configuration": {
-          "clientAttributeNames": [],
-          "sharedAttributeNames": [],
-          "serverAttributeNames": [
-            "accounting"
-          ],
-          "latestTsKeyNames": [],
-          "tellFailureIfAbsent": false,
-          "getLatestValueWithTs": false
+          "defaultTTL": 0
         }
       },
       {
@@ -176,77 +49,204 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 820,
-          "layoutY": 332
+          "layoutX": 256,
+          "layoutY": 411
         },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "accounting",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "accounting"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": false,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 530,
+          "layoutY": 413
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "actualizarAccounting",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var accounting={};\nif(metadata.hasOwnProperty('ss_accounting')){\n    accounting=JSON.parse(metadata.ss_accounting);\n}\naccounting[metadata.customerID]={'dispositivosPropios':msg.dispositivosPropios,'dispositivosAsumidos':msg.dispositivosAsumidos,\"credito\":msg.credito};\nreturn {msg: {\"accounting\":accounting}, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 529,
+          "layoutY": 150
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "customerID",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "id": "customerID"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1028,
+          "layoutY": 232
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "POST_ATTRIBUTES_REQUEST",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var msg = {\n    'dispositivosPropios': parseInt(metadata\n        .ss_dispositivosPropios) + parseInt(msg.deltaDispositivosPropios),\n        'dispositivosAsumidos': parseInt(metadata\n        .ss_dispositivosAsumidos) + parseInt(msg.deltaDispositivosAsumidos),\n    'credito': parseInt(metadata.ss_credito) +parseInt(msg.deltaCredito)\n};\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: 'POST_ATTRIBUTES_REQUEST'\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1029,
+          "layoutY": 147
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "primerDispositivoActivo",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\nmetadata.ss_dispositivosPropios=0;\nmetadata.ss_dispositivosAsumidos=0;\nmetadata.ss_credito=365;\n\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 768,
+          "layoutY": 149
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "dispositivosPropios",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "credito",
+            "dispositivosPropios",
+            "dispositivosAsumidos"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": true,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 823,
+          "layoutY": 412
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 256,
+          "layoutY": 330
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
         "name": "guardar credito/dispositivosActivos",
         "debugMode": true,
         "configuration": {
-          "defaultTTL": 0
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 533,
+          "layoutY": 341
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "POST_TELEMETRY_REQUEST",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return {\n    msg: msg,\n    metadata: metadata,\n    msgType: 'POST_TELEMETRY_REQUEST'\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "description": "Se espera que el originador sea ya el customer al que hay que actualizar el accounting",
+          "layoutX": 290,
+          "layoutY": 152
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "validacion",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if(msg.hasOwnProperty('deltaCredito') &&\nmsg.hasOwnProperty('deltaDispositivosPropios') &&\nmsg.hasOwnProperty('deltaDispositivosAsumidos')){\n    return true;\n}else{\n    return false;\n}"
         }
       }
     ],
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 7,
-        "type": "True"
-      },
-      {
-        "fromIndex": 1,
-        "toIndex": 11,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 2,
         "toIndex": 1,
         "type": "Success"
       },
       {
-        "fromIndex": 4,
-        "toIndex": 5,
-        "type": "Failure"
-      },
-      {
-        "fromIndex": 4,
-        "toIndex": 6,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 6,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 6,
+        "fromIndex": 1,
         "toIndex": 2,
         "type": "Success"
       },
       {
-        "fromIndex": 7,
-        "toIndex": 4,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 8,
+        "fromIndex": 2,
         "toIndex": 3,
         "type": "Success"
       },
       {
-        "fromIndex": 9,
+        "fromIndex": 3,
         "toIndex": 8,
         "type": "Success"
       },
       {
-        "fromIndex": 10,
+        "fromIndex": 4,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
         "toIndex": 9,
         "type": "Success"
       },
       {
-        "fromIndex": 11,
+        "fromIndex": 6,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 6,
+        "type": "Failure"
+      },
+      {
+        "fromIndex": 9,
         "toIndex": 10,
         "type": "Success"
+      },
+      {
+        "fromIndex": 10,
+        "toIndex": 0,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 4,
+        "type": "True"
       }
     ],
     "ruleChainConnections": null

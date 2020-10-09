@@ -1,0 +1,111 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "entregaPatron",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 0,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 120,
+          "layoutY": 270
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "devEUI?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (msg.hasOwnProperty('hardware_serial')){//TTN\n    metadata.devEUI=msg.hardware_serial;\n} else if(msg.hasOwnProperty('devEUI')){//CS\n    metadata.devEUI=msg.devEUI;\n}else if(msg.hasOwnProperty('device')){//Everynet\n    metadata.devEUI=msg.device;\n}\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 123,
+          "layoutY": 380
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "dispositivo final",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${devEUI}",
+                "entityTypes": [
+                  "DEVICE"
+                ]
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 431,
+          "layoutY": 383
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "name y type",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "name": "originatorName",
+            "type": "originatorType"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 727,
+          "layoutY": 384
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "metadata",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return {\n    msg: msg,\n    metadata: {\n        \"deviceType\": metadata.originatorType,\n        \"deviceName\": metadata.originatorName,\n        \"ts\": metadata.ts\n    },\n    msgType: msgType\n};"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 3,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": [
+      {
+        "fromIndex": 3,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "e5d20f00-07c6-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1014,
+          "layoutY": 386,
+          "ruleChainNodeId": "rule-chain-node-6"
+        },
+        "type": "Success"
+      }
+    ]
+  }
+}

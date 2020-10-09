@@ -1,0 +1,43 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "switchTipoDispositivo",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 0,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 319,
+          "layoutY": 154
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "al dispositivo",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return [metadata.deviceType];"
+        }
+      }
+    ],
+    "connections": null,
+    "ruleChainConnections": [
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "3f2381b0-07c7-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 641,
+          "layoutY": 156,
+          "ruleChainNodeId": "rule-chain-node-4"
+        },
+        "type": "LDS01"
+      }
+    ]
+  }
+}

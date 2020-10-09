@@ -8,27 +8,45 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 3,
+    "firstNodeIndex": 12,
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 282,
-          "layoutY": 305
+          "layoutX": 1259,
+          "layoutY": 534
         },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "prepararMensaje",
+        "type": "org.thingsboard.rule.engine.action.TbDeleteRelationNode",
+        "name": "borrar anterior",
         "debugMode": true,
         "configuration": {
-          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\n\nvar mensaje = {};\n//Las alarmas se guardan siempre\nvar configuracion = JSON.parse(metadata.configuracion);\n\n\nfor (var clave in configuracion) {\n    if (clave.substr(0, 3) == \"___\") {\n        //La ignoro\n    } else {\n        if (clave == '__alarmas') {\n            mensaje[\"__alarma_\" + metadata.subtipoEntidad] =\n                configuracion.__alarmas;\n            //Si incluye una alarma de inactividad tengo que actualizar el parámetro del servidor inactivityTimeout\n            var alarma = JSON.parse(configuracion\n                .__alarmas);\n            if (alarma.hasOwnProperty('inactividad') &&\n                alarma.inactividad.hasOwnProperty(\n                    'enable') && alarma.inactividad\n                .enable ===\n                true) {\n                mensaje.inactivityTimeout = parseInt(\n                    alarma.inactividad\n                    .umbralInactividad) * 1000;\n            }\n        } else {\n            mensaje[clave] = configuracion[clave];\n        }\n    }\n}\nreturn {\n    msg: mensaje,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "direction": "FROM",
+          "relationType": "${ss_devEUI}",
+          "entityType": null,
+          "entityNamePattern": "",
+          "entityTypePattern": null,
+          "entityCacheExpiration": 300,
+          "deleteForSingleEntity": false
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 286,
-          "layoutY": 408
+          "layoutX": 1257,
+          "layoutY": 838
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "preparar atributos",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\n//Valido los atributos que admito modificar\nvar atributosCompartidos=JSON.parse(metadata.configuracion)['___atributosCompartidos'];\nvar mensaje={'devEUI':atributosCompartidos.devEUI,'___atributosCompartidos':atributosCompartidos};\n\nreturn {msg: mensaje, metadata: metadata, msgType: msgType};\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1256,
+          "layoutY": 914
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "guardarAtributos",
+        "name": "guardar atributos",
         "debugMode": true,
         "configuration": {
           "scope": "SERVER_SCOPE"
@@ -36,43 +54,127 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 567,
-          "layoutY": 53
+          "layoutX": 1255,
+          "layoutY": 763
         },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "Originador=Customer",
+        "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
+        "name": "crear nueva",
         "debugMode": true,
         "configuration": {
-          "originatorSource": "CUSTOMER",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "Contains",
-                "entityTypes": []
-              }
-            ],
-            "fetchLastLevelOnly": false
+          "direction": "FROM",
+          "relationType": "${devEUI_nuevo}",
+          "entityType": "DEVICE",
+          "entityNamePattern": "${customerName}_CONTROL",
+          "entityTypePattern": "SYSTEM",
+          "entityCacheExpiration": 300,
+          "createEntityIfNotExists": false,
+          "changeOriginatorToRelatedEntity": false,
+          "removeCurrentRelations": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1258,
+          "layoutY": 613
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerDetailsNode",
+        "name": "customer name",
+        "debugMode": true,
+        "configuration": {
+          "detailsList": [
+            "TITLE"
+          ],
+          "addToMetadata": true
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1265,
+          "layoutY": 389
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "devEUI/esDelegado",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "devEUI",
+            "esDelegado"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": false,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1266,
+          "layoutY": 457
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "length==16 y cambio?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return (!metadata.hasOwnProperty('ss_devEUI') || (metadata.ss_devEUI.length==16 && msg.configuracion.___atributosCompartidos.devEUI!=metadata.ss_devEUI)) && (!metadata.hasOwnProperty('ss_esDelegado')||metadata.ss_esDelegado=='false');"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 976,
+          "layoutY": 389
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararMensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "//Sólo necesito pasar los parámetros con triple guión bajo ___\nmsgType = 'POST_TELEMETRY_REQUEST';\nmetadata.deviceType=metadata.subtipoEntidad;\nvar mensaje = {};\n\nvar configuracion = JSON.parse(metadata.configuracion);\n\nfor (var clave in configuracion) {\n    if (clave.substr(0, 3) == \"___\") {\n        mensaje[clave] = configuracion[clave];\n        \n    } else {\n        //La ignoro\n    }\n}\nreturn {\n    msg: mensaje,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 968,
+          "layoutY": 286
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "atributosOdownlink?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var configuracion = JSON.parse(metadata.configuracion);\nif (configuracion.hasOwnProperty('___ultimoDownlink') &&\n    configuracion.___ultimoDownlink !== '') {\n    if (configuracion.___ultimoDownlink == 'devEUI') {\n        return ['devEUI'];\n    } else {\n        return ['downlink'];\n    }\n} else {\n    return ['atributos'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 693,
+          "layoutY": 284
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "obtener tipo",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "type": "subtipoEntidad"
           }
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 287,
-          "layoutY": 51
+          "layoutX": 691,
+          "layoutY": 222
         },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "Validacion",
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "originador?",
         "debugMode": true,
         "configuration": {
-          "jsScript": "metadata.idEntidad = msg.idEntidad;\nif (msg.hasOwnProperty('configuracion')) {\n    metadata.configuracion = JSON.stringify(msg.configuracion);\n}\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "fieldsMapping": {
+            "name": "customerName"
+          }
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 569,
-          "layoutY": 132
+          "layoutX": 966,
+          "layoutY": 213
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "Originator=Entidad",
@@ -94,110 +196,169 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 294,
-          "layoutY": 141
+          "layoutX": 684,
+          "layoutY": 132
         },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
-        "name": "originador?",
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Validacion",
         "debugMode": true,
         "configuration": {
-          "fieldsMapping": {
-            "name": "customerName"
+          "jsScript": "metadata.idEntidad = msg.idEntidad;\nif (msg.hasOwnProperty('configuracion')) {\n    metadata.configuracion = JSON.stringify(msg.configuracion);\n}\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 964,
+          "layoutY": 134
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Originador=Customer",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "CUSTOMER",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
           }
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 296,
-          "layoutY": 203
+          "layoutX": 683,
+          "layoutY": 489
         },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
-        "name": "obtener tipo",
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardarAtributos",
         "debugMode": true,
         "configuration": {
-          "fieldsMapping": {
-            "type": "subtipoEntidad"
-          }
+          "scope": "SERVER_SCOPE"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 571,
-          "layoutY": 205
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
-        "name": "atributosOdownlink?",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "var configuracion = JSON.parse(metadata.configuracion);\nif (configuracion.hasOwnProperty('___ultimoDownlink') &&\n    configuracion.___ultimoDownlink !== '') {\n    return ['downlink'];\n} else {\n    return ['atributos'];\n}"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 579,
-          "layoutY": 308
+          "layoutX": 679,
+          "layoutY": 386
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "prepararMensaje",
         "debugMode": true,
         "configuration": {
-          "jsScript": "//Sólo necesito pasar los parámetros con triple guión bajo ___\nmsgType = 'POST_TELEMETRY_REQUEST';\nmetadata.deviceType=metadata.subtipoEntidad;\nvar mensaje = {};\n\nvar configuracion = JSON.parse(metadata.configuracion);\n\nfor (var clave in configuracion) {\n    if (clave.substr(0, 3) == \"___\") {\n        mensaje[clave] = configuracion[clave];\n        \n    } else {\n        //La ignoro\n    }\n}\nreturn {\n    msg: mensaje,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\n\nvar mensaje = {};\n//Las alarmas se guardan siempre\nvar configuracion = JSON.parse(metadata.configuracion);\n\n\nfor (var clave in configuracion) {\n    if (clave.substr(0, 3) == \"___\") {\n        //La ignoro\n    } else {\n        if (clave == '__alarmas') {\n            var alarma = JSON.parse(configuracion\n                .__alarmas);\n            mensaje[\"__alarma_\" + metadata.subtipoEntidad] =\n                alarma;\n            //Si incluye una alarma de inactividad tengo que actualizar el parámetro del servidor inactivityTimeout\n            \n            if (alarma.hasOwnProperty('inactividad') &&\n                alarma.inactividad.hasOwnProperty(\n                    'enable') && alarma.inactividad\n                .enable ===\n                true) {\n                mensaje.inactivityTimeout = parseInt(\n                    alarma.inactividad\n                    .umbralInactividad) * 1000;\n            }\n        } else {\n            mensaje[clave] = configuracion[clave];\n        }\n    }\n}\nreturn {\n    msg: mensaje,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1254,
+          "layoutY": 683
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "extraer devEUI_nuevo",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.devEUI_nuevo=JSON.parse(metadata.configuracion)['___atributosCompartidos']['devEUI'];\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
         }
       }
     ],
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 1,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 5,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 3,
-        "toIndex": 2,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 4,
-        "toIndex": 6,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 5,
         "toIndex": 4,
         "type": "Success"
       },
       {
-        "fromIndex": 6,
-        "toIndex": 7,
+        "fromIndex": 1,
+        "toIndex": 2,
         "type": "Success"
       },
       {
-        "fromIndex": 7,
-        "toIndex": 8,
+        "fromIndex": 3,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 16,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 0,
+        "type": "True"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 5,
+        "type": "devEUI"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 15,
+        "type": "atributos"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 7,
         "type": "downlink"
       },
       {
-        "fromIndex": 7,
-        "toIndex": 0,
-        "type": "atributos"
+        "fromIndex": 9,
+        "toIndex": 8,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 10,
+        "toIndex": 11,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 9,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 13,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 10,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 14,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 16,
+        "toIndex": 3,
+        "type": "Success"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 8,
+        "fromIndex": 7,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "572010d0-cbe5-11ea-8dcf-e3657ee9cbba"
+          "id": "e5d20f00-07c6-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
-          "layoutX": 577,
-          "layoutY": 397,
-          "ruleChainNodeId": "rule-chain-node-11"
+          "layoutX": 974,
+          "layoutY": 478,
+          "ruleChainNodeId": "rule-chain-node-19"
         },
         "type": "Success"
       }
