@@ -39,7 +39,8 @@ Canal | Tipo | Valor
 ----- | ---- | -----
 0x01 | Entrada analógica [0x02] | Tensión de la batería en cV (centivoltios)
 0x02 | Entrada digital [0x00] | Estado del sensor hall: 0 cerrado y 1 abierto
-0x03  |Entrada digital [0x00] | Estado del LED: 0 apagado y 1 encendido
+0x03  |Entrada digital [0x00] | Estado del LED: 0 apagado y 1 encendido.  Obsérvese que se distingue el canal para indicar el estado del LED (éste) del canal para cambiar el estado del LED (0x06; ver siguiente)
+0x06 | Salida digital [0x01] | Canal para cambiar el estado del LED. myDevices necesita que sea de tipo 0x01 para mostrar el botón, pero el downlink que envía es de tipo 0x00?
 
 ## Carga de pago para downlinks
 
@@ -47,8 +48,8 @@ El dispositivo sólo atiende los downlinks que lleguen por el puerto 99, y usa u
 
 Canal | Tipo | Valor
 ----- | ---- | -----
-0x06  |Salida digital [0x01] | Cambiar el estado del LED: 100 (0x64) encender; cualquier otro valor apagar
-0x07|Salida digital [0x01] | Cambiar el periodo de envío de heartbeats (expresado en minutos)
+0x06  |Entrada digital [0x00] | Cambiar el estado del LED: 100 (0x64) encender; cualquier otro valor apagar
+0x07|Entrada digital [0x00] | Cambiar el periodo de envío de heartbeats (expresado en minutos; máximo 60)
 0x46 | 0x46 (no estándar LPP) | Cambio de credenciales OTAA
 
 El cambio de credenciales implica el envío de 3 downlinks, uno para cada credencial (DEV EUI, APP EUI y APP KEY). No pueden enviarse en un sólo downlink porque se superaría la longitud de carga de pago de LoRaWAN para los spread factors más lentos.
@@ -71,6 +72,7 @@ Por último se incluirá la credencial correspondiente en el mismo formato que l
 El tipo de dispositivo V02_001 ofrece los siguientes parámetros de configuración en la interfaz de My IoT open Tech:
 
 * Número de minutos entre heartbeats.
+* DevEUI, para poder recibir telemetrías a través de un dispositivo de control (tipo SYSTEM).
 * Coordenadas para mostrarlo sobre la imagen de un activo de tipo IMAGE01 (corresponden al porcentaje respecto a la esquina superior izquierda; sólo se admiten valores positivos).
 * Alarmas: En todas las alarmas el usuario puede elegir por qué vía desea que le sean notificadas (email, IFTTT, Telegram...)
   * Cambio de estado: Se puede activar al abrir el sensor hall o al cerrarlo.

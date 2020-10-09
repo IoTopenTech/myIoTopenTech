@@ -233,7 +233,7 @@ void onEvent (ev_t ev) {
         //Sólo voy a atender los downlink que entren por el puerto 99
         //Serial.println(LMIC.dataLen);
         if (LMIC.frame[LMIC.dataBeg - 1] == 99) {
-          if (LMIC.frame[LMIC.dataBeg + 0] == 0x06 && LMIC.frame[LMIC.dataBeg + 1] == 0x01) {
+          if (LMIC.frame[LMIC.dataBeg + 0] == 0x06 && LMIC.frame[LMIC.dataBeg + 1] == 0x00) {
             //downlink para el LED por el canal 6
             nuevasCredenciales[0] = false;
             nuevasCredenciales[1] = false;

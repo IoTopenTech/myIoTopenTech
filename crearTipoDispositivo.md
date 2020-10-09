@@ -592,7 +592,7 @@ Fundamentalmente está compuesto por 4 secciones:
   
   Una de las funciones de este bloque, llamada "inicializacion", tiene un comportamiento especial; se ejecuta al acceder al cuadro de diálogo, permitiéndonos realizar tareas como declarar variables específicas para el tipo de dispositivo/activo. 
     
-* Sustituciones: Son bloques de código genéricos para la mayoría de tipos de dispositivos y que reemplaza automáticamente el sistema por el código correspondiente. Por ejemplo "<sustituir-coordenadas class="ng-scope"></sustituir-coordenadas>" será sustituido por el código necesario para que el usuario seleccione el tipo de coordenadas (imagen o mapa) que quiere asignar al dispositivo. Actualmente sólo existen 3 sustituciones posibles (coordenadas, chirpstack y notificaciones), pero poco a poco iremos añadiendo más, especialmente relacionadas con las alarmas.
+* Sustituciones: Son bloques de código genéricos para la mayoría de tipos de dispositivos y que reemplaza automáticamente el sistema por el código correspondiente. Por ejemplo ```<sustituir-coordenadas class="ng-scope"></sustituir-coordenadas>``` será sustituido por el código necesario para que el usuario seleccione el tipo de coordenadas (imagen o mapa) que quiere asignar al dispositivo. Actualmente sólo existen 3 sustituciones posibles (coordenadas, chirpstack y notificaciones), pero poco a poco iremos añadiendo más, especialmente relacionadas con las alarmas.
 * Parámetros: Son bloques de código para configurar parámetros concretos, como __heartbeat.
 * Alarmas: Son los bloques de código para configurar las alarmas, que se explican con más detalle a continuación.
 
