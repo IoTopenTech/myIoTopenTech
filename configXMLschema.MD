@@ -3,7 +3,8 @@
 	<panel  titulo="" resumen="" nombreFormulario="" labelBotonSubmit="[Configurar]" ultimoDownlink="[Sólo se utiliza en atributosCompartidos]" [tipo="devEUI"]>
 		<item tipo="coordenadas/chirpstack/alarma/atributoCompartido/atributoInterno" 
 		      
-			nombreAlarma="" telemetria=""
+			nombreAlarma="" 
+		      	telemetria=""
 		     	labelAlarma=""
 		      	tipoAlarma="opciones/umbralMinimo/umbralMaximo/biUmbral"
 		      	labelAuxAlarma="Disparar al/expresado en segundos..." 
