@@ -1,7 +1,7 @@
 ```xml
 <myIoT>
-	<panel  titulo="" resumen="" nombreFormulario="" labelBotonSubmit="[Configurar]" ultimoDownlink="" [tipo="devEUI"]>
-		<item tipo="coordenadas/chirpstack/alarma/atributoCompartido" 
+	<panel  titulo="" resumen="" nombreFormulario="" labelBotonSubmit="[Configurar]" ultimoDownlink="[Sólo se utiliza en atributosCompartidos]" [tipo="devEUI"]>
+		<item tipo="coordenadas/chirpstack/alarma/atributoCompartido/atributoInterno" 
 		      
 			nombreAlarma="" telemetria=""
 		     	labelAlarma=""
@@ -10,16 +10,16 @@
 		      	histeresis="no/min/max/bi"
 			opciones="A/B/C"
 			
-		      	nombreAtributoCompartido=""
-		      	labelAtributoCompartido=""		      	
-		      	tipoAtributoCompartido="opciones/texto/numero/boton">
+		      	nombreAtributo=""
+		      	labelAtributo=""		      	
+		      	tipoAtributo="opciones/texto/numero/boton">
 				
 				<umbralMinimo min="" max="" step="" --> atributos estándar HTML />
 				<umbralMaximo min="" max="" step="" --> atributos estándar HTML />
 				<histeresisMinimo min="" max="" step="" --> atributos estándar HTML />
 				<histeresisMaximo min="" max="" step="" --> atributos estándar HTML />
 				
-				<atributoCompartido min="" max="" step="" size="" pattern="" --> atributos estándar HTML />
+				<atributosHTML min="" max="" step="" size="" pattern="" --> atributos estándar HTML />
 					
 		</item>
 	</panel>
