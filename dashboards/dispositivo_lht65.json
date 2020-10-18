@@ -217,7 +217,7 @@
               "showLabels": true
             }
           },
-          "title": "Nivel de batería (V)",
+          "title": "Evolución nivel de batería (V)",
           "dropShadow": true,
           "enableFullscreen": true,
           "titleStyle": {
@@ -434,7 +434,7 @@
             },
             "tooltipValueFormatter": "if (value=== -41){\n return \"NO DELEGADO\";   \n}else{\n    return value;\n}"
           },
-          "title": "Temperatura interior",
+          "title": "Evolución temperatura interior",
           "dropShadow": true,
           "enableFullscreen": true,
           "titleStyle": {
@@ -454,149 +454,6 @@
           "actions": {}
         },
         "id": "4fc914e5-e564-8843-24a8-d522956af3b6"
-      },
-      "57c88b5b-61a8-b5b5-127e-e35ec010ce8e": {
-        "isSystemType": true,
-        "bundleAlias": "charts",
-        "typeAlias": "basic_timeseries",
-        "type": "timeseries",
-        "title": "New widget",
-        "sizeX": 12,
-        "sizeY": 6,
-        "config": {
-          "datasources": [
-            {
-              "type": "entity",
-              "dataKeys": [
-                {
-                  "name": "TempC_DS",
-                  "type": "timeseries",
-                  "label": "TempC_DS",
-                  "color": "#2196f3",
-                  "settings": {
-                    "excludeFromStacking": false,
-                    "hideDataByDefault": false,
-                    "disableDataHiding": false,
-                    "removeFromLegend": false,
-                    "showLines": true,
-                    "fillLines": false,
-                    "showPoints": true,
-                    "showPointShape": "circle",
-                    "pointShapeFormatter": "var size = radius * Math.sqrt(Math.PI) / 2;\nctx.moveTo(x - size, y - size);\nctx.lineTo(x + size, y + size);\nctx.moveTo(x - size, y + size);\nctx.lineTo(x + size, y - size);",
-                    "showPointsLineWidth": 5,
-                    "showPointsRadius": 3,
-                    "showSeparateAxis": false,
-                    "axisPosition": "left",
-                    "thresholds": [
-                      {
-                        "thresholdValueSource": "predefinedValue"
-                      }
-                    ],
-                    "comparisonSettings": {
-                      "showValuesForComparison": true
-                    }
-                  },
-                  "_hash": 0.30429734990217727
-                },
-                {
-                  "name": "Ext_sensor",
-                  "type": "timeseries",
-                  "label": "Ext_sensor",
-                  "color": "rgba(76, 175, 80, 0)",
-                  "settings": {
-                    "excludeFromStacking": false,
-                    "hideDataByDefault": true,
-                    "disableDataHiding": false,
-                    "removeFromLegend": true,
-                    "showLines": false,
-                    "fillLines": false,
-                    "showPoints": false,
-                    "showPointShape": "circle",
-                    "pointShapeFormatter": "var size = radius * Math.sqrt(Math.PI) / 2;\nctx.moveTo(x - size, y - size);\nctx.lineTo(x + size, y + size);\nctx.moveTo(x - size, y + size);\nctx.lineTo(x + size, y - size);",
-                    "showPointsLineWidth": 5,
-                    "showPointsRadius": 3,
-                    "showSeparateAxis": false,
-                    "axisPosition": "left",
-                    "thresholds": [
-                      {
-                        "thresholdValueSource": "predefinedValue"
-                      }
-                    ],
-                    "comparisonSettings": {
-                      "showValuesForComparison": false
-                    }
-                  },
-                  "_hash": 0.6779823830212508
-                }
-              ],
-              "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
-            }
-          ],
-          "timewindow": {
-            "realtime": {
-              "timewindowMs": 60000
-            }
-          },
-          "showTitle": true,
-          "backgroundColor": "#fff",
-          "color": "rgba(0, 0, 0, 0.87)",
-          "padding": "8px",
-          "settings": {
-            "shadowSize": 4,
-            "fontColor": "#545454",
-            "fontSize": 10,
-            "xaxis": {
-              "showLabels": true,
-              "color": "#545454"
-            },
-            "yaxis": {
-              "showLabels": true,
-              "color": "#545454"
-            },
-            "grid": {
-              "color": "#545454",
-              "tickColor": "#DDDDDD",
-              "verticalLines": true,
-              "horizontalLines": true,
-              "outlineWidth": 1
-            },
-            "stack": false,
-            "tooltipIndividual": false,
-            "timeForComparison": "months",
-            "xaxisSecond": {
-              "axisPosition": "top",
-              "showLabels": true
-            },
-            "hideZeros": true
-          },
-          "title": "Sensor externo",
-          "dropShadow": true,
-          "enableFullscreen": true,
-          "titleStyle": {
-            "fontSize": "16px",
-            "fontWeight": 400
-          },
-          "mobileHeight": null,
-          "showTitleIcon": false,
-          "titleIcon": null,
-          "iconColor": "rgba(0, 0, 0, 0.87)",
-          "iconSize": "24px",
-          "titleTooltip": "",
-          "widgetStyle": {},
-          "useDashboardTimewindow": true,
-          "displayTimewindow": false,
-          "showLegend": false,
-          "actions": {},
-          "legendConfig": {
-            "direction": "column",
-            "position": "bottom",
-            "showMin": false,
-            "showMax": false,
-            "showAvg": true,
-            "showTotal": false
-          }
-        },
-        "id": "57c88b5b-61a8-b5b5-127e-e35ec010ce8e"
       },
       "d445814f-e46e-0cad-3450-762e85409831": {
         "isSystemType": true,
@@ -687,7 +544,7 @@
             },
             "tooltipValueFormatter": "if (value=== -1){\n return \"NO DELEGADO\";   \n}else{\n    return value;\n}"
           },
-          "title": "Humedad relativa interior",
+          "title": "Evolución humedad relativa interior",
           "dropShadow": true,
           "enableFullscreen": true,
           "titleStyle": {
@@ -846,8 +703,8 @@
           "color": "rgba(255, 254, 254, 0.87)",
           "padding": "0px",
           "settings": {
-            "maxValue": 80,
-            "minValue": -20,
+            "maxValue": 125,
+            "minValue": -55,
             "donutStartAngle": 90,
             "showValue": true,
             "showMinMax": true,
@@ -895,7 +752,7 @@
             "showTimestamp": true,
             "useFixedLevelColor": false
           },
-          "title": "Sensor externo",
+          "title": "Temperatura exterior",
           "dropShadow": true,
           "enableFullscreen": true,
           "titleStyle": {
@@ -1026,7 +883,7 @@
         "type": "timeseries",
         "title": "New widget",
         "sizeX": 12,
-        "sizeY": 7,
+        "sizeY": 6,
         "config": {
           "datasources": [
             {
@@ -1097,12 +954,12 @@
                     "axisMin": -1,
                     "axisMax": 1,
                     "tooltipValueFormatter": "if (value==-1){\n    return \"No delegado\";\n}else{\n    return value;\n}",
-                    "axisTicksFormatter": "if (value==-1){\n    return \"No delegado\";\n}else{\n    return value;\n}",
+                    "axisTicksFormatter": "if (value==-1){\n    return \"No delegado\";\n}else if(value==1){\n    return 'HIGH';\n}else{\n    return 'LOW';\n}",
                     "axisTickDecimals": 0
                   },
                   "_hash": 0.1085509607051629,
                   "decimals": 0,
-                  "postFuncBody": "if (value == \"No delegado\") {\n    return -1;\n} else {\n    return value;\n}"
+                  "postFuncBody": "if (value == \"No delegado\") {\n    return -1;\n}else{\n    return value;\n}"
                 },
                 {
                   "name": "Exti_status",
@@ -1269,7 +1126,7 @@
             },
             "tooltipValueFormatter": "if (value==-56){\n    return \"No delegado\";\n}else{\n    return value;\n}"
           },
-          "title": "LHT65",
+          "title": "Sensor externo LHT65",
           "dropShadow": true,
           "enableFullscreen": true,
           "titleStyle": {
@@ -1297,7 +1154,7 @@
         "type": "latest",
         "title": "New widget",
         "sizeX": 7,
-        "sizeY": 7,
+        "sizeY": 3,
         "config": {
           "datasources": [
             {
@@ -1347,6 +1204,329 @@
           "displayTimewindow": true
         },
         "id": "b399b929-6fde-1da3-0887-2146ae07f751"
+      },
+      "675f7858-cf7a-8db4-ef3d-287b35e8dfcf": {
+        "isSystemType": true,
+        "bundleAlias": "cards",
+        "typeAlias": "html_value_card",
+        "type": "latest",
+        "title": "New widget",
+        "sizeX": 5,
+        "sizeY": 6,
+        "config": {
+          "datasources": [
+            {
+              "type": "entity",
+              "dataKeys": [
+                {
+                  "name": "Exti_pin_level",
+                  "type": "timeseries",
+                  "label": "My value",
+                  "color": "#2196f3",
+                  "settings": {},
+                  "_hash": 0.9311761678753112,
+                  "postFuncBody": "if (value == 1) {\n    return 'High';\n} else if (value == 0) {\n    return 'Low';\n} else {\n    return value;\n}"
+                }
+              ],
+              "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#fff",
+          "color": "rgba(0, 0, 0, 0.87)",
+          "padding": "0px",
+          "settings": {
+            "cardCss": ".card {\n   width: 100%;\n   height: 100%;\n   border: 2px solid #ccc;\n   box-sizing: border-box;\n}\n\n.card .content {\n   padding: 20px;\n   display: flex;\n   flex-direction: row;\n   align-items: center;\n   justify-content: space-around;\n   height: 100%;\n   box-sizing: border-box;\n}\n\n.card .content .column {\n   display: flex;\n   flex-direction: column;    \n   justify-content: space-around;\n   height: 100%;\n}\n\n.card h1 {\n    text-transform: uppercase;\n    color: #999;\n    font-size: 20px;\n    font-weight: bold;\n    margin: 0;\n    padding-bottom: 10px;\n    line-height: 32px;\n}\n\n.card .value {\n    font-size: 38px;\n    font-weight: 200;\n}\n\n.card .description {\n    font-size: 20px;\n    color: #999;\n}\n",
+            "cardHtml": "<div class='card'>\n    <div class='content'>\n        <div class='column'>\n            \n            <div class='value'>\n                ${My value}\n            </div>    \n            \n        </div>\n    </div>\n</div>"
+          },
+          "title": "Sensor de interrupción",
+          "dropShadow": false,
+          "enableFullscreen": true,
+          "widgetStyle": {},
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400
+          },
+          "useDashboardTimewindow": true,
+          "showLegend": false,
+          "actions": {},
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "displayTimewindow": true
+        },
+        "id": "675f7858-cf7a-8db4-ef3d-287b35e8dfcf"
+      },
+      "c17a44f6-a8a8-7e8d-2fcd-84f6464d0b19": {
+        "isSystemType": true,
+        "bundleAlias": "digital_gauges",
+        "typeAlias": "digital_speedometer",
+        "type": "latest",
+        "title": "New widget",
+        "sizeX": 5,
+        "sizeY": 6,
+        "config": {
+          "datasources": [
+            {
+              "type": "entity",
+              "dataKeys": [
+                {
+                  "name": "ADC_V",
+                  "type": "timeseries",
+                  "label": "ADC_V",
+                  "color": "#2196f3",
+                  "settings": {},
+                  "_hash": 0.32240232031647476
+                }
+              ],
+              "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#000000",
+          "color": "rgba(255, 254, 254, 0.87)",
+          "padding": "0px",
+          "settings": {
+            "maxValue": 3.3,
+            "minValue": 0,
+            "donutStartAngle": 90,
+            "showValue": true,
+            "showMinMax": true,
+            "gaugeWidthScale": 0.75,
+            "levelColors": [
+              "#008000",
+              "#fbc02d",
+              "#f44336"
+            ],
+            "titleFont": {
+              "family": "Roboto",
+              "size": 12,
+              "style": "normal",
+              "weight": "500"
+            },
+            "labelFont": {
+              "family": "Roboto",
+              "size": 8,
+              "style": "normal",
+              "weight": "500"
+            },
+            "valueFont": {
+              "family": "Segment7Standard",
+              "style": "normal",
+              "weight": "500",
+              "size": 32
+            },
+            "minMaxFont": {
+              "family": "Segment7Standard",
+              "size": 12,
+              "style": "normal",
+              "weight": "500",
+              "color": "#ffffff"
+            },
+            "neonGlowBrightness": 40,
+            "dashThickness": 1.5,
+            "unitTitle": "V",
+            "showUnitTitle": true,
+            "gaugeColor": "#171a1c",
+            "gaugeType": "arc",
+            "animation": true,
+            "animationDuration": 500,
+            "animationRule": "linear",
+            "timestampFormat": "yyyy-MM-dd HH:mm:ss",
+            "showTimestamp": true
+          },
+          "title": "Sensor ADC",
+          "dropShadow": true,
+          "enableFullscreen": true,
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400
+          },
+          "widgetStyle": {},
+          "useDashboardTimewindow": true,
+          "showLegend": false,
+          "actions": {},
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "displayTimewindow": true
+        },
+        "id": "c17a44f6-a8a8-7e8d-2fcd-84f6464d0b19"
+      },
+      "e4c8bd49-845d-01ca-b668-493d0ae33e97": {
+        "isSystemType": true,
+        "bundleAlias": "digital_gauges",
+        "typeAlias": "digital_speedometer",
+        "type": "latest",
+        "title": "New widget",
+        "sizeX": 5,
+        "sizeY": 6,
+        "config": {
+          "datasources": [
+            {
+              "type": "entity",
+              "dataKeys": [
+                {
+                  "name": "ILL_lux",
+                  "type": "timeseries",
+                  "label": "ILL_lux",
+                  "color": "#2196f3",
+                  "settings": {},
+                  "_hash": 0.5436154468738927
+                }
+              ],
+              "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#000000",
+          "color": "rgba(255, 254, 254, 0.87)",
+          "padding": "0px",
+          "settings": {
+            "maxValue": 100000,
+            "minValue": 0,
+            "donutStartAngle": 90,
+            "showValue": true,
+            "showMinMax": true,
+            "gaugeWidthScale": 0.75,
+            "levelColors": [
+              "#008000",
+              "#fbc02d",
+              "#f44336"
+            ],
+            "titleFont": {
+              "family": "Roboto",
+              "size": 12,
+              "style": "normal",
+              "weight": "500"
+            },
+            "labelFont": {
+              "family": "Roboto",
+              "size": 8,
+              "style": "normal",
+              "weight": "500"
+            },
+            "valueFont": {
+              "family": "Segment7Standard",
+              "style": "normal",
+              "weight": "500",
+              "size": 32
+            },
+            "minMaxFont": {
+              "family": "Segment7Standard",
+              "size": 12,
+              "style": "normal",
+              "weight": "500",
+              "color": "#ffffff"
+            },
+            "neonGlowBrightness": 40,
+            "dashThickness": 1.5,
+            "unitTitle": "lux",
+            "showUnitTitle": true,
+            "gaugeColor": "#171a1c",
+            "gaugeType": "arc",
+            "animation": true,
+            "animationDuration": 500,
+            "animationRule": "linear",
+            "timestampFormat": "yyyy-MM-dd HH:mm:ss",
+            "showTimestamp": true
+          },
+          "title": "Iluminación",
+          "dropShadow": true,
+          "enableFullscreen": true,
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400
+          },
+          "widgetStyle": {},
+          "useDashboardTimewindow": true,
+          "showLegend": false,
+          "actions": {},
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "displayTimewindow": true
+        },
+        "id": "e4c8bd49-845d-01ca-b668-493d0ae33e97"
+      },
+      "5fbe66df-ecc0-b1e1-4397-414e3d3c966d": {
+        "isSystemType": true,
+        "bundleAlias": "cards",
+        "typeAlias": "html_value_card",
+        "type": "latest",
+        "title": "New widget",
+        "sizeX": 5,
+        "sizeY": 6,
+        "config": {
+          "datasources": [
+            {
+              "type": "entity",
+              "dataKeys": [
+                {
+                  "name": "Exti_count",
+                  "type": "timeseries",
+                  "label": "My value",
+                  "color": "#2196f3",
+                  "settings": {},
+                  "_hash": 0.13990309465488537
+                }
+              ],
+              "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#fff",
+          "color": "rgba(0, 0, 0, 0.87)",
+          "padding": "0px",
+          "settings": {
+            "cardCss": ".card {\n   width: 100%;\n   height: 100%;\n   border: 2px solid #ccc;\n   box-sizing: border-box;\n}\n\n.card .content {\n   padding: 20px;\n   display: flex;\n   flex-direction: row;\n   align-items: center;\n   justify-content: space-around;\n   height: 100%;\n   box-sizing: border-box;\n}\n\n.card .content .column {\n   display: flex;\n   flex-direction: column;    \n   justify-content: space-around;\n   height: 100%;\n}\n\n.card h1 {\n    text-transform: uppercase;\n    color: #999;\n    font-size: 20px;\n    font-weight: bold;\n    margin: 0;\n    padding-bottom: 10px;\n    line-height: 32px;\n}\n\n.card .value {\n    font-size: 38px;\n    font-weight: 200;\n}\n\n.card .description {\n    font-size: 20px;\n    color: #999;\n}\n",
+            "cardHtml": "<div class='card'>\n    <div class='content'>\n        <div class='column'>\n            \n            <div class='value'>\n                ${My valu} pulsos.\n            </div>    \n            \n        </div>\n       \n    </div>\n</div>"
+          },
+          "title": "Contador de pulsos",
+          "dropShadow": false,
+          "enableFullscreen": true,
+          "widgetStyle": {},
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400
+          },
+          "useDashboardTimewindow": true,
+          "showLegend": false,
+          "actions": {},
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "displayTimewindow": true
+        },
+        "id": "5fbe66df-ecc0-b1e1-4397-414e3d3c966d"
       }
     },
     "states": {
@@ -1382,13 +1562,6 @@
                 "row": 0,
                 "col": 0
               },
-              "57c88b5b-61a8-b5b5-127e-e35ec010ce8e": {
-                "sizeX": 12,
-                "sizeY": 6,
-                "mobileHeight": null,
-                "row": 12,
-                "col": 0
-              },
               "d445814f-e46e-0cad-3450-762e85409831": {
                 "sizeX": 12,
                 "sizeY": 6,
@@ -1405,8 +1578,8 @@
               "6c5b0060-245f-8d85-c110-85d807b3c226": {
                 "sizeX": 5,
                 "sizeY": 6,
-                "row": 12,
-                "col": 12
+                "row": 34,
+                "col": 0
               },
               "b12e824f-968e-53fd-ccf0-66120000e355": {
                 "sizeX": 5,
@@ -1416,16 +1589,40 @@
               },
               "20524521-aa51-e41c-4ce8-6a425ab31940": {
                 "sizeX": 12,
-                "sizeY": 7,
+                "sizeY": 6,
                 "mobileHeight": null,
-                "row": 34,
+                "row": 12,
                 "col": 0
               },
               "b399b929-6fde-1da3-0887-2146ae07f751": {
                 "sizeX": 7,
-                "sizeY": 7,
+                "sizeY": 3,
+                "row": 12,
+                "col": 17
+              },
+              "675f7858-cf7a-8db4-ef3d-287b35e8dfcf": {
+                "sizeX": 5,
+                "sizeY": 6,
                 "row": 34,
-                "col": 12
+                "col": 5
+              },
+              "c17a44f6-a8a8-7e8d-2fcd-84f6464d0b19": {
+                "sizeX": 5,
+                "sizeY": 6,
+                "row": 34,
+                "col": 15
+              },
+              "e4c8bd49-845d-01ca-b668-493d0ae33e97": {
+                "sizeX": 5,
+                "sizeY": 6,
+                "row": 34,
+                "col": 10
+              },
+              "5fbe66df-ecc0-b1e1-4397-414e3d3c966d": {
+                "sizeX": 5,
+                "sizeY": 6,
+                "row": 40,
+                "col": 0
               }
             },
             "gridSettings": {
