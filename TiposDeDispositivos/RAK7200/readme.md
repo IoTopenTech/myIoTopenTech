@@ -16,7 +16,7 @@ https://doc.rakwireless.com/rak7200-lora-tracker/upgrading-the-firmware
 
 ## Carga de pago para uplinks
 
-El dispositivo utiliza el formato de carga de pago Cayenne LPP, excepto para el magnetómetro que lo codifica como valores analógicos, con los siguientes canales:
+El dispositivo utiliza el formato de carga de pago Cayenne LPP (ej. 0188069e16ff1f5500641e0802010c0371fedc000103c00586ff710074ffa60902fbf50a0208bb0b02e197), excepto para el magnetómetro que lo codifica como valores analógicos, con los siguientes canales:
 
 Canal | Tipo | Valor
 ----- | ---- | -----
