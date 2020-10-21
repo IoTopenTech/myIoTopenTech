@@ -4,7 +4,7 @@
 		<item tipo="coordenadas/chirpstack/alarma/atributoCompartido/atributoInterno"
 		      
 			nombreAlarma="" 
-		      	telemetria=""
+		      	telemetria="corresponde al nombre de la delegación"
 		     	labelAlarma=""
 		      	tipoAlarma="opciones/umbralMinimo/umbralMaximo/biUmbral"
 		      	labelAuxAlarma="Disparar al/expresado en segundos..." 
