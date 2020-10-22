@@ -1,7 +1,7 @@
 ```xml
 <myIoT>
 	<panel  titulo="" resumen="" nombreFormulario="" labelBotonSubmit="[Configurar]" ultimoDownlink="[Sólo se utiliza en atributosCompartidos]" [tipo="devEUI"]>
-		<item tipo="coordenadas/chirpstack/alarma/atributoCompartido/atributoInterno"
+		<item tipo="coordenadas/chirpstack/alarma/atributoCompartido/atributoInterno/alarma ad-hoc"
 		      
 			nombreAlarma="" 
 		      	telemetria="corresponde al nombre de la delegación"
