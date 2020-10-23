@@ -73,3 +73,76 @@ Para preaprovisionar dispositivos de tipo RAK7200 se requiere un archivo CSV que
 * apropiable: Atributo en el que se indica si el usuario podría tomar posesión del dispositivo mediante downlinks; en este caso el valor será false porque el RAK7200 no admite esta opción.
 * __cs_url: Si el dispositivo está pre-aprovisionado en ChirpStack, aquí indicaremos el URL.
 * __cs_token: Si el dispositivo está pre-aprovisionado en ChirpStack, aquí indicaremos el JWT autorizado en la API.
+
+# RAK7200_delegate
+```xml
+<myIoT>
+    <delegacion nombre='{"GPS":[ "latitude", "longitude"]}' label="Permitir ver las coordenadas GPS" /> <delegacion nombre="Altitud" label="Permitir ver la altitud GPS" />
+    <delegacion nombre="Orientacion" label="Permitir ver la orientación del magnetómetro" />
+    <delegacion nombre='{"Acelerometro":[ "Acelerometro_x", "Acelerometro_y", "Acelerometro_z"]}' label="Permitir ver las mediciones del acelerómetro" />
+    <delegacion nombre='{"Giroscopo":[ "Giroscopo_x", "Giroscopo_y", "Giroscopo_z"]}' label="Permitir ver las mediciones del giróscopo" /> <delegacion nombre="Bateria" label="Permitir ver la tensión de la batería" />
+</myIoT>
+```
+
+# RAK7200_config
+```xml
+<myIoT>
+    <panel titulo="Configuración general" resumen="Configurar atributos de la entidad" nombreFormulario="General" labelBotonSubmit="Configurar">
+        <item tipo="chirpstack" />
+        <item tipo="atributoInterno" nombreAtributo="__geocercado" labelAtributo="Polígono del geocercado en formato [[lat1,lon1],[lat2,lon2], ... ,[latN,lonN]]" tipoAtributo="texto">
+            <atributosHTML size="30" pattern="^\[(\[([-+]?)([\d]{1,2})(((\.)(\d+)(,)))(\s*)(([-+]?)([\d]{1,3})((\.)(\d+))?)\],){2,}(\[([-+]?)([\d]{1,2})(((\.)(\d+)(,)))(\s*)(([-+]?)([\d]{1,3})((\.)(\d+))?)\]){1}\]$" maxlength="1500" />
+        </item>
+        <item tipo="alarma" nombreAlarma="geocercado" telemetria="geocercado" labelAlarma="geocercado" tipoAlarma="opciones" labelAuxAlarma="Disparar al" opciones="entrar/salir" />
+        <item tipo="alarma" nombreAlarma="altitud" telemetria="Altitud" labelAlarma="altitud" tipoAlarma="biUmbral" labelAuxAlarma="(m)[0..100000]" histeresis="bi">
+            <umbralMinimo size="10" min="0" max="100000" step="1" /> <umbralMaximo size="10" min="0" max="100000" step="1" />
+        </item>
+        <item tipo="alarma" nombreAlarma="orientacion" telemetria="Orientacion" labelAlarma="orientación" tipoAlarma="biUmbral" labelAuxAlarma="(º)[-180..180] 0º = N, 90º = E, 180º = S, -90º = O" histeresis="bi">
+            <umbralMinimo size="10" min="-180" max="180" step="1" /> <umbralMaximo size="10" min="-180" max="180" step="1" /> <histeresisMinimo min="0" max="90" step="1" /> <histeresisMaximo min="0" max="90" step="1" />
+        </item>
+        <item tipo="alarma" nombreAlarma="bateria" telemetria="Bateria" labelAlarma="nivel bajo de batería" tipoAlarma="umbralMinimo" labelAuxAlarma="(V)" histeresis="min"> <umbralMinimo size="10" min="0" max="5" step="0.1" /> </item>
+        <item tipo="alarma ad-hoc" nombreAlarma="acelerometro" labelAlarma="acelerómetro">
+            <md-card>
+                <div class="flex" layout="column">
+                    <md-input-container class="flex md-block">
+                        <label>Disparar la alarma si la aceleración del eje </label>
+                        <md-select ng-disabled="!vm.configuracion.__alarmas.acelerometro.enable" ng-required="vm.configuracion.__alarmas.acelerometro.enable" ng-model="vm.configuracion.__alarmas.acelerometro.eje">
+                            <md-option value="X">X</md-option> <md-option value="Y">Y</md-option> <md-option value="Z">Z</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="flex md-block">
+                        <label>es </label>
+                        <md-select ng-disabled="!vm.configuracion.__alarmas.acelerometro.enable" ng-required="vm.configuracion.__alarmas.acelerometro.enable" ng-model="vm.configuracion.__alarmas.acelerometro.comparacion">
+                            <md-option value="menor">menor</md-option> <md-option value="mayor">mayor</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="flex md-block">
+                        <label>que el valor </label>
+                        <input
+                            type="number"
+                            step="0.1"
+                            min="-1"
+                            max="1"
+                            ng-disabled="!vm.configuracion.__alarmas.acelerometro.enable"
+                            ng-model="vm.configuracion.__alarmas.acelerometro.umbral"
+                            ng-required="vm.configuracion.__alarmas.acelerometro.enable"
+                        />
+                    </md-input-container>
+                    <md-input-container class="flex md-block">
+                        <label>Histéresis</label>
+                        <input
+                            type="number"
+                            step="0.1"
+                            min="0"
+                            max="1"
+                            autocomplete="off"
+                            ng-disabled="!vm.configuracion.__alarmas.acelerometro.enable"
+                            ng-model="vm.configuracion.__alarmas.acelerometro.histeresis"
+                            ng-required="vm.configuracion.__alarmas.acelerometro.enable"
+                        />
+                    </md-input-container>
+                </div>
+            </md-card>
+        </item>
+    </panel>
+</myIoT>
+```
