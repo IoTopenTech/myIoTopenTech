@@ -171,7 +171,7 @@
         "name": "cargar msg y delegados en metadata",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var delegadosArray = JSON.parse(metadata.ss_delegados);\nvar newDelegados = [];\nfor (var i = 0; i < delegadosArray.length; i++) {\n    if (delegadosArray[i].reclamado === true) {\n        if (delegadosArray[i].delegacionPorCargoDe == \"delegado\" ||\n            metadata.delegadorSolvente == \"true\") {\n            newDelegados.push(delegadosArray[i]);\n        }\n    }\n}\n\nif (newDelegados.length > 0) {\n     \n    delegadosArray = newDelegados;\n    //Extraigo el primer delegado para cambiar a él\n    var delegadoActual = delegadosArray.shift();\n   \n    metadata.idDelegadoActual = delegadoActual.id;\n    metadata.msgOriginal = JSON.stringify(msg);\n    metadata.delegadosArray = JSON.stringify(\n    delegadosArray);\n    metadata.delegadoActual = JSON.stringify(\n    delegadoActual);\n    return {\n        msg: msg,\n        metadata: metadata,\n        msgType: msgType\n    };\n}"
+          "jsScript": "var delegadosArray = JSON.parse(metadata.ss_delegados);\nvar newDelegados = [];\nfor (var i = 0; i < delegadosArray.length; i++) {\n    if (delegadosArray[i].reclamado === true) {\n        if (delegadosArray[i].delegacionPorCargoDe == \"delegado\" ||\n            metadata.delegadorSolvente == \"true\") {\n            newDelegados.push(delegadosArray[i]);\n        } \n    }\n}\n\nif (newDelegados.length > 0) {\n     \n    delegadosArray = newDelegados;\n    //Extraigo el primer delegado para cambiar a él\n    var delegadoActual = delegadosArray.shift();\n   \n    metadata.idDelegadoActual = delegadoActual.id;\n    metadata.msgOriginal = JSON.stringify(msg);\n    metadata.delegadosArray = JSON.stringify(\n    delegadosArray);\n    metadata.delegadoActual = JSON.stringify(\n    delegadoActual);\n    return {\n        msg: msg,\n        metadata: metadata,\n        msgType: msgType\n    };\n}"
         }
       },
       {
@@ -806,7 +806,7 @@
         "fromIndex": 2,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "c7aec1d0-07c6-11eb-b82a-9b3a9cfbb111"
+          "id": "037c3190-0a59-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1578,
@@ -819,7 +819,7 @@
         "fromIndex": 2,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "c7aec1d0-07c6-11eb-b82a-9b3a9cfbb111"
+          "id": "037c3190-0a59-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1578,
@@ -832,7 +832,7 @@
         "fromIndex": 5,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "c7aec1d0-07c6-11eb-b82a-9b3a9cfbb111"
+          "id": "037c3190-0a59-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1578,
@@ -845,7 +845,7 @@
         "fromIndex": 9,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "94f63fd0-07c5-11eb-b82a-9b3a9cfbb111"
+          "id": "b0785cd0-0a58-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 3099,
@@ -858,7 +858,7 @@
         "fromIndex": 14,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "c7aec1d0-07c6-11eb-b82a-9b3a9cfbb111"
+          "id": "037c3190-0a59-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1578,
@@ -871,7 +871,7 @@
         "fromIndex": 16,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "2abf80f0-07c4-11eb-b82a-9b3a9cfbb111"
+          "id": "4981ca40-0a56-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1221,
@@ -884,7 +884,7 @@
         "fromIndex": 16,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "9b889270-07c6-11eb-b82a-9b3a9cfbb111"
+          "id": "dfc1ec40-0a58-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1222,
@@ -897,7 +897,7 @@
         "fromIndex": 16,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "be6f6d10-07c4-11eb-b82a-9b3a9cfbb111"
+          "id": "9a898b70-0a57-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1221,
@@ -910,7 +910,7 @@
         "fromIndex": 16,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "d3da0fc0-07c4-11eb-b82a-9b3a9cfbb111"
+          "id": "aab986d0-0a57-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1222,
@@ -923,7 +923,7 @@
         "fromIndex": 16,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "891fa8f0-07c4-11eb-b82a-9b3a9cfbb111"
+          "id": "76a80f10-0a57-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1220,
@@ -936,7 +936,7 @@
         "fromIndex": 16,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "fed41b30-07c4-11eb-b82a-9b3a9cfbb111"
+          "id": "070eeab0-0a58-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1222,
@@ -949,11 +949,11 @@
         "fromIndex": 16,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "13c1c5b0-07c5-11eb-b82a-9b3a9cfbb111"
+          "id": "53393530-0a58-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
-          "layoutX": 1223,
-          "layoutY": 826,
+          "layoutX": 1219,
+          "layoutY": 833,
           "ruleChainNodeId": "rule-chain-node-42"
         },
         "type": "configurarDelegacion"
@@ -962,7 +962,7 @@
         "fromIndex": 36,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "c7aec1d0-07c6-11eb-b82a-9b3a9cfbb111"
+          "id": "037c3190-0a59-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 1578,
@@ -975,7 +975,7 @@
         "fromIndex": 37,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "38201dc0-07c6-11eb-b82a-9b3a9cfbb111"
+          "id": "c89463e0-0a58-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
           "layoutX": 873,

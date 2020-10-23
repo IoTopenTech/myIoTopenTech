@@ -8,82 +8,68 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 6,
+    "firstNodeIndex": 2,
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 935,
-          "layoutY": 259
+          "layoutX": 943,
+          "layoutY": 477
         },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "customer",
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar",
         "debugMode": true,
         "configuration": {
-          "originatorSource": "RELATED",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "${customerID}",
-                "entityTypes": [
-                  "CUSTOMER"
-                ]
-              }
-            ],
-            "fetchLastLevelOnly": false
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 611,
+          "layoutY": 146
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "name+id",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "name": "customerName",
+            "id": "customerID"
           }
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 332,
-          "layoutY": 352
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "dashboard",
-        "debugMode": true,
-        "configuration": {
-          "originatorSource": "RELATED",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "${subtipoEntidad}",
-                "entityTypes": [
-                  "DASHBOARD"
-                ]
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 625,
-          "layoutY": 351
-        },
-        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
-        "name": "Dash2Cust",
-        "debugMode": true,
-        "configuration": {
-          "customerNamePattern": "${customerName}",
-          "customerCacheExpiration": 300,
-          "createCustomerIfNotExists": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 941,
-          "layoutY": 364
+          "layoutX": 321,
+          "layoutY": 150
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "preparar atributos",
+        "name": "subtipoEntidad",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var newMsg = {};\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_config')) {\n    newMsg[metadata.subtipoEntidad + '_config'] = metadata[\n        'ss_' + metadata.subtipoEntidad + '_config'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_delegate')) {\n    newMsg[metadata.subtipoEntidad + '_delegate'] = metadata[\n        'ss_' + metadata.subtipoEntidad + '_delegate'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_config_version')) {\n    newMsg[metadata.subtipoEntidad + '_config_version'] =\n        metadata['ss_' + metadata.subtipoEntidad +\n            '_config_version'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_delegate_version')) {\n    newMsg[metadata.subtipoEntidad + '_delegate_version'] =\n        metadata['ss_' + metadata.subtipoEntidad +\n            '_delegate_version'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_dashboard_version')) {\n    newMsg[metadata.subtipoEntidad + '_dashboard_version'] =\n        metadata['ss_' + metadata.subtipoEntidad +\n            '_dashboard_version'];\n\n}\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: 'POST_ATTRIBUTES_REQUEST'\n};"
+          "jsScript": "\nreturn {msg: msg, metadata: {'subtipoEntidad':msg.subtipoEntidad}, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 622,
+          "layoutY": 260
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "config",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "${subtipoEntidad}_config",
+            "${subtipoEntidad}_config_version",
+            "${subtipoEntidad}_dashboard_version",
+            "${subtipoEntidad}_delegate",
+            "${subtipoEntidad}_delegate_version"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": false,
+          "getLatestValueWithTs": false
         }
       },
       {
@@ -113,76 +99,90 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 622,
-          "layoutY": 260
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
-        "name": "config",
-        "debugMode": true,
-        "configuration": {
-          "clientAttributeNames": [],
-          "sharedAttributeNames": [],
-          "serverAttributeNames": [
-            "${subtipoEntidad}_config",
-            "${subtipoEntidad}_config_version",
-            "${subtipoEntidad}_dashboard_version",
-            "${subtipoEntidad}_delegate",
-            "${subtipoEntidad}_delegate_version"
-          ],
-          "latestTsKeyNames": [],
-          "tellFailureIfAbsent": false,
-          "getLatestValueWithTs": false
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 321,
-          "layoutY": 150
+          "layoutX": 941,
+          "layoutY": 364
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "subtipoEntidad",
+        "name": "preparar atributos",
         "debugMode": true,
         "configuration": {
-          "jsScript": "\nreturn {msg: msg, metadata: {'subtipoEntidad':msg.subtipoEntidad}, msgType: msgType};"
+          "jsScript": "var newMsg = {};\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_config')) {\n    newMsg[metadata.subtipoEntidad + '_config'] = metadata[\n        'ss_' + metadata.subtipoEntidad + '_config'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_delegate')) {\n    newMsg[metadata.subtipoEntidad + '_delegate'] = metadata[\n        'ss_' + metadata.subtipoEntidad + '_delegate'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_config_version')) {\n    newMsg[metadata.subtipoEntidad + '_config_version'] =\n        metadata['ss_' + metadata.subtipoEntidad +\n            '_config_version'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_delegate_version')) {\n    newMsg[metadata.subtipoEntidad + '_delegate_version'] =\n        metadata['ss_' + metadata.subtipoEntidad +\n            '_delegate_version'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_dashboard_version')) {\n    newMsg[metadata.subtipoEntidad + '_dashboard_version'] =\n        metadata['ss_' + metadata.subtipoEntidad +\n            '_dashboard_version'];\n\n}\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: 'POST_ATTRIBUTES_REQUEST'\n};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 611,
-          "layoutY": 146
+          "layoutX": 625,
+          "layoutY": 351
         },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
-        "name": "name+id",
+        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
+        "name": "Dash2Cust",
         "debugMode": true,
         "configuration": {
-          "fieldsMapping": {
-            "name": "customerName",
-            "id": "customerID"
+          "customerNamePattern": "${customerName}",
+          "customerCacheExpiration": 300,
+          "createCustomerIfNotExists": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 332,
+          "layoutY": 352
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "dashboard",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${subtipoEntidad}",
+                "entityTypes": [
+                  "DASHBOARD"
+                ]
+              }
+            ],
+            "fetchLastLevelOnly": false
           }
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 943,
-          "layoutY": 477
+          "layoutX": 935,
+          "layoutY": 259
         },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "guardar",
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "customer",
         "debugMode": true,
         "configuration": {
-          "scope": "SERVER_SCOPE"
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${customerID}",
+                "entityTypes": [
+                  "CUSTOMER"
+                ]
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
         }
       }
     ],
     "connections": [
       {
-        "fromIndex": 0,
-        "toIndex": 3,
+        "fromIndex": 1,
+        "toIndex": 4,
         "type": "Success"
       },
       {
-        "fromIndex": 1,
-        "toIndex": 2,
+        "fromIndex": 2,
+        "toIndex": 1,
         "type": "Success"
       },
       {
@@ -191,13 +191,13 @@
         "type": "Success"
       },
       {
-        "fromIndex": 4,
-        "toIndex": 5,
+        "fromIndex": 3,
+        "toIndex": 7,
         "type": "Success"
       },
       {
-        "fromIndex": 5,
-        "toIndex": 1,
+        "fromIndex": 4,
+        "toIndex": 3,
         "type": "Success"
       },
       {
@@ -206,13 +206,13 @@
         "type": "Success"
       },
       {
-        "fromIndex": 6,
-        "toIndex": 7,
+        "fromIndex": 7,
+        "toIndex": 6,
         "type": "Success"
       },
       {
-        "fromIndex": 7,
-        "toIndex": 4,
+        "fromIndex": 8,
+        "toIndex": 5,
         "type": "Success"
       }
     ],

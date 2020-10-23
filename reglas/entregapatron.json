@@ -12,8 +12,8 @@
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 120,
-          "layoutY": 270
+          "layoutX": 330,
+          "layoutY": 168
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "devEUI?",
@@ -24,8 +24,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 123,
-          "layoutY": 380
+          "layoutX": 333,
+          "layoutY": 278
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "dispositivo final",
@@ -49,8 +49,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 431,
-          "layoutY": 383
+          "layoutX": 641,
+          "layoutY": 281
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
         "name": "name y type",
@@ -64,8 +64,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 727,
-          "layoutY": 384
+          "layoutX": 937,
+          "layoutY": 282
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "metadata",
@@ -97,11 +97,11 @@
         "fromIndex": 3,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "e5d20f00-07c6-11eb-b82a-9b3a9cfbb111"
+          "id": "d138a690-0a59-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
-          "layoutX": 1014,
-          "layoutY": 386,
+          "layoutX": 1224,
+          "layoutY": 284,
           "ruleChainNodeId": "rule-chain-node-6"
         },
         "type": "Success"

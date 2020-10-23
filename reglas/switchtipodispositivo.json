@@ -12,8 +12,8 @@
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 319,
-          "layoutY": 154
+          "layoutX": 365,
+          "layoutY": 144
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
         "name": "al dispositivo",
@@ -29,14 +29,40 @@
         "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "3f2381b0-07c7-11eb-b82a-9b3a9cfbb111"
+          "id": "830cd790-122c-11eb-bb64-db1cd6459831"
         },
         "additionalInfo": {
-          "layoutX": 641,
-          "layoutY": 156,
+          "layoutX": 700,
+          "layoutY": 320,
+          "ruleChainNodeId": "rule-chain-node-5"
+        },
+        "type": "RAK7200"
+      },
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "e3fbb370-0a5a-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 687,
+          "layoutY": 146,
           "ruleChainNodeId": "rule-chain-node-4"
         },
         "type": "LDS01"
+      },
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "994a5120-115c-11eb-bb64-db1cd6459831"
+        },
+        "additionalInfo": {
+          "layoutX": 697,
+          "layoutY": 241,
+          "ruleChainNodeId": "rule-chain-node-3"
+        },
+        "type": "LHT65"
       }
     ]
   }
