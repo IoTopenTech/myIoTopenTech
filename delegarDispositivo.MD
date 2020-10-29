@@ -24,7 +24,7 @@ Respecto al accounting: hay que encontrar la forma de que quién delega pueda ha
 
 En los dispositivos _FREE la delegación se configura internamente a cargo del delegador, pero realmente no tiene ningún efecto porque no incrementa su número de dispositivos asumidos.
 
-Existe también una Delegación pública, que crea un dispositivo asignado al customer Public, de tal modo que se puede acceder directamente a su dashboard sin acreditarse en myIoT.
+Existe también una Delegación pública, que crea un dispositivo asignado al customer Public, de tal modo que se puede acceder directamente a su dashboard sin acreditarse en myIoT. Para diferenciarla de cualquier otra delegación, su nombre es _publica (como los nombres de las delegaciones no pueden empezar con _ no existe la posibilidad de que el usuario pueda sobreescribirla).
 
 Cuando llega una telemetría al dispositivo Delegador, en la regla del propio tipo de dispositivo, se carga el atributo delegados (ss_delegados) que se mantendrá inalterado durante el envío de las telemetrías a todos los delegados, se duplica en el metadata.delegadosArray del que se irán extrayendo los delegados de uno en uno para enviarles la telemetría, se extrae el primero de los delegados de metadata.delegadosArray y se almacena el metadata.idDelegadoActual. Además se almacena en metadata.msgOriginal el stringifycado del msg original. 
 
