@@ -22,8 +22,8 @@
 - [ ] Al crear una delegación con un mismo nombre que ya se ha utilizado anteriormente, puede producirse un error al crear la relación auxiliar de la regla crearDelegado (habría que buscar alguna forma de que los nombres de las delegaciones fueran únicos).
 - [X] En los dispositivos LoRaWAN, permitir al usuario indicar el devEUI. Al hacerlo se creará una relación de su dispositivo SYSTEM a este dispositivo, de modo que el dispositivo SYSTEM pueda hacer entregas de telemetrías/downlinks en nombre del propio dispositivo (con el objeto de poder tener muchos dispositivos en una sola integración en sistemas en los que la integración es a nivel de aplicación, como The Things Network).
 - [ ] Explorar la posibilidad de que una delegación pueda ser pública, de forma que un usuario pueda compartir públicamente un dashboard parcial de sus dispositivos (podría ser una forma de superar la imposibilidad de crear vistas de entidad desde las reglas)
-- [ ] Integración con https://api.spontit.com/ o pushed
+- [X] Integración con https://api.spontit.com/ o pushed
 - [ ] Valorar usar esta librería para leer códigos QR (https://blog.minhazav.dev/HTML5-QR-Code-scanning-launched-v1.0.1/)
-- [ ] Valorar que haya dispositivos de coste nulo (por ejemplo, estaciones de medición de CO2 para colegios) que se puedan crear incluso aunque el crédito sea nulo (ésta es la parte crítica). Por ejemplo, podrían tener el sufijo _FREE en el nombre. Podrán delegarse, pero no podrá cambiarse su tipo.
+- [X] Valorar que haya dispositivos de coste nulo (por ejemplo, estaciones de medición de CO2 para colegios) que se puedan crear incluso aunque el crédito sea nulo (ésta es la parte crítica). Por ejemplo, podrían tener el sufijo _FREE en el nombre. Podrán delegarse, pero no podrá cambiarse su tipo.
 - [ ] Valorar que haya dispositivos reclamados que vayan a costa del proveedor mientras se mantenga el devEUI original para entregar a través de él. 
 - [ ] Evaluar integración con matrix.org
