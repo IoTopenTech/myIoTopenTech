@@ -33,7 +33,7 @@ Si el botón no está pulsado al arrancar, el dispositivo entra en el modo de fu
 
 ## Carga de pago para uplinks
 
-El dispositivo utiliza el formato de carga de pago Cayenne LPP, con los siguientes canales:
+El dispositivo utiliza el formato de carga de pago Cayenne LPP (por ejemplo:  01020160020000030000060100) , con los siguientes canales:
 
 Canal | Tipo | Valor
 ----- | ---- | -----
