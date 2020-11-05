@@ -113,6 +113,17 @@ Para preaprovisionar dispositivos de tipo V02_001 se requiere un archivo CSV que
 * admiteABP: Contendrá el valor false porque el tipo de nodo V02_001 no admite ABP
 * __heartbeat: Este parámetro corresponde al periodo de envío de heartbeats y contendrá el valor 1 (que es el predeterminado para el tipo V02_001).
 
+# TTNMAD_V02_001_delegate
+
+```xml
+<myIoT>
+   <delegacion nombre="Bat" label="Permitir ver la tensión de la batería" />
+   <delegacion nombre="Hall" label="Permitir ver el estado del sensor Hall" />
+   <delegacion nombre="LED" label="Permitir ver el estado del LED" />
+   <delegacion nombre="CambiarLED" label="Permitir cambiar el estado del LED" />
+   <delegacion nombre="Heartbeat" label="Permitir cambiar el periodo de envío de heartbeats" />
+</myIoT>
+```
 
 # TTNMAD_V02_001_config
 
