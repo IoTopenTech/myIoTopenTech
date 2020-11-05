@@ -116,6 +116,7 @@ Para preaprovisionar dispositivos de tipo V02_001 se requiere un archivo CSV que
 
 # TTNMAD_V02_001_config
 
+```xml
 <myIoT>
    <panel titulo="Configuración general" resumen="Configurar atributos de la entidad" nombreFormulario="General" labelBotonSubmit="Configurar">
       <item tipo="coordenadas" />
@@ -166,5 +167,5 @@ Para preaprovisionar dispositivos de tipo V02_001 se requiere un archivo CSV que
       </md-input-container>
    </panel>
 </myIoT>
-
+```
 
