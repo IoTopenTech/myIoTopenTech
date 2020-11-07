@@ -8,8 +8,20 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 17,
+    "firstNodeIndex": 18,
     "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 1138,
+          "layoutY": 605
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "Sólo si no es _FREE, actualizar accounting",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return metadata.subtipoEntidadNuevo.split(\"_\").pop()!=\"FREE\";\n"
+        }
+      },
       {
         "additionalInfo": {
           "layoutX": 414,
@@ -87,7 +99,7 @@
         "name": "actualizarAccounting",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var accounting={};\nif(metadata.hasOwnProperty('ss_accounting')){\n    accounting=JSON.parse(metadata.ss_accounting);\n}\naccounting[metadata.customerID].dispositivosPropios=msg.dispositivosPropios;\naccounting[metadata.customerID].credito=msg.credito;\n\nreturn {msg: {\"accounting\":accounting}, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+          "jsScript": "var accounting={};\nif(metadata.hasOwnProperty('ss_accounting')){\n    accounting=JSON.parse(metadata.ss_accounting);\n}\nif(!accounting.hasOwnProperty(metadata.customerID)){\n    accounting[metadata.customerID]={};\n}\naccounting[metadata.customerID].dispositivosPropios=msg.dispositivosPropios;\naccounting[metadata.customerID].credito=msg.credito;\n\nreturn {msg: {\"accounting\":accounting}, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
         }
       },
       {
@@ -193,7 +205,7 @@
         "name": "POST ATTRIBUTES",
         "debugMode": true,
         "configuration": {
-          "jsScript": "\nvar msg={'nombreEntidad':String(metadata.nombreEntidadNuevo),\n'tipoEntidad':metadata.subtipoEntidadNuevo,\n'padreEntidad':metadata.padreEntidadNombre,\n    'esDelegado':false,\n    'delegados':[]\n};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+          "jsScript": "\nvar msg={'nombreEntidad':String(metadata.nombreEntidadNuevo),\n'tipoEntidad':metadata.subtipoEntidadNuevo,\n'padreEntidad':metadata.padreEntidadNombre,\n    'esDelegado':false\n};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
         }
       },
       {
@@ -237,7 +249,7 @@
           "entityNamePattern": "${nombreEntidadNuevoCompleto}",
           "entityTypePattern": "${subtipoEntidadNuevo}",
           "entityCacheExpiration": 5,
-          "createEntityIfNotExists": true,
+          "createEntityIfNotExists": false,
           "changeOriginatorToRelatedEntity": true,
           "removeCurrentRelations": false
         }
@@ -527,13 +539,13 @@
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 30,
+        "toIndex": 6,
         "type": "True"
       },
       {
         "fromIndex": 1,
-        "toIndex": 2,
-        "type": "Success"
+        "toIndex": 31,
+        "type": "True"
       },
       {
         "fromIndex": 2,
@@ -547,158 +559,163 @@
       },
       {
         "fromIndex": 4,
-        "toIndex": 28,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 27,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 6,
-        "toIndex": 20,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 7,
-        "toIndex": 11,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 8,
         "toIndex": 5,
         "type": "Success"
       },
       {
-        "fromIndex": 9,
-        "toIndex": 8,
+        "fromIndex": 5,
+        "toIndex": 29,
         "type": "Success"
       },
       {
-        "fromIndex": 10,
-        "toIndex": 12,
+        "fromIndex": 6,
+        "toIndex": 28,
         "type": "Success"
       },
       {
-        "fromIndex": 11,
-        "toIndex": 10,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 9,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 13,
-        "toIndex": 18,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 14,
-        "toIndex": 23,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 16,
-        "toIndex": 15,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 17,
-        "toIndex": 19,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 18,
-        "toIndex": 6,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 19,
+        "fromIndex": 7,
         "toIndex": 21,
         "type": "Success"
       },
       {
-        "fromIndex": 20,
-        "toIndex": 7,
-        "type": "Dispositivo"
-      },
-      {
-        "fromIndex": 20,
-        "toIndex": 14,
-        "type": "Activo"
-      },
-      {
-        "fromIndex": 21,
-        "toIndex": 31,
+        "fromIndex": 8,
+        "toIndex": 12,
         "type": "Success"
       },
       {
-        "fromIndex": 22,
+        "fromIndex": 9,
+        "toIndex": 0,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 10,
+        "toIndex": 9,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 13,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 11,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 10,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 14,
+        "toIndex": 19,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 15,
         "toIndex": 24,
         "type": "Success"
       },
       {
-        "fromIndex": 23,
-        "toIndex": 22,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 24,
+        "fromIndex": 17,
         "toIndex": 16,
         "type": "Success"
       },
       {
-        "fromIndex": 25,
+        "fromIndex": 18,
+        "toIndex": 20,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 19,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 20,
+        "toIndex": 22,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 21,
+        "toIndex": 8,
+        "type": "Dispositivo"
+      },
+      {
+        "fromIndex": 21,
+        "toIndex": 15,
+        "type": "Activo"
+      },
+      {
+        "fromIndex": 22,
         "toIndex": 32,
         "type": "Success"
       },
       {
-        "fromIndex": 26,
+        "fromIndex": 23,
         "toIndex": 25,
         "type": "Success"
       },
       {
-        "fromIndex": 27,
-        "toIndex": 25,
+        "fromIndex": 24,
+        "toIndex": 23,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 25,
+        "toIndex": 17,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 26,
+        "toIndex": 33,
         "type": "Success"
       },
       {
         "fromIndex": 27,
         "toIndex": 26,
-        "type": "Failure"
-      },
-      {
-        "fromIndex": 30,
-        "toIndex": 29,
-        "type": "no"
-      },
-      {
-        "fromIndex": 30,
-        "toIndex": 13,
-        "type": "si"
-      },
-      {
-        "fromIndex": 31,
-        "toIndex": 0,
         "type": "Success"
       },
       {
+        "fromIndex": 28,
+        "toIndex": 26,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 28,
+        "toIndex": 27,
+        "type": "Failure"
+      },
+      {
+        "fromIndex": 31,
+        "toIndex": 30,
+        "type": "no"
+      },
+      {
+        "fromIndex": 31,
+        "toIndex": 14,
+        "type": "si"
+      },
+      {
         "fromIndex": 32,
-        "toIndex": 33,
+        "toIndex": 1,
         "type": "Success"
       },
       {
         "fromIndex": 33,
-        "toIndex": 1,
+        "toIndex": 34,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 34,
+        "toIndex": 2,
         "type": "Success"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 30,
+        "fromIndex": 31,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "1eb1dc10-0a56-11eb-b82a-9b3a9cfbb111"
@@ -706,7 +723,7 @@
         "additionalInfo": {
           "layoutX": 1004,
           "layoutY": 360,
-          "ruleChainNodeId": "rule-chain-node-36"
+          "ruleChainNodeId": "rule-chain-node-37"
         },
         "type": "si"
       }

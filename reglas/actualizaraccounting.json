@@ -4,7 +4,7 @@
     "name": "actualizarAccounting",
     "firstRuleNodeId": null,
     "root": false,
-    "debugMode": true,
+    "debugMode": false,
     "configuration": null
   },
   "metadata": {

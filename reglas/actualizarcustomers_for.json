@@ -1,0 +1,336 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "actualizarCustomers_for",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 4,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 962,
+          "layoutY": 263
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "name customer",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "name": "customerName"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 657,
+          "layoutY": 451
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 656,
+          "layoutY": 359
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "preparar atributos",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: 'POST_ATTRIBUTES_REQUEST'\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 650,
+          "layoutY": 254
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "customer",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${clienteActual}",
+                "entityTypes": [
+                  "CUSTOMER"
+                ]
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 326,
+          "layoutY": 150
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "arrayAccounting",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (metadata.hasOwnProperty('arrayAccounting') && JSON.parse(metadata.arrayAccounting).length>0 ){\n    return true;\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 639,
+          "layoutY": 153
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "extraer clienteActual",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var arrayAccounting=JSON.parse(metadata.arrayAccounting);\nvar clienteActual=arrayAccounting.shift();\nmetadata.clienteActual=clienteActual;\nmetadata.arrayAccounting=JSON.stringify(arrayAccounting);\nreturn {msg: msg, metadata: metadata, msgType: \"POST_TELEMETRY_REQUEST\"};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 102,
+          "layoutY": 476
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "generar array ids custormers",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var accounting=JSON.parse(metadata.ss_accounting);\nvar arrayAccounting=[];\nfor (var clave in accounting){\n    arrayAccounting.push(clave);\n}\nmetadata.arrayAccounting=JSON.stringify(arrayAccounting);\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 79,
+          "layoutY": 385
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "accounting",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "accounting"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": true,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 46,
+          "layoutY": 294
+        },
+        "type": "org.thingsboard.rule.engine.debug.TbMsgGeneratorNode",
+        "name": "Iniciar",
+        "debugMode": true,
+        "configuration": {
+          "msgCount": 1,
+          "periodInSeconds": 1,
+          "originatorId": "4aa193f0-99cd-11ea-b5dd-ef17dc77c86c",
+          "originatorType": "CUSTOMER",
+          "jsScript": "var msg = { 'LDS01_config':'<md-dialog-content> <div class=\"md-dialog-content\" flex> <md-expansion-panel-group> <md-expansion-panel md-component-id=\"panelGeneral\" id=\"panelGeneral\"> <md-expansion-panel-collapsed> <div class=\"md-title\" translate>Configuraci&oacute;n general</div> <div class=\"md-summary\">Configurar atributos de la entidad</div> <md-expansion-panel-icon></md-expansion-panel-icon> </md-expansion-panel-collapsed> <md-expansion-panel-expanded> <md-expansion-panel-header ng-click=\"$panel.collapse()\"> <div class=\"md-title\" translate>Configuraci&oacute;n general</div> <div class=\"md-summary\">Configurar atributos de la entidad</div> <md-expansion-panel-icon></md-expansion-panel-icon> </md-expansion-panel-header> <md-expansion-panel-content> <form name=\"form.configuracionGeneral\" class=\"configure-entity-form\" ng-submit=\"vm.configurar()\"> <sustituir-coordenadas class=\"ng-scope\"></sustituir-coordenadas> <sustituir-chirpstack class=\"ng-scope\"></sustituir-chirpstack> <div class=\"md-body-1\" style=\"padding-bottom: 10px; color: rgba(0, 0, 0, 0.57);\">Alarmas</div> <div class=\"body\" ng-if=\"!vm.attributes.hasOwnProperty(\\'esDelegado\\') || (vm.attributes.esDelegado===false)||(vm.attributes.esDelegado===true && vm.attributes.delegacion.hasOwnProperty(\\'DOOR_OPEN_STATUS\\') && vm.attributes.delegacion.DOOR_OPEN_STATUS===true)\" > <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"> <div flex layout=\"column\"> <label class=\"checkbox-label\">Activar alarma de cambio de estado</label> <md-checkbox ng-model=\"vm.configuracion.__alarmas.cambioDeEstado.enable\" style=\"margin-bottom: 10px;\"> {{(vm.configuracion.__alarmas.cambioDeEstado.enable ? \"value.true\" : \"value.false\") | translate}} </md-checkbox> </div> <div class=\"row\" layout=\"row\"> <md-input-container class=\"md-block\" style=\"min-width: 100px;\"> <label>Disparar al </label> <md-select ng-disabled=\"!vm.configuracion.__alarmas.cambioDeEstado.enable\" ng-required=\"vm.configuracion.__alarmas.cambioDeEstado.enable\" name=\"cambioDeEstadoTrigger\" ng-model=\"vm.configuracion.__alarmas.cambioDeEstado.trigger\" > <md-option value=\"abrir\"> abrir </md-option> <md-option value=\"cerrar\"> cerrar </md-option> </md-select> <div ng-messages=\"editEntityForm.cambioDeEstadoTrigger.$error\"><div ng-message=\"required\">Este dato es obligatorio.</div></div> </md-input-container> <sustituir-notificaciones class=\"ng-scope\">cambioDeEstado</sustituir-notificaciones> </div> </div> </div> </div> <div class=\"body\" ng-if=\"!vm.attributes.hasOwnProperty(\\'esDelegado\\') || (vm.attributes.esDelegado===false)||(vm.attributes.esDelegado===true && vm.attributes.delegacion.hasOwnProperty(\\'BAT_V\\') && vm.attributes.delegacion.BAT_V===true)\" > <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"> <div flex layout=\"column\"> <label class=\"checkbox-label\">Activar alarma de nivel bajo de batería</label> <md-checkbox ng-model=\"vm.configuracion.__alarmas.nivelDeBateria.enable\" style=\"margin-bottom: 10px;\"> {{(vm.configuracion.__alarmas.nivelDeBateria.enable ? \"value.true\" : \"value.false\") | translate}} </md-checkbox> </div> <div class=\"row\" layout=\"row\"> <md-input-container flex class=\"md-block\"> <label>Umbral (V)</label> <input type=\"decimal\" size=\"10\" ng-disabled=\"!vm.configuracion.__alarmas.nivelDeBateria.enable \" ng-model=\"vm.configuracion.__alarmas.nivelDeBateria.umbralBateria\" ng-required=\"vm.configuracion.__alarmas.nivelDeBateria.enable\" /> </md-input-container> <sustituir-notificaciones class=\"ng-scope\">nivelDeBateria</sustituir-notificaciones> </div> </div> </div> </div> <div class=\"body md-whiteframe-1dp\" style=\"margin-bottom: 25px;\" ng-if=\"!vm.attributes.hasOwnProperty(\\'esDelegado\\') || (vm.attributes.esDelegado===false)||(vm.attributes.esDelegado===true && vm.attributes.delegacion.hasOwnProperty(\\'LAST_DOOR_OPEN_DURATION\\') && vm.attributes.delegacion.LAST_DOOR_OPEN_DURATION===true)\" > <label class=\"checkbox-label\">Activar alarma de duración de apertura</label> <md-checkbox ng-model=\"vm.configuracion.__alarmas.duracionApertura.enable\" style=\"margin-bottom: 10px;\"> {{(vm.configuracion.__alarmas.duracionApertura.enable ? \"value.true\" : \"value.false\") | translate}} </md-checkbox> <md-content class=\"md-padding\" layout-xs=\"column\" layout=\"row\"> <div flex-xs flex-gt-xs=\"50\" layout=\"column\"> <md-card> <div flex layout=\"column\"> Configuraci&oacute;n <md-input-container flex class=\"md-block\"> <label>Umbral duración mínima (minutos): </label> <input type=\"decimal\" size=\"5\" autocomplete=\"off\" ng-disabled=\"!vm.configuracion.__alarmas.duracionApertura.enable \" ng-model=\"vm.configuracion.__alarmas.duracionApertura.umbralMinima\" ng-required=\"vm.configuracion.__alarmas.duracionApertura.enable\" /> </md-input-container> <md-input-container flex class=\"md-block\"> <label>Umbral duración máxima (minutos): </label> <input type=\"decimal\" size=\"5\" autocomplete=\"off\" ng-disabled=\"!vm.configuracion.__alarmas.duracionApertura.enable \" ng-model=\"vm.configuracion.__alarmas.duracionApertura.umbralMaxima\" ng-required=\"vm.configuracion.__alarmas.duracionApertura.enable\" /> </md-input-container> </div> </md-card> </div> <div flex-xs flex-gt-xs=\"50\" layout=\"column\"><sustituir-notificaciones class=\"ng-scope\">duracionApertura</sustituir-notificaciones></div> </md-content> </div><div class=\"body md-whiteframe-1dp\" style=\"margin-bottom: 25px;\" ng-if=\"!vm.attributes.hasOwnProperty(\\'esDelegado\\') || (vm.attributes.esDelegado===false)||(vm.attributes.esDelegado===true && vm.attributes.delegacion.hasOwnProperty(\\'DOOR_OPEN_TIMES\\') && vm.attributes.delegacion.DOOR_OPEN_TIMES===true)\" > <label class=\"checkbox-label\">Activar alarma de número de aperturas</label> <md-checkbox ng-model=\"vm.configuracion.__alarmas.numeroDeAperturas.enable\" style=\"margin-bottom: 10px;\"> {{(vm.configuracion.__alarmas.numeroDeAperturas.enable ? \"value.true\" : \"value.false\") | translate}} </md-checkbox> <md-content class=\"md-padding\" layout-xs=\"column\" layout=\"row\"> <div flex-xs flex-gt-xs=\"50\" layout=\"column\"> <md-card> <div flex layout=\"column\"> Configuraci&oacute;n <md-input-container flex class=\"md-block\"> <label>Umbral de número de aperturas: </label> <input type=\"decimal\" size=\"5\" autocomplete=\"off\" ng-disabled=\"!vm.configuracion.__alarmas.numeroDeAperturas.enable \" ng-model=\"vm.configuracion.__alarmas.numeroDeAperturas.umbral\" ng-required=\"vm.configuracion.__alarmas.numeroDeAperturas.enable\" /> </md-input-container> </div> </md-card> </div> <div flex-xs flex-gt-xs=\"50\" layout=\"column\"><sustituir-notificaciones class=\"ng-scope\">numeroDeAperturas</sustituir-notificaciones></div> </md-content> </div> <div class=\"body\"> <div class=\"row\" layout=\"row\" layout-align=\"start center\"> <div class=\"md-whiteframe-1dp\" flex layout=\"column\" style=\"padding-left: 5px; margin-bottom: 3px;\"> <div flex layout=\"column\"> <label class=\"checkbox-label\">Activar alarma de inactividad</label> <md-checkbox ng-model=\"vm.configuracion.__alarmas.inactividad.enable\" style=\"margin-bottom: 10px;\"> {{(vm.configuracion.__alarmas.inactividad.enable ? \"value.true\" : \"value.false\") | translate}} </md-checkbox> </div> <div class=\"row\" layout=\"row\"> <md-input-container flex class=\"md-block\"> <label>Umbral en segundos</label> <input type=\"number\" size=\"10\" ng-disabled=\"!vm.configuracion.__alarmas.inactividad.enable \" ng-model=\"vm.configuracion.__alarmas.inactividad.umbralInactividad\" ng-required=\"vm.configuracion.__alarmas.inactividad.enable\" /> </md-input-container> <sustituir-notificaciones class=\"ng-scope\">inactividad</sustituir-notificaciones> </div> </div> </div> </div> <md-button type=\"submit\" ng-disabled=\"form.configuracionGeneral.$invalid || !form.configuracionGeneral.$dirty\" class=\"md-raised md-primary\"> Configurar </md-button> </form> </md-expansion-panel-content> </md-expansion-panel-expanded> </md-expansion-panel> <md-expansion-panel md-component-id=\"panelHeartbeat\" id=\"panelHeartbeat\" ng-if=\"!vm.attributes.hasOwnProperty(\\'esDelegado\\') || (vm.attributes.esDelegado===false)||(vm.attributes.esDelegado===true && vm.attributes.delegacion.hasOwnProperty(\\'heartbeat\\') && vm.attributes.delegacion.heartbeat===true)\" > <md-expansion-panel-collapsed> <div class=\"md-title\" translate>Hearbeat</div> <div class=\"md-summary\">Configurar periodo de envío de heartbeat</div> <md-expansion-panel-icon></md-expansion-panel-icon> </md-expansion-panel-collapsed> <md-expansion-panel-expanded> <md-expansion-panel-header ng-click=\"$panel.collapse()\"> <div class=\"md-title\" translate>Hearbeat</div> <div class=\"md-summary\">Configurar periodo de envío de heartbeat</div> <md-expansion-panel-icon></md-expansion-panel-icon> </md-expansion-panel-header> <md-expansion-panel-content> <form name=\"form.configuracionDownlink\" class=\"configure-entity-form\" ng-submit=\"vm.configurar()\"> <div class=\"row\" layout=\"row\"> <md-input-container flex class=\"md-block\"> <label>Número de segundos entre heartbeats. Tenga en cuenta que debe resetear el dispositivo para habilitar este valor.</label> <input type=\"number\" size=\"10\" step=\"1\" min=\"0\" max=\"16777215\" ng-model=\"vm.configuracion.___heartbeat\" ng-change=\"actualizarHeartbeat()\" /> <md-button type=\"submit\" ng-disabled=\"form.configuracionDownlink.$invalid || !form.configuracionDownlink.$dirty\" class=\"md-raised md-primary\" ng-click=\"vm.configuracion.___ultimoDownlink=\\'heartbeat\\'\"> Configurar </md-button> </md-input-container> </div> </form> </md-expansion-panel-content> </md-expansion-panel-expanded> </md-expansion-panel> <md-expansion-panel md-component-id=\"panelBorrarContador\" id=\"panelBorrarContador\" ng-if=\"!vm.attributes.hasOwnProperty(\\'esDelegado\\') || (vm.attributes.esDelegado===false)||(vm.attributes.esDelegado===true && vm.attributes.delegacion.hasOwnProperty(\\'borrarContador\\') && vm.attributes.delegacion.borrarContador===true)\" > <md-expansion-panel-collapsed> <div class=\"md-title\" translate>Borrar contador</div> <div class=\"md-summary\">Poner a cero el contador de aperturas</div> <md-expansion-panel-icon></md-expansion-panel-icon> </md-expansion-panel-collapsed> <md-expansion-panel-expanded> <md-expansion-panel-header ng-click=\"$panel.collapse()\"> <div class=\"md-title\" translate>Borrar contador</div> <div class=\"md-summary\">Poner a cero el contador de aperturas</div> <md-expansion-panel-icon></md-expansion-panel-icon> </md-expansion-panel-header> <md-expansion-panel-content> <form name=\"form.configuracionBorrarContador\" class=\"configure-entity-form\" ng-submit=\"vm.configurar()\"> <div class=\"row\" layout=\"row\"> <md-input-container style=\"margin: 0px; margin-top: 10px;\"> <md-input-container style=\"margin: 0px; margin-top: 10px;\"> <md-button class=\"md-raised md-warn\" type=\"submit\" ng-click=\"vm.configuracion.___ultimoDownlink=\\'borrarContador\\'\">Borrar contador</md-button> </md-input-container> </md-input-container> </div> </form> </md-expansion-panel-content> </md-expansion-panel-expanded> </md-expansion-panel> <md-expansion-panel md-component-id=\"panelResetear\" id=\"panelResetear\" ng-if=\"!vm.attributes.hasOwnProperty(\\'esDelegado\\') || (vm.attributes.esDelegado===false)||(vm.attributes.esDelegado===true && vm.attributes.delegacion.hasOwnProperty(\\'resetear\\') && vm.attributes.delegacion.resetear===true)\" > <md-expansion-panel-collapsed> <div class=\"md-title\" translate>Resetear</div> <div class=\"md-summary\">Resetear dispositivo</div> <md-expansion-panel-icon></md-expansion-panel-icon> </md-expansion-panel-collapsed> <md-expansion-panel-expanded> <md-expansion-panel-header ng-click=\"$panel.collapse()\"> <div class=\"md-title\" translate>Resetear</div> <div class=\"md-summary\">Resetear dispositivo</div> <md-expansion-panel-icon></md-expansion-panel-icon> </md-expansion-panel-header> <md-expansion-panel-content> <form name=\"form.configuracionResetear\" class=\"configure-entity-form\" ng-submit=\"vm.configurar()\"> <div class=\"row\" layout=\"row\"> <md-input-container style=\"margin: 0px; margin-top: 10px;\"> <md-input-container style=\"margin: 0px; margin-top: 10px;\"> <md-button class=\"md-raised md-warn\" type=\"submit\" ng-click=\"vm.configuracion.___ultimoDownlink=\\'resetear\\'\">Resetear</md-button> </md-input-container> </md-input-container> </div> </form> </md-expansion-panel-content> </md-expansion-panel-expanded> </md-expansion-panel> </md-expansion-panel-group> </div></md-dialog-content><md-dialog-actions> <md-button ng-click=\"vm.cancel()\" class=\"md-primary\">Cancelar </md-button></md-dialog-actions>' , 'LDS01_delegate':'<md-dialog-content> <div class=\"md-dialog-content\" flex> <md-expansion-panel-group> <md-expansion-panel md-component-id=\"panelDelegacion\" id=\"panelDelegacion\"> <md-expansion-panel-collapsed> <div class=\"md-title\" translate>Nueva delegaci&oacute;n</div> <div class=\"md-summary\">Delegar dispositivo en otro usuario</div> <md-expansion-panel-icon></md-expansion-panel-icon> </md-expansion-panel-collapsed> <md-expansion-panel-expanded> <md-expansion-panel-header ng-click=\"$panel.collapse()\"> <div class=\"md-title\" translate>Nueva delegaci&oacute;n</div> <div class=\"md-summary\">Delegar dispositivo en otro usuario</div> <md-expansion-panel-icon></md-expansion-panel-icon> </md-expansion-panel-header> <md-expansion-panel-content> <form name=\"form.crearDelegacion\" class=\"configure-entity-form\" ng-submit=\"vm.delegar()\"> <md-input-container flex class=\"md-block\"> <label>Nombre del dispositivo delegado</label> <input type=\"text\" size=\"30\" ng-model=\"vm.nombreDelegado\" ng-required=\"true\" /> </md-input-container> <md-input-container flex class=\"md-block\"> <label>Clave para reclamar el dispositivo delegado (si lo deja vacío se generará una clave automáticamente). No puede empezar por cero.</label> <input type=\"text\" size=\"30\" ng-model=\"vm.tokenDelegado\" pattern=\"^[1-9a-zA-Z][0-9a-zA-Z]*$\" placeholder=\"Sólo letras y números. No puede empezar por cero.\" /> </md-input-container> <md-input-container flex class=\"md-block\"> <label>La delegación se costea a cargo del crédito del </label> <md-select ng-required=\"true\" ng-model=\"vm.delegacionPorCargoDe\"> <md-option value=\"delegador\"> Delegador (yo) </md-option> <md-option value=\"delegado\"> Delegado (usuario que reclame el dispositivo delegado) </md-option> </md-select> <div ng-messages=\"editEntityForm.cambioDeEstadoTrigger.$error\"><div ng-message=\"required\">Este dato es obligatorio.</div></div> </md-input-container> <md-input-container flex class=\"md-block\"> <md-button type=\"submit\" ng-disabled=\"form.crearDelegacion.$invalid || !form.crearDelegacion.$dirty\" class=\"md-raised md-primary\"> Delegar </md-button> </md-input-container> </form> </md-expansion-panel-content> </md-expansion-panel-expanded> </md-expansion-panel> <md-expansion-panel ng-repeat=\"delegado in vm.attributes.delegados\" md-component-id=\"panelConfiguracionDelegacion_{{$index}}\" id=\"panelConfiguracionDelegacion_{{$index}}\"> <md-expansion-panel-collapsed> <div class=\"md-title\" translate>{{delegado.nombre.substring(delegado.nombre.indexOf(\\'_\\')+1)}}</div> <div class=\"md-summary\">Configurar la delegaci&oacute;n</div> <md-expansion-panel-icon></md-expansion-panel-icon> </md-expansion-panel-collapsed> <md-expansion-panel-expanded> <md-expansion-panel-header ng-click=\"$panel.collapse()\"> <div class=\"md-title\" translate>{{delegado.nombre.substring(delegado.nombre.indexOf(\\'_\\')+1)}}</div> <div class=\"md-summary\">Configurar la delegaci&oacute;n</div> <md-expansion-panel-icon></md-expansion-panel-icon> </md-expansion-panel-header> <md-expansion-panel-content> <md-button class=\"md-raised md-button ng-isolate-scope md-ink-ripple\" ngclipboard=\"\" data-clipboard-action=\"copy\" data-clipboard-text=\"{{delegado.claimingData.secretKey}}\">Copiar clave de reclamación</md-button> <br /> <br /> <form name=\"form.configurarDelegacion_{{$index}}\" class=\"configure-entity-form\" ng-submit=\"vm.configurarDelegacion(delegado.id,$index)\"> <!-- <md-input-container flex class=\"md-block\"> --> <md-checkbox ng-model=\"vm.delegacion[$index].BAT_V\" style=\"margin-bottom: 10px;\" ng-checked=\"delegado.delegaciones.BAT_V\">Permitir ver la tensión de la bater&iacute;a</md-checkbox> <br /> <md-checkbox ng-model=\"vm.delegacion[$index].DOOR_OPEN_STATUS\" style=\"margin-bottom: 10px;\" ng-checked=\"delegado.delegaciones.DOOR_OPEN_STATUS\">Permitir ver el estado de la puerta</md-checkbox><br /> <md-checkbox ng-model=\"vm.delegacion[$index].DOOR_OPEN_TIMES\" style=\"margin-bottom: 10px;\" ng-checked=\"delegado.delegaciones.DOOR_OPEN_TIMES\">Permitir ver el contador de aperturas de la puerta</md-checkbox><br /><md-checkbox ng-model=\"vm.delegacion[$index].LAST_DOOR_OPEN_DURATION\" style=\"margin-bottom: 10px;\" ng-checked=\"delegado.delegaciones.LAST_DOOR_OPEN_DURATION\">Permitir ver la duración de la última apertura de la puerta</md-checkbox><br /> <md-checkbox ng-model=\"vm.delegacion[$index].heartbeat\" style=\"margin-bottom: 10px;\" ng-checked=\"delegado.delegaciones.heartbeat\">Permitir cambiar el periodo de env&iacute;o de heartbeats (tenga en cuenta que para que el cambio sea efectivo se necesita resetear el dispositivo)</md-checkbox> <br /><md-checkbox ng-model=\"vm.delegacion[$index].borrarContador\" style=\"margin-bottom: 10px;\" ng-checked=\"delegado.delegaciones.borrarContador\">Permitir borrar el contador de aperturas de la puerta </md-checkbox> <br /><md-checkbox ng-model=\"vm.delegacion[$index].resetear\" style=\"margin-bottom: 10px;\" ng-checked=\"delegado.delegaciones.resetear\">Permitir resetear el dispositivo </md-checkbox> <br /> <md-button type=\"submit\" ng-disabled=\"form.configurarDelegacion_{{$index}}.$invalid || !form.configurarDelegacion_{{$index}}.$dirty\" class=\"md-raised md-primary\"> Actualizar </md-button> <md-button type=\"submit\" ng-click=\"vm.delegacion[$index].borrar=true\" class=\"md-raised md-primary\"> Borrar </md-button> <!-- </md-input-container> --> </form> </md-expansion-panel-content> </md-expansion-panel-expanded> </md-expansion-panel> </md-expansion-panel-group> </div></md-dialog-content>' };\nvar metadata = {'subtipoEntidadDashboard':'LDS01' };\nvar msgType = \"POST_TELEMETRY_REQUEST\";\n\nreturn { msg: msg, metadata: metadata, msgType: msgType };"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 968,
+          "layoutY": 367
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "patron",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "TO",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${clienteActual}",
+                "entityTypes": [
+                  "CUSTOMER"
+                ]
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 969,
+          "layoutY": 467
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "dashboard",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${subtipoEntidadDashboard}",
+                "entityTypes": [
+                  "DASHBOARD"
+                ]
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 981,
+          "layoutY": 565
+        },
+        "type": "org.thingsboard.rule.engine.action.TbAssignToCustomerNode",
+        "name": "Dash2Cust",
+        "debugMode": true,
+        "configuration": {
+          "customerNamePattern": "${customerName}",
+          "customerCacheExpiration": 300,
+          "createCustomerIfNotExists": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 975,
+          "layoutY": 661
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "patron",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "TO",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${subtipoEntidadDashboard}",
+                "entityTypes": [
+                  "CUSTOMER"
+                ]
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 959,
+          "layoutY": 165
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbCheckMessageNode",
+        "name": "subtipoEntidadDashboard",
+        "debugMode": true,
+        "configuration": {
+          "messageNames": [],
+          "metadataNames": [
+            "subtipoEntidadDashboard"
+          ],
+          "checkAllKeys": true
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 9,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 13,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 5,
+        "type": "True"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 4,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 9,
+        "toIndex": 10,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 10,
+        "toIndex": 11,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 12,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 0,
+        "type": "True"
+      }
+    ],
+    "ruleChainConnections": [
+      {
+        "fromIndex": 12,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "cd398d00-d365-11ea-9205-fbede7550239"
+        },
+        "additionalInfo": {
+          "layoutX": 983,
+          "layoutY": 752,
+          "ruleChainNodeId": "rule-chain-node-15"
+        },
+        "type": "Success"
+      }
+    ]
+  }
+}

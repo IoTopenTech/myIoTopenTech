@@ -119,7 +119,7 @@
           "entityCacheExpiration": 300,
           "createEntityIfNotExists": false,
           "changeOriginatorToRelatedEntity": true,
-          "removeCurrentRelations": false
+          "removeCurrentRelations": true
         }
       },
       {
@@ -169,7 +169,7 @@
         "name": "Validacion",
         "debugMode": true,
         "configuration": {
-          "jsScript": "//Vamos a usar como prefijo para el nombre D000000001_ (D seguido de número de customer)\nmsg.nombreDispositivo='D'+msg.nombreDispositivoPadre.split('_')[0]+'_'+msg.nombreDispositivo;\nmsg.tipoEntidadNuevo='device';\nmetadata.subtipoDispositivo=msg.subtipoDispositivo;\nmetadata.nombreDispositivoPadre=msg.nombreDispositivoPadre;\nmetadata.nombreDispositivo=msg.nombreDispositivo;\nmetadata.delegacionPorCargoDe=msg.delegacionPorCargoDe;\nif (msg.hasOwnProperty('tokenDelegado')){\n    metadata.tokenDelegado=msg.tokenDelegado;\n}else{\n    metadata.tokenDelegado=\"\";\n}\nmetadata.idDispositivoPadre=msg.idDispositivoPadre;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+          "jsScript": "//Vamos a usar como prefijo para el nombre D000000001_ (D seguido de número de customer)\n//El nombre no puede empezar por _ para evitar que se pueda sobreescribir\n//la delegación _publica\nif (msg.nombreDispositivo.substring(0, 1) == \"_\") {\n    return false;\n}\nmsg.nombreDispositivo = 'D' + msg.nombreDispositivoPadre\n    .split('_')[0] + '_' + msg.nombreDispositivo;\nmsg.tipoEntidadNuevo = 'device';\nmetadata.subtipoDispositivo = msg.subtipoDispositivo;\nmetadata.nombreDispositivoPadre = msg\n.nombreDispositivoPadre;\nmetadata.nombreDispositivo = msg.nombreDispositivo;\n//En los free voy a indicar que la delegación es por cargo del delegador\n//aunque no tenga efecto sobre los créditos\nif (msg.subtipoDispositivo.split(\"_\").pop() == \"FREE\") {\n    metadata.delegacionPorCargoDe = \"delegador\";\n    msg.delegacionPorCargoDe = \"delegador\";\n} else {\n    metadata.delegacionPorCargoDe = msg\n    .delegacionPorCargoDe;\n}\nif (msg.hasOwnProperty('tokenDelegado')) {\n    metadata.tokenDelegado = msg.tokenDelegado;\n} else {\n    metadata.tokenDelegado = \"\";\n}\nmetadata.idDispositivoPadre = msg.idDispositivoPadre;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       },
       {

@@ -8,12 +8,49 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 10,
+    "firstNodeIndex": 2,
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 568,
-          "layoutY": 379
+          "layoutX": 1457,
+          "layoutY": 797
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "sólo si no publica",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return !metadata.hasOwnProperty('ss_esPublica') || metadata\n    .ss_esPublica== false;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 546,
+          "layoutY": 476
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "esPublica? y es borrar?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if(metadata.hasOwnProperty ('ss_delegados')){\n    var delegados=JSON.parse(metadata.ss_delegados);\n    for (var i=0;i<delegados.length;i++){\n        \n        if(delegados[i].id==metadata.idDelegacion){\n            \n            if (delegados[i].hasOwnProperty('esPublica')&& delegados[i].esPublica==true &&msg.delegacion.hasOwnProperty('borrar')&&msg.delegacion.borrar==true){\n                return ['si'];\n            }\n        }\n    }\n\n}else{\n    return['no'];\n}\nreturn['no'];"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 274,
+          "layoutY": 144,
+          "description": "Al crear la delegación pública se envía en idDelegacion el valor publica en lugar del id de la delegación"
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "crear pública o configurar",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if(msg.idDelegacion==\"publica\"){\n    return ['crearPublica'];\n}else{\n    return ['configurar'];\n}\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 871,
+          "layoutY": 568
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
         "name": "borrar o actualizar?",
@@ -25,8 +62,8 @@
       {
         "additionalInfo": {
           "description": "Esto me permitirá saber si ha sido reclamado o no. Si no ha sido reclamado tendrá claimingData",
-          "layoutX": 859,
-          "layoutY": 608
+          "layoutX": 1162,
+          "layoutY": 797
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
         "name": "claimingData",
@@ -44,8 +81,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1141,
-          "layoutY": 606
+          "layoutX": 901,
+          "layoutY": 894
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
         "name": "nombre=originatorName",
@@ -58,20 +95,20 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 860,
-          "layoutY": 670
+          "layoutX": 1175,
+          "layoutY": 894
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "preparar borrado",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var newMsg={\"accion\": \"borrarEntidad\",\n    \"nombreEntidad\": \"_\"+metadata.originatorName.split(\"_\")[1],\n    \"idEntidad\": metadata.idDelegacion,\n    \"tipoEntidad\": \"DEVICE\",\n    \"claimingData\": metadata.ss_claimingData\n};\n\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "jsScript": "var newMsg={\"accion\": \"borrarEntidad\",\n    \"nombreEntidad\": \"_\"+metadata.originatorName.substring(metadata.originatorName.indexOf(\"_\")+1),\n    \"idEntidad\": metadata.idDelegacion,\n    \"tipoEntidad\": \"DEVICE\",\n    \"claimingData\": metadata.ss_claimingData\n};\n\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 571,
-          "layoutY": 532
+          "layoutX": 874,
+          "layoutY": 721
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "delegado",
@@ -95,8 +132,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 573,
-          "layoutY": 602
+          "layoutX": 876,
+          "layoutY": 791
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
         "name": "actualizar?",
@@ -107,8 +144,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 857,
-          "layoutY": 520
+          "layoutX": 1160,
+          "layoutY": 709
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "prepararMensaje",
@@ -119,8 +156,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1136,
-          "layoutY": 516
+          "layoutX": 1439,
+          "layoutY": 705
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
         "name": "guardar delegado",
@@ -131,8 +168,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 283,
-          "layoutY": 378
+          "layoutX": 266,
+          "layoutY": 475
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
         "name": "delegados",
@@ -150,8 +187,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 283,
-          "layoutY": 230
+          "layoutX": 266,
+          "layoutY": 327
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "Originador=Customer",
@@ -173,20 +210,20 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 288,
-          "layoutY": 150
+          "layoutX": 265,
+          "layoutY": 251
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "Validacion",
         "debugMode": true,
         "configuration": {
-          "jsScript": "msg.delegacion=JSON.parse(msg.delegacion);\nmetadata.idDispositivo=msg.idDispositivo; //id del delegado\nmetadata.nombreDelegacion=msg.nombreDelegacion;\nmetadata.idDelegacion=msg.idDelegacion;//id del delegado\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "jsScript": "\nmsg.delegacion=JSON.parse(msg.delegacion);\nmetadata.idDispositivo=msg.idDispositivo; //id del delegado\nmetadata.nombreDelegacion=msg.nombreDelegacion;\nmetadata.idDelegacion=msg.idDelegacion;//id del delegado\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 557,
-          "layoutY": 295
+          "layoutX": 540,
+          "layoutY": 392
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "Originator=Delegador",
@@ -208,8 +245,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 282,
-          "layoutY": 304
+          "layoutX": 265,
+          "layoutY": 401
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
         "name": "originador name?",
@@ -222,8 +259,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1105,
-          "layoutY": 367
+          "layoutX": 1408,
+          "layoutY": 556
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
         "name": "guardar",
@@ -234,8 +271,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 846,
-          "layoutY": 372
+          "layoutX": 1149,
+          "layoutY": 561
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "actualizarDelegados",
@@ -248,86 +285,127 @@
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 14,
-        "type": "actualizar"
+        "toIndex": 5,
+        "type": "True"
       },
       {
         "fromIndex": 1,
-        "toIndex": 2,
-        "type": "Success"
+        "toIndex": 7,
+        "type": "no"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 3,
+        "type": "no"
       },
       {
         "fromIndex": 2,
-        "toIndex": 3,
-        "type": "Success"
+        "toIndex": 13,
+        "type": "configurar"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 17,
+        "type": "actualizar"
       },
       {
         "fromIndex": 4,
-        "toIndex": 5,
+        "toIndex": 0,
         "type": "Success"
       },
       {
         "fromIndex": 5,
         "toIndex": 6,
-        "type": "True"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 1,
-        "type": "False"
-      },
-      {
-        "fromIndex": 6,
-        "toIndex": 7,
         "type": "Success"
       },
       {
-        "fromIndex": 8,
-        "toIndex": 4,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 8,
-        "toIndex": 0,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 9,
-        "toIndex": 12,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 10,
-        "toIndex": 9,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 11,
+        "fromIndex": 7,
         "toIndex": 8,
         "type": "Success"
       },
       {
+        "fromIndex": 8,
+        "toIndex": 9,
+        "type": "True"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 4,
+        "type": "False"
+      },
+      {
+        "fromIndex": 9,
+        "toIndex": 10,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
         "fromIndex": 12,
-        "toIndex": 11,
+        "toIndex": 15,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 12,
         "type": "Success"
       },
       {
         "fromIndex": 14,
-        "toIndex": 13,
+        "toIndex": 11,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 15,
+        "toIndex": 14,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 16,
         "type": "Success"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 3,
+        "fromIndex": 1,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "b45c88d0-1d04-11eb-b978-37de61f72881"
+        },
+        "additionalInfo": {
+          "layoutX": 879,
+          "layoutY": 377,
+          "ruleChainNodeId": "rule-chain-node-23"
+        },
+        "type": "si"
+      },
+      {
+        "fromIndex": 2,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "ae4ffce0-1a22-11eb-b978-37de61f72881"
+        },
+        "additionalInfo": {
+          "layoutX": 589,
+          "layoutY": 143,
+          "ruleChainNodeId": "rule-chain-node-22"
+        },
+        "type": "crearPublica"
+      },
+      {
+        "fromIndex": 6,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
           "id": "76a80f10-0a57-11eb-b82a-9b3a9cfbb111"
         },
         "additionalInfo": {
-          "layoutX": 1142,
-          "layoutY": 663,
-          "ruleChainNodeId": "rule-chain-node-17"
+          "layoutX": 1457,
+          "layoutY": 887,
+          "ruleChainNodeId": "rule-chain-node-21"
         },
         "type": "Success"
       }

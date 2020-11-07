@@ -1,0 +1,43 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "actualizarCustomers_next",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 0,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 322,
+          "layoutY": 151
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "nada",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "return {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      }
+    ],
+    "connections": null,
+    "ruleChainConnections": [
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "92f252a0-d345-11ea-9205-fbede7550239"
+        },
+        "additionalInfo": {
+          "layoutX": 622,
+          "layoutY": 154,
+          "ruleChainNodeId": "rule-chain-node-2"
+        },
+        "type": "Success"
+      }
+    ]
+  }
+}

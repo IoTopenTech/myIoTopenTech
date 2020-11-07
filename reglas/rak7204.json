@@ -1,0 +1,1635 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "RAK7204",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 19,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 1174,
+          "layoutY": 842
+        },
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1438,
+          "layoutY": 797
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha generado una alarma de inactividad.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 778,
+          "layoutY": 682,
+          "description": "He tenido que poner esto porque parece que TB no actualiza el nombre del dispositivo cuando lo cambiamos desde el panel Configuración"
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "name?",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "name": "deviceName"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1171,
+          "layoutY": 1185
+        },
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1437,
+          "layoutY": 1025
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha generado una alarma de tipo \"+metadata.tipoAlarma+\". La temperatura es \"+metadata.temperature_2+\" ºC y el umbral es de \"+metadata.umbralMinimo+\" ºC.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.temperature_2+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1173,
+          "layoutY": 1009
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Crear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
+          "severity": "CRITICAL",
+          "propagate": true,
+          "useMessageAlarmData": false,
+          "relationTypes": [
+            "Contains"
+          ]
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1125,
+          "layoutY": 250
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "downlinkQueue",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "downlinkQueue"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": true,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 782,
+          "layoutY": 533
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "RAW2JSON",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var b64array =\n    \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=\";\n\nfunction decode64(input) {\n\n    var output = \"\";\n    var hex = \"\";\n    var chr1, chr2, chr3 = \"\";\n    var enc1, enc2, enc3, enc4 = \"\";\n    var i = 0;\n\n    input = input.replace(/[^A-Za-z0-9\\+\\/\\=]/g, \"\");\n\n    do {\n        enc1 = b64array.indexOf(input.charAt(i++));\n        enc2 = b64array.indexOf(input.charAt(i++));\n        enc3 = b64array.indexOf(input.charAt(i++));\n        enc4 = b64array.indexOf(input.charAt(i++));\n\n        chr1 = (enc1 << 2) | (enc2 >> 4);\n        chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);\n        chr3 = ((enc3 & 3) << 6) | enc4;\n\n        output = output + String.fromCharCode(chr1);\n\n        if (enc3 != 64) {\n            output = output + String.fromCharCode(chr2);\n        }\n        if (enc4 != 64) {\n            output = output + String.fromCharCode(chr3);\n        }\n\n        chr1 = chr2 = chr3 = \"\";\n        enc1 = enc2 = enc3 = enc4 = \"\";\n\n    } while (i < input.length);\n\n    return unescape(output);\n\n}\n\nfunction encodeHex(input) {\n    var hex = \"\";\n\n    for (i = 0; i < input.length; i++)\n        hex += ('00' + input.charCodeAt(i).toString(16))\n        .slice(-2);\n\n    return hex;\n}\nvar newMsg = {};\nnewMsg.app_id = msg.app_id;\nnewMsg.dev_id = msg.dev_id;\n\nif (msg.hasOwnProperty('ultimoUplink') && msg\n    .ultimoUplink == 'CS_new') {\n    newMsg.hardware_serial = encodeHex(decode64(msg\n        .hardware_serial));\n    msg.infoDownlink.hardware_serial = encodeHex(decode64(\n        msg.infoDownlink.hardware_serial));\n    msg.ultimoUplink = \"CS\";\n} else {\n    newMsg.hardware_serial = msg.hardware_serial;\n}\n\nnewMsg.counter = msg.counter;\nnewMsg.port = msg.port;\nnewMsg.metadata = msg.metadata;\nnewMsg.payload_raw = encodeHex(decode64(msg.payload_raw));\n\n//Inicio de la conversión de la carga de pago RAW en telemetrías\n//El RAK7204 usa LPP\n//Ejemplo\n//0802016c07686906732657026700d804020591\nvar comodin_payload_raw = newMsg.payload_raw;\n//Creo el decodificador LPP\nvar payload_fields = {};\nwhile (comodin_payload_raw.length > 4) {\n    switch (comodin_payload_raw.substring(2, 4)) {\n        case \"00\":\n            payload_fields['digital_in_' +\n                    parseInt(comodin_payload_raw\n                        .substring(0, 2), 16)] =\n                parseInt(\n                    comodin_payload_raw.substring(4, 6),\n                    16);\n            comodin_payload_raw = comodin_payload_raw\n                .substring(6);\n            break;\n        case \"01\":\n            payload_fields['digital_out_' +\n                    parseInt(comodin_payload_raw\n                        .substring(0, 2), 16)] =\n                parseInt(\n                    comodin_payload_raw.substring(4, 6),\n                    16);\n            comodin_payload_raw = comodin_payload_raw\n                .substring(6);\n            break;\n        case \"02\":\n\n\n            valor = parseInt(\n                comodin_payload_raw.substring(4,\n                    8),\n                16);\n\n            if ((valor & 0x8000) > 0) {\n                payload_fields['analog_in_' + parseInt(\n                    comodin_payload_raw.substring(0,\n                        2), 16)] = ((valor & 0x7FFF) -\n                    0x8000) / 100.0;\n            } else {\n                payload_fields['analog_in_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)] = valor /\n                    100.0;\n\n            }\n\n\n\n            comodin_payload_raw = comodin_payload_raw\n                .substring(8);\n            break;\n        case \"03\":\n            payload_fields['analog_out_' +\n                    parseInt(comodin_payload_raw\n                        .substring(0, 2), 16)] =\n                parseInt(\n                    comodin_payload_raw.substring(4, 8),\n                    16) / 100.0;\n            comodin_payload_raw = comodin_payload_raw\n                .substring(8);\n            break;\n        case \"65\":\n            payload_fields['luminosity_' +\n                    parseInt(comodin_payload_raw\n                        .substring(0, 2), 16)] =\n                parseInt(\n                    comodin_payload_raw.substring(4, 8),\n                    16);\n            comodin_payload_raw = comodin_payload_raw\n                .substring(8);\n            break;\n        case \"66\":\n            payload_fields['presence_' +\n                    parseInt(comodin_payload_raw\n                        .substring(0, 2), 16)] =\n                parseInt(\n                    comodin_payload_raw.substring(4, 6),\n                    16);\n            comodin_payload_raw = comodin_payload_raw\n                .substring(6);\n            break;\n        case \"67\":\n            payload_fields['temperature_' +\n                    parseInt(comodin_payload_raw\n                        .substring(0, 2), 16)] =\n                parseInt(\n                    comodin_payload_raw.substring(4, 8),\n                    16) / 10.0;\n            comodin_payload_raw = comodin_payload_raw\n                .substring(8);\n            break;\n        case \"68\":\n            payload_fields['relative_humidity_' +\n                    parseInt(comodin_payload_raw\n                        .substring(0, 2), 16)] =\n                parseInt(\n                    comodin_payload_raw.substring(4, 6),\n                    16) / 2.0;\n            comodin_payload_raw = comodin_payload_raw\n                .substring(6);\n            break;\n        case \"73\":\n            payload_fields[\n                    'barometric_pressure_' +\n                    parseInt(comodin_payload_raw\n                        .substring(0, 2), 16)] =\n                parseInt(\n                    comodin_payload_raw.substring(4, 8),\n                    16) / 10.0;\n            comodin_payload_raw = comodin_payload_raw\n                .substring(8);\n            break;\n        case \"71\":\n            var valor;\n            var campo = 'accelerometer_' +\n                parseInt(comodin_payload_raw\n                    .substring(0, 2), 16);\n\n            payload_fields[campo] = {};\n\n            valor = parseInt(\n                comodin_payload_raw.substring(4,\n                    8),\n                16);\n\n            if ((valor & 0x8000) > 0) {\n                payload_fields[campo]\n                    .x =\n                    ((valor & 0x7FFF) - 0x8000) / 1000.0;\n            } else {\n                payload_fields[campo]\n                    .x =\n                    valor / 1000.0;\n\n            }\n\n\n\n\n            valor = parseInt(\n                comodin_payload_raw.substring(8,\n                    12),\n                16);\n\n\n            if ((valor & 0x8000) > 0) {\n                payload_fields[campo]\n                    .y =\n                    ((valor & 0x7FFF) - 0x8000) / 1000.0;\n            } else {\n                payload_fields[campo]\n                    .y =\n                    valor / 1000.0;\n\n            }\n\n\n\n            valor = parseInt(\n                comodin_payload_raw.substring(12,\n                    16),\n                16);\n\n\n            if ((valor & 0x8000) > 0) {\n                payload_fields[campo]\n                    .z =\n                    ((valor & 0x7FFF) - 0x8000) / 1000.0;\n            } else {\n                payload_fields[campo]\n                    .z =\n                    valor / 1000.0;\n\n            }\n\n\n            comodin_payload_raw = comodin_payload_raw\n                .substring(16);\n            break;\n        case \"86\":\n            var valor;\n            var campo = 'gyrometer_' +\n                parseInt(comodin_payload_raw\n                    .substring(0, 2), 16);\n\n            payload_fields[campo] = {};\n            valor = parseInt(\n                comodin_payload_raw.substring(4,\n                    8),\n                16);\n\n\n            if ((valor & 0x8000) > 0) {\n                payload_fields[campo]\n                    .x =\n                    ((valor & 0x7FFF) - 0x8000) / 100.0;\n\n            } else {\n                payload_fields[campo]\n                    .x =\n                    valor / 100.0;\n            }\n\n\n            valor = parseInt(\n                comodin_payload_raw.substring(8,\n                    12),\n                16);\n\n\n            if ((valor & 0x8000) > 0) {\n                payload_fields[campo]\n                    .y =\n                    ((valor & 0x7FFF) - 0x8000) / 100.0;\n            } else {\n                payload_fields[campo]\n                    .y =\n                    valor / 100.0;\n\n            }\n\n\n\n            valor = parseInt(\n                comodin_payload_raw.substring(12,\n                    16),\n                16);\n\n\n            if ((valor & 0x8000) > 0) {\n                payload_fields[campo]\n                    .z =\n                    ((valor & 0x7FFF) - 0x8000) / 100.0;\n            } else {\n                payload_fields[campo]\n                    .z =\n                    valor / 100.0;\n\n            }\n\n\n\n\n            comodin_payload_raw = comodin_payload_raw\n                .substring(16);\n            break;\n        case \"88\":\n            var valor;\n            var campo = 'gps_' +\n                parseInt(comodin_payload_raw\n                    .substring(0, 2), 16);\n\n            payload_fields[campo] = {};\n            valor = parseInt(\n                comodin_payload_raw.substring(4,\n                    10),\n                16);\n\n            if ((valor & 0x800000) > 0) {\n                payload_fields[campo]\n                    .latitude = (\n                        valor - 0x1000000) / 10000.0;\n\n            } else {\n                payload_fields[campo]\n                    .latitude =\n                    valor / 10000.0;\n            }\n\n            valor = parseInt(\n                comodin_payload_raw.substring(10,\n                    16),\n                16);\n            if ((valor & 0x800000) > 0) {\n                payload_fields[campo]\n                    .longitude = (\n                        valor - 0x1000000) / 10000.0;\n            } else {\n                payload_fields[campo]\n                    .longitude =\n                    valor / 10000.0;\n\n            }\n\n            valor = parseInt(\n                comodin_payload_raw.substring(16,\n                    22),\n                16);\n            if ((valor & 0x800000) > 0) {\n                payload_fields[campo]\n                    .longitude = (\n                        valor - 0x1000000) / 100.0;\n            } else {\n                payload_fields[campo]\n                    .altitude =\n                    valor / 100.0;\n\n\n            }\n            comodin_payload_raw = comodin_payload_raw\n                .substring(22);\n            break;\n    }\n}\n\n\nif (payload_fields.hasOwnProperty(\n    'barometric_pressure_6')) {\n    newMsg.barometric_pressure_6 = payload_fields\n        .barometric_pressure_6;\n\n}\nif (payload_fields.hasOwnProperty('relative_humidity_7')) {\n    newMsg.relative_humidity_7 = payload_fields\n        .relative_humidity_7;\n\n}\nif (payload_fields.hasOwnProperty('temperature_2')) {\n    newMsg.temperature_2 = payload_fields.temperature_2;\n\n}\nif (payload_fields.hasOwnProperty('analog_in_8')) {\n    newMsg.analog_in_8 = payload_fields.analog_in_8;\n\n}\nif (payload_fields.hasOwnProperty('analog_in_4') &&\n    payload_fields.hasOwnProperty('temperature_2') &&\n    payload_fields.hasOwnProperty('relative_humidity_7')) {\n    //Uso esta referencia para calcular el IAQ\n    //https://github.com/G6EJD/BME680-Example\n    //David Bird 2018\n    //Asumo rango de resistencia de 0 a 50000\n    //Doy un peso del 10% a la humedad\n    //y otro 10% a la temperatura\n\n    var resistencia = 100.0 - (Math.min(50000, Math.abs(\n            payload_fields.analog_in_4*1000.0)) * 100.0 /\n        50000.0);\n    var temperatura;\n    if (payload_fields.temperature_2 < 21) {\n        temperatura = (payload_fields.temperature_2 -\n            21.0) * 100.0 / (-41.0);\n    } else {\n        temperatura = (payload_fields.temperature_2 -\n            21.0) * 100.0 / 79.0;\n    }\n    var humedad;\n    if (payload_fields.relative_humidity_7 < 40) {\n        humedad = (payload_fields.relative_humidity_7 -\n            40.0) * 100.0 / (-40.0);\n    } else {\n        humedad = (payload_fields.relative_humidity_7 -\n            40.0) * 100.0 / 60.0;\n    }\n    newMsg.iaq = 0.8 * resistencia + 0.1 * temperatura +\n        0.1 * humedad; //en porcentaje\n    newMsg.iaq = 5.0 * newMsg.iaq;\n\n}\n\n//Final de la conversión de la carga de pago RAW en telemetrías\n\n\nif (!msg.hasOwnProperty('ultimoUplink')) {\n    newMsg.ultimoUplink = \"TTN\";\n    newMsg.infoDownlink = {\n        \"downlink_url\": msg.downlink_url,\n        \"ttn_dev_id\": msg.dev_id\n    };\n} else {\n    newMsg.ultimoUplink = msg.ultimoUplink;\n    newMsg.infoDownlink = msg.infoDownlink;\n}\n\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 131,
+          "layoutY": 348
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "es telemetria?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (msgType == 'POST_TELEMETRY_REQUEST') {\n    if (msg.hasOwnProperty('___ultimoDownlink') && !metadata.hasOwnProperty('delegadosArray') ) {\n        //Realmente sólo puede enviar el downlink el delegador (que no tiene el atributo delegadosArray)\n        return ['downlink'];\n     }else if (msg.hasOwnProperty('___ultimoDownlink')) {\n        return ['guardarAtributos'];\n    } else {\n        return ['telemetria'];\n    }\n} else if (msgType == 'INACTIVITY_EVENT' || msgType ==\n    'ACTIVITY_EVENT') {\n    return ['alarma'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1063,
+          "layoutY": 528,
+          "description": "Si la telemetría anterior ya era -1 y el delegado no tiene autorizada esa telemetría, no vuelvo a actualizarla con -1"
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetTelemetryNode",
+        "name": "anteriorTelemetria",
+        "debugMode": true,
+        "configuration": {
+          "startInterval": 60,
+          "endInterval": 1,
+          "startIntervalPattern": "",
+          "endIntervalPattern": "",
+          "useMetadataIntervalPatterns": false,
+          "startIntervalTimeUnit": "MINUTES",
+          "endIntervalTimeUnit": "MINUTES",
+          "fetchMode": "LAST",
+          "orderBy": "ASC",
+          "limit": 1000,
+          "latestTsKeyNames": [
+            "iaq",
+            "temperature_2",
+            "barometric_pressure_6",
+            "relative_humidity_7",
+            "analog_in_8"
+          ]
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1168,
+          "layoutY": 896
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Crear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
+          "severity": "CRITICAL",
+          "propagate": true,
+          "useMessageAlarmData": false,
+          "relationTypes": [
+            "Contains"
+          ]
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1168,
+          "layoutY": 957
+        },
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 878,
+          "layoutY": 906
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "C[r/l]ear",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (metadata.temperature_2> msg.alarma.umbralMaximo) {\n    return ['crear'];\n} else if( metadata.temperature_2 < msg.alarma.umbralMaximo - msg.alarma.histeresisMaximo){\n    return ['clear'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 610,
+          "layoutY": 908
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "tipo temperaturaDS maxima superada",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var obj = JSON.parse(metadata['ss___alarma_' + metadata\n    .deviceType]);\n\n//Cargamos la alarma en el mensaje para que el nodo siguiente\n//pueda ejecutar la \"lógica de negocio\"\nmsg.alarma = obj.temperatura;\n\n//Cargamos los datos de interés en los metadatos para construir los mensajes \n//de alarma tras el nodo que genera/borrar la alarma\nmetadata.temperature_2 = msg.temperature_2;\n//alarmaActual se usa en la cadena de reglas de Notificaciones\n//Para extraer información. No puede ir por msg porque se\n//pierde en el nodo de generación de alarma\nmetadata.alarmaActual = JSON.stringify(obj.temperatura);\nmetadata.tipoAlarma =\n\"Temperatura superior al umbral máximo\";\nmetadata.umbralMinimo = msg.alarma.umbralMinimo;\nmetadata.umbralMaximo = msg.alarma.umbralMaximo;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1432,
+          "layoutY": 964
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha anulado una alarma de tipo \"+metadata.tipoAlarma+\"La temperatura es \"+metadata.temperature_2+\" ºC y el umbral es de \"+metadata.umbralMaximo+\" ºC.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.temperature_2+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma anulada\"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};\n\n\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1438,
+          "layoutY": 849
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha anulado una alarma de tipo inactividad.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma anulada \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 844,
+          "layoutY": 248
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "esDelegado?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if(metadata.hasOwnProperty('ss_esDelegado')&& metadata.ss_esDelegado==\"true\" ){\n    return ['si'];\n}else{\n    return ['no'];\n}\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1173,
+          "layoutY": 1070
+        },
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 883,
+          "layoutY": 1019
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "C[r/l]ear",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (metadata.temperature_2< msg.alarma.umbralMinimo) {\n    return ['crear'];\n} else if( metadata.temperature_2 > msg.alarma.umbralMinimo + msg.alarma.histeresisMinimo){\n    return ['clear'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 96,
+          "layoutY": 250
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "esDelegado/delegacion",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "esDelegado",
+            "delegacion"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": false,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1435,
+          "layoutY": 1140
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha generado una alarma de tipo \"+metadata.tipoAlarma+\". La tensión actual de la batería es \"+metadata.analog_in_8+\" V, y el umbral de alarma es \"+metadata.umbralMinimo+\" V.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.analog_in_8+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 615,
+          "layoutY": 1021
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "tipo temperaturaDS maxima superada",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var obj = JSON.parse(metadata['ss___alarma_' + metadata\n    .deviceType]);\n\n//Cargamos la alarma en el mensaje para que el nodo siguiente\n//pueda ejecutar la \"lógica de negocio\"\nmsg.alarma = obj.temperatura;\n\n//Cargamos los datos de interés en los metadatos para construir los mensajes \n//de alarma tras el nodo que genera/borrar la alarma\nmetadata.temperature_2 = msg.temperature_2;\n//alarmaActual se usa en la cadena de reglas de Notificaciones\n//Para extraer información. No puede ir por msg porque se\n//pierde en el nodo de generación de alarma\nmetadata.alarmaActual = JSON.stringify(obj.temperatura);\nmetadata.tipoAlarma =\n\"Temperatura inferior al umbral mínimo\";\nmetadata.umbralMinimo = msg.alarma.umbralMinimo;\nmetadata.umbralMaximo = msg.alarma.umbralMaximo;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1437,
+          "layoutY": 1077
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha anulado una alarma de tipo \"+metadata.tipoAlarma+\"La temperatura es \"+metadata.temperature_2+\" ºC y el umbral es de \"+metadata.umbralMinimo+\" ºC.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.temperature_2+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma anulada\"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};\n\n\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1174,
+          "layoutY": 781
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Crear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
+          "severity": "CRITICAL",
+          "propagate": true,
+          "useMessageAlarmData": false,
+          "relationTypes": [
+            "Contains"
+          ]
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 619,
+          "layoutY": 764
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "tipoAlarma",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var obj = JSON.parse(metadata['ss___alarma_' + metadata\n    .deviceType]);\n\n\nmetadata.alarmaActual = JSON.stringify(obj.inactividad);\nmetadata.tipoAlarma = \"Inactividad\";\n\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 886,
+          "layoutY": 761
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "C[r/l]ear",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (msgType=='INACTIVITY_EVENT') {\n    return ['crear'];\n} else{\n    return ['clear'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1717,
+          "layoutY": 461
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgTimeseriesNode",
+        "name": "save timeseries",
+        "debugMode": true,
+        "configuration": {
+          "defaultTTL": 0
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1726,
+          "layoutY": 525
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "tooltip + downlink",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "// unix timestamp\nvar ts = metadata.ts;\n\n// convert unix timestamp to milliseconds\nvar ts_ms = ts * 1;\n\n// initialize new Date object\nvar date_ob = new Date(ts_ms);\n\n// year as 4 digits (YYYY)\nvar year = date_ob.getFullYear();\n\n// month as 2 digits (MM)\nvar month = (\"0\" + (date_ob.getMonth() + 1)).slice(-2);\n\n// date as 2 digits (DD)\nvar date = (\"0\" + date_ob.getDate()).slice(-2);\n\n// hours as 2 digits (hh)\nvar hours = (\"0\" + date_ob.getHours()).slice(-2);\n\n// minutes as 2 digits (mm)\nvar minutes = (\"0\" + date_ob.getMinutes()).slice(-2);\n\n// seconds as 2 digits (ss)\nvar seconds = (\"0\" + date_ob.getSeconds()).slice(-2);\n\n//Inicio de construcción del tooltip\nvar newMsg = {};\nnewMsg.tooltip = \"<b>\" + year + \"-\" + month + \"-\" + date +\n    \" \" + hours + \":\" + minutes + \":\" + seconds +\n    \"</b><br/>\" + \"<b>IAQ: </b>\" + (msg\n        .iaq == undefined ? 'No delegado' : msg\n        .iaq) +\n    \"<br/><b>Temp: </b>\" + (msg.temperature_2 ==\n        undefined ? 'No delegado' : msg.temperature_2);\nnewMsg.tooltip += \"<br/><b>Pres: </b>\" + (msg\n    .barometric_pressure_6 == undefined ?\n    'No delegado' : (msg.barometric_pressure_6) +\n    \" hPa\");\n    newMsg.tooltip += \"<br/><b>Hum: </b>\" + (msg\n    .relative_humidity_7 == undefined ?\n    'No delegado' : (msg.relative_humidity_7) +\n    \" %\");\nnewMsg.tooltip += \"<br/><b>Batería: </b>\" + (msg\n    .analog_in_8 == undefined ? 'No delegado' : (msg\n        .analog_in_8) +\n    \" V\");\n//Final de construcción del tooltip\n\nnewMsg.ultimoUplink = msg.ultimoUplink;\nnewMsg.infoDownlink = msg.infoDownlink;\n\nmsgType = \"POST_ATTRIBUTES_REQUEST\";\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 619,
+          "layoutY": 1152
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "tipoAlarma",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "JSON.parse(metadata['ss___alarma_' + metadata.deviceType]);\n\nmsg.alarma = obj.bateria;\n//Cargo los datos de interés en los metadatos para construir los mensaje de alarma\nmetadata.analog_in_8 = msg.analog_in_8;\nmetadata.alarmaActual = JSON.stringify(obj.bateria);\nmetadata.tipoAlarma = \"Nivel bajo de batería\";\nmetadata.umbralMinimo = msg.alarma.umbralMinimo;\nmetadata.histeresisMinimo = msg.alarma.histeresisMinimo;\n\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1432,
+          "layoutY": 912
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha generado una alarma de tipo \"+metadata.tipoAlarma+\". La temperatura es \"+metadata.temperature_2+\" ºC y el umbral es de \"+metadata.umbralMaximo+\" ºC.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.temperature_2+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 2267,
+          "layoutY": 248
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 761,
+          "layoutY": 378
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Everynet2TTN",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var b64array =\n    \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=\";\n\nfunction decode64(input) {\n\n    var output = \"\";\n    var hex = \"\";\n    var chr1, chr2, chr3 = \"\";\n    var enc1, enc2, enc3, enc4 = \"\";\n    var i = 0;\n\n    input = input.replace(/[^A-Za-z0-9\\+\\/\\=]/g, \"\");\n\n    do {\n        enc1 = b64array.indexOf(input.charAt(i++));\n        enc2 = b64array.indexOf(input.charAt(i++));\n        enc3 = b64array.indexOf(input.charAt(i++));\n        enc4 = b64array.indexOf(input.charAt(i++));\n\n        chr1 = (enc1 << 2) | (enc2 >> 4);\n        chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);\n        chr3 = ((enc3 & 3) << 6) | enc4;\n\n        output = output + String.fromCharCode(chr1);\n\n        if (enc3 != 64) {\n            output = output + String.fromCharCode(chr2);\n        }\n        if (enc4 != 64) {\n            output = output + String.fromCharCode(chr3);\n        }\n\n        chr1 = chr2 = chr3 = \"\";\n        enc1 = enc2 = enc3 = enc4 = \"\";\n\n    } while (i < input.length);\n\n    return unescape(output);\n\n}\n\nfunction encodeHex(input) {\n    var hex = \"\";\n\n    for (i = 0; i < input.length; i++)\n        hex += ('00' + input.charCodeAt(i).toString(16))\n        .slice(-2);\n\n    return hex;\n}\n\n//Sólo gestiono los uplinks no duplicados\nif (msg.params.duplicate === false) {\n\n    /*FORMATO EVERYNET ABP\n    {\n    \"type\": \"uplink\",\n    \"meta\": {\n        \"network\": \"f2108cf9ef0647b291e07e708b8f1812\",\n        \"packet_hash\": \"7a0a3591f78ca5170d189fc13df2be39\",\n        \"application\": \"70b3d57ed0024fa9\",\n        \"device_addr\": \"2601128e\",\n        \"time\": 1592045398.914028883,\n        \"device\": \"00098698e0267d50\",\n        \"packet_id\": \"a5bc7e3592c5eb4b581915cbe8e62545\",\n        \"gateway\": \"b0fd0b70063c0000\"\n    },\n    \"params\": {\n        \"rx_time\": 1592045398.8111801147,\n        \"port\": 1,\n        \"duplicate\": false,\n        \"counter_up\": 0,\n        \"payload\": \"AQIA8QIAAANnAPYEcyTIBWh1BgEA\",\n        \"encrypted_payload\": \"rxcVFaaTAWU4bM4ys885QgCRQXec\"\n    }\n}\n*/\n    /*FORMATO TTN\n    {\n    \"app_id\": \"iotopentech\",\n    \"dev_id\": \"iotopentech03\",\n    \"hardware_serial\": \"005640FFD76F9212\",\n    \"port\": 1,\n    \"counter\": 31092,\n    \"payload_raw\": \"AWYAAgEAA2hWBAIBVAVnAOsGcyTwBwIAAA\\u003d\\u003d\",\n    \"payload_fields\": {\n        \"analog_in_4\": 3.4,\n        \"analog_in_7\": 0,\n        \"barometric_pressure_6\": 945.6,\n        \"digital_out_2\": 0,\n        \"presence_1\": 0,\n        \"relative_humidity_3\": 43,\n        \"temperature_5\": 23.5\n    },\n    \"metadata\": {\n        \"time\": \"2020-06-13T11:25:49.770303106Z\",\n        \"frequency\": 868.5,\n        \"modulation\": \"LORA\",\n        \"data_rate\": \"SF7BW125\",\n        \"coding_rate\": \"4/5\",\n        \"gateways\": [{\n            \"gtw_id\": \"eui-3234333629005e00\",\n            \"timestamp\": 3734173416,\n            \"time\": \"\",\n            \"channel\": 2,\n            \"rssi\": -87,\n            \"snr\": 4,\n            \"rf_chain\": 0\n        }]\n    },\n    \"downlink_url\": \"https://integrations.thethingsnetwork.org/ttn-eu/api/v2/down/iotopentech/myiotopentech_integration?key\\u003dttn-account-v2.hLI6TVUdL4uPkXgUECKvvnDlLm2nvlSSj24ciHOth_Q\"\n}\n*/\n\n\n    var newMsg = {};\n    newMsg.app_id = msg.meta.application;\n    newMsg.dev_id = msg.meta.device_addr;\n    newMsg.hardware_serial = msg.meta.device;\n    newMsg.counter = msg.params.counter_up;\n    newMsg.port = msg.params.port;\n    //newMsg.payload_raw = encodeHex(decode64(msg.params.payload));\n    newMsg.payload_raw = msg.params\n        .payload;\n    /*\n    var comodin_payload_raw = newMsg.payload_raw;\n    //Creo el decodificador LPP\n    newMsg.payload_fields = {};\n\n    while (comodin_payload_raw.length > 4) {\n        switch (comodin_payload_raw.substring(2, 4)) {\n            case \"00\":\n                newMsg.payload_fields['digital_in_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)] =\n                    parseInt(\n                        comodin_payload_raw.substring(4, 6),\n                        16);\n                comodin_payload_raw = comodin_payload_raw\n                    .substring(6);\n                break;\n            case \"01\":\n                newMsg.payload_fields['digital_out_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)] =\n                    parseInt(\n                        comodin_payload_raw.substring(4, 6),\n                        16);\n                comodin_payload_raw = comodin_payload_raw\n                    .substring(6);\n                break;\n            case \"02\":\n                newMsg.payload_fields['analog_in_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)] =\n                    parseInt(\n                        comodin_payload_raw.substring(4, 8),\n                        16) / 100.0;\n                comodin_payload_raw = comodin_payload_raw\n                    .substring(8);\n                break;\n            case \"03\":\n                newMsg.payload_fields['analog_out_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)] =\n                    parseInt(\n                        comodin_payload_raw.substring(4, 8),\n                        16) / 100.0;\n                comodin_payload_raw = comodin_payload_raw\n                    .substring(8);\n                break;\n            case \"65\":\n                newMsg.payload_fields['luminosity_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)] =\n                    parseInt(\n                        comodin_payload_raw.substring(4, 8),\n                        16);\n                comodin_payload_raw = comodin_payload_raw\n                    .substring(8);\n                break;\n            case \"65\":\n                newMsg.payload_fields['presence_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)] =\n                    parseInt(\n                        comodin_payload_raw.substring(4, 6),\n                        16);\n                comodin_payload_raw = comodin_payload_raw\n                    .substring(6);\n                break;\n            case \"67\":\n                newMsg.payload_fields['temperature_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)] =\n                    parseInt(\n                        comodin_payload_raw.substring(4, 8),\n                        16) / 10.0;\n                comodin_payload_raw = comodin_payload_raw\n                    .substring(8);\n                break;\n            case \"68\":\n                newMsg.payload_fields['relative_humidity_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)] =\n                    parseInt(\n                        comodin_payload_raw.substring(4, 6),\n                        16) / 2.0;\n                comodin_payload_raw = comodin_payload_raw\n                    .substring(6);\n                break;\n            case \"73\":\n                newMsg.payload_fields[\n                        'barometric_pressure_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)] =\n                    parseInt(\n                        comodin_payload_raw.substring(4, 8),\n                        16) / 10.0;\n                comodin_payload_raw = comodin_payload_raw\n                    .substring(8);\n                break;\n            case \"71\":\n                newMsg.payload_fields['accelerometer_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)].x =\n                    parseInt(\n                        comodin_payload_raw.substring(4, 8),\n                        16) / 1000.0;\n                newMsg.payload_fields['accelerometer_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)].y =\n                    parseInt(\n                        comodin_payload_raw.substring(8,\n                            12),\n                        16) / 1000.0;\n                newMsg.payload_fields['accelerometer_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)].z =\n                    parseInt(\n                        comodin_payload_raw.substring(12,\n                            16),\n                        16) / 1000.0;\n                comodin_payload_raw = comodin_payload_raw\n                    .substring(16);\n                break;\n            case \"86\":\n                newMsg.payload_fields['gyrometer_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)].x =\n                    parseInt(\n                        comodin_payload_raw.substring(4, 8),\n                        16) / 100.0;\n                newMsg.payload_fields['gyrometer_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)].y =\n                    parseInt(\n                        comodin_payload_raw.substring(8,\n                            12),\n                        16) / 100.0;\n                newMsg.payload_fields['gyrometer_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)].z =\n                    parseInt(\n                        comodin_payload_raw.substring(12,\n                            16),\n                        16) / 100.0;\n                comodin_payload_raw = comodin_payload_raw\n                    .substring(16);\n                break;\n            case \"88\":\n                newMsg.payload_fields['gps_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)]\n                    .latitude =\n                    parseInt(\n                        comodin_payload_raw.substring(4,\n                        10),\n                        16) / 10000.0;\n                newMsg.payload_fields['gps_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)]\n                    .longitude =\n                    parseInt(\n                        comodin_payload_raw.substring(10,\n                            16),\n                        16) / 10000.0;\n                newMsg.payload_fields['gps_' +\n                        parseInt(comodin_payload_raw\n                            .substring(0, 2), 16)]\n                    .altitude =\n                    parseInt(\n                        comodin_payload_raw.substring(16,\n                            22),\n                        16) / 100.0;\n                comodin_payload_raw = comodin_payload_raw\n                    .substring(22);\n                break;\n        }\n    }\n*/\n\n    newMsg.metadata = {\n        'gateway': msg.meta.gateway,\n        'network': msg.meta.network\n    };\n\n    newMsg.ultimoUplink = \"Everynet\";\n    newMsg.infoDownlink = {};\n    return {\n        msg: newMsg,\n        metadata: metadata,\n        msgType: msgType\n    };\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 2037,
+          "layoutY": 535
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1435,
+          "layoutY": 1192
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha anulado una alarma de tipo \"+metadata.tipoAlarma+\". La tensión actual de la batería es \"+metadata.analog_in_8+\" V, y el umbral de alarma es \"+metadata.umbralMinimo+\" V.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.analog_in_8+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma anulada \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 960,
+          "layoutY": 351
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "CS2TTN",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var newMsg = {};\nnewMsg.app_id = msg.applicationName;\nnewMsg.dev_id = msg.deviceName;\n\nnewMsg.hardware_serial = msg.devEUI;\nnewMsg.adr = msg.adr;\nnewMsg.counter = msg.fCnt;\nnewMsg.port = msg.fPort;\nnewMsg.payload_raw = msg.data;\nvar newPayloadFields = msg.object;\n//Desafortunadamente el Cayenne Codec de CS es muy diferente al de TTN\n//No obstante, lo utilizaré porque aquí se hace una vez, pero si hubiera que\n//hacerlo en CS implicaría actuar sobre cada aplicación\n//\"object\": \"{\\\"analogInput\\\":{\\\"1\\\":2.74},\\\"digitalInput\\\":{\\\"2\\\":1,\\\"3\\\":0}}\"\n//\"payload_fields\": \"{\\\"analog_in_1\\\":2.75,\\\"digital_in_2\\\":1,\\\"digital_in_3\\\":0}\"\n/*\nnewMsg.payload_fields = {};\nfor (var key in newPayloadFields) {\n    var prefijo = \"\";\n    switch (key) {\n        case 'analogInput':\n            prefijo = 'analog_in_';\n            break;\n        case 'digitalInput':\n            prefijo = 'digital_in_';\n            break;\n        case 'temperatureSensor':\n            prefijo = 'temperature_';\n            break;\n        case 'humiditySensor':\n            prefijo = 'relative_humidity_';\n            break;\n        case 'accelerometer':\n            prefijo = 'accelerometer_';\n            break;\n        case 'barometer':\n            prefijo = 'barometric_pressure_';\n            break;\n        case 'gyrometer':\n            prefijo = 'gyrometer_';\n            break;\n        case 'gpsLocation':\n            prefijo = 'gps_';\n            break;\n        case 'digitalOutput':\n            prefijo = 'digital_out_';\n            break;\n        case 'analogOutput':\n            prefijo = 'analog_out_';\n            break;\n        case 'illuminanceSensor':\n            prefijo = 'luminosity_';\n            break;\n        case 'presenceSensor':\n            prefijo = 'presence_';\n            break;\n\n    }\n    for (var key2 in newPayloadFields[key]) {\n        newMsg.payload_fields[prefijo + key2] =\n            newPayloadFields[key][key2];\n    }\n}\n*/\nnewMsg.metadata = {\n    'rxInfo': msg.rxInfo,\n    'txInfo': msg.txInfo\n};\n//Con el marshaller JSON nuevo de CS parece que envía la propiedad objectJSON\n//incluso aunque no se haya elegido un Codec\n//Por eso la utilizo para intentar saber si se está usando el nuevo JSON o el legacy\nif(msg.hasOwnProperty('objectJSON')){\nnewMsg.ultimoUplink = \"CS_new\";\n}else{\n    newMsg.ultimoUplink = \"CS\";\n}\nnewMsg.infoDownlink = {\"hardware_serial\":newMsg.hardware_serial};\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 223,
+          "layoutY": 724
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "Alarmas",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var respuesta = [];\nif (metadata.hasOwnProperty('ss___alarma_'+metadata.deviceType)) {\n    var obj = JSON.parse(metadata['ss___alarma_'+metadata.deviceType]);\n    \n    if (obj.hasOwnProperty('bateria')&&msg.hasOwnProperty('analog_in_8')&&obj.bateria.enable===true) {\n        respuesta.push('bateria');\n    }\n   if (obj.hasOwnProperty('iaq')&&msg.hasOwnProperty('iaq')&&obj.iaq.enable===true) {\n        respuesta.push('iaq');\n    }\n    if (obj.hasOwnProperty('temperatura')&&msg.hasOwnProperty('temperature_2')&&obj.temperatura.enable===true) {\n        respuesta.push('temperatura');\n    }\n    if (obj.hasOwnProperty('presion')&&msg.hasOwnProperty('barometric_pressure_6')&&obj.presion.enable===true) {\n        respuesta.push('presion');\n    }\n    if (obj.hasOwnProperty('humedad')&&msg.hasOwnProperty('relative_humidity_7')&&obj.humedad.enable===true) {\n        respuesta.push('humedad');\n    }\n    //La alarma de inactividad es genérica para todos los tipos de dispositivos y no requiere modificación\n    if (obj.hasOwnProperty('inactividad')&&(msgType=='INACTIVITY_EVENT'||msgType=='ACTIVITY_EVENT')&&obj.inactividad.enable===true) {\n        \n        respuesta.push('inactividad');\n    }\n}\n\nreturn respuesta;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 878,
+          "layoutY": 1151
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "C[r/l]ear",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (msg.alarma.umbralMinimo > msg.analog_in_8) {\n    return ['crear'];\n} else if(msg.alarma.umbralMinimo + msg.alarma.histeresisMinimo < msg.analog_in_8){\n    return ['clear'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1171,
+          "layoutY": 1124
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Crear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
+          "severity": "CRITICAL",
+          "propagate": true,
+          "useMessageAlarmData": false,
+          "relationTypes": [
+            "Contains"
+          ]
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1394,
+          "layoutY": 251
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "msg",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var downlinkQueue = JSON.parse(metadata.ss_downlinkQueue);\nif (downlinkQueue.length > 0) {\n    var downlink = downlinkQueue.shift();\n    //La meto en metadata para luego guardarla en los atributos del servidor\n    metadata.ss_downlinkQueue=JSON.stringify(downlinkQueue);\n    var newMsg = {\n        \"meta\": msg.meta,\n        \"params\": {\n            \"counter_down\": msg.params.counter_down,\n            \"payload\": downlink.payload,\n            \"port\": downlink.port,\n            \"queue_if_late\": true\n        },\n        \"type\": \"downlink_response\"\n    };\n    return {\n        msg: newMsg,\n        metadata: metadata,\n        msgType: \"POST_ATTRIBUTES_REQUEST\"\n    };\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1674,
+          "layoutY": 244
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SHARED_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1360,
+          "layoutY": 523
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "filtrar telemetrias delegado",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var newMsg = {};\nif (metadata.hasOwnProperty('delegadoActual') && metadata\n    .delegadoActual.length > 0) {\n    //Es un delegadoActual\n    var delegadoActual = JSON.parse(metadata\n        .delegadoActual).delegaciones;\n    for (var telemetria in msg) {\n        if (delegadoActual.hasOwnProperty(telemetria) &&\n            delegadoActual[telemetria] === true) {\n            newMsg[telemetria] = msg[telemetria];\n        } else {\n            //Si no tiene la delegación o es false\n            if (!metadata.hasOwnProperty(telemetria) ||\n                metadata[telemetria] != \"No delegado\") {\n                newMsg[telemetria] = \"No delegado\";\n            }\n        }\n    }\n\n} else {\n    newMsg = msg;\n}\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1956,
+          "layoutY": 246
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "msg",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\n    return {\n        msg: {\"downlinkQueue\":JSON.parse(metadata.ss_downlinkQueue)},\n        metadata: metadata,\n        msgType: \"POST_ATTRIBUTES_REQUEST\"\n    };\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 545,
+          "layoutY": 301
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "TTN/CS/Everynet?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (msg.hasOwnProperty('type') && msg.type == \"uplink\") {\r\n    return ['everynetUplink'];\r\n} else if (msg.hasOwnProperty('type') && msg.type ==\r\n    \"downlink_request\") {\r\n    return ['everynetDownlink'];\r\n} else if (msg.hasOwnProperty('payload_raw') &&\r\n    msg.hasOwnProperty('metadata') &&\r\n    msg.hasOwnProperty('dev_id')) {\r\n    return ['TTN'];\r\n} else if (msg.hasOwnProperty('data') &&\r\n    msg.hasOwnProperty('rxInfo') &&\r\n    msg.hasOwnProperty('txInfo') &&\r\n    msg.hasOwnProperty('deviceName')) {\r\n    return ['CS'];\r\n} else if (msg.hasOwnProperty('___ultimoDownlink') &&\r\n    msg.___ultimoDownlink !== '') {\r\n    return ['downlink'];\r\n}\r\n\r\n/*El formato de CS con el nuevo JSON marshaller\r\n{\r\n    \"applicationID\": 6,\r\n    \"applicationName\": \"LDS02\",\r\n    \"deviceName\": \"LDS01\",\r\n    \"devEUI\": \"qEBBAAGB+X8=\",\r\n    \"rxInfo\": [{\r\n        \"gatewayID\": \"uCfr//6my+4=\",\r\n        \"rssi\": -73,\r\n        \"loRaSNR\": 7,\r\n        \"channel\": 2,\r\n        \"rfChain\": 1,\r\n        \"board\": 0,\r\n        \"antenna\": 0,\r\n        \"location\": {\r\n            \"latitude\": 0,\r\n            \"longitude\": 0,\r\n            \"altitude\": 0,\r\n            \"source\": \"UNKNOWN\",\r\n            \"accuracy\": 0\r\n        },\r\n        \"fineTimestampType\": \"NONE\",\r\n        \"context\": \"WAixqw==\",\r\n        \"uplinkID\": \"yNrsc7btS8CljKLG9TiySw==\",\r\n        \"crcStatus\": \"CRC_OK\"\r\n    }],\r\n    \"txInfo\": {\r\n        \"frequency\": 868500000,\r\n        \"modulation\": \"LORA\",\r\n        \"loRaModulationInfo\": {\r\n            \"bandwidth\": 125,\r\n            \"spreadingFactor\": 7,\r\n            \"codeRate\": \"4/5\",\r\n            \"polarizationInversion\": false\r\n        }\r\n    },\r\n    \"adr\": true,\r\n    \"dr\": 5,\r\n    \"fCnt\": 11,\r\n    \"fPort\": 10,\r\n    \"data\": \"CyIBAAAFAAAB\",\r\n    \"objectJSON\": \"{\\\"BAT_V\\\":2.85,\\\"DOOR_OPEN_STATUS\\\":0,\\\"DOOR_OPEN_TIMES\\\":5,\\\"LAST_DOOR_OPEN_DURATION\\\":1,\\\"MOD\\\":\\\"Door sensor\\\"}\",\r\n    \"tags\": {},\r\n    \"confirmedUplink\": false,\r\n    \"devAddr\": \"ASVKiQ==\"\r\n}\r\n*/\r\n\r\n/*El formato legacy json de CS\r\n{\r\n    \"applicationID\": 6,\r\n    \"applicationName\": \"LDS02\",\r\n    \"deviceName\": \"LDS01\",\r\n    \"devEUI\": \"a84041000181f97f\",\r\n    \"rxInfo\": [{\r\n        \"gatewayID\": \"b827ebfffea6cbee\",\r\n        \"uplinkID\": \"37f815f5-e49f-42fe-b379-ff8c38c0d2e9\",\r\n        \"name\": \"jfmateos_rak831\",\r\n        \"rssi\": -75,\r\n        \"loRaSNR\": 7.25,\r\n        \"location\": {\r\n            \"latitude\": 0,\r\n            \"longitude\": 0,\r\n            \"altitude\": 0\r\n        }\r\n    }],\r\n    \"txInfo\": {\r\n        \"frequency\": 868500000,\r\n        \"dr\": 5\r\n    },\r\n    \"adr\": true,\r\n    \"fCnt\": 14,\r\n    \"fPort\": 10,\r\n    \"data\": \"iygBAAAHAAAA\",\r\n    \"object\": {\r\n        \"BAT_V\": 2.856,\r\n        \"DOOR_OPEN_STATUS\": 1,\r\n        \"DOOR_OPEN_TIMES\": 7,\r\n        \"LAST_DOOR_OPEN_DURATION\": 0,\r\n        \"MOD\": \"Door sensor\"\r\n    }\r\n}*/"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 523,
+          "layoutY": 440
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "Cargar alarmas",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "__alarma_${deviceType}"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": true,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1182,
+          "layoutY": 1410
+        },
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 892,
+          "layoutY": 1359
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "C[r/l]ear",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (metadata.barometric_pressure_6< msg.alarma.umbralMinimo) {\n    return ['crear'];\n} else if( metadata.barometric_pressure_6 > msg.alarma.umbralMinimo + msg.alarma.histeresisMinimo){\n    return ['clear'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 624,
+          "layoutY": 1361
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "tipo presión mínima superada",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var obj = JSON.parse(metadata['ss___alarma_' + metadata\n    .deviceType]);\n\n//Cargamos la alarma en el mensaje para que el nodo siguiente\n//pueda ejecutar la \"lógica de negocio\"\nmsg.alarma = obj.presion;\n\n//Cargamos los datos de interés en los metadatos para construir los mensajes \n//de alarma tras el nodo que genera/borrar la alarma\nmetadata.barometric_pressure_6 = msg.barometric_pressure_6;\n//alarmaActual se usa en la cadena de reglas de Notificaciones\n//Para extraer información. No puede ir por msg porque se\n//pierde en el nodo de generación de alarma\nmetadata.alarmaActual = JSON.stringify(obj.temperatura);\nmetadata.tipoAlarma =\n\"Presión barométrica inferior al umbral mínimo\";\nmetadata.umbralMinimo = msg.alarma.umbralMinimo;\nmetadata.umbralMaximo = msg.alarma.umbralMaximo;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1446,
+          "layoutY": 1417
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha anulado una alarma de tipo \"+metadata.tipoAlarma+\"La presión es \"+metadata.barometric_pressure_6+\" hPa y el umbral es de \"+metadata.umbralMinimo+\" hPa.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.barometric_pressure_6+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma anulada\"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};\n\n\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1441,
+          "layoutY": 1252
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha generado una alarma de tipo \"+metadata.tipoAlarma+\". La presión es \"+metadata.barometric_pressure_6+\" hPa y el umbral es de \"+metadata.umbralMaximo+\" hPa.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.barometric_pressure_6+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1446,
+          "layoutY": 1365
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha generado una alarma de tipo \"+metadata.tipoAlarma+\". La presión es \"+metadata.barometric_pressure_6+\" hPa y el umbral es de \"+metadata.umbralMinimo+\" hPa.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.barometric_pressure_6+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1182,
+          "layoutY": 1349
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Crear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
+          "severity": "CRITICAL",
+          "propagate": true,
+          "useMessageAlarmData": false,
+          "relationTypes": [
+            "Contains"
+          ]
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1177,
+          "layoutY": 1236
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Crear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
+          "severity": "CRITICAL",
+          "propagate": true,
+          "useMessageAlarmData": false,
+          "relationTypes": [
+            "Contains"
+          ]
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1177,
+          "layoutY": 1297
+        },
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 887,
+          "layoutY": 1246
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "C[r/l]ear",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (metadata.barometric_pressure_6> msg.alarma.umbralMaximo) {\n    return ['crear'];\n} else if( metadata.barometric_pressure_6 < msg.alarma.umbralMaximo - msg.alarma.histeresisMaximo){\n    return ['clear'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 619,
+          "layoutY": 1248
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "tipo presión maxima superada",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var obj = JSON.parse(metadata['ss___alarma_' + metadata\n    .deviceType]);\n\n//Cargamos la alarma en el mensaje para que el nodo siguiente\n//pueda ejecutar la \"lógica de negocio\"\nmsg.alarma = obj.presion;\n\n//Cargamos los datos de interés en los metadatos para construir los mensajes \n//de alarma tras el nodo que genera/borrar la alarma\nmetadata.barometric_pressure_6 = msg.barometric_pressure_6;\n//alarmaActual se usa en la cadena de reglas de Notificaciones\n//Para extraer información. No puede ir por msg porque se\n//pierde en el nodo de generación de alarma\nmetadata.alarmaActual = JSON.stringify(obj.presion);\nmetadata.tipoAlarma =\n\"Presión barométrica superior al umbral máximo\";\nmetadata.umbralMinimo = msg.alarma.umbralMinimo;\nmetadata.umbralMaximo = msg.alarma.umbralMaximo;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1441,
+          "layoutY": 1304
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha anulado una alarma de tipo \"+metadata.tipoAlarma+\"La presión es \"+metadata.barometric_pressure_6+\" hPa y el umbral es de \"+metadata.umbralMaximo+\" hPa.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.barometric_pressure_6+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma anulada\"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};\n\n\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1187,
+          "layoutY": 1637
+        },
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 897,
+          "layoutY": 1586
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "C[r/l]ear",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (metadata.relative_humidity_7< msg.alarma.umbralMinimo) {\n    return ['crear'];\n} else if( metadata.relative_humidity_7 > msg.alarma.umbralMinimo + msg.alarma.histeresisMinimo){\n    return ['clear'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 629,
+          "layoutY": 1588
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "tipo humedadmínima superada",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var obj = JSON.parse(metadata['ss___alarma_' + metadata\n    .deviceType]);\n\n//Cargamos la alarma en el mensaje para que el nodo siguiente\n//pueda ejecutar la \"lógica de negocio\"\nmsg.alarma = obj.humedad;\n\n//Cargamos los datos de interés en los metadatos para construir los mensajes \n//de alarma tras el nodo que genera/borrar la alarma\nmetadata.relative_humidity_7 = msg.relative_humidity_7;\n//alarmaActual se usa en la cadena de reglas de Notificaciones\n//Para extraer información. No puede ir por msg porque se\n//pierde en el nodo de generación de alarma\nmetadata.alarmaActual = JSON.stringify(obj.humedad);\nmetadata.tipoAlarma =\n\"Humedad relativa inferior al umbral mínimo\";\nmetadata.umbralMinimo = msg.alarma.umbralMinimo;\nmetadata.umbralMaximo = msg.alarma.umbralMaximo;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1451,
+          "layoutY": 1644
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha anulado una alarma de tipo \"+metadata.tipoAlarma+\"La humedad es \"+metadata.relative_humidity_7+\" % y el umbral es de \"+metadata.umbralMinimo+\" %.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.relative_humidity_7+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma anulada\"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};\n\n\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1446,
+          "layoutY": 1479
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha generado una alarma de tipo \"+metadata.tipoAlarma+\". La humedad es \"+metadata.relative_humidity_7+\" % y el umbral es de \"+metadata.umbralMaximo+\" %.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.relative_humidity_7+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1451,
+          "layoutY": 1592
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha generado una alarma de tipo \"+metadata.tipoAlarma+\". La humedad es \"+metadata.relative_humidity_7+\" % y el umbral es de \"+metadata.umbralMinimo+\" %.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.relative_humidity_7+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1187,
+          "layoutY": 1576
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Crear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
+          "severity": "CRITICAL",
+          "propagate": true,
+          "useMessageAlarmData": false,
+          "relationTypes": [
+            "Contains"
+          ]
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1182,
+          "layoutY": 1463
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Crear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
+          "severity": "CRITICAL",
+          "propagate": true,
+          "useMessageAlarmData": false,
+          "relationTypes": [
+            "Contains"
+          ]
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1182,
+          "layoutY": 1524
+        },
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 892,
+          "layoutY": 1473
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "C[r/l]ear",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (metadata.relative_humidity_7> msg.alarma.umbralMaximo) {\n    return ['crear'];\n} else if( metadata.relative_humidity_7 < msg.alarma.umbralMaximo - msg.alarma.histeresisMaximo){\n    return ['clear'];\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 624,
+          "layoutY": 1475
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "tipo humedad maxima superada",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var obj = JSON.parse(metadata['ss___alarma_' + metadata\n    .deviceType]);\n\n//Cargamos la alarma en el mensaje para que el nodo siguiente\n//pueda ejecutar la \"lógica de negocio\"\nmsg.alarma = obj.humedad;\n\n//Cargamos los datos de interés en los metadatos para construir los mensajes \n//de alarma tras el nodo que genera/borrar la alarma\nmetadata.relative_humidity_7 = msg.relative_humidity_7;\n//alarmaActual se usa en la cadena de reglas de Notificaciones\n//Para extraer información. No puede ir por msg porque se\n//pierde en el nodo de generación de alarma\nmetadata.alarmaActual = JSON.stringify(obj.humedad);\nmetadata.tipoAlarma =\n\"Humedad relativa superior al umbral máximo\";\nmetadata.umbralMinimo = msg.alarma.umbralMinimo;\nmetadata.umbralMaximo = msg.alarma.umbralMaximo;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1446,
+          "layoutY": 1531
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha anulado una alarma de tipo \"+metadata.tipoAlarma+\"La humedad es \"+metadata.relative_humidity_7+\" % y el umbral es de \"+metadata.umbralMaximo+\" %.\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.relative_humidity_7+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma anulada\"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};\n\n\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1186,
+          "layoutY": 1681
+        },
+        "type": "org.thingsboard.rule.engine.action.TbCreateAlarmNode",
+        "name": "Crear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;",
+          "severity": "CRITICAL",
+          "propagate": true,
+          "useMessageAlarmData": false,
+          "relationTypes": [
+            "Contains"
+          ]
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1186,
+          "layoutY": 1742
+        },
+        "type": "org.thingsboard.rule.engine.action.TbClearAlarmNode",
+        "name": "Clear alarma",
+        "debugMode": true,
+        "configuration": {
+          "alarmType": "${tipoAlarma}",
+          "alarmDetailsBuildJs": "var details = {};\nif (metadata.prevAlarmDetails) {\n    details = JSON.parse(metadata.prevAlarmDetails);\n}\nreturn details;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 896,
+          "layoutY": 1691
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "C[r/l]ear",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "switch (msg.alarma.trigger) {\n    case 'MODERADA':\n        if (metadata.iaq > 50) {\n            return ['crear'];\n        } else {\n            return ['clear'];\n        }\n        break;\n    case 'INSALUBRE PARA GRUPOS SENSIBLES':\n        if (metadata.iaq > 100) {\n            return ['crear'];\n        } else {\n            return ['clear'];\n        }\n        break;\n    case 'INSALUBRE':\n        if (metadata.iaq > 150) {\n            return ['crear'];\n        } else {\n            return ['clear'];\n        }\n        break;\n    case 'MUY INSALUBRE':\n        if (metadata.iaq > 200) {\n            return ['crear'];\n        } else {\n            return ['clear'];\n        }\n        break;\n    case 'PELIGROSA':\n        if (metadata.iaq > 300) {\n            return ['crear'];\n        } else {\n            return ['clear'];\n        }\n        break;\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 628,
+          "layoutY": 1693
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "tipo iaq",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var obj = JSON.parse(metadata['ss___alarma_' + metadata\n    .deviceType]);\n\n//Cargamos la alarma en el mensaje para que el nodo siguiente\n//pueda ejecutar la \"lógica de negocio\"\nmsg.alarma = obj.iaq;\n\n//Cargamos los datos de interés en los metadatos para construir los mensajes \n//de alarma tras el nodo que genera/borrar la alarma\nmetadata.iaq = msg.iaq;\nif(msg.iaq<50){\n    metadata.iaqTexto=\"BUENA\";\n}else if(msg.iaq<100){\n    metadata.iaqTexto=\"MODERADA\";\n}else if(msg.iaq<150){\n    metadata.iaqTexto=\"INSALUBRE PARA GRUPOS SENSIBLES\";\n}else if(msg.iaq<200){\n    metadata.iaqTexto=\"INSALUBRE\";\n}else if(msg.iaq<300){\n    metadata.iaqTexto=\"MUY INSALUBRE\";\n}else {\n    metadata.iaqTexto=\"PELIGROSA\";\n}\n\nmetadata.umbral=msg.alarma.trigger;\n\n\n//alarmaActual se usa en la cadena de reglas de Notificaciones\n//Para extraer información. No puede ir por msg porque se\n//pierde en el nodo de generación de alarma\nmetadata.alarmaActual = JSON.stringify(obj.iaq);\nmetadata.tipoAlarma =\n\"Calidad del aire\";\n\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1450,
+          "layoutY": 1749
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha anulado una alarma de tipo \"+metadata.tipoAlarma+\"La calidad del aire es \"+metadata.iaqTexto+\" y el umbral es de \"+metadata.umbral+\".\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.iaqTexto+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma anulada\"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};\n\n\n"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1450,
+          "layoutY": 1697
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "construir mensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "metadata.mensajeTelegram=\"El dispositivo \" + metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\" ha generado una alarma de tipo \"+metadata.tipoAlarma+\". La calidad es \"+metadata.iaqTexto+\" y el umbral es de \"+metadata.umbral+\".\";\n\nmetadata.mensajeIfttt='{\"value1\":\"'+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+'\",\"value2\":\"'+metadata.iaqTexto+'\"}';\n\nmetadata.mensajeEmail=metadata.mensajeTelegram;\nmetadata.asuntoEmail=\"[IoT open Tech] \"+metadata.deviceName.substring(metadata.deviceName.indexOf(\"_\")+1)+\": Alarma \"+metadata.tipoAlarma;\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 15,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 43,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 33,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 4,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 6,
+        "toIndex": 38,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 9,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 42,
+        "type": "telemetria"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 43,
+        "type": "alarma"
+      },
+      {
+        "fromIndex": 9,
+        "toIndex": 40,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 10,
+        "toIndex": 29,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 14,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 11,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 10,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 12,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 16,
+        "toIndex": 6,
+        "type": "no"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 22,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 18,
+        "toIndex": 17,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 18,
+        "toIndex": 5,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 19,
+        "toIndex": 8,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 21,
+        "toIndex": 18,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 23,
+        "toIndex": 1,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 24,
+        "toIndex": 25,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 25,
+        "toIndex": 0,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 25,
+        "toIndex": 23,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 27,
+        "toIndex": 32,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 28,
+        "toIndex": 36,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 31,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 34,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 58,
+        "type": "humedad"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 66,
+        "type": "humedad"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 24,
+        "type": "inactividad"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 21,
+        "type": "temperatura"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 28,
+        "type": "bateria"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 13,
+        "type": "temperatura"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 54,
+        "type": "presion"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 46,
+        "type": "presion"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 71,
+        "type": "iaq"
+      },
+      {
+        "fromIndex": 36,
+        "toIndex": 37,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 36,
+        "toIndex": 3,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 37,
+        "toIndex": 20,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 38,
+        "toIndex": 39,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 39,
+        "toIndex": 41,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 40,
+        "toIndex": 27,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 40,
+        "toIndex": 26,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 40,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 41,
+        "toIndex": 30,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 42,
+        "toIndex": 16,
+        "type": "everynetDownlink"
+      },
+      {
+        "fromIndex": 42,
+        "toIndex": 31,
+        "type": "everynetUplink"
+      },
+      {
+        "fromIndex": 42,
+        "toIndex": 7,
+        "type": "TTN"
+      },
+      {
+        "fromIndex": 42,
+        "toIndex": 34,
+        "type": "CS"
+      },
+      {
+        "fromIndex": 43,
+        "toIndex": 35,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 44,
+        "toIndex": 47,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 45,
+        "toIndex": 44,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 45,
+        "toIndex": 50,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 46,
+        "toIndex": 45,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 50,
+        "toIndex": 49,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 51,
+        "toIndex": 48,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 52,
+        "toIndex": 55,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 53,
+        "toIndex": 52,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 53,
+        "toIndex": 51,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 54,
+        "toIndex": 53,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 56,
+        "toIndex": 59,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 57,
+        "toIndex": 56,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 57,
+        "toIndex": 62,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 58,
+        "toIndex": 57,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 62,
+        "toIndex": 61,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 63,
+        "toIndex": 60,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 64,
+        "toIndex": 67,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 65,
+        "toIndex": 64,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 65,
+        "toIndex": 63,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 66,
+        "toIndex": 65,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 68,
+        "toIndex": 73,
+        "type": "Created"
+      },
+      {
+        "fromIndex": 69,
+        "toIndex": 72,
+        "type": "Cleared"
+      },
+      {
+        "fromIndex": 70,
+        "toIndex": 69,
+        "type": "clear"
+      },
+      {
+        "fromIndex": 70,
+        "toIndex": 68,
+        "type": "crear"
+      },
+      {
+        "fromIndex": 71,
+        "toIndex": 70,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": [
+      {
+        "fromIndex": 1,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 4,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 14,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 15,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 20,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 22,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 29,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 33,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 47,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 48,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 49,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 55,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 59,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 60,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 61,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 67,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 72,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 73,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc973d00-0a55-11eb-b82a-9b3a9cfbb111"
+        },
+        "additionalInfo": {
+          "layoutX": 1983,
+          "layoutY": 1183,
+          "ruleChainNodeId": "rule-chain-node-76"
+        },
+        "type": "Success"
+      }
+    ]
+  }
+}

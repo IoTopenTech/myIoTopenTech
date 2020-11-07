@@ -65,7 +65,8 @@
             "${subtipoEntidad}_config_version",
             "${subtipoEntidad}_dashboard_version",
             "${subtipoEntidad}_delegate",
-            "${subtipoEntidad}_delegate_version"
+            "${subtipoEntidad}_delegate_version",
+            "${subtipoEntidad}_urlDashboard"
           ],
           "latestTsKeyNames": [],
           "tellFailureIfAbsent": false,
@@ -106,7 +107,7 @@
         "name": "preparar atributos",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var newMsg = {};\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_config')) {\n    newMsg[metadata.subtipoEntidad + '_config'] = metadata[\n        'ss_' + metadata.subtipoEntidad + '_config'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_delegate')) {\n    newMsg[metadata.subtipoEntidad + '_delegate'] = metadata[\n        'ss_' + metadata.subtipoEntidad + '_delegate'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_config_version')) {\n    newMsg[metadata.subtipoEntidad + '_config_version'] =\n        metadata['ss_' + metadata.subtipoEntidad +\n            '_config_version'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_delegate_version')) {\n    newMsg[metadata.subtipoEntidad + '_delegate_version'] =\n        metadata['ss_' + metadata.subtipoEntidad +\n            '_delegate_version'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_dashboard_version')) {\n    newMsg[metadata.subtipoEntidad + '_dashboard_version'] =\n        metadata['ss_' + metadata.subtipoEntidad +\n            '_dashboard_version'];\n\n}\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: 'POST_ATTRIBUTES_REQUEST'\n};"
+          "jsScript": "var newMsg = {};\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_config')) {\n    newMsg[metadata.subtipoEntidad + '_config'] = metadata[\n        'ss_' + metadata.subtipoEntidad + '_config'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_delegate')) {\n    newMsg[metadata.subtipoEntidad + '_delegate'] = metadata[\n        'ss_' + metadata.subtipoEntidad + '_delegate'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_urlDashboard')) {\n    newMsg[metadata.subtipoEntidad + '_urlDashboard'] = metadata[\n        'ss_' + metadata.subtipoEntidad + '_urlDashboard'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_config_version')) {\n    newMsg[metadata.subtipoEntidad + '_config_version'] =\n        metadata['ss_' + metadata.subtipoEntidad +\n            '_config_version'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_delegate_version')) {\n    newMsg[metadata.subtipoEntidad + '_delegate_version'] =\n        metadata['ss_' + metadata.subtipoEntidad +\n            '_delegate_version'];\n}\nif (metadata.hasOwnProperty('ss_' + metadata\n        .subtipoEntidad + '_dashboard_version')) {\n    newMsg[metadata.subtipoEntidad + '_dashboard_version'] =\n        metadata['ss_' + metadata.subtipoEntidad +\n            '_dashboard_version'];\n\n}\nreturn {\n    msg: newMsg,\n    metadata: metadata,\n    msgType: 'POST_ATTRIBUTES_REQUEST'\n};"
         }
       },
       {

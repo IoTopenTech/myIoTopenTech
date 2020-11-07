@@ -1,0 +1,190 @@
+{
+  "ruleChain": {
+    "additionalInfo": null,
+    "name": "borrarDelegadoPublico",
+    "firstRuleNodeId": null,
+    "root": false,
+    "debugMode": false,
+    "configuration": null
+  },
+  "metadata": {
+    "firstNodeIndex": 4,
+    "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 362,
+          "layoutY": 377
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "prepararMensaje",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var mensaje = {};\nmensaje.nombreActual=metadata.nombreEntidad;\nmensaje.tipoEntidad='DEVICE';\nmensaje.nombreNuevo=metadata.nombreEntidad+Date.now();\nmetadata.nombreNuevo=mensaje.nombreNuevo;\nmsg = mensaje;\nreturn {msg:msg,metadata:metadata,msgType:msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 673,
+          "layoutY": 386
+        },
+        "type": "org.thingsboard.rule.engine.action.TbRenameEntityNode",
+        "name": "renombrar",
+        "debugMode": true,
+        "configuration": {
+          "claveNombreActual": "nombreActual",
+          "claveNombreNuevo": "nombreNuevo",
+          "claveTipoEntidad": "tipoEntidad"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 656,
+          "layoutY": 231
+        },
+        "type": "org.thingsboard.rule.engine.action.TbUnassignFromCustomerNode",
+        "name": "Desasignar",
+        "debugMode": true,
+        "configuration": {
+          "customerNamePattern": "Public",
+          "customerCacheExpiration": 300
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 360,
+          "layoutY": 224,
+          "description": "El originador en la entrada es el dispositivo delegador"
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "delegado",
+        "debugMode": true,
+        "configuration": {
+          "originatorSource": "RELATED",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "${idDelegacion}",
+                "entityTypes": [
+                  "DEVICE"
+                ]
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 352,
+          "layoutY": 147
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "borrar de delegados",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "\nmetadata.tipoEntidad = msg.subtipoDispositivo;\n\nmsgType = 'POST_ATTRIBUTES_REQUEST';\nvar delegados = JSON.parse(metadata.ss_delegados);\nfor (var i = 0; i < delegados.length; i++) {\n    if (delegados[i].id == metadata.idDelegacion) {\n        metadata.nombreEntidad = delegados[i].nombre;\n        delegados.splice(i, 1);\n        break;\n    }\n}\n\nreturn {\n    msg: {\n        'delegados': delegados\n    },\n    metadata: metadata,\n    msgType: msgType\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 652,
+          "layoutY": 152
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 678,
+          "layoutY": 460
+        },
+        "type": "org.thingsboard.rule.engine.action.TbDeleteEntityNode",
+        "name": "borrar",
+        "debugMode": true,
+        "configuration": {
+          "claveNombreEntidad": "nombreEntidad",
+          "claveTipoEntidad": "tipoEntidad"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 373,
+          "layoutY": 459
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "preparar borrado",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msg.nombreEntidad=metadata.nombreNuevo;\nmsg.tipoEntidad='DEVICE';\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 360,
+          "layoutY": 294
+        },
+        "type": "org.thingsboard.rule.engine.action.TbDeleteRelationNode",
+        "name": "borrar relaciones id",
+        "debugMode": true,
+        "configuration": {
+          "direction": "FROM",
+          "relationType": "${idDelegacion}",
+          "entityType": null,
+          "entityNamePattern": "",
+          "entityTypePattern": null,
+          "entityCacheExpiration": 300,
+          "deleteForSingleEntity": false
+        }
+      }
+    ],
+    "connections": [
+      {
+        "fromIndex": 0,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 1,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 2,
+        "toIndex": 8,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 4,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 5,
+        "toIndex": 3,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 0,
+        "type": "Success"
+      }
+    ],
+    "ruleChainConnections": null
+  }
+}

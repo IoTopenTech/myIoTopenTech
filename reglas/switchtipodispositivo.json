@@ -12,8 +12,8 @@
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 365,
-          "layoutY": 144
+          "layoutX": 349,
+          "layoutY": 161
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
         "name": "al dispositivo",
@@ -29,12 +29,51 @@
         "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
+          "id": "8f903ed0-1f97-11eb-b978-37de61f72881"
+        },
+        "additionalInfo": {
+          "layoutX": 685,
+          "layoutY": 204,
+          "ruleChainNodeId": "rule-chain-node-9"
+        },
+        "type": "LGT92"
+      },
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "fc4ab5c0-1e00-11eb-b978-37de61f72881"
+        },
+        "additionalInfo": {
+          "layoutX": 695,
+          "layoutY": 505,
+          "ruleChainNodeId": "rule-chain-node-8"
+        },
+        "type": "TTNMAD_V02_001"
+      },
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "6f62aa80-17c7-11eb-8bbe-bfa6a50c9769"
+        },
+        "additionalInfo": {
+          "layoutX": 694,
+          "layoutY": 454,
+          "ruleChainNodeId": "rule-chain-node-7"
+        },
+        "type": "TTNMAD_CO2_FREE"
+      },
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
           "id": "830cd790-122c-11eb-bb64-db1cd6459831"
         },
         "additionalInfo": {
-          "layoutX": 700,
-          "layoutY": 320,
-          "ruleChainNodeId": "rule-chain-node-5"
+          "layoutX": 692,
+          "layoutY": 324,
+          "ruleChainNodeId": "rule-chain-node-6"
         },
         "type": "RAK7200"
       },
@@ -47,7 +86,7 @@
         "additionalInfo": {
           "layoutX": 687,
           "layoutY": 146,
-          "ruleChainNodeId": "rule-chain-node-4"
+          "ruleChainNodeId": "rule-chain-node-5"
         },
         "type": "LDS01"
       },
@@ -55,14 +94,27 @@
         "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "994a5120-115c-11eb-bb64-db1cd6459831"
+          "id": "00b4f0f0-185f-11eb-b978-37de61f72881"
         },
         "additionalInfo": {
-          "layoutX": 697,
-          "layoutY": 241,
-          "ruleChainNodeId": "rule-chain-node-3"
+          "layoutX": 691,
+          "layoutY": 262,
+          "ruleChainNodeId": "rule-chain-node-4"
         },
         "type": "LHT65"
+      },
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "b1a8b460-1dbd-11eb-b978-37de61f72881"
+        },
+        "additionalInfo": {
+          "layoutX": 692,
+          "layoutY": 378,
+          "ruleChainNodeId": "rule-chain-node-3"
+        },
+        "type": "RAK7204"
       }
     ]
   }

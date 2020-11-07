@@ -599,8 +599,8 @@
       },
       {
         "fromIndex": 9,
-        "toIndex": 23,
-        "type": "si"
+        "toIndex": 1,
+        "type": "no"
       },
       {
         "fromIndex": 9,
@@ -609,18 +609,18 @@
       },
       {
         "fromIndex": 9,
-        "toIndex": 1,
-        "type": "no"
-      },
-      {
-        "fromIndex": 10,
-        "toIndex": 24,
-        "type": "False"
+        "toIndex": 23,
+        "type": "si"
       },
       {
         "fromIndex": 10,
         "toIndex": 7,
         "type": "True"
+      },
+      {
+        "fromIndex": 10,
+        "toIndex": 24,
+        "type": "False"
       },
       {
         "fromIndex": 12,
@@ -679,7 +679,7 @@
       },
       {
         "fromIndex": 23,
-        "toIndex": 30,
+        "toIndex": 24,
         "type": "delegado"
       },
       {
@@ -689,7 +689,7 @@
       },
       {
         "fromIndex": 23,
-        "toIndex": 24,
+        "toIndex": 30,
         "type": "delegado"
       },
       {
@@ -699,7 +699,7 @@
       },
       {
         "fromIndex": 25,
-        "toIndex": 6,
+        "toIndex": 3,
         "type": "Success"
       },
       {
@@ -709,7 +709,7 @@
       },
       {
         "fromIndex": 25,
-        "toIndex": 3,
+        "toIndex": 6,
         "type": "Success"
       },
       {
@@ -724,12 +724,12 @@
       },
       {
         "fromIndex": 30,
-        "toIndex": 3,
+        "toIndex": 6,
         "type": "Success"
       },
       {
         "fromIndex": 30,
-        "toIndex": 6,
+        "toIndex": 3,
         "type": "Success"
       },
       {
@@ -748,7 +748,7 @@
         "additionalInfo": {
           "layoutX": 1134,
           "layoutY": 712,
-          "ruleChainNodeId": "rule-chain-node-36"
+          "ruleChainNodeId": "rule-chain-node-37"
         },
         "type": "Success"
       },
@@ -761,7 +761,7 @@
         "additionalInfo": {
           "layoutX": 870,
           "layoutY": 21,
-          "ruleChainNodeId": "rule-chain-node-37"
+          "ruleChainNodeId": "rule-chain-node-38"
         },
         "type": "Success"
       },
@@ -774,7 +774,7 @@
         "additionalInfo": {
           "layoutX": 1134,
           "layoutY": 712,
-          "ruleChainNodeId": "rule-chain-node-36"
+          "ruleChainNodeId": "rule-chain-node-37"
         },
         "type": "Success"
       }
