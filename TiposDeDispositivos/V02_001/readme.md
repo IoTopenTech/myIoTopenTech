@@ -33,7 +33,7 @@ Si el botón no está pulsado al arrancar, el dispositivo entra en el modo de fu
 
 ## Carga de pago para uplinks
 
-El dispositivo utiliza el formato de carga de pago Cayenne LPP, con los siguientes canales:
+El dispositivo utiliza el formato de carga de pago Cayenne LPP (por ejemplo:  01020160020000030000060100) , con los siguientes canales:
 
 Canal | Tipo | Valor
 ----- | ---- | -----
@@ -112,3 +112,71 @@ Para preaprovisionar dispositivos de tipo V02_001 se requiere un archivo CSV que
 * __cs_token: Si el dispositivo está pre-aprovisionado en ChirpStack, aquí indicaremos el JWT autorizado en la API.
 * admiteABP: Contendrá el valor false porque el tipo de nodo V02_001 no admite ABP
 * __heartbeat: Este parámetro corresponde al periodo de envío de heartbeats y contendrá el valor 1 (que es el predeterminado para el tipo V02_001).
+
+# TTNMAD_V02_001_delegate
+
+```xml
+<myIoT>
+   <delegacion nombre="Bat" label="Permitir ver la tensión de la batería" />
+   <delegacion nombre="Hall" label="Permitir ver el estado del sensor Hall" />
+   <delegacion nombre="LED" label="Permitir ver el estado del LED" />
+   <delegacion nombre="CambiarLED" label="Permitir cambiar el estado del LED" />
+   <delegacion nombre="Heartbeat" label="Permitir cambiar el periodo de envío de heartbeats" />
+</myIoT>
+```
+
+# TTNMAD_V02_001_config
+
+```xml
+<myIoT>
+   <panel titulo="Configuración general" resumen="Configurar atributos de la entidad" nombreFormulario="General" labelBotonSubmit="Configurar">
+      <item tipo="coordenadas" />
+      <item tipo="chirpstack" />
+      <item tipo="alarma" nombreAlarma="nivelDeBateria" telemetria="Bat" labelAlarma="nivel bajo de batería" tipoAlarma="umbralMinimo" labelAuxAlarma="(V)" histeresis="min">
+         <umbralMinimo size="10" min="0" max="4" step="0.1" />
+      </item>
+      <item tipo="alarma" nombreAlarma="cambioDeEstado" telemetria="Hall" labelAlarma="estado del sensor Hall" tipoAlarma="opciones" labelAuxAlarma="Disparar al" opciones="Abrir/Cerrar" />
+      <item tipo="alarma" nombreAlarma="inactividad" />
+   </panel>
+   <panel tipo="devEUI" />
+   <panel titulo="Heartbeat" resumen="Configurar periodo de envío de heartbeat" nombreFormulario="Heartbeat" ultimoDownlink="Heartbeat">
+      <item tipo="atributoCompartido" nombreAtributo="Heartbeat" labelAtributo="Número de minutos entre heartbeats." tipoAtributo="numero">
+         <atributosHTML size="10" step="1" min="0" max="59" />
+      </item>
+   </panel>
+   <panel titulo="Credenciales LoRaWAN" resumen="Configurar las credenciales LoRaWAN del dispositivo" nombreFormulario="LoRaWAN" ultimoDownlink="tomarPosesion">
+      <md-input-container style="margin: 0px; margin-top: 10px;" class="md-block">
+         <label>Método de activación</label>
+         <md-select ng-model="vm.configuracion.___atributosCompartidos.tomarPosesionMetodoActivacion" required="required">
+            <md-option ng-if="vm.attributes.hasOwnProperty('admiteABP') &amp;&amp; vm.attributes.admiteABP==true" value="A" ng-selected="">ABP</md-option>
+            <md-option value="O">OTAA</md-option>
+         </md-select>
+      </md-input-container>
+      <md-input-container style="margin: 0px; margin-top: 10px;" ng-if="vm.configuracion.___atributosCompartidos.tomarPosesionMetodoActivacion=='A'" class="md-block">
+         <label>Device Address (msb)</label>
+         <input type="text" pattern="[0-9a-fA-F]{8}" autocomplete="off" ng-model="vm.configuracion.___atributosCompartidos.tomarPosesionParam1" required="required" />
+      </md-input-container>
+      <md-input-container ng-if="vm.configuracion.___atributosCompartidos.tomarPosesionMetodoActivacion=='A'" style="margin: 0px; margin-top: 10px;" class="md-block">
+         <label>Network Session Key (msb)</label>
+         <input type="text" pattern="[0-9a-fA-F]{32}" autocomplete="off" ng-model="vm.configuracion.___atributosCompartidos.tomarPosesionParam2" required="required" />
+      </md-input-container>
+      <md-input-container ng-if="vm.configuracion.___atributosCompartidos.tomarPosesionMetodoActivacion=='A'" style="margin: 0px; margin-top: 10px;" class="md-block">
+         <label>Application Session Key (msb)</label>
+         <input type="text" pattern="[0-9a-fA-F]{32}" autocomplete="off" ng-model="vm.configuracion.___atributosCompartidos.tomarPosesionParam3" required="required" />
+      </md-input-container>
+      <md-input-container ng-if="vm.configuracion.___atributosCompartidos.tomarPosesionMetodoActivacion=='O'" style="margin: 0px; margin-top: 10px;" class="md-block">
+         <label>Device EUI (msb)</label>
+         <input type="text" pattern="[0-9a-fA-F]{16}" autocomplete="off" ng-model="vm.configuracion.___atributosCompartidos.tomarPosesionParam1" required="required" />
+      </md-input-container>
+      <md-input-container ng-if="vm.configuracion.___atributosCompartidos.tomarPosesionMetodoActivacion=='O'" style="margin: 0px; margin-top: 10px;" class="md-block">
+         <label>Application EUI (msb)</label>
+         <input type="text" pattern="[0-9a-fA-F]{16}" autocomplete="off" ng-model="vm.configuracion.___atributosCompartidos.tomarPosesionParam2" required="required" />
+      </md-input-container>
+      <md-input-container ng-if="vm.configuracion.___atributosCompartidos.tomarPosesionMetodoActivacion=='O'" style="margin: 0px; margin-top: 10px;" class="md-block">
+         <label>Application Key (msb)</label>
+         <input type="text" pattern="[0-9a-fA-F]{32}" autocomplete="off" ng-model="vm.configuracion.___atributosCompartidos.tomarPosesionParam3" required="required" />
+      </md-input-container>
+   </panel>
+</myIoT>
+```
+
