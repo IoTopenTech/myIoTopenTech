@@ -26,4 +26,4 @@
 - [ ] Valorar usar esta librería para leer códigos QR (https://blog.minhazav.dev/HTML5-QR-Code-scanning-launched-v1.0.1/)
 - [X] Valorar que haya dispositivos de coste nulo (por ejemplo, estaciones de medición de CO2 para colegios) que se puedan crear incluso aunque el crédito sea nulo (ésta es la parte crítica). Por ejemplo, podrían tener el sufijo _FREE en el nombre. Podrán delegarse, pero no podrá cambiarse su tipo.
 - [ ] Valorar que haya dispositivos reclamados que vayan a costa del proveedor mientras se mantenga el devEUI original para entregar a través de él. 
-- [ ] Evaluar integración con matrix.org
+- [ ] Evaluar integración con matrix.org. El usuario crearía una sala en matrix.org e invitaría a participar en ella al usuario @myiot:matrix.org. Después añadiría el id de la sala (que está en las opciones avanzadas de Element) en su panel de configuración.
