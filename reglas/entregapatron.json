@@ -8,24 +8,39 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 0,
+    "firstNodeIndex": 3,
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 330,
-          "layoutY": 168
+          "layoutX": 940,
+          "layoutY": 265
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "devEUI?",
+        "name": "metadata",
         "debugMode": true,
         "configuration": {
-          "jsScript": "if (msg.hasOwnProperty('hardware_serial')){//TTN\n    metadata.devEUI=msg.hardware_serial;\n} else if(msg.hasOwnProperty('devEUI')){//CS\n    metadata.devEUI=msg.devEUI;\n}else if(msg.hasOwnProperty('device')){//Everynet\n    metadata.devEUI=msg.device;\n}\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+          "jsScript": "return {\n    msg: msg,\n    metadata: {\n        \"deviceType\": metadata.originatorType,\n        \"deviceName\": metadata.originatorName,\n        \"ts\": metadata.ts\n    },\n    msgType: msgType\n};"
         }
       },
       {
         "additionalInfo": {
-          "layoutX": 333,
-          "layoutY": 278
+          "layoutX": 644,
+          "layoutY": 264
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
+        "name": "name y type",
+        "debugMode": true,
+        "configuration": {
+          "fieldsMapping": {
+            "name": "originatorName",
+            "type": "originatorType"
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 336,
+          "layoutY": 261
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "dispositivo final",
@@ -49,59 +64,44 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 641,
-          "layoutY": 281
-        },
-        "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
-        "name": "name y type",
-        "debugMode": true,
-        "configuration": {
-          "fieldsMapping": {
-            "name": "originatorName",
-            "type": "originatorType"
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 937,
-          "layoutY": 282
+          "layoutX": 333,
+          "layoutY": 151
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "metadata",
+        "name": "devEUI?",
         "debugMode": true,
         "configuration": {
-          "jsScript": "return {\n    msg: msg,\n    metadata: {\n        \"deviceType\": metadata.originatorType,\n        \"deviceName\": metadata.originatorName,\n        \"ts\": metadata.ts\n    },\n    msgType: msgType\n};"
+          "jsScript": "if (msg.hasOwnProperty('hardware_serial')){//TTN\n    metadata.devEUI=msg.hardware_serial;\n} else if(msg.hasOwnProperty('devEUI')){//CS\n    metadata.devEUI=msg.devEUI;\n}else if(msg.hasOwnProperty('device')){//Everynet\n    metadata.devEUI=msg.device;\n}\n\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
         }
       }
     ],
     "connections": [
       {
-        "fromIndex": 0,
-        "toIndex": 1,
-        "type": "Success"
-      },
-      {
         "fromIndex": 1,
-        "toIndex": 2,
+        "toIndex": 0,
         "type": "Success"
       },
       {
         "fromIndex": 2,
-        "toIndex": 3,
+        "toIndex": 1,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 3,
+        "toIndex": 2,
         "type": "Success"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 3,
+        "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "d138a690-0a59-11eb-b82a-9b3a9cfbb111"
+          "id": "9e0e1260-2010-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
-          "layoutX": 1224,
-          "layoutY": 284,
+          "layoutX": 1227,
+          "layoutY": 267,
           "ruleChainNodeId": "rule-chain-node-6"
         },
         "type": "Success"

@@ -12,8 +12,8 @@
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 367,
-          "layoutY": 221
+          "layoutX": 296,
+          "layoutY": 236
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "placeHolder",
@@ -29,11 +29,11 @@
         "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "d138a690-0a59-11eb-b82a-9b3a9cfbb111"
+          "id": "9e0e1260-2010-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
-          "layoutX": 606,
-          "layoutY": 139,
+          "layoutX": 535,
+          "layoutY": 154,
           "ruleChainNodeId": "rule-chain-node-3"
         },
         "type": "Success"

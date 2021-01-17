@@ -12,8 +12,8 @@
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 349,
-          "layoutY": 161
+          "layoutX": 354,
+          "layoutY": 157
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
         "name": "al dispositivo",
@@ -29,12 +29,12 @@
         "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "8f903ed0-1f97-11eb-b978-37de61f72881"
+          "id": "40197e90-5433-11eb-a5f7-21c7279bffcd"
         },
         "additionalInfo": {
-          "layoutX": 685,
-          "layoutY": 204,
-          "ruleChainNodeId": "rule-chain-node-9"
+          "layoutX": 699,
+          "layoutY": 263,
+          "ruleChainNodeId": "rule-chain-node-12"
         },
         "type": "LGT92"
       },
@@ -42,64 +42,38 @@
         "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "fc4ab5c0-1e00-11eb-b978-37de61f72881"
+          "id": "917844e0-28fc-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
-          "layoutX": 695,
-          "layoutY": 505,
-          "ruleChainNodeId": "rule-chain-node-8"
+          "layoutX": 693,
+          "layoutY": 161,
+          "ruleChainNodeId": "rule-chain-node-11"
         },
-        "type": "TTNMAD_V02_001"
+        "type": "LDDS75"
       },
       {
         "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "6f62aa80-17c7-11eb-8bbe-bfa6a50c9769"
+          "id": "1e18b280-2011-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
-          "layoutX": 694,
-          "layoutY": 454,
-          "ruleChainNodeId": "rule-chain-node-7"
+          "layoutX": 701,
+          "layoutY": 438,
+          "ruleChainNodeId": "rule-chain-node-10"
         },
-        "type": "TTNMAD_CO2_FREE"
+        "type": "RAK7204"
       },
       {
         "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "830cd790-122c-11eb-bb64-db1cd6459831"
+          "id": "f6e720c0-2010-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
-          "layoutX": 692,
-          "layoutY": 324,
-          "ruleChainNodeId": "rule-chain-node-6"
-        },
-        "type": "RAK7200"
-      },
-      {
-        "fromIndex": 0,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "e3fbb370-0a5a-11eb-b82a-9b3a9cfbb111"
-        },
-        "additionalInfo": {
-          "layoutX": 687,
-          "layoutY": 146,
-          "ruleChainNodeId": "rule-chain-node-5"
-        },
-        "type": "LDS01"
-      },
-      {
-        "fromIndex": 0,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "00b4f0f0-185f-11eb-b978-37de61f72881"
-        },
-        "additionalInfo": {
-          "layoutX": 691,
-          "layoutY": 262,
-          "ruleChainNodeId": "rule-chain-node-4"
+          "layoutX": 700,
+          "layoutY": 322,
+          "ruleChainNodeId": "rule-chain-node-9"
         },
         "type": "LHT65"
       },
@@ -107,14 +81,79 @@
         "fromIndex": 0,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "b1a8b460-1dbd-11eb-b978-37de61f72881"
+          "id": "dd73ee20-2010-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
-          "layoutX": 692,
-          "layoutY": 378,
+          "layoutX": 695,
+          "layoutY": 208,
+          "ruleChainNodeId": "rule-chain-node-8"
+        },
+        "type": "LDS01"
+      },
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "dabec0a0-9de4-11ea-abf5-9397c4646ed8"
+        },
+        "additionalInfo": {
+          "layoutX": 701,
+          "layoutY": 384,
+          "ruleChainNodeId": "rule-chain-node-7"
+        },
+        "type": "RAK7200"
+      },
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "313f7fb0-2011-11eb-800c-43a360f58fa3"
+        },
+        "additionalInfo": {
+          "layoutX": 703,
+          "layoutY": 497,
+          "ruleChainNodeId": "rule-chain-node-6"
+        },
+        "type": "TTNMAD_CO2_FREE"
+      },
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "496794b0-2011-11eb-800c-43a360f58fa3"
+        },
+        "additionalInfo": {
+          "layoutX": 706,
+          "layoutY": 661,
+          "ruleChainNodeId": "rule-chain-node-5"
+        },
+        "type": "TTNMAD_V02_001"
+      },
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "705b1da0-2654-11eb-800c-43a360f58fa3"
+        },
+        "additionalInfo": {
+          "layoutX": 704,
+          "layoutY": 554,
+          "ruleChainNodeId": "rule-chain-node-4"
+        },
+        "type": "TTNMAD_DOOR_BME280_TEMT6000"
+      },
+      {
+        "fromIndex": 0,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "4fb8d150-53f4-11eb-a5f7-21c7279bffcd"
+        },
+        "additionalInfo": {
+          "layoutX": 704,
+          "layoutY": 609,
           "ruleChainNodeId": "rule-chain-node-3"
         },
-        "type": "RAK7204"
+        "type": "TTNMAD_DOOR"
       }
     ]
   }

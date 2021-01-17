@@ -781,7 +781,8 @@
             "tipoOriginal",
             "claimingDataOriginal",
             "esDelegado",
-            "delegacionPorCargoDe"
+            "delegacionPorCargoDe",
+            "tipoEntidad"
           ],
           "latestTsKeyNames": [],
           "tellFailureIfAbsent": false,
@@ -896,7 +897,7 @@
         "name": "Sólo si no es FREE",
         "debugMode": true,
         "configuration": {
-          "jsScript": "return metadata.ss_tipoOriginal.split(\"_\").pop()!=\"FREE\";"
+          "jsScript": "if (metadata.hasOwnProperty('ss_tipoEntidad')) {\n    return metadata.ss_tipoEntidad.split(\"_\").pop() !=\n        \"FREE\";\n} else if (metadata.hasOwnProperty('ss_tipoOriginal')) {\n    return metadata.ss_tipoOriginal.split(\"_\").pop() !=\n        \"FREE\";\n}"
         }
       }
     ],
@@ -1197,12 +1198,12 @@
         "fromIndex": 1,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "296bd4d0-0a56-11eb-b82a-9b3a9cfbb111"
+          "id": "2f6887b0-200f-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
           "layoutX": 1498,
           "layoutY": 533,
-          "ruleChainNodeId": "rule-chain-node-57"
+          "ruleChainNodeId": "rule-chain-node-58"
         },
         "type": "Success"
       },
@@ -1210,12 +1211,12 @@
         "fromIndex": 32,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "296bd4d0-0a56-11eb-b82a-9b3a9cfbb111"
+          "id": "2f6887b0-200f-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
           "layoutX": 1498,
           "layoutY": 533,
-          "ruleChainNodeId": "rule-chain-node-57"
+          "ruleChainNodeId": "rule-chain-node-58"
         },
         "type": "Success"
       }

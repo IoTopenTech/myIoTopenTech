@@ -8,8 +8,67 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 35,
+    "firstNodeIndex": 36,
     "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 2619,
+          "layoutY": 627
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
+        "name": "delegados.length>0",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var delegadosArray = JSON.parse(metadata.ss_delegados);\n\nif(delegadosArray.length>0){\n    return true;\n}\nreturn false;"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1223,
+          "layoutY": 409
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
+        "name": "Customer",
+        "debugMode": false,
+        "configuration": {
+          "originatorSource": "CUSTOMER",
+          "relationsQuery": {
+            "direction": "FROM",
+            "maxLevel": 1,
+            "filters": [
+              {
+                "relationType": "Contains",
+                "entityTypes": []
+              }
+            ],
+            "fetchLastLevelOnly": false
+          }
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1487,
+          "layoutY": 407
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "idEntidad",
+        "debugMode": false,
+        "configuration": {
+          "jsScript": "msg.___ultimoDownlink=msg.tipoDownlink;\nmetadata.idEntidad=msg.uuid;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1427,
+          "layoutY": 311
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "guardar atributos",
+        "debugMode": false,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
       {
         "additionalInfo": {
           "layoutX": 608,
@@ -45,7 +104,7 @@
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
         "name": "guardar",
-        "debugMode": false,
+        "debugMode": true,
         "configuration": {
           "scope": "SERVER_SCOPE"
         }
@@ -135,7 +194,7 @@
         },
         "type": "org.thingsboard.rule.engine.mail.TbSendEmailNode",
         "name": "Enviar",
-        "debugMode": false,
+        "debugMode": true,
         "configuration": {
           "useSystemSmtpSettings": true,
           "smtpHost": "localhost",
@@ -155,7 +214,7 @@
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
         "name": "hoy=fechaDeudora?",
-        "debugMode": false,
+        "debugMode": true,
         "configuration": {
           "jsScript": "var hoy =new Date();\nreturn metadata.fechaDeudora.substring(0,10)==hoy.toISOString().substring(0,10) ;"
         }
@@ -276,53 +335,6 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 1223,
-          "layoutY": 409
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
-        "name": "Customer",
-        "debugMode": false,
-        "configuration": {
-          "originatorSource": "CUSTOMER",
-          "relationsQuery": {
-            "direction": "FROM",
-            "maxLevel": 1,
-            "filters": [
-              {
-                "relationType": "Contains",
-                "entityTypes": []
-              }
-            ],
-            "fetchLastLevelOnly": false
-          }
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1487,
-          "layoutY": 407
-        },
-        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
-        "name": "idEntidad",
-        "debugMode": false,
-        "configuration": {
-          "jsScript": "msg.___ultimoDownlink=msg.tipoDownlink;\nmetadata.idEntidad=msg.uuid;\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 1427,
-          "layoutY": 311
-        },
-        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
-        "name": "guardar atributos",
-        "debugMode": false,
-        "configuration": {
-          "scope": "SERVER_SCOPE"
-        }
-      },
-      {
-        "additionalInfo": {
           "layoutX": 1181,
           "layoutY": 182
         },
@@ -351,9 +363,9 @@
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
         "name": "acciones",
-        "debugMode": false,
+        "debugMode": true,
         "configuration": {
-          "jsScript": "if (metadata.deviceType == \"SYSTEM\") {\n\n    if (msg.accion == 'editarPerfil') {\n        return ['editarPerfil'];\n    } else if (msg\n        .accion == 'configurarDelegacion') {\n        if (msg\n            .hasOwnProperty('nombreDispositivo') && msg\n            .hasOwnProperty('idDispositivo') && msg\n            .hasOwnProperty('idDelegacion') && msg\n            .hasOwnProperty('subtipoDispositivo') && msg\n            .hasOwnProperty('delegacion')) {\n            return ['configurarDelegacion'];\n        }\n\n    \n    } else if (msg\n        .accion == 'crearDelegado') {\n\n        if (msg\n            .hasOwnProperty('nombreDispositivo') && msg\n            .hasOwnProperty('nombreDispositivoPadre') &&\n            msg\n            .hasOwnProperty(\n                'subtipoDispositivo') && msg\n            .hasOwnProperty(\n                'idDispositivoPadre') && msg\n            .hasOwnProperty(\n                'delegacionPorCargoDe')) {\n            return ['crearDelegado'];\n        }\n    } else if (msg\n        .accion == 'enviarDownlink') {\n        if (msg\n            .hasOwnProperty('uuid') && msg\n            .hasOwnProperty(\n                'payload')) {\n            return ['enviarDownlink'];\n        }\n    } else if (msg\n        .accion == 'reclamarDispositivo') {\n        if (msg.hasOwnProperty('idEntidad') && msg\n            .hasOwnProperty('nombreEntidad') && msg\n            .hasOwnProperty('subtipoEntidad')) {\n            return ['reclamarDispositivo'];\n        }\n    } else if (msg\n        .accion == 'editarEntidad') {\n        if (msg.hasOwnProperty('idEntidad') && msg\n            .hasOwnProperty('nombreEntidad') && msg\n            .hasOwnProperty('tipoEntidad') && msg\n            .hasOwnProperty('subtipoEntidad') && msg\n            .hasOwnProperty('padreEntidad') && msg\n            .hasOwnProperty('tipoPadreEntidad')) {\n            return ['editarEntidad'];\n        }\n    } else if (msg\n        .accion == 'configurarEntidad') {\n        if (msg.hasOwnProperty('configuracion')) {\n            return ['configurarEntidad'];\n        }\n    } else if (msg.accion == 'crearEntidad') {\n        if (msg.hasOwnProperty('nombreEntidad') && msg\n            .hasOwnProperty('tipoEntidad') && msg\n            .hasOwnProperty('subtipoEntidad') && msg\n            .hasOwnProperty('padreEntidadId') && msg\n            .hasOwnProperty('padreEntidadNombre')) {\n            return ['crearEntidad'];\n        }\n    } else if (msg.accion == 'borrarEntidad') {\n        if (msg.hasOwnProperty('nombreEntidad') && msg\n            .hasOwnProperty('tipoEntidad')) {\n            return ['borrarEntidad'];\n        }\n    }\n\n} else {\n    return false;\n}"
+          "jsScript": "if (metadata.deviceType == \"SYSTEM\") {\n\n    if (msg.accion == 'editarPerfil') {\n        return ['editarPerfil'];\n    } else if (msg\n        .accion == 'configurarDelegacion') {\n        if (msg\n            .hasOwnProperty('nombreDispositivo') && msg\n            .hasOwnProperty('idDispositivo') && msg\n            .hasOwnProperty('idDelegacion') && msg\n            .hasOwnProperty('subtipoDispositivo') && msg\n            .hasOwnProperty('delegacion')) {\n            return ['configurarDelegacion'];\n        }\n\n    \n    } else if (msg\n        .accion == 'crearDelegado') {\n\n        if (msg\n            .hasOwnProperty('nombreDispositivo') && msg\n            .hasOwnProperty('nombreDispositivoPadre') &&\n            msg\n            .hasOwnProperty(\n                'subtipoDispositivo') && msg\n            .hasOwnProperty(\n                'idDispositivoPadre') && msg\n            .hasOwnProperty(\n                'delegacionPorCargoDe')) {\n            return ['crearDelegado'];\n        }\n    } else if (msg\n        .accion == 'enviarDownlink') {\n        if (msg\n            .hasOwnProperty('uuid') && msg\n            .hasOwnProperty(\n                'payload')) {\n            return ['enviarDownlink'];\n        }\n    } else if (msg\n        .accion == 'reclamarDispositivo') {\n        if (msg.hasOwnProperty('idEntidad') && msg\n            .hasOwnProperty('nombreEntidad') && msg\n            .hasOwnProperty('subtipoEntidad')) {\n            return ['reclamarDispositivo'];\n        }\n    } else if (msg\n        .accion == 'editarEntidad') {\n        if (msg.hasOwnProperty('idEntidad') && msg\n            .hasOwnProperty('nombreEntidad') && msg\n            .hasOwnProperty('tipoEntidad') && msg\n            .hasOwnProperty('subtipoEntidad') && msg\n            .hasOwnProperty('padreEntidad') && msg\n            .hasOwnProperty('tipoPadreEntidad')) {\n            return ['editarEntidad'];\n        }\n    } else if (msg\n        .accion == 'configurarEntidad') {\n        if (msg.hasOwnProperty('configuracion')) {\n            return ['configurarEntidad'];\n        }\n    } else if (msg.accion == 'crearEntidad') {\n        if (msg.hasOwnProperty('nombreEntidad') && msg\n            .hasOwnProperty('tipoEntidad') && msg\n            .hasOwnProperty('subtipoEntidad') && msg\n            .hasOwnProperty('padreEntidadId') && msg\n            .hasOwnProperty('padreEntidadNombre')) {\n            return ['crearEntidad'];\n        }\n    } else if (msg.accion == 'borrarEntidad') {\n        if (msg.hasOwnProperty('nombreEntidad') && msg\n            .hasOwnProperty('tipoEntidad')) {\n            return ['borrarEntidad'];\n        }\n    }else if (msg.accion == 'configurarAtribNotificaciones') {\n            return ['configurarAtribNotificaciones'];\n    }\n\n} else {\n    return false;\n}"
         }
       },
       {
@@ -363,9 +375,9 @@
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "preparar atributos",
-        "debugMode": false,
+        "debugMode": true,
         "configuration": {
-          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\n//Valido los atributos que admito modificar\nvar mensaje={};\nif(msg.hasOwnProperty('email')){\n    mensaje.email=msg.email;\n}\nif(msg.hasOwnProperty('token_telegram')){\n    mensaje.token_telegram=msg.token_telegram;\n}\nif(msg.hasOwnProperty('chatid_telegram')){\n    mensaje.chatid_telegram=msg.chatid_telegram;\n}\nif(msg.hasOwnProperty('token_webhook_ifttt')){\n    mensaje.token_webhook_ifttt=msg.token_webhook_ifttt;\n}\n\t\nreturn {msg: mensaje, metadata: metadata, msgType: msgType};\n"
+          "jsScript": "msgType = 'POST_ATTRIBUTES_REQUEST';\n//Valido los atributos que admito modificar\nvar mensaje={};\nif(msg.hasOwnProperty('email')){\n    mensaje.email=msg.email;\n}\nif(msg.hasOwnProperty('token_telegram')){\n    mensaje.token_telegram=msg.token_telegram;\n}\nif(msg.hasOwnProperty('chatid_telegram')){\n    mensaje.chatid_telegram=msg.chatid_telegram;\n}\nif(msg.hasOwnProperty('token_webhook_ifttt')){\n    mensaje.token_webhook_ifttt=msg.token_webhook_ifttt;\n}\nif(msg.hasOwnProperty('id_sala_matrix')){\n    mensaje.id_sala_matrix=msg.id_sala_matrix;\n}\t\nreturn {msg: mensaje, metadata: metadata, msgType: msgType};\n"
         }
       },
       {
@@ -389,7 +401,7 @@
         },
         "type": "org.thingsboard.rule.engine.mail.TbMsgToEmailNode",
         "name": "enviarAviso",
-        "debugMode": false,
+        "debugMode": true,
         "configuration": {
           "fromTemplate": "no-reply@iotopentech.io",
           "toTemplate": "${customer_email}",
@@ -431,7 +443,7 @@
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "cargar msg y delegados en metadata",
-        "debugMode": false,
+        "debugMode": true,
         "configuration": {
           "jsScript": "var delegadosArray = JSON.parse(metadata.ss_delegados);\nvar newDelegados = [];\nfor (var i = 0; i < delegadosArray.length; i++) {\n    if (delegadosArray[i].reclamado === true) {\n        if (delegadosArray[i].delegacionPorCargoDe == \"delegado\" ||\n            metadata.delegadorSolvente == \"true\") {\n            newDelegados.push(delegadosArray[i]);\n        } \n    }\n}\n\nif (newDelegados.length > 0) {\n     \n    delegadosArray = newDelegados;\n    //Extraigo el primer delegado para cambiar a él\n    var delegadoActual = delegadosArray.shift();\n   \n    metadata.idDelegadoActual = delegadoActual.id;\n    metadata.msgOriginal = JSON.stringify(msg);\n    metadata.delegadosArray = JSON.stringify(\n    delegadosArray);\n    metadata.delegadoActual = JSON.stringify(\n    delegadoActual);\n    return {\n        msg: msg,\n        metadata: metadata,\n        msgType: msgType\n    };\n}"
         }
@@ -492,7 +504,7 @@
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
         "name": "delegados?",
-        "debugMode": false,
+        "debugMode": true,
         "configuration": {
           "clientAttributeNames": [],
           "sharedAttributeNames": [],
@@ -559,7 +571,7 @@
         },
         "type": "org.thingsboard.rule.engine.filter.TbMsgTypeSwitchNode",
         "name": "Message Type Switch",
-        "debugMode": false,
+        "debugMode": true,
         "configuration": {
           "version": 0
         }
@@ -604,72 +616,67 @@
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 21,
-        "type": "accion"
-      },
-      {
-        "fromIndex": 1,
-        "toIndex": 5,
-        "type": "False"
-      },
-      {
-        "fromIndex": 1,
         "toIndex": 27,
         "type": "True"
       },
       {
-        "fromIndex": 2,
-        "toIndex": 24,
+        "fromIndex": 1,
+        "toIndex": 2,
         "type": "Success"
       },
       {
-        "fromIndex": 3,
-        "toIndex": 23,
+        "fromIndex": 2,
+        "toIndex": 7,
         "type": "Success"
       },
       {
         "fromIndex": 4,
-        "toIndex": 1,
-        "type": "Success"
+        "toIndex": 22,
+        "type": "accion"
       },
       {
         "fromIndex": 5,
-        "toIndex": 38,
-        "type": "False"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 32,
-        "type": "True"
-      },
-      {
-        "fromIndex": 5,
-        "toIndex": 10,
-        "type": "True"
-      },
-      {
-        "fromIndex": 6,
         "toIndex": 9,
         "type": "False"
       },
       {
-        "fromIndex": 6,
-        "toIndex": 7,
+        "fromIndex": 5,
+        "toIndex": 28,
         "type": "True"
       },
       {
+        "fromIndex": 6,
+        "toIndex": 25,
+        "type": "Success"
+      },
+      {
         "fromIndex": 7,
-        "toIndex": 14,
+        "toIndex": 24,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 8,
+        "toIndex": 5,
         "type": "Success"
       },
       {
         "fromIndex": 9,
-        "toIndex": 32,
+        "toIndex": 39,
+        "type": "False"
+      },
+      {
+        "fromIndex": 9,
+        "toIndex": 33,
         "type": "True"
       },
       {
         "fromIndex": 9,
-        "toIndex": 31,
+        "toIndex": 14,
+        "type": "True"
+      },
+      {
+        "fromIndex": 10,
+        "toIndex": 13,
         "type": "False"
       },
       {
@@ -679,18 +686,13 @@
       },
       {
         "fromIndex": 11,
-        "toIndex": 12,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 12,
-        "toIndex": 16,
+        "toIndex": 18,
         "type": "Success"
       },
       {
         "fromIndex": 13,
-        "toIndex": 7,
-        "type": "False"
+        "toIndex": 33,
+        "type": "True"
       },
       {
         "fromIndex": 13,
@@ -698,74 +700,84 @@
         "type": "False"
       },
       {
-        "fromIndex": 13,
-        "toIndex": 6,
+        "fromIndex": 14,
+        "toIndex": 15,
         "type": "True"
       },
       {
-        "fromIndex": 14,
-        "toIndex": 15,
+        "fromIndex": 15,
+        "toIndex": 16,
         "type": "Success"
       },
       {
-        "fromIndex": 15,
-        "toIndex": 2,
+        "fromIndex": 16,
+        "toIndex": 20,
         "type": "Success"
       },
       {
         "fromIndex": 17,
-        "toIndex": 18,
-        "type": "Success"
+        "toIndex": 11,
+        "type": "False"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 33,
+        "type": "False"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 10,
+        "type": "True"
       },
       {
         "fromIndex": 18,
-        "toIndex": 3,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 20,
-        "toIndex": 22,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 21,
-        "toIndex": 20,
-        "type": "editarPerfil"
-      },
-      {
-        "fromIndex": 21,
-        "toIndex": 17,
-        "type": "enviarDownlink"
-      },
-      {
-        "fromIndex": 22,
         "toIndex": 19,
         "type": "Success"
       },
       {
-        "fromIndex": 24,
-        "toIndex": 8,
+        "fromIndex": 19,
+        "toIndex": 6,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 21,
+        "toIndex": 23,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 22,
+        "toIndex": 21,
+        "type": "editarPerfil"
+      },
+      {
+        "fromIndex": 22,
+        "toIndex": 1,
+        "type": "enviarDownlink"
+      },
+      {
+        "fromIndex": 23,
+        "toIndex": 3,
         "type": "Success"
       },
       {
         "fromIndex": 25,
-        "toIndex": 28,
+        "toIndex": 12,
         "type": "Success"
       },
       {
         "fromIndex": 26,
-        "toIndex": 28,
+        "toIndex": 29,
         "type": "Success"
       },
       {
         "fromIndex": 27,
         "toIndex": 29,
-        "type": "True"
+        "type": "Success"
       },
       {
-        "fromIndex": 29,
-        "toIndex": 25,
-        "type": "Success"
+        "fromIndex": 28,
+        "toIndex": 30,
+        "type": "True"
       },
       {
         "fromIndex": 30,
@@ -774,235 +786,253 @@
       },
       {
         "fromIndex": 31,
-        "toIndex": 30,
+        "toIndex": 0,
         "type": "Success"
       },
       {
         "fromIndex": 32,
-        "toIndex": 30,
+        "toIndex": 31,
         "type": "Success"
       },
       {
         "fromIndex": 33,
-        "toIndex": 4,
+        "toIndex": 31,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 34,
+        "toIndex": 8,
         "type": "False"
       },
       {
-        "fromIndex": 33,
-        "toIndex": 0,
+        "fromIndex": 34,
+        "toIndex": 4,
         "type": "True"
       },
       {
-        "fromIndex": 35,
-        "toIndex": 33,
+        "fromIndex": 36,
+        "toIndex": 34,
         "type": "Post telemetry"
       },
       {
-        "fromIndex": 35,
-        "toIndex": 37,
+        "fromIndex": 36,
+        "toIndex": 38,
         "type": "Other"
       },
       {
-        "fromIndex": 35,
-        "toIndex": 34,
+        "fromIndex": 36,
+        "toIndex": 35,
         "type": "Post attributes"
       },
       {
-        "fromIndex": 35,
-        "toIndex": 36,
+        "fromIndex": 36,
+        "toIndex": 37,
         "type": "RPC Request from Device"
       },
       {
-        "fromIndex": 38,
-        "toIndex": 13,
+        "fromIndex": 39,
+        "toIndex": 17,
         "type": "False"
       },
       {
-        "fromIndex": 38,
-        "toIndex": 32,
+        "fromIndex": 39,
+        "toIndex": 33,
         "type": "True"
       }
     ],
     "ruleChainConnections": [
       {
-        "fromIndex": 0,
+        "fromIndex": 4,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "c89463e0-0a58-11eb-b82a-9b3a9cfbb111"
+          "id": "205f63a0-2010-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
           "layoutX": 873,
           "layoutY": 311,
-          "ruleChainNodeId": "rule-chain-node-50"
+          "ruleChainNodeId": "rule-chain-node-52"
         },
         "type": "potencialmenteEntregaPatron"
       },
       {
-        "fromIndex": 1,
+        "fromIndex": 5,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "037c3190-0a59-11eb-b82a-9b3a9cfbb111"
+          "id": "2dbba590-2010-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
-          "layoutX": 1578,
-          "layoutY": 976,
-          "ruleChainNodeId": "rule-chain-node-41"
+          "layoutX": 1580,
+          "layoutY": 1014,
+          "ruleChainNodeId": "rule-chain-node-42"
         },
         "type": "True"
       },
       {
-        "fromIndex": 21,
+        "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "53393530-0a58-11eb-b82a-9b3a9cfbb111"
+          "id": "9189e780-251f-11eb-800c-43a360f58fa3"
+        },
+        "additionalInfo": {
+          "layoutX": 1219,
+          "layoutY": 885,
+          "ruleChainNodeId": "rule-chain-node-51"
+        },
+        "type": "configurarAtribNotificaciones"
+      },
+      {
+        "fromIndex": 22,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "d448ef40-200f-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
           "layoutX": 1219,
           "layoutY": 833,
-          "ruleChainNodeId": "rule-chain-node-49"
+          "ruleChainNodeId": "rule-chain-node-50"
         },
         "type": "configurarDelegacion"
       },
       {
-        "fromIndex": 21,
+        "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "070eeab0-0a58-11eb-b82a-9b3a9cfbb111"
+          "id": "b08f4630-200f-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
           "layoutX": 1222,
           "layoutY": 720,
-          "ruleChainNodeId": "rule-chain-node-48"
+          "ruleChainNodeId": "rule-chain-node-49"
         },
         "type": "reclamarDispositivo"
       },
       {
-        "fromIndex": 21,
+        "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "76a80f10-0a57-11eb-b82a-9b3a9cfbb111"
+          "id": "64a22bc0-200f-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
           "layoutX": 1220,
           "layoutY": 609,
-          "ruleChainNodeId": "rule-chain-node-47"
+          "ruleChainNodeId": "rule-chain-node-48"
         },
         "type": "borrarEntidad"
       },
       {
-        "fromIndex": 21,
+        "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "aab986d0-0a57-11eb-b82a-9b3a9cfbb111"
+          "id": "85fef910-200f-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
           "layoutX": 1222,
           "layoutY": 500,
-          "ruleChainNodeId": "rule-chain-node-46"
+          "ruleChainNodeId": "rule-chain-node-47"
         },
         "type": "editarEntidad"
       },
       {
-        "fromIndex": 21,
+        "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "9a898b70-0a57-11eb-b82a-9b3a9cfbb111"
+          "id": "7538d830-200f-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
           "layoutX": 1221,
           "layoutY": 556,
-          "ruleChainNodeId": "rule-chain-node-45"
+          "ruleChainNodeId": "rule-chain-node-46"
         },
         "type": "crearEntidad"
       },
       {
-        "fromIndex": 21,
+        "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "dfc1ec40-0a58-11eb-b82a-9b3a9cfbb111"
+          "id": "2518f410-2010-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
           "layoutX": 1222,
           "layoutY": 670,
-          "ruleChainNodeId": "rule-chain-node-44"
+          "ruleChainNodeId": "rule-chain-node-45"
         },
         "type": "configurarEntidad"
       },
       {
-        "fromIndex": 21,
+        "fromIndex": 22,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "4981ca40-0a56-11eb-b82a-9b3a9cfbb111"
+          "id": "42c6b890-200f-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
           "layoutX": 1221,
           "layoutY": 772,
-          "ruleChainNodeId": "rule-chain-node-43"
+          "ruleChainNodeId": "rule-chain-node-44"
         },
         "type": "crearDelegado"
       },
       {
-        "fromIndex": 23,
+        "fromIndex": 24,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "037c3190-0a59-11eb-b82a-9b3a9cfbb111"
+          "id": "2dbba590-2010-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
-          "layoutX": 1578,
-          "layoutY": 976,
-          "ruleChainNodeId": "rule-chain-node-41"
-        },
-        "type": "Success"
-      },
-      {
-        "fromIndex": 28,
-        "targetRuleChainId": {
-          "entityType": "RULE_CHAIN",
-          "id": "b0785cd0-0a58-11eb-b82a-9b3a9cfbb111"
-        },
-        "additionalInfo": {
-          "layoutX": 3307,
-          "layoutY": 525,
+          "layoutX": 1580,
+          "layoutY": 1014,
           "ruleChainNodeId": "rule-chain-node-42"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 32,
+        "fromIndex": 29,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "037c3190-0a59-11eb-b82a-9b3a9cfbb111"
+          "id": "186fd580-2010-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
-          "layoutX": 1578,
-          "layoutY": 976,
-          "ruleChainNodeId": "rule-chain-node-41"
+          "layoutX": 3307,
+          "layoutY": 525,
+          "ruleChainNodeId": "rule-chain-node-43"
         },
         "type": "Success"
       },
       {
-        "fromIndex": 35,
+        "fromIndex": 33,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "037c3190-0a59-11eb-b82a-9b3a9cfbb111"
+          "id": "2dbba590-2010-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
-          "layoutX": 1578,
-          "layoutY": 976,
-          "ruleChainNodeId": "rule-chain-node-41"
+          "layoutX": 1580,
+          "layoutY": 1014,
+          "ruleChainNodeId": "rule-chain-node-42"
+        },
+        "type": "Success"
+      },
+      {
+        "fromIndex": 36,
+        "targetRuleChainId": {
+          "entityType": "RULE_CHAIN",
+          "id": "2dbba590-2010-11eb-800c-43a360f58fa3"
+        },
+        "additionalInfo": {
+          "layoutX": 1580,
+          "layoutY": 1014,
+          "ruleChainNodeId": "rule-chain-node-42"
         },
         "type": "Inactivity Event"
       },
       {
-        "fromIndex": 35,
+        "fromIndex": 36,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "037c3190-0a59-11eb-b82a-9b3a9cfbb111"
+          "id": "2dbba590-2010-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
-          "layoutX": 1578,
-          "layoutY": 976,
-          "ruleChainNodeId": "rule-chain-node-41"
+          "layoutX": 1580,
+          "layoutY": 1014,
+          "ruleChainNodeId": "rule-chain-node-42"
         },
         "type": "Activity Event"
       }

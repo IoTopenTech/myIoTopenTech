@@ -1,5 +1,5 @@
 {
-  "title": "Dispositivo_TTNMAD_V02_001",
+  "title": "Dispositivo_LWL01",
   "configuration": {
     "widgets": {
       "71519cb3-d9c1-cae4-a2cb-7d9a796518fa": {
@@ -16,9 +16,9 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "Bat",
+                  "name": "BAT_V",
                   "type": "timeseries",
-                  "label": "Bat",
+                  "label": "Batería",
                   "color": "#2196f3",
                   "settings": {},
                   "_hash": 0.11135200794403222
@@ -139,13 +139,13 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "Hall",
+                  "name": "WATER_LEAK_STATUS",
                   "type": "timeseries",
-                  "label": "Puerta",
+                  "label": "Sensor fuga",
                   "color": "#2196f3",
                   "settings": {},
                   "_hash": 0.15660290796390508,
-                  "postFuncBody": "if(value==1){\n    return \"ABIERTA\";\n}else{\n    return \"CERRADA\";\n}\nreturn value;"
+                  "postFuncBody": "if(value==1){\n    return \"HÚMEDO\";\n}else{\n    return \"SECO\";\n}\nreturn value;"
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -199,9 +199,9 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "Hall",
+                  "name": "WATER_LEAK_STATUS",
                   "type": "timeseries",
-                  "label": "Estado de la puerta",
+                  "label": "Estado del sensor",
                   "color": "#2196f3",
                   "settings": {
                     "excludeFromStacking": false,
@@ -252,7 +252,7 @@
             "yaxis": {
               "showLabels": true,
               "color": "#545454",
-              "ticksFormatter": "if (value === 1) {\n    return 'ABIERTA';\n} else if (value === 0) {\n    return 'CERRADA';\n} else if (value === -1){\n    return 'NO DELEGADO';\n}else{\n    return \"\";\n}",
+              "ticksFormatter": "if (value === 1) {\n    return 'HÚMEDI';\n} else if (value === 0) {\n    return 'SECO';\n} else if (value === -1){\n    return 'NO DELEGADO';\n}else{\n    return \"\";\n}",
               "min": -1,
               "max": 1,
               "tickDecimals": 0,
@@ -267,7 +267,7 @@
             },
             "stack": false,
             "tooltipIndividual": false,
-            "tooltipValueFormatter": "if (value== 1) {\n    return 'ABIERTA';\n} else if (value === 0) {\n    return 'CERRADA';\n} else if (value === -1){\n    return 'NO DELEGADO';\n}else{\n    return \"\";\n}",
+            "tooltipValueFormatter": "if (value== 1) {\n    return 'HÚMEDO';\n} else if (value === 0) {\n    return 'SECO';\n} else if (value === -1){\n    return 'NO DELEGADO';\n}else{\n    return \"\";\n}",
             "smoothLines": false,
             "timeForComparison": "months",
             "xaxisSecond": {
@@ -276,7 +276,7 @@
             },
             "hideZeros": false
           },
-          "title": "Estado de la puerta",
+          "title": "Estado del sensor",
           "dropShadow": true,
           "enableFullscreen": true,
           "titleStyle": {
@@ -318,7 +318,7 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "Bat",
+                  "name": "BAT_V",
                   "type": "timeseries",
                   "label": "Nivel de batería",
                   "color": "#2196f3",
@@ -329,7 +329,7 @@
                     "removeFromLegend": false,
                     "showLines": true,
                     "fillLines": false,
-                    "showPoints": true,
+                    "showPoints": false,
                     "showPointShape": "circle",
                     "pointShapeFormatter": "var size = radius * Math.sqrt(Math.PI) / 2;\nctx.moveTo(x - size, y - size);\nctx.lineTo(x + size, y + size);\nctx.moveTo(x - size, y + size);\nctx.lineTo(x + size, y - size);",
                     "showPointsLineWidth": 5,
@@ -513,7 +513,7 @@
           "iconSize": "24px",
           "titleTooltip": "",
           "widgetStyle": {},
-          "displayTimewindow": false,
+          "displayTimewindow": true,
           "actions": {},
           "datasources": [],
           "alarmsMaxCountLoad": 0,
@@ -521,26 +521,26 @@
         },
         "id": "59d678c9-f9c1-b54c-a024-7d38c9af50c3"
       },
-      "c5c5ea63-7d76-8939-f171-914489eea2f8": {
+      "054db6ee-db1c-eb28-561d-b34f7fe009b7": {
         "isSystemType": true,
         "bundleAlias": "iotopentech",
-        "typeAlias": "downlink_digital2",
+        "typeAlias": "simple_card",
         "type": "latest",
         "title": "New widget",
         "sizeX": 7,
-        "sizeY": 8,
+        "sizeY": 5,
         "config": {
           "datasources": [
             {
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "LED",
+                  "name": "WATER_LEAK_TIMES",
                   "type": "timeseries",
-                  "label": "LED",
+                  "label": "Nº de fugas",
                   "color": "#2196f3",
                   "settings": {},
-                  "_hash": 0.7325395322015935
+                  "_hash": 0.7007079582079607
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -552,32 +552,207 @@
             }
           },
           "showTitle": true,
-          "backgroundColor": "#fff",
-          "color": "rgba(0, 0, 0, 0.87)",
-          "padding": "8px",
+          "backgroundColor": "#ff5722",
+          "color": "rgba(255, 255, 255, 0.87)",
+          "padding": "16px",
           "settings": {
-            "outputChannel": 6,
-            "tipoDownlink": "CambiarLED"
+            "labelPosition": "none"
           },
-          "title": "LED",
+          "title": "Nº de fugas",
+          "dropShadow": true,
+          "enableFullscreen": false,
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400
+          },
+          "units": "",
+          "decimals": 0,
+          "useDashboardTimewindow": true,
+          "showLegend": false,
+          "widgetStyle": {},
+          "actions": {},
           "showTitleIcon": false,
           "titleIcon": null,
           "iconColor": "rgba(0, 0, 0, 0.87)",
           "iconSize": "24px",
           "titleTooltip": "",
+          "displayTimewindow": true
+        },
+        "id": "054db6ee-db1c-eb28-561d-b34f7fe009b7"
+      },
+      "1e3e0bf1-9725-b7a3-e2b4-b54e0a196dc3": {
+        "isSystemType": true,
+        "bundleAlias": "iotopentech",
+        "typeAlias": "simple_card",
+        "type": "latest",
+        "title": "New widget",
+        "sizeX": 8,
+        "sizeY": 5,
+        "config": {
+          "datasources": [
+            {
+              "type": "entity",
+              "dataKeys": [
+                {
+                  "name": "WATER_LEAK_OPEN_DURATION",
+                  "type": "timeseries",
+                  "label": "WATER_LEAK_OPEN_DURATION",
+                  "color": "#2196f3",
+                  "settings": {},
+                  "_hash": 0.7984385758022179
+                }
+              ],
+              "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#ff5722",
+          "color": "rgba(255, 255, 255, 0.87)",
+          "padding": "16px",
+          "settings": {
+            "labelPosition": "none"
+          },
+          "title": "Duración última fuga",
           "dropShadow": true,
-          "enableFullscreen": true,
-          "widgetStyle": {},
+          "enableFullscreen": false,
           "titleStyle": {
             "fontSize": "16px",
             "fontWeight": 400
           },
+          "units": "min",
+          "decimals": 0,
           "useDashboardTimewindow": true,
-          "displayTimewindow": true,
           "showLegend": false,
-          "actions": {}
+          "widgetStyle": {},
+          "actions": {},
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "displayTimewindow": true
         },
-        "id": "c5c5ea63-7d76-8939-f171-914489eea2f8"
+        "id": "1e3e0bf1-9725-b7a3-e2b4-b54e0a196dc3"
+      },
+      "fd639f42-e8b4-44c5-75e5-3eca5902eeea": {
+        "isSystemType": true,
+        "bundleAlias": "charts",
+        "typeAlias": "timeseries_bars_flot",
+        "type": "timeseries",
+        "title": "New widget",
+        "sizeX": 9,
+        "sizeY": 5,
+        "config": {
+          "datasources": [
+            {
+              "type": "entity",
+              "dataKeys": [
+                {
+                  "name": "WATER_LEAK_OPEN_DURATION",
+                  "type": "timeseries",
+                  "label": "WATER_LEAK_OPEN_DURATION",
+                  "color": "#2196f3",
+                  "settings": {
+                    "excludeFromStacking": false,
+                    "hideDataByDefault": false,
+                    "disableDataHiding": false,
+                    "removeFromLegend": false,
+                    "showLines": false,
+                    "fillLines": false,
+                    "showPoints": false,
+                    "showPointShape": "circle",
+                    "pointShapeFormatter": "var size = radius * Math.sqrt(Math.PI) / 2;\nctx.moveTo(x - size, y - size);\nctx.lineTo(x + size, y + size);\nctx.moveTo(x - size, y + size);\nctx.lineTo(x + size, y - size);",
+                    "showPointsLineWidth": 5,
+                    "showPointsRadius": 3,
+                    "showSeparateAxis": false,
+                    "axisPosition": "left",
+                    "thresholds": [
+                      {
+                        "thresholdValueSource": "predefinedValue"
+                      }
+                    ],
+                    "comparisonSettings": {
+                      "showValuesForComparison": true
+                    }
+                  },
+                  "_hash": 0.671710160017812
+                }
+              ],
+              "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
+            }
+          ],
+          "timewindow": {
+            "realtime": {
+              "timewindowMs": 60000
+            },
+            "aggregation": {
+              "limit": 200,
+              "type": "AVG"
+            }
+          },
+          "showTitle": true,
+          "backgroundColor": "#fff",
+          "color": "rgba(0, 0, 0, 0.87)",
+          "padding": "8px",
+          "settings": {
+            "shadowSize": 4,
+            "fontColor": "#545454",
+            "fontSize": 10,
+            "xaxis": {
+              "showLabels": true,
+              "color": "#545454"
+            },
+            "yaxis": {
+              "showLabels": true,
+              "color": "#545454",
+              "ticksFormatter": "if (value === -1){\n    return 'NO DELEGADO';\n}else{\n    return value;\n}",
+              "min": -1,
+              "tickDecimals": 0,
+              "tickSize": 1
+            },
+            "grid": {
+              "color": "#545454",
+              "tickColor": "#DDDDDD",
+              "verticalLines": true,
+              "horizontalLines": true,
+              "outlineWidth": 1
+            },
+            "stack": true,
+            "tooltipIndividual": false,
+            "defaultBarWidth": 60000,
+            "barAlignment": "left",
+            "timeForComparison": "months",
+            "xaxisSecond": {
+              "axisPosition": "top",
+              "showLabels": true
+            },
+            "tooltipValueFormatter": "if (value === -1){\n    return 'NO DELEGADO';\n}else{\n    return value;\n}"
+          },
+          "title": "Duración última fuga",
+          "dropShadow": true,
+          "enableFullscreen": true,
+          "titleStyle": {
+            "fontSize": "16px",
+            "fontWeight": 400
+          },
+          "mobileHeight": null,
+          "widgetStyle": {},
+          "useDashboardTimewindow": true,
+          "showLegend": false,
+          "actions": {},
+          "showTitleIcon": false,
+          "titleIcon": null,
+          "iconColor": "rgba(0, 0, 0, 0.87)",
+          "iconSize": "24px",
+          "titleTooltip": "",
+          "displayTimewindow": true
+        },
+        "id": "fd639f42-e8b4-44c5-75e5-3eca5902eeea"
       }
     },
     "states": {
@@ -590,7 +765,7 @@
               "71519cb3-d9c1-cae4-a2cb-7d9a796518fa": {
                 "sizeX": 8,
                 "sizeY": 6,
-                "row": 5,
+                "row": 10,
                 "col": 9
               },
               "3a4f97f3-8e24-d36b-6ecb-ece617101135": {
@@ -610,20 +785,33 @@
                 "sizeX": 9,
                 "sizeY": 6,
                 "mobileHeight": null,
-                "row": 5,
+                "row": 10,
                 "col": 0
               },
               "59d678c9-f9c1-b54c-a024-7d38c9af50c3": {
                 "sizeX": 24,
                 "sizeY": 11,
-                "row": 11,
+                "row": 16,
                 "col": 0
               },
-              "c5c5ea63-7d76-8939-f171-914489eea2f8": {
+              "054db6ee-db1c-eb28-561d-b34f7fe009b7": {
                 "sizeX": 7,
-                "sizeY": 8,
+                "sizeY": 5,
                 "row": 0,
                 "col": 17
+              },
+              "1e3e0bf1-9725-b7a3-e2b4-b54e0a196dc3": {
+                "sizeX": 8,
+                "sizeY": 5,
+                "row": 5,
+                "col": 9
+              },
+              "fd639f42-e8b4-44c5-75e5-3eca5902eeea": {
+                "sizeX": 9,
+                "sizeY": 5,
+                "mobileHeight": null,
+                "row": 5,
+                "col": 0
               }
             },
             "gridSettings": {
@@ -675,5 +863,5 @@
       "toolbarAlwaysOpen": true
     }
   },
-  "name": "Dispositivo_TTNMAD_V02_001"
+  "name": "Dispositivo_LWL01"
 }

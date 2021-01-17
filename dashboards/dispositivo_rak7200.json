@@ -1237,7 +1237,7 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "gps_1_latitude",
+                  "name": "latitude",
                   "type": "timeseries",
                   "label": "latitude",
                   "color": "#2196f3",
@@ -1245,7 +1245,7 @@
                   "_hash": 0.49605375369307136
                 },
                 {
-                  "name": "gps_1_longitude",
+                  "name": "longitude",
                   "type": "timeseries",
                   "label": "longitude",
                   "color": "#4caf50",

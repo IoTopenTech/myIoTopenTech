@@ -198,22 +198,6 @@
               "type": "entity",
               "dataKeys": [
                 {
-                  "name": "latitude",
-                  "type": "timeseries",
-                  "label": "latitude",
-                  "color": "#2196f3",
-                  "settings": {},
-                  "_hash": 0.7169778809592335
-                },
-                {
-                  "name": "longitude",
-                  "type": "timeseries",
-                  "label": "longitude",
-                  "color": "#4caf50",
-                  "settings": {},
-                  "_hash": 0.7802440432656877
-                },
-                {
                   "name": "tooltip",
                   "type": "attribute",
                   "label": "tooltip",
@@ -236,6 +220,22 @@
                   "color": "#607d8b",
                   "settings": {},
                   "_hash": 0.06617442556671338
+                },
+                {
+                  "name": "__latitude",
+                  "type": "attribute",
+                  "label": "__latitude",
+                  "color": "#ffc107",
+                  "settings": {},
+                  "_hash": 0.7871171229871896
+                },
+                {
+                  "name": "__longitude",
+                  "type": "attribute",
+                  "label": "__longitude",
+                  "color": "#607d8b",
+                  "settings": {},
+                  "_hash": 0.21703468105546275
                 }
               ],
               "entityAliasId": "3fb0aab2-16f2-c72b-009e-a9cad51f3554"
@@ -252,8 +252,8 @@
           "padding": "8px",
           "settings": {
             "fitMapBounds": true,
-            "latKeyName": "latitude",
-            "lngKeyName": "longitude",
+            "latKeyName": "__latitude",
+            "lngKeyName": "__longitude",
             "showLabel": true,
             "label": "<div style=\"position: relative; white-space: nowrap; text-aling: center; font-size: 14px; top: 5px;\"> <span style=\"border: 2px solid #000; border-radius: 10px; color: #000; background-color: #fff; padding-left: 5px; padding-right: 5px; padding-top: 3px; padding-bottom: 3px;\">${entityName}</span> </div>",
             "tooltipPattern": "<b>${entityName}</b><br/><br/><b>Latitude:</b> ${latitude:7}<br/><b>Longitude:</b> ${longitude:7}<br/><b>Temperature:</b> ${temperature} °C<br/><small>See advanced settings for details</small>",

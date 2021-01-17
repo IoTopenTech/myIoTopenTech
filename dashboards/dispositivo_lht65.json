@@ -167,7 +167,8 @@
                       "showValuesForComparison": true
                     }
                   },
-                  "_hash": 0.9512565647847968
+                  "_hash": 0.9512565647847968,
+                  "postFuncBody": "if (value == \"No delegado\") {\n    return -1;\n} else {\n    return value;\n}"
                 }
               ],
               "entityAliasId": "9c31ef58-c750-9697-7d67-df0e2a4ac83c"
@@ -200,7 +201,8 @@
               "color": "#545454",
               "tickDecimals": 1,
               "min": 0,
-              "max": 4
+              "max": 4,
+              "ticksFormatter": "if (value=== -1){\n return \"NO DELEGADO\";   \n}else{\n    return value;\n}"
             },
             "grid": {
               "color": "#545454",
@@ -215,7 +217,8 @@
             "xaxisSecond": {
               "axisPosition": "top",
               "showLabels": true
-            }
+            },
+            "tooltipValueFormatter": "if (value=== -1){\n return \"NO DELEGADO\";   \n}else{\n    return value;\n}"
           },
           "title": "Evolución nivel de batería (V)",
           "dropShadow": true,

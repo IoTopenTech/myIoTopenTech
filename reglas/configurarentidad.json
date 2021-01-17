@@ -12,8 +12,20 @@
     "nodes": [
       {
         "additionalInfo": {
-          "layoutX": 912,
-          "layoutY": 552
+          "layoutX": 897,
+          "layoutY": 481
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "existe relacion anterior?",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "//ss_devEUI (el antiguo devEUI) puede no existir => Continuar con relación nueva\n//o puede existir y estar vacio => Continuar con relación nueva\n//o puede existir y contener un devEUI válido distinto del nuevo => Borrar relacion anterior \n//Sólo si no es un ss_esDelegado\nif(!metadata.hasOwnProperty('ss_esDelegado')||metadata.ss_esDelegado=='false'){\n    //si ss_devEUI no existe\n    if(!metadata.hasOwnProperty('ss_devEUI')){\n        return ['continuarRelacionNueva'];\n    }else{\n        if(metadata.ss_devEUI.length==0){\n            //Si es nulo\n            return ['continuarRelacionNueva'];\n        }else{\n            //Si no es nulo ()\n            //y es diferente del nuevo\n            if(msg.configuracion.___atributosCompartidos.devEUI!=metadata.ss_devEUI){\n            return ['borrarRelacionAnterior'];\n            }\n        }\n    }\n}"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1273,
+          "layoutY": 474
         },
         "type": "org.thingsboard.rule.engine.action.TbDeleteRelationNode",
         "name": "borrar anterior",
@@ -30,8 +42,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 910,
-          "layoutY": 856
+          "layoutX": 1608,
+          "layoutY": 778
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "preparar atributos",
@@ -42,8 +54,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 909,
-          "layoutY": 932
+          "layoutX": 1607,
+          "layoutY": 854
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
         "name": "guardar atributos",
@@ -54,8 +66,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 908,
-          "layoutY": 781
+          "layoutX": 1606,
+          "layoutY": 703
         },
         "type": "org.thingsboard.rule.engine.action.TbCreateRelationNode",
         "name": "crear nueva",
@@ -74,8 +86,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 911,
-          "layoutY": 631
+          "layoutX": 1272,
+          "layoutY": 553
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetCustomerDetailsNode",
         "name": "customer name",
@@ -89,8 +101,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 918,
-          "layoutY": 407
+          "layoutX": 904,
+          "layoutY": 411
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
         "name": "devEUI/esDelegado",
@@ -109,20 +121,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 919,
-          "layoutY": 475
-        },
-        "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
-        "name": "length==16 y cambio?",
-        "debugMode": true,
-        "configuration": {
-          "jsScript": "return (!metadata.hasOwnProperty('ss_devEUI') || (metadata.ss_devEUI.length==16 && msg.configuracion.___atributosCompartidos.devEUI!=metadata.ss_devEUI)) && (!metadata.hasOwnProperty('ss_esDelegado')||metadata.ss_esDelegado=='false');"
-        }
-      },
-      {
-        "additionalInfo": {
-          "layoutX": 629,
-          "layoutY": 407
+          "layoutX": 615,
+          "layoutY": 411
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "prepararMensaje",
@@ -133,8 +133,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 621,
-          "layoutY": 304
+          "layoutX": 607,
+          "layoutY": 308
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
         "name": "atributosOdownlink?",
@@ -145,8 +145,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 346,
-          "layoutY": 302
+          "layoutX": 332,
+          "layoutY": 306
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
         "name": "obtener tipo",
@@ -159,8 +159,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 344,
-          "layoutY": 240
+          "layoutX": 330,
+          "layoutY": 244
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetOriginatorFieldsNode",
         "name": "originador?",
@@ -173,8 +173,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 619,
-          "layoutY": 231
+          "layoutX": 605,
+          "layoutY": 235
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "Originator=Entidad",
@@ -196,8 +196,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 337,
-          "layoutY": 150
+          "layoutX": 323,
+          "layoutY": 154
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "Validacion",
@@ -208,8 +208,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 617,
-          "layoutY": 152
+          "layoutX": 603,
+          "layoutY": 156
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "Originador=Customer",
@@ -231,8 +231,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 336,
-          "layoutY": 507
+          "layoutX": 322,
+          "layoutY": 511
         },
         "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
         "name": "guardarAtributos",
@@ -243,8 +243,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 332,
-          "layoutY": 404
+          "layoutX": 318,
+          "layoutY": 408
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "prepararMensaje",
@@ -255,8 +255,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 907,
-          "layoutY": 701
+          "layoutX": 1268,
+          "layoutY": 623
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "extraer devEUI_nuevo",
@@ -264,42 +264,59 @@
         "configuration": {
           "jsScript": "metadata.devEUI_nuevo=JSON.parse(metadata.configuracion)['___atributosCompartidos']['devEUI'];\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
         }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1275,
+          "layoutY": 698
+        },
+        "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
+        "name": "metadata.devEUI_nuevo.length>0",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "if (metadata.hasOwnProperty('devEUI_nuevo') && metadata.devEUI_nuevo.length>0){\n    return ['crearRelacion'];\n}else{\n    return ['borrarAtributo'];\n}"
+        }
       }
     ],
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 4,
-        "type": "Success"
+        "toIndex": 1,
+        "type": "borrarRelacionAnterior"
+      },
+      {
+        "fromIndex": 0,
+        "toIndex": 5,
+        "type": "continuarRelacionNueva"
       },
       {
         "fromIndex": 1,
-        "toIndex": 2,
+        "toIndex": 5,
         "type": "Success"
       },
       {
-        "fromIndex": 3,
-        "toIndex": 1,
+        "fromIndex": 2,
+        "toIndex": 3,
         "type": "Success"
       },
       {
         "fromIndex": 4,
-        "toIndex": 16,
+        "toIndex": 2,
         "type": "Success"
       },
       {
         "fromIndex": 5,
-        "toIndex": 6,
+        "toIndex": 16,
         "type": "Success"
       },
       {
         "fromIndex": 6,
         "toIndex": 0,
-        "type": "True"
+        "type": "Success"
       },
       {
         "fromIndex": 8,
-        "toIndex": 5,
+        "toIndex": 6,
         "type": "devEUI"
       },
       {
@@ -344,8 +361,18 @@
       },
       {
         "fromIndex": 16,
-        "toIndex": 3,
+        "toIndex": 17,
         "type": "Success"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 2,
+        "type": "borrarAtributo"
+      },
+      {
+        "fromIndex": 17,
+        "toIndex": 4,
+        "type": "crearRelacion"
       }
     ],
     "ruleChainConnections": [
@@ -353,12 +380,12 @@
         "fromIndex": 7,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "d138a690-0a59-11eb-b82a-9b3a9cfbb111"
+          "id": "9e0e1260-2010-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
-          "layoutX": 627,
-          "layoutY": 496,
-          "ruleChainNodeId": "rule-chain-node-19"
+          "layoutX": 613,
+          "layoutY": 500,
+          "ruleChainNodeId": "rule-chain-node-20"
         },
         "type": "Success"
       }

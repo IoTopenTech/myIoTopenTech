@@ -24,8 +24,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 414,
-          "layoutY": 221
+          "layoutX": 534,
+          "layoutY": 219
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsFilterNode",
         "name": "permitido?",
@@ -205,7 +205,7 @@
         "name": "POST ATTRIBUTES",
         "debugMode": true,
         "configuration": {
-          "jsScript": "\nvar msg={'nombreEntidad':String(metadata.nombreEntidadNuevo),\n'tipoEntidad':metadata.subtipoEntidadNuevo,\n'padreEntidad':metadata.padreEntidadNombre,\n    'esDelegado':false\n};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+          "jsScript": "\nvar msg={'nombreEntidad':String(metadata.nombreEntidadNuevo),\n'tipoEntidad':metadata.subtipoEntidadNuevo,\n'padreEntidad':metadata.padreEntidadNombre,\n    'esDelegado':false\n};\n// En el caso del dispositivo TTNMAD-DOOR-BME280-TEMT6000 hay que crear los atributos \n// que almacenarán el max y  min de la temperatura\nif (metadata.subtipoEntidadNuevo == \"TTNMAD_DOOR_BME280_TEMT6000\") {\n    msg.max_temp = -200.99; \n    msg.min_temp = 100.99; \n    if(metadata.hasOwnProperty('ss_notificacionCorreo')){\n        msg.notificacionCorreo=metadata.ss_notificacionCorreo;\n    }\n    if(metadata.hasOwnProperty('ss_notificacionCorreoActiva')){\n        msg.notificacionCorreoActiva=metadata.ss_notificacionCorreoActiva;\n    }\n    if(metadata.hasOwnProperty('ss_notificacionTelegramToken')){\n        msg.notificacionTelegramToken=metadata.ss_notificacionTelegramToken;\n    }\n    if(metadata.hasOwnProperty('ss_notificacionTelegramChatid')){\n        msg.notificacionTelegramChatid=metadata.ss_notificacionTelegramChatid;\n    }\n    if(metadata.hasOwnProperty('ss_notificacionTelegramActiva')){\n        msg.notificacionTelegramActiva=metadata.ss_notificacionTelegramActiva;\n    }\n    if(metadata.hasOwnProperty('ss_nivelBateriaBaja')){\n        msg.nivelBateriaBaja=metadata.ss_nivelBateriaBaja;\n    }\n}\n\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};\n"
         }
       },
       {
@@ -480,8 +480,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 684,
-          "layoutY": 222
+          "layoutX": 804,
+          "layoutY": 220
         },
         "type": "org.thingsboard.rule.engine.filter.TbJsSwitchNode",
         "name": "credito>0",
@@ -492,8 +492,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 152,
-          "layoutY": 220
+          "layoutX": 26,
+          "layoutY": 218
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
         "name": "credito/tipos",
@@ -533,6 +533,30 @@
         "debugMode": true,
         "configuration": {
           "jsScript": "return {\n    msg: msg,\n    metadata: metadata,\n    msgType: 'POST_TELEMETRY_REQUEST'\n};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 286,
+          "layoutY": 218
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "TTNMAD_DOOR_BME280_TEMT6000",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "notificacionCorreo",
+            "notificacionCorreoActiva",
+            "notificacionTelegramToken",
+            "notificacionTelegramChatid",
+            "notificacionTelegramActiva",
+            "nivelBateriaBaja"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": false,
+          "getLatestValueWithTs": false
         }
       }
     ],
@@ -699,7 +723,7 @@
       },
       {
         "fromIndex": 32,
-        "toIndex": 1,
+        "toIndex": 35,
         "type": "Success"
       },
       {
@@ -711,6 +735,11 @@
         "fromIndex": 34,
         "toIndex": 2,
         "type": "Success"
+      },
+      {
+        "fromIndex": 35,
+        "toIndex": 1,
+        "type": "Success"
       }
     ],
     "ruleChainConnections": [
@@ -718,12 +747,12 @@
         "fromIndex": 31,
         "targetRuleChainId": {
           "entityType": "RULE_CHAIN",
-          "id": "1eb1dc10-0a56-11eb-b82a-9b3a9cfbb111"
+          "id": "28c6af40-200f-11eb-800c-43a360f58fa3"
         },
         "additionalInfo": {
           "layoutX": 1004,
           "layoutY": 360,
-          "ruleChainNodeId": "rule-chain-node-37"
+          "ruleChainNodeId": "rule-chain-node-38"
         },
         "type": "si"
       }
