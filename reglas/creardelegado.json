@@ -8,8 +8,75 @@
     "configuration": null
   },
   "metadata": {
-    "firstNodeIndex": 8,
+    "firstNodeIndex": 13,
     "nodes": [
+      {
+        "additionalInfo": {
+          "layoutX": 574,
+          "layoutY": 248
+        },
+        "type": "org.thingsboard.rule.engine.telemetry.TbMsgAttributesNode",
+        "name": "Guardar Atributos",
+        "debugMode": true,
+        "configuration": {
+          "scope": "SERVER_SCOPE"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 301,
+          "layoutY": 237
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "POST ATTRIBUTES",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "var msg={'contadorEntidades':parseInt(metadata.ss_contadorEntidades) + 1};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 861,
+          "layoutY": 153
+        },
+        "type": "org.thingsboard.rule.engine.flow.TbCheckpointNode",
+        "name": "De1en1",
+        "debugMode": true,
+        "configuration": {
+          "queueName": "SequentialByOriginator"
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 1161,
+          "layoutY": 151
+        },
+        "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
+        "name": "contadorEntidades",
+        "debugMode": true,
+        "configuration": {
+          "clientAttributeNames": [],
+          "sharedAttributeNames": [],
+          "serverAttributeNames": [
+            "contadorEntidades"
+          ],
+          "latestTsKeyNames": [],
+          "tellFailureIfAbsent": true,
+          "getLatestValueWithTs": false
+        }
+      },
+      {
+        "additionalInfo": {
+          "layoutX": 863,
+          "layoutY": 252
+        },
+        "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
+        "name": "Generar nombre",
+        "debugMode": true,
+        "configuration": {
+          "jsScript": "msg.nombreDispositivo = 'D' + metadata.nombreDispositivoPadre.split('_')[0]+'+'+metadata.ss_contadorEntidades + '_' + metadata.nombreDispositivo;\nmsg.tipoEntidadNuevo = 'device';\nmetadata.nombreDispositivo = msg.nombreDispositivo;\nmsg.subtipoDispositivo=metadata.subtipoDispositivo;\n\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};\n"
+        }
+      },
       {
         "additionalInfo": {
           "layoutX": 852,
@@ -101,7 +168,7 @@
           "layoutY": 349
         },
         "type": "org.thingsboard.rule.engine.metadata.TbGetAttributesNode",
-        "name": "delegados",
+        "name": "delegados/esDelegado",
         "debugMode": true,
         "configuration": {
           "clientAttributeNames": [],
@@ -117,8 +184,8 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 587,
-          "layoutY": 145
+          "layoutX": 585,
+          "layoutY": 155
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
         "name": "customer",
@@ -140,7 +207,7 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 297,
+          "layoutX": 1165,
           "layoutY": 240
         },
         "type": "org.thingsboard.rule.engine.transform.TbChangeOriginatorNode",
@@ -165,14 +232,14 @@
       },
       {
         "additionalInfo": {
-          "layoutX": 302,
-          "layoutY": 148
+          "layoutX": 306,
+          "layoutY": 153
         },
         "type": "org.thingsboard.rule.engine.transform.TbTransformMsgNode",
         "name": "Validacion",
         "debugMode": true,
         "configuration": {
-          "jsScript": "//Vamos a usar como prefijo para el nombre D000000001_ (D seguido de número de customer)\n//El nombre no puede empezar por _ para evitar que se pueda sobreescribir\n//la delegación _publica\nif (msg.nombreDispositivo.substring(0, 1) == \"_\") {\n    return false;\n}\nmsg.nombreDispositivo = 'D' + msg.nombreDispositivoPadre\n    .split('_')[0] + '_' + msg.nombreDispositivo;\nmsg.tipoEntidadNuevo = 'device';\nmetadata.subtipoDispositivo = msg.subtipoDispositivo;\nmetadata.nombreDispositivoPadre = msg\n.nombreDispositivoPadre;\nmetadata.nombreDispositivo = msg.nombreDispositivo;\n//En los free voy a indicar que la delegación es por cargo del delegador\n//aunque no tenga efecto sobre los créditos\nif (msg.subtipoDispositivo.split(\"_\").pop() == \"FREE\") {\n    metadata.delegacionPorCargoDe = \"delegador\";\n    msg.delegacionPorCargoDe = \"delegador\";\n} else {\n    metadata.delegacionPorCargoDe = msg\n    .delegacionPorCargoDe;\n}\nif (msg.hasOwnProperty('tokenDelegado')) {\n    metadata.tokenDelegado = msg.tokenDelegado;\n} else {\n    metadata.tokenDelegado = \"\";\n}\nmetadata.idDispositivoPadre = msg.idDispositivoPadre;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
+          "jsScript": "//Vamos a usar como prefijo para el nombre D000000001%1_ (D seguido de número de customer más % seguido del contadorEntidades)\n//El nombre no puede empezar por _ para evitar que se pueda sobreescribir\n//la delegación _publica\nif (msg.nombreDispositivo.substring(0, 1) == \"_\") {\n    return false;\n}\nmetadata.nombreDispositivo=msg.nombreDispositivo;\n//msg.nombreDispositivo = 'D' + msg.nombreDispositivoPadre.split('_')[0] + '_' + msg.nombreDispositivo;\n//msg.tipoEntidadNuevo = 'device';\nmetadata.subtipoDispositivo = msg.subtipoDispositivo;\nmetadata.nombreDispositivoPadre = msg\n.nombreDispositivoPadre;\n//metadata.nombreDispositivo = msg.nombreDispositivo;\n//En los free voy a indicar que la delegación es por cargo del delegador\n//aunque no tenga efecto sobre los créditos\nif (msg.subtipoDispositivo.split(\"_\").pop() == \"FREE\") {\n    metadata.delegacionPorCargoDe = \"delegador\";\n    //msg.delegacionPorCargoDe = \"delegador\";\n} else {\n    metadata.delegacionPorCargoDe = msg\n    .delegacionPorCargoDe;\n}\nif (msg.hasOwnProperty('tokenDelegado')) {\n    metadata.tokenDelegado = msg.tokenDelegado;\n} else {\n    metadata.tokenDelegado = \"\";\n}\nmetadata.idDispositivoPadre = msg.idDispositivoPadre;\nreturn {\n    msg: msg,\n    metadata: metadata,\n    msgType: msgType\n};"
         }
       },
       {
@@ -184,7 +251,7 @@
         "name": "POST ATTRIBUTES",
         "debugMode": true,
         "configuration": {
-          "jsScript": "var secretKey;\nif(!metadata.hasOwnProperty('tokenDelegado') || metadata.tokenDelegado==\"\"|| metadata.tokenDelegado==\"undefined\"){\n    secretKey=Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);\n}else{\n    secretKey=msg.tokenDelegado;\n}\nvar expirationTime=String(Date.now()+(100*365*24*60*60*1000)); //Fecha actual + 100 años\nvar msg={'nombreOriginal':String(metadata.nombreDispositivo),\n'tipoOriginal':metadata.subtipoDispositivo,\n'claimingData':{\"secretKey\": secretKey, \"expirationTime\": \"1640995200000\"},\n'claimingDataOriginal':{\"secretKey\": secretKey, \"expirationTime\": \"1640995200000\"},\n'esDelegado':true,\n'delegacion':{},\n'delegacionPorCargoDe':msg.delegacionPorCargoDe\n};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
+          "jsScript": "var secretKey;\nif(!metadata.hasOwnProperty('tokenDelegado') || metadata.tokenDelegado==\"\"|| metadata.tokenDelegado==\"undefined\"){\n    secretKey=Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);\n}else{\n    secretKey=msg.tokenDelegado;\n}\nvar expirationTime=String(Date.now()+(100*365*24*60*60*1000)); //Fecha actual + 100 años\nvar msg={'nombreOriginal':String(metadata.nombreDispositivo),\n'tipoOriginal':metadata.subtipoDispositivo,\n'claimingData':{\"secretKey\": secretKey, \"expirationTime\": \"1640995200000\"},\n'claimingDataOriginal':{\"secretKey\": secretKey, \"expirationTime\": \"1640995200000\"},\n'esDelegado':true,\n'delegacion':{},\n'delegacionPorCargoDe':metadata.delegacionPorCargoDe\n};\nreturn {msg: msg, metadata: metadata, msgType: 'POST_ATTRIBUTES_REQUEST'};"
         }
       },
       {
@@ -308,7 +375,7 @@
         "name": "Extraer nombre customer",
         "debugMode": true,
         "configuration": {
-          "jsScript": "metadata.customerName=metadata.deviceName.split(\"_\")[0];\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
+          "jsScript": "metadata.customerName=metadata.deviceName.split(\"_\")[0];\nmetadata.customerName=metadata.customerName.split(\"%\")[0];\nreturn {msg: msg, metadata: metadata, msgType: msgType};"
         }
       },
       {
@@ -329,92 +396,117 @@
     "connections": [
       {
         "fromIndex": 0,
-        "toIndex": 1,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 1,
-        "toIndex": 3,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 2,
-        "toIndex": 11,
-        "type": "True"
-      },
-      {
-        "fromIndex": 3,
         "toIndex": 4,
         "type": "Success"
       },
       {
-        "fromIndex": 5,
-        "toIndex": 2,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 6,
-        "toIndex": 7,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 7,
-        "toIndex": 5,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 8,
-        "toIndex": 6,
-        "type": "Success"
-      },
-      {
-        "fromIndex": 9,
+        "fromIndex": 1,
         "toIndex": 0,
         "type": "Success"
       },
       {
-        "fromIndex": 9,
-        "toIndex": 10,
+        "fromIndex": 2,
+        "toIndex": 3,
         "type": "Success"
       },
       {
-        "fromIndex": 10,
-        "toIndex": 15,
+        "fromIndex": 3,
+        "toIndex": 1,
         "type": "Success"
       },
       {
-        "fromIndex": 11,
+        "fromIndex": 4,
         "toIndex": 12,
         "type": "Success"
       },
       {
-        "fromIndex": 12,
-        "toIndex": 14,
+        "fromIndex": 5,
+        "toIndex": 6,
         "type": "Success"
       },
       {
-        "fromIndex": 13,
+        "fromIndex": 6,
+        "toIndex": 8,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 7,
+        "toIndex": 16,
+        "type": "True"
+      },
+      {
+        "fromIndex": 8,
         "toIndex": 9,
         "type": "Success"
       },
       {
+        "fromIndex": 10,
+        "toIndex": 7,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 11,
+        "toIndex": 2,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 12,
+        "toIndex": 10,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 13,
+        "toIndex": 11,
+        "type": "Success"
+      },
+      {
         "fromIndex": 14,
-        "toIndex": 17,
+        "toIndex": 5,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 14,
+        "toIndex": 15,
         "type": "Success"
       },
       {
         "fromIndex": 15,
-        "toIndex": 16,
+        "toIndex": 20,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 16,
+        "toIndex": 17,
         "type": "Success"
       },
       {
         "fromIndex": 17,
-        "toIndex": 18,
+        "toIndex": 19,
         "type": "Success"
       },
       {
         "fromIndex": 18,
-        "toIndex": 13,
+        "toIndex": 14,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 19,
+        "toIndex": 22,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 20,
+        "toIndex": 21,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 22,
+        "toIndex": 23,
+        "type": "Success"
+      },
+      {
+        "fromIndex": 23,
+        "toIndex": 18,
         "type": "Success"
       }
     ],
