@@ -28,3 +28,4 @@
 - [ ] Valorar que haya dispositivos reclamados que vayan a costa del proveedor mientras se mantenga el devEUI original para entregar a través de él. 
 - [X] Evaluar integración con matrix.org. El usuario crearía una sala en matrix.org e invitaría a participar en ella al usuario @myiot:matrix.org. Después añadiría el id de la sala (que está en las opciones avanzadas de Element) en su panel de configuración.
 - [X] Posibilidad de habilitar/deshabilitar las notificaciones temporalmente (limitación horaria/semanal/mensual).
+- [ ] Delegación pública de activos. Es interesante, por ejemplo, para compartir públicamente un mapa en el que se muestren distintos dispositivos. Cuestiones: ¿delegar el activo debe incluir la delegación de todos los dispositivos que contiene, o la delegación de activos y dispositivos debe mantenerse desvinculada? ¿Y si un activo contiene otros activos?
