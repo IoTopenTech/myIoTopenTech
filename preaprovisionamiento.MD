@@ -6,7 +6,7 @@ También se pre-aprovisionan dispositivos al crear delegados.
 # Formato de pre-aprovisionamiento
 Para preaprovisionar dispositivos se requiere un archivo CSV que use como separador el signo ; (punto y coma) y contenga, al menos, los siguientes campos:
 
-* name: Nombre del dispositivo precedido del carácter P; por ejemplo: P0000000100000001
+* name: Nombre del dispositivo precedido del carácter P; por ejemplo: P0000000100000001 (está compuesto por el id del customer seguido de un número secuencial).
 * type: Tipo de dispositivo; por ejemplo V02_001
 * nombreOriginal: Nombre original del dispositivo para recuperarlo si el usuario lo resetease; coincidirá con el name (P0000000100000001)
 * tipoOriginal: Tipo original del dispositivo para recuperarlo si el usuario lo resetease; coincidirá con el type (V02_001)
