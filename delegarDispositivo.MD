@@ -4,7 +4,7 @@ La delegación consiste en crear un dispositivo nuevo relacionado con el disposi
 
 En el dispositivo original delegador se crea el atributo del lado del servidor delegados, con el siguiente formato:
 
-[{"nombre":"D00000001_PuertaDelegada3","reclamado":false,"claimingData":{"secretKey":"7qg55y6qy98lq0as5i34hi2rpy","expirationTime":"1640995200000"},"id":"e0e9b240-c6df-11ea-b825-09d866a6d73c","delegaciones":{}}]
+[{"nombre":"D00000001+1_PuertaDelegada3","reclamado":false,"claimingData":{"secretKey":"7qg55y6qy98lq0as5i34hi2rpy","expirationTime":"1640995200000"},"id":"e0e9b240-c6df-11ea-b825-09d866a6d73c","delegaciones":{}}]
 
 En el dispositivo delegado se crea el atributo del lado del servidor esDelegado con el valor true, y otro llamado delegación que contiene su delegación en particular (ver formato anterior).
 
@@ -14,7 +14,7 @@ Los dispositivos delegados no se pueden sub-delegar.
 
 El dispositivo delegado se pre-aprovisiona, para que el segundo usuario pueda reclamarlo con las credenciales que le proporcionará el propietario.
 
-El nombre del dispositivo delegado utilizará como prefijo D00000001_ (D + número de cliente del propietario + _). Al ser reclamado se renombrará con el esquema habitual (idUsuario_nombre), pero seguiremos teniendo el nombre original en el atributo nombreOriginal.
+El nombre del dispositivo delegado utilizará como prefijo D00000001+1_ (D + número de cliente del propietario + '+' + número secuencial + _). Al ser reclamado se renombrará con el esquema habitual (idUsuario_nombre), pero seguiremos teniendo el nombre original en el atributo nombreOriginal.
 
 No está permitido cambiar el tipo de los dispositivos delegados ni delegador.
 
@@ -24,7 +24,7 @@ Respecto al accounting: hay que encontrar la forma de que quién delega pueda ha
 
 En los dispositivos _FREE la delegación se configura internamente a cargo del delegador, pero realmente no tiene ningún efecto porque no incrementa su número de dispositivos asumidos.
 
-Existe también una Delegación pública, que crea un dispositivo delegado asignado al customer Public, de tal modo que se puede acceder directamente a su dashboard sin acreditarse en myIoT. Para diferenciarla de cualquier otra delegación, su nombre es D[nonmbreCustomer]__[idDispositivoDelegador]_publica (como los nombres de las delegaciones no pueden empezar con _ no existe la posibilidad de que el usuario pueda sobreescribirla). Esta delegación no consume créditos. Siempre tendrá el atributo reclamado como true para que se le pasen las telemetrías. No tendrá claiming data porque no puede ser reclamado (está asignado al customer public). Tendrá un atributo esPublica=true.
+Existe también una Delegación pública, que crea un dispositivo delegado asignado al customer Public, de tal modo que se puede acceder directamente a su dashboard sin acreditarse en myIoT. Para diferenciarla de cualquier otra delegación, su nombre es D[nonmbreCustomer]__[idDispositivoDelegador]_publica[timestamp] (como los nombres de las delegaciones no pueden empezar con _ no existe la posibilidad de que el usuario pueda sobreescribirla). Esta delegación no consume créditos. Siempre tendrá el atributo reclamado como true para que se le pasen las telemetrías. No tendrá claiming data porque no puede ser reclamado (está asignado al customer public). Tendrá un atributo esPublica=true.
 
 Cuando llega una telemetría al dispositivo Delegador, en la regla del propio tipo de dispositivo, se carga el atributo delegados (ss_delegados) que se mantendrá inalterado durante el envío de las telemetrías a todos los delegados, se duplica en el metadata.delegadosArray del que se irán extrayendo los delegados de uno en uno para enviarles la telemetría, se extrae el primero de los delegados de metadata.delegadosArray y se almacena el metadata.idDelegadoActual. Además se almacena en metadata.msgOriginal el stringifycado del msg original. 
 
