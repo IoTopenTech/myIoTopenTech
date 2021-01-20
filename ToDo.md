@@ -25,7 +25,8 @@
 - [ ] ~~Integración con https://api.spontit.com/ o pushed~~
 - [ ] Valorar usar esta librería para leer códigos QR (https://blog.minhazav.dev/HTML5-QR-Code-scanning-launched-v1.0.1/)
 - [X] Valorar que haya dispositivos de coste nulo (por ejemplo, estaciones de medición de CO2 para colegios) que se puedan crear incluso aunque el crédito sea nulo (ésta es la parte crítica). Por ejemplo, podrían tener el sufijo _FREE en el nombre. Podrán delegarse, pero no podrá cambiarse su tipo.
-- [ ] Valorar que haya dispositivos reclamados que vayan a costa del proveedor mientras se mantenga el devEUI original para entregar a través de él. 
+- [ ] Valorar que haya dispositivos reclamados que vayan a costa del proveedor mientras se mantenga el devEUI original para entregar a través de él. Esto va unido al hecho de que un usuario decida desvincularse de su proveedor, pero no sepa o tenga los medios para cambiar el devEUI de su dispositivo.
 - [X] Evaluar integración con matrix.org. El usuario crearía una sala en matrix.org e invitaría a participar en ella al usuario @myiot:matrix.org. Después añadiría el id de la sala (que está en las opciones avanzadas de Element) en su panel de configuración.
 - [X] Posibilidad de habilitar/deshabilitar las notificaciones temporalmente (limitación horaria/semanal/mensual).
 - [ ] Delegación pública de activos. Es interesante, por ejemplo, para compartir públicamente un mapa en el que se muestren distintos dispositivos. Cuestiones: ¿delegar el activo debe incluir la delegación de todos los dispositivos que contiene, o la delegación de activos y dispositivos debe mantenerse desvinculada (por si solo se quieren hacer públicos algunos de los dispositivos que contien)? ¿Y si un activo contiene otros activos (hasta que nivel de anidamiento)?
+- [ ] Traducción.
