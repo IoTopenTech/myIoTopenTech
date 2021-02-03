@@ -1,4 +1,3 @@
-#include <Wire.h>
 #include <SPI.h>
 #include "LowPower.h"
 #include <lmic.h>
@@ -6,7 +5,7 @@
 #include <EEPROM.h>
 
 #include <CayenneLPP.h>
-CayenneLPP lpp(22);//4 bateria + 3 hall + 3 entradaDigitalLED + 3 salidaDigitalLED
+CayenneLPP lpp(13);//4 bateria + 3 hall + 3 entradaDigitalLED + 3 salidaDigitalLED
 
 
 boolean envioEnCurso = false;
@@ -18,7 +17,7 @@ boolean puertaAbierta;
 boolean interrumpido = false;
 //El periodo de heartBeat va a estar almacenado en la posición 37
 //Mapa memoria EEPROM
-//Posicion 0: 0sFF indica que se usen las credenciales originales / 0x00 indica que se utilicen las credenciales recibidas por downlink
+//Posicion 0: 0xFF indica que se usen las credenciales originales / 0x00 indica que se utilicen las credenciales recibidas por downlink
 //Posiciones 1 hasta máximo 36: credenciales
 //Posición 37: Periodo heartbeat en minutos
 byte minutosHeartbeat;
