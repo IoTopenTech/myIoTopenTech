@@ -1,6 +1,6 @@
 # Tipo de dispositivo V02_001
 ## Descripción general
-El tipo de dispositivo V02_001 tiene una finalidad eminentemente didáctica para mostrar las posibilidades de la plataforma My IoT open Tech.
+El tipo de dispositivo V02_001 tiene una finalidad eminentemente didáctica para mostrar las posibilidades de la plataforma my IoT open Tech.
 
 Se trata de un dispositivo LoRaWAN con las siguientes características:
 
