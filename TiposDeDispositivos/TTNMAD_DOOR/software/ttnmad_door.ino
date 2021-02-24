@@ -5,7 +5,8 @@
 //Cuando la memoria está vacía el valor de cada byte es FF
 //Hay otras soluciones como AVR101: High Endurance EEPROM Storage
 //El ATMega328 tiene 1024 bytes de EEPROM
-//Voy a usar los 804 [0..803] primeros para uplinks, los 219 siguientes [804..1022] para downlinks
+//Voy a usar los 804 [0..803] primeros para uplinks, los 219 siguientes [804..1021] para downlinks
+//el 1022 para la confirmación de los uplinks (1 significa No, y 254 significa sí)
 //y el último [1023] para los minutos de heartbeat
 
 #define NTCPin A6
@@ -27,6 +28,7 @@ boolean envioEnCurso = false;
 boolean puertaAbierta;
 boolean interrumpido = false; //Indica que ha habido una interrupción
 byte minutosHeartbeat;
+byte confirmacionUplinks;
 
 unsigned long contadorUPInicial;
 unsigned long contadorDOWNInicial;
@@ -84,6 +86,10 @@ const lmic_pinmap lmic_pins = {
   .rst = 9,
   .dio = {2, 7, LMIC_UNUSED_PIN},
 };
+
+void reset() {
+  asm volatile ("jmp 0");
+}
 
 long readVcc() {
   ADMUX = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
@@ -149,8 +155,19 @@ void onEvent (ev_t ev) {
             //downlink para el heartbeat por el canal 4
             byte periodoHeartbeat = LMIC.frame[LMIC.dataBeg + 2];
             if (periodoHeartbeat > 0) {
-              //EEPROM.write(1023, periodoHeartbeat);
+              EEPROM.write(1023, periodoHeartbeat);
               minutosHeartbeat = periodoHeartbeat;
+            }
+          } else if (LMIC.frame[LMIC.dataBeg + 0] == 0x05 && LMIC.frame[LMIC.dataBeg + 1] == 0x01) {
+            //downlink para la confirmación de los uplinks
+            byte uplinksConACK = LMIC.frame[LMIC.dataBeg + 2];
+            if (uplinksConACK == 1) {
+              confirmacionUplinks = 0;
+              EEPROM.write(1022, 0x01);
+
+            } else if (uplinksConACK == 254) {
+              confirmacionUplinks = 1;
+              EEPROM.write(1022, 0xFE);
             }
           }
         }
@@ -163,7 +180,15 @@ void onEvent (ev_t ev) {
         actualizarContador(804, LMIC.seqnoDn);
         contadorDOWN = LMIC.seqnoDn;
       }
-
+      //Tengo que ponerlo después de actualizar los contadores
+      //Pues de otro modo resetea y vuelve a enviar el mismo uplink, 
+      //que recibe nuevamente el reset y entra en un bucle sin fin
+      if (LMIC.frame[LMIC.dataBeg + 0] == 0x06 && LMIC.frame[LMIC.dataBeg + 1] == 0x01) {
+        //downlink para resetear
+        if (LMIC.frame[LMIC.dataBeg + 2] == 1) {
+          reset();
+        }
+      }
       envioEnCurso = false;
       break;
     case EV_LOST_TSYNC:
@@ -340,7 +365,7 @@ void setup() {
     EEPROM.write(808, 0xFF);
   } else {
     //Tengo que leer cuántos ceros consecutivos hay para sumarselos al valor inicial
-    for (int i = 808; i <= 1022; i++) {
+    for (int i = 808; i <= 1021; i++) {
       byte lectura = EEPROM.read(i);
       if (lectura == 0) {
         contadorDOWN = contadorDOWN + 8;
@@ -355,15 +380,19 @@ void setup() {
   if (minutosHeartbeat == 0 || minutosHeartbeat == 255) {
     minutosHeartbeat = 30;
   }
-  Serial.print(contadorUPInicial);
-  Serial.print(" - ");
-  Serial.print(contadorDOWNInicial);
-  Serial.print(" - ");
-  Serial.print(contadorUP);
-  Serial.print(" - ");
-  Serial.print(contadorDOWN);
-  Serial.print(" - ");
-  Serial.println(minutosHeartbeat);
+  confirmacionUplinks = EEPROM.read(1022);
+  if (confirmacionUplinks == 1) {
+    confirmacionUplinks = 0;
+
+  } else if (confirmacionUplinks == 254) {
+    confirmacionUplinks = 1;
+
+  } else {
+    //Valor predeterminado sin confirmacion
+    confirmacionUplinks = 1;
+    EEPROM.write(1022, 0xFE);
+  }
+
   //Conecto en el pin 3 un interruptor a GND normalmente abierto
   pinMode(3, INPUT);
   delay(100);
@@ -445,7 +474,7 @@ void do_send(osjob_t* j) {
 
     lpp.addTemperature(3, beta);
     if (interrumpido) {
-      LMIC_setTxData2(1, lpp.getBuffer(), lpp.getSize(), 1);
+      LMIC_setTxData2(1, lpp.getBuffer(), lpp.getSize(), confirmacionUplinks);
       Serial.println(F("Packet queued interrumpido"));
     } else {
 
@@ -457,9 +486,9 @@ void do_send(osjob_t* j) {
   // Next TX is scheduled after TX_COMPLETE event.
 }
 byte ultimoByte(byte lectura) {
-  byte i = 8;  
+  byte i = 8;
   while (lectura != 0) {
-    lectura = lectura >> 1;    
+    lectura = lectura >> 1;
     i--;
   }
   return i;
@@ -510,7 +539,7 @@ void actualizarContador(int direccion, long contador) {
     contadorUPInicial = contador;
     EEPROM.write(4, 0xFF);
     return;
-  } else if (direccion == 804 && direccionDelta == 214 && resto == 8) {
+  } else if (direccion == 804 && direccionDelta == 213 && resto == 8) {
     //Hay que reiniciar
     EEPROM.put(804, contador);
     contadorDOWNInicial = contador;
