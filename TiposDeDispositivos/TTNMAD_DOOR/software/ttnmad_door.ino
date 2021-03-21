@@ -51,16 +51,16 @@ unsigned long contadorDOWN;
 
 // LoRaWAN NwkSKey, network session key
 // This should be in big-endian (aka msb).
-static const PROGMEM u1_t NWKSKEY[16] = { FILLMEIN };
+static const PROGMEM u1_t NWKSKEY[16] = { 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0x0E, 0x21, 0x57, 0xF2, 0xA1, 0xD5, 0xA0 };
 
 // LoRaWAN AppSKey, application session key
 // This should also be in big-endian (aka msb).
-static const u1_t PROGMEM APPSKEY[16] = { FILLMEIN };
+static const u1_t PROGMEM APPSKEY[16] = { 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0x39, 0x97, 0xFE, 0x23, 0xC8, 0x98, 0xBF };
 
 // LoRaWAN end-device address (DevAddr)
 // See http://thethingsnetwork.org/wiki/AddressSpace
 // The library converts the address to network byte order as needed, so this should be in big-endian (aka msb) too.
-static const u4_t DEVADDR = FILLMEIN; // <-- Change this address for every node!
+static const u4_t DEVADDR = 0x26EEEEEE; // <-- Change this address for every node!
 
 // These callbacks are only used in over-the-air activation, so they are
 // left empty here (we cannot leave them out completely unless
@@ -156,6 +156,7 @@ void onEvent (ev_t ev) {
             byte periodoHeartbeat = LMIC.frame[LMIC.dataBeg + 2];
             if (periodoHeartbeat > 0) {
               EEPROM.write(1023, periodoHeartbeat);
+              delay(10);
               minutosHeartbeat = periodoHeartbeat;
             }
           } else if (LMIC.frame[LMIC.dataBeg + 0] == 0x05 && LMIC.frame[LMIC.dataBeg + 1] == 0x01) {
@@ -164,10 +165,11 @@ void onEvent (ev_t ev) {
             if (uplinksConACK == 1) {
               confirmacionUplinks = 0;
               EEPROM.write(1022, 0x01);
-
+              delay(10);
             } else if (uplinksConACK == 254) {
               confirmacionUplinks = 1;
               EEPROM.write(1022, 0xFE);
+              delay(10);
             }
           }
         }
@@ -186,6 +188,16 @@ void onEvent (ev_t ev) {
       if (LMIC.frame[LMIC.dataBeg + 0] == 0x06 && LMIC.frame[LMIC.dataBeg + 1] == 0x01) {
         //downlink para resetear
         if (LMIC.frame[LMIC.dataBeg + 2] == 1) {
+          //Reseteo los contadores y los periodos
+          contadorUP = 0;
+          EEPROM.put(0, contadorUP);
+          EEPROM.write(4, 0xFF);
+          contadorDOWN = 0;
+          EEPROM.put(804, contadorDOWN);
+          EEPROM.write(808, 0xFF);
+          EEPROM.write(1022, 1);//Uplinks sin confirmación
+          EEPROM.write(1023, 240);
+          delay(100);
           reset();
         }
       }
@@ -345,6 +357,7 @@ void setup() {
     contadorUP = 0 ;
     EEPROM.put(0, contadorUPInicial);
     EEPROM.write(4, 0xFF);
+    delay(10);
   } else {
     //Tengo que leer cuántos ceros consecutivos hay para sumarselos al valor inicial
     for (int i = 4; i < 804; i++) {
@@ -363,6 +376,7 @@ void setup() {
     contadorDOWN = 0;
     EEPROM.put(804, contadorDOWNInicial);
     EEPROM.write(808, 0xFF);
+    delay(10);
   } else {
     //Tengo que leer cuántos ceros consecutivos hay para sumarselos al valor inicial
     for (int i = 808; i <= 1021; i++) {
@@ -379,6 +393,8 @@ void setup() {
   minutosHeartbeat = EEPROM.read(1023);
   if (minutosHeartbeat == 0 || minutosHeartbeat == 255) {
     minutosHeartbeat = 30;
+    EEPROM.write(1023, 30);
+    delay(10);
   }
   confirmacionUplinks = EEPROM.read(1022);
   if (confirmacionUplinks == 1) {
@@ -391,6 +407,7 @@ void setup() {
     //Valor predeterminado sin confirmacion
     confirmacionUplinks = 1;
     EEPROM.write(1022, 0xFE);
+    delay(10);
   }
 
   //Conecto en el pin 3 un interruptor a GND normalmente abierto
@@ -538,12 +555,14 @@ void actualizarContador(int direccion, long contador) {
     EEPROM.put(0, contador);
     contadorUPInicial = contador;
     EEPROM.write(4, 0xFF);
+    delay(10);
     return;
   } else if (direccion == 804 && direccionDelta == 213 && resto == 8) {
     //Hay que reiniciar
     EEPROM.put(804, contador);
     contadorDOWNInicial = contador;
     EEPROM.write(808, 0xFF);
+    delay(10);
     return;
   }
   byte valor;
@@ -552,6 +571,7 @@ void actualizarContador(int direccion, long contador) {
       valor = 0x00;
       //Reseteo el byte siguiente
       EEPROM.write(direccion + 4 + direccionDelta + 1, 0xFF);
+      delay(10);
       break;
     case 1:
       valor = 0x7F;

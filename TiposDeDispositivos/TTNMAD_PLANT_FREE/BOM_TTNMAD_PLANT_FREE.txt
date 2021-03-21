@@ -1,0 +1,11 @@
+BOM TTNMAD_PLANT_FREE
+
+PCB
+ARDUINO PRO MINI 8MHz 3.3v	https://es.aliexpress.com/item/32849721150.html
+RFM95W 868MHz				https://es.aliexpress.com/item/32811523237.html
+HELIX ANTENNA 868MHz		https://es.aliexpress.com/item/32270738608.html
+CAPACITIVE SOIL SENSOR		https://es.aliexpress.com/item/32859194413.html
+LDR PGM5506					https://es.aliexpress.com/item/32805090955.html
+RESISTOR 0603 4K7			https://es.aliexpress.com/item/32879437087.html
+PORTABATERÍAS CR123A		https://es.aliexpress.com/item/32791260438.html
+BME280 BREAKBOARD 3.3V		https://es.aliexpress.com/item/32912100752.html
