@@ -1,6 +1,6 @@
 |Componente|Ejemplo de enlace de compra|Observaciones|
 |---|---|---|
-|1x PCB TTNMAD_PLANT||Archivos Gerber disponibles en este mismo repositorio|
+|1x PCB TTNMAD_PLANT_FREE||Archivos Gerber disponibles en este mismo repositorio|
 |1x Arduino Pro Mini 8MHz 3.3V|https://es.aliexpress.com/item/32672156652.html||
 |1x RFM95W versión 868 MHz|https://es.aliexpress.com/item/32811523237.html||
 |1x Antena helicoidal|https://es.aliexpress.com/item/1989211654.html||
