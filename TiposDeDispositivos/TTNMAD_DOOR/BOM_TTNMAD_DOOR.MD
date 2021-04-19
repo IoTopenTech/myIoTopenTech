@@ -1,5 +1,6 @@
 |Componente|Ejemplo de enlace de compra|Observaciones|
 |---|---|---|
+|1x PCB TTNMAD_V2.3||Archivos Eagle disponibles en https://github.com/IoTopenTech/Nodo_TTN_MAD_V2/tree/master/hardware|
 |1x Arduino Pro Mini 8MHz 3.3V|https://es.aliexpress.com/item/32672156652.html||
 |1x RFM95W versión 868 MHz|https://es.aliexpress.com/item/32811523237.html||
 |1x Antena helicoidal|https://es.aliexpress.com/item/1989211654.html||
