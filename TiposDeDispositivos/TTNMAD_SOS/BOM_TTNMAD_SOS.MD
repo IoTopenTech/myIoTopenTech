@@ -10,7 +10,7 @@
 |1x resistencia SMD 0603/0805 75ohm||Resistencia limitadora para el LED|
 |1x resistencia SMD 0603/0805 10k|||
 |3x condensadores SMD 0603 100n|||
-|1x condensador SMD 1206 4.7k|||
+|1x condensador SMD 1206 4.7u|||
 |1x pulsador TS-A022|https://es.aliexpress.com/item/32949675639.html||
 |1x Slide Switch DPDT MSS22D18|https://es.aliexpress.com/item/32842955927.html||
 |2x MIC94092YC6|https://www.mouser.es/ProductDetail/Microchip-Technology-Micrel/MIC94092YC6-TR||

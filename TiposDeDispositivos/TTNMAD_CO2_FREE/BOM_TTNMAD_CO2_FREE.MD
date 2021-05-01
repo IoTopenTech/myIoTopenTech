@@ -4,7 +4,7 @@
 |1x Wemos D1 mini|https://es.aliexpress.com/item/32666984035.html||
 |1x RFM95W versión 868 MHz|https://es.aliexpress.com/item/32811523237.html|Sólo necesario para la versión LoRaWAN|
 |1x Antena helicoidal|https://es.aliexpress.com/item/1989211654.html|Sólo necesario para la versión LoRaWAN|
-|1x SDC30|https://www.mouser.es/ProductDetail/Sensirion/SCD30?qs=rrS6PyfT74fdywu4FxpYjQ%3D%3D||
+|1x SCD30|https://www.mouser.es/ProductDetail/Sensirion/SCD30?qs=rrS6PyfT74fdywu4FxpYjQ%3D%3D||
 |1x Pantalla OLED para Wemos|https://es.aliexpress.com/item/32865961001.html||
 |1x LED WS2812D 5mm|https://es.aliexpress.com/item/4000879459147.html||
 |1x resistencia Through Hole 75ohm||Resistencia para el LED|
