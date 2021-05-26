@@ -6,7 +6,7 @@
 //Hay otras soluciones como AVR101: High Endurance EEPROM Storage
 //El ATMega328 tiene 1024 bytes de EEPROM
 //Voy a usar los 804 [0..803] primeros para uplinks, los 219 siguientes [804..1021] para downlinks
-//el 1022 para la confirmación de los uplinks (1 significa No, y 254 significa sí)
+//el 1022 reservado para la confirmación de los uplinks (1 significa No, y 254 significa sí)
 //y el último [1023] para los minutos de heartbeat
 
 #define POWER_SENSORS A0
@@ -24,8 +24,8 @@
 
 HTU21D myHumidity;
 
-boolean envioEnCurso = false;
-
+volatile boolean envioEnCurso = false;
+uint8_t payload[9];
 byte minutosHeartbeat;
 
 unsigned long contadorUPInicial;
@@ -230,7 +230,7 @@ void setup() {
   digitalWrite(POWER_HTU21D, LOW);
 
   while (!Serial); // wait for Serial to be initialized
-  Serial.begin(115200);
+  Serial.begin(9600);
   delay(100);     // per sample code on RF_95 test
   Serial.println(F("Starting"));
 
@@ -322,14 +322,16 @@ void setup() {
   LMIC.dn2Dr = DR_SF9;
 
   // Set data rate and transmit power for uplink
-  LMIC_setDrTxpow(DR_SF8, 14);
+  LMIC_setDrTxpow(DR_SF10, 14);
   //Leo los contadores
+
 
   contadorUPInicial = EEPROM.get( 0, contadorUPInicial );
   contadorDOWNInicial = EEPROM.get( 804, contadorDOWNInicial );
   contadorUP = contadorUPInicial ;
   contadorDOWN = contadorDOWNInicial ;
   //Si alguno de ellos es FFFFFFFF quiere decir que es el primer arranque
+
   if (contadorUPInicial == 0xFFFFFFFF) {
     contadorUPInicial = 0;
     contadorUP = 0 ;
@@ -370,7 +372,6 @@ void setup() {
   if (minutosHeartbeat == 0 || minutosHeartbeat == 255) {
     minutosHeartbeat = 30;
   }
-  minutosHeartbeat = 2;
 
   enviarMensaje();
   // Start job
@@ -395,7 +396,86 @@ void loop() {
 }
 
 void enviarMensaje() {
+  
   envioEnCurso = true;
+  digitalWrite(POWER_SENSORS, HIGH);
+  int32_t comodin;
+
+  int medidas[10], medidas_ordenadas[10], minimo, indice_minimo;
+  delay(1000);
+  for (byte i = 0; i < 10; i++) {
+    medidas[i] = analogRead(SOIL_MOISTURE);
+    delay(300);
+
+  }
+  for (byte i = 0; i < 10; i++) {
+    minimo = 1023;
+    for (byte j = 0; j < 10; j++) {
+      if (medidas[j] < minimo) {
+        minimo = medidas[j];
+        indice_minimo = j;
+      }
+    }
+    medidas_ordenadas[i] = medidas[indice_minimo];
+    medidas[indice_minimo] = 1023;
+  }
+  comodin = (medidas_ordenadas[4] + medidas_ordenadas[5]) / 2;
+  payload[5] = comodin >> 8;
+  payload[6] = comodin;
+
+  
+
+  for (byte i = 0; i < 10; i++) {
+    medidas[i] = analogRead(LDR);
+    delay(300);
+
+  }
+  for (byte i = 0; i < 10; i++) {
+    minimo = 1023;
+    for (byte j = 0; j < 10; j++) {
+      if (medidas[j] < minimo) {
+        minimo = medidas[j];
+        indice_minimo = j;
+      }
+    }
+    medidas_ordenadas[i] = medidas[indice_minimo];
+    medidas[indice_minimo] = 1023;
+  }
+  comodin = (medidas_ordenadas[4] + medidas_ordenadas[5]) / 2;
+  payload[7] = comodin >> 8;
+  payload[8] = comodin;
+
+  digitalWrite(POWER_SENSORS, LOW);
+  delay(200);
+  comodin =  readVcc(); //Tensión en milivoltios
+
+  payload[0] = comodin >> 8;
+  payload[1] = comodin;
+  digitalWrite(POWER_HTU21D, HIGH);
+
+  delay(200);
+  myHumidity.begin();
+
+
+  float comodinHTU21D;
+
+
+ 
+ comodinHTU21D = myHumidity.readTemperature();
+
+  Serial.println(comodinHTU21D);
+  payload[2] = ((int)(comodinHTU21D * 10)) >> 8;
+  payload[3] = ((int)(comodinHTU21D * 10));
+  comodinHTU21D = myHumidity.readHumidity(); //%
+
+  Serial.println(comodinHTU21D);
+  payload[4] = ((int)(comodinHTU21D * 2));
+  digitalWrite(POWER_HTU21D, LOW);
+  //Para evitar fuga de corriente por las pullup del i2c
+  digitalWrite( SDA, LOW);
+  digitalWrite( SCL, LOW);
+  
+  delay(200);
   os_setCallback (&sendjob, do_send);
 }
 
@@ -405,73 +485,7 @@ void do_send(osjob_t* j) {
     Serial.println(F("OP_TXRXPEND, not sending"));
   } else {
     // Prepare upstream data transmission at the next possible time.
-    static uint8_t payload[9];
-    digitalWrite(POWER_SENSORS, HIGH);
-    int32_t comodin;
-    comodin =  readVcc(); //Tensión en milivoltios
 
-    payload[0] = comodin >> 8;
-    payload[1] = comodin;
-
-    int medidas[10], medidas_ordenadas[10], minimo, indice_minimo;
-    for (byte i = 0; i < 10; i++) {
-      medidas[i] = analogRead(LDR);
-      delay(100);
-    }
-    for (byte i = 0; i < 10; i++) {
-      minimo = 1023;
-      for (byte j = 0; j < 10; j++) {
-        if (medidas[j] < minimo) {
-          minimo = medidas[j];
-          indice_minimo = j;
-        }
-      }
-      medidas_ordenadas[i] = medidas[indice_minimo];
-      medidas[indice_minimo] = 1023;
-    }
-    comodin = (medidas_ordenadas[4] + medidas_ordenadas[5]) / 2;
-    payload[4] = comodin >> 8;
-    payload[5] = comodin;
-    //Tomo la mediana de 10 medidas del sensor de humedad del suelo
-    for (byte i = 0; i < 10; i++) {
-      medidas[i] = analogRead(SOIL_MOISTURE);
-      delay(100);
-    }
-    for (byte i = 0; i < 10; i++) {
-      minimo = 1023;
-      for (byte j = 0; j < 10; j++) {
-        if (medidas[j] < minimo) {
-          minimo = medidas[j];
-          indice_minimo = j;
-        }
-      }
-      medidas_ordenadas[i] = medidas[indice_minimo];
-      medidas[indice_minimo] = 1023;//Lo pongo al máximo
-    }
-    comodin = (medidas_ordenadas[4] + medidas_ordenadas[5]) / 2;
-    payload[2] = comodin >> 8;
-    payload[3] = comodin;
-    digitalWrite(POWER_SENSORS, LOW);
-    delay(500);
-    digitalWrite(POWER_HTU21D, HIGH);
-
-    delay(1000);
-    myHumidity.begin();
-
-
-    float comodinHTU21D;
-
-    comodinHTU21D = myHumidity.readTemperature();
-    Serial.println(comodinHTU21D);
-    payload[6] = ((int)(comodinHTU21D * 10)) >> 8;
-    payload[7] = ((int)(comodinHTU21D * 10));
-    comodinHTU21D = myHumidity.readHumidity(); //%
-    Serial.println(comodinHTU21D);
-    payload[8] = ((int)(comodinHTU21D * 2));
-    digitalWrite(POWER_HTU21D, LOW);
-    //Para evitar fuga de corriente por las pullup del i2c
-    digitalWrite( SDA, LOW);
-    digitalWrite( SCL, LOW);
     LMIC_setTxData2(1, payload, 9 , 0);
     Serial.println(F("Packet queued"));
 
