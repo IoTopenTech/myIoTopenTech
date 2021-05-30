@@ -10,7 +10,7 @@
 //y el último [1023] para los minutos de heartbeat
 
 #define NTCPin A6
-#define R_PULL_DOWN 8200
+#define R_PULL_DOWN 8120
 #define R_25 10000
 #define TEMPERATURA_NOMINAL 25
 #define COEFICIENTE_BETA 3950
@@ -51,16 +51,16 @@ unsigned long contadorDOWN;
 
 // LoRaWAN NwkSKey, network session key
 // This should be in big-endian (aka msb).
-static const PROGMEM u1_t NWKSKEY[16] = { 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0x0E, 0x21, 0x57, 0xF2, 0xA1, 0xD5, 0xA0 };
+static const PROGMEM u1_t NWKSKEY[16] = { 0x45, 0x85, 0x28, 0x69, 0xBF, 0xAB, 0x1E, 0x6D, 0x21, 0xB5, 0xD7, 0xBC, 0xDD, 0x1D, 0x64, 0x8E};
 
 // LoRaWAN AppSKey, application session key
 // This should also be in big-endian (aka msb).
-static const u1_t PROGMEM APPSKEY[16] = { 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0xEE, 0x39, 0x97, 0xFE, 0x23, 0xC8, 0x98, 0xBF };
+static const u1_t PROGMEM APPSKEY[16] = { 0xAA, 0x49, 0xA6, 0x12, 0x9F, 0x17, 0xE1, 0xB0, 0xFA, 0x97, 0xC1, 0x53, 0xF1, 0xEC, 0x7B, 0x68};
 
 // LoRaWAN end-device address (DevAddr)
 // See http://thethingsnetwork.org/wiki/AddressSpace
 // The library converts the address to network byte order as needed, so this should be in big-endian (aka msb) too.
-static const u4_t DEVADDR = 0x26EEEEEE; // <-- Change this address for every node!
+static const u4_t DEVADDR = 0x260B8087; // <-- Change this address for every node!
 
 // These callbacks are only used in over-the-air activation, so they are
 // left empty here (we cannot leave them out completely unless
@@ -144,12 +144,14 @@ void onEvent (ev_t ev) {
 
       if (LMIC.txrxFlags & TXRX_ACK)
         Serial.println(F("Received ack"));
+
       if (LMIC.dataLen) {
         Serial.println(F("Received "));
         Serial.println(LMIC.dataLen);
         //El downlink del periodo de heartbeat tendrá el formato canal (04), tipo de valor (01=digital output), valor (0 a 255), FF (ACK)
         //Sólo voy a atender los downlink que entren por el puerto 99
         //Serial.println(LMIC.dataLen);
+
         if (LMIC.frame[LMIC.dataBeg - 1] == 99) {
           if (LMIC.frame[LMIC.dataBeg + 0] == 0x04 && LMIC.frame[LMIC.dataBeg + 1] == 0x01) {
             //downlink para el heartbeat por el canal 4
@@ -174,6 +176,7 @@ void onEvent (ev_t ev) {
           }
         }
       }
+
       //Tengo que almacenar los counters
       actualizarContador(0, LMIC.seqnoUp);
       contadorUP = LMIC.seqnoUp;
@@ -183,7 +186,7 @@ void onEvent (ev_t ev) {
         contadorDOWN = LMIC.seqnoDn;
       }
       //Tengo que ponerlo después de actualizar los contadores
-      //Pues de otro modo resetea y vuelve a enviar el mismo uplink, 
+      //Pues de otro modo resetea y vuelve a enviar el mismo uplink,
       //que recibe nuevamente el reset y entra en un bucle sin fin
       if (LMIC.frame[LMIC.dataBeg + 0] == 0x06 && LMIC.frame[LMIC.dataBeg + 1] == 0x01) {
         //downlink para resetear
@@ -201,6 +204,7 @@ void onEvent (ev_t ev) {
           reset();
         }
       }
+
       envioEnCurso = false;
       break;
     case EV_LOST_TSYNC:
@@ -405,11 +409,11 @@ void setup() {
 
   } else {
     //Valor predeterminado sin confirmacion
-    confirmacionUplinks = 1;
+    confirmacionUplinks = 0;
     EEPROM.write(1022, 0xFE);
     delay(10);
   }
-
+confirmacionUplinks=0;
   //Conecto en el pin 3 un interruptor a GND normalmente abierto
   pinMode(3, INPUT);
   delay(100);
@@ -490,11 +494,10 @@ void do_send(osjob_t* j) {
     //Cayenne lpp requiere la temperatura expresada en décimas de grado
 
     lpp.addTemperature(3, beta);
-    if (interrumpido) {
+    if (interrumpido) {      
       LMIC_setTxData2(1, lpp.getBuffer(), lpp.getSize(), confirmacionUplinks);
       Serial.println(F("Packet queued interrumpido"));
     } else {
-
       LMIC_setTxData2(1, lpp.getBuffer(), lpp.getSize(), 0);
       Serial.println(F("Packet queued"));
     }
