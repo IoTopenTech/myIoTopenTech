@@ -32,4 +32,4 @@
 - [ ] Traducción (requiere recompilación).
 - [ ] Extraer de las reglas de dispositivos la homogeneización de información común procedente de diferentes redes (TTN, CS, Everynet...) como payload_raw, informacionDownlink...
 - [ ] Valorar incluir en los tipos de dispositivos LoRaWAN widgets en el dashboard (o un estado) con información sobre la transmisión (contador, RSSI, número de gateways...)
-- [ ] Permitir configurar los mensajes de teto de las alarmas
+- [ ] Permitir configurar los mensajes de texto de las alarmas
