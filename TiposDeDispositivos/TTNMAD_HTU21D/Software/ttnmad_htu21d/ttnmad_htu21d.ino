@@ -49,11 +49,11 @@ unsigned long contadorDOWN;
 
 // LoRaWAN NwkSKey, network session key
 // This should be in big-endian (aka msb).
-static const PROGMEM u1_t NWKSKEY[16] = { FILLMEIN };
+static const PROGMEM u1_t NWKSKEY[16] = {FILLMEIN};
 
 // LoRaWAN AppSKey, application session key
 // This should also be in big-endian (aka msb).
-static const u1_t PROGMEM APPSKEY[16] = { FILLMEIN };
+static const u1_t PROGMEM APPSKEY[16] = {FILLMEIN};
 
 // LoRaWAN end-device address (DevAddr)
 // See http://thethingsnetwork.org/wiki/AddressSpace
@@ -370,7 +370,7 @@ void setup() {
   if (minutosHeartbeat == 0 || minutosHeartbeat == 255) {
     minutosHeartbeat = 2;
   }
-
+minutosHeartbeat = 2;
 
   enviarMensaje();
   // Start job
