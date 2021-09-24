@@ -7,3 +7,9 @@ Generalmente el programador no es capaz de aportar la corriente que el nodo nece
 
 Resultado de la compilación con Arduino 1.8.10 y versión de las librerías utilizadas (la versión de Minicore es 2.0.3
 ![imagen](https://user-images.githubusercontent.com/52624907/134652531-3c782e80-79ed-4b29-9e56-d59d169ad6dc.png)
+
+Perfil de consumos
+![imagen](https://user-images.githubusercontent.com/52624907/134659367-e845967a-f661-4854-aa4a-d91e97d3a00a.png)
+
+
+En estado dormido consume unos 12uA.
