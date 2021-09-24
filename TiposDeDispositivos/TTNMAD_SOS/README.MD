@@ -9,7 +9,8 @@ Resultado de la compilación con Arduino 1.8.10 y versión de las librerías uti
 ![imagen](https://user-images.githubusercontent.com/52624907/134652531-3c782e80-79ed-4b29-9e56-d59d169ad6dc.png)
 
 Perfil de consumos
-![imagen](https://user-images.githubusercontent.com/52624907/134659367-e845967a-f661-4854-aa4a-d91e97d3a00a.png)
+![imagen](https://user-images.githubusercontent.com/52624907/134661465-e4668836-8e76-4cf8-9a08-4740f311c621.png)
+
 
 
 En estado dormido consume unos 12uA.
