@@ -31,7 +31,7 @@ Procedimiento de montaje
 3. Conectar un programador al Arduino por mini para cargar en él el firmware de Minicore 2.0.3. Por ejemplo, en la siguiente imagen se realiza esta operación con un USBtinyISP. 
 ![imagen](https://user-images.githubusercontent.com/52624907/136382172-0406707d-94fd-4c2d-a208-cf05dab69323.png)
 
-4. Configurar las opciones de Arduino IDE como se indica en la siguiente figura y ejecutar el comando Herramientas>Quemar bootloader. Comprobar que en la zona inferior de la interfaz de Arduino IDE se indica que la operación se ha realizado correctamente (este procedimiento es muy rápido; apenas dura 2-3 segundos).
+4. Configurar las opciones de Arduino IDE como se indica en la siguiente figura y ejecutar el comando Herramientas>Quemar bootloader. Comprobar que en la zona inferior de la interfaz de Arduino IDE se indica que la operación se ha realizado correctamente (este procedimiento es muy rápido; apenas dura 2 o 3 segundos).
 ![imagen](https://user-images.githubusercontent.com/52624907/136382695-d8d3115d-68d8-4fa2-abaa-5af52adfe9d3.png)
 
 5. Soldar todos los componentes de la cara posterior, excepto el botón (no lo soldamos aún porque, como sobresale del PCB, podría resultar un poco complicado mantenerlo en posición mientras lo soldamos). En este caso se ha realizado con estaño en pasta y un soldador de aire caliente, pero también podría hacerse con una soldador de tipo lápiz. Obsérvese la orientación del los integrados MIC94092.
@@ -55,6 +55,17 @@ Procedimiento de montaje
 
 11. Terminar el proceso de soldadura eliminando con un soldador de aire caliente el LED y el regulador de tensión del Arduino pro mini. Esta operación reducirá el consumo del Arduino pro mini de un modo significativo.
 ![imagen](https://user-images.githubusercontent.com/52624907/136386001-4b4155ff-60f0-403e-9951-7ad4752895ef.png)
+
+12. Cargar en Arduino IDE el programa TTNMAD_SOS de este mismo repositorio. Alimentar con baterías el nodo y conectarlo a un conversor USB-->Serial para programarlo. Obsérvese la siguiente imagen. Se recomienda utilizar baterías de alto rendimiento por los picos de corriente que puede requerir el ESP03. Programar el Atmega328p ejecutando el comando Programar>Subir de Arduino IDE (las opciones de placa deben ser las mismas que se mostraron en el paso 4 para cambiar el firmware).
+![imagen](https://user-images.githubusercontent.com/52624907/136386989-9f2aa618-b79d-4977-97a4-f84acefbe22c.png)
+
+13. Cargar en Arduino IDE el programa TTNMAD_SOS_ESP03 de este mismo repositorio y configurar las opciones de placa como se muestran en la siguiente imagen.
+![imagen](https://user-images.githubusercontent.com/52624907/136388401-316ee367-78b5-498b-bf8f-be47bf8449cc.png)
+
+14. Conectar el conversor USB-->Serial al nodo como se indica en la imagen. Colocar el interruptor deslizante en la posición más próxima a la antena. Retirar las baterías del nodo para interrumpir su alimentación. Pulsar y mantener pulsado el botón Reset del Arduino pro mini para activar el modo de programación del ESP03. Volver a colocar las baterías y, con el botón Reset aún pulsado, ejecutar el comando Programa>Subir de Arduino IDE para programar el ESP03.
+![imagen](https://user-images.githubusercontent.com/52624907/136388846-561d18dc-0c55-4d75-99a1-50c49b7bbf30.png)
+
+
 
 
 
