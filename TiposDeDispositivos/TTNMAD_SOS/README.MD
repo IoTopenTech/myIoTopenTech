@@ -65,6 +65,8 @@ Procedimiento de montaje
 14. Conectar el conversor USB-->Serial al nodo como se indica en la imagen. Colocar el interruptor deslizante en la posición más próxima a la antena. Retirar las baterías del nodo para interrumpir su alimentación. Pulsar y mantener pulsado el botón Reset del Arduino pro mini para activar el modo de programación del ESP03. Volver a colocar las baterías y, con el botón Reset aún pulsado, ejecutar el comando Programa>Subir de Arduino IDE para programar el ESP03.
 ![imagen](https://user-images.githubusercontent.com/52624907/136388846-561d18dc-0c55-4d75-99a1-50c49b7bbf30.png)
 
+16. Soltar el botón de Reset y colocar el interruptor deslizante en la posición más alejada de la antena para salir del modo de programación del ESP03 y habilitar el modo de funcionamiento normal del nodo.
+
 
 
 
