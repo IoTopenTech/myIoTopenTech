@@ -25,7 +25,7 @@ Procedimiento de montaje
 1. Insertar los pines por el lado más largo en el PCB. Este paso nos permite aprovechar el PCB para alinear los pines correctamente, de modo que al soldar en ellos el Arduino pro mini (paso siguiente) no queden inclinados
 ![imagen](https://user-images.githubusercontent.com/52624907/136381722-f86443d5-bb9d-4a0f-935f-44fc098ebe00.png)
 
-2. Insertar el Arduino pro mini en los pines y soldarlo. Retirar el Arduino pro mini con los pines ya soldados del PCB.
+2. Insertar el Arduino pro mini en los pines y soldarlo. Retirar del PCB el Arduino pro mini con los pines ya soldados (el Arduino pro mini no debe soldarse aún al PCB; primero vamos a cambiar su firmware (paso siguiente)).
  ![imagen](https://user-images.githubusercontent.com/52624907/136381993-e3312ed7-9fc8-4c76-a0ed-5f283cf80715.png)
  
 3. Conectar un programador al Arduino por mini para cargar en él el firmware de Minicore 2.0.3. Por ejemplo, en la siguiente imagen se realiza esta operación con un USBtinyISP. 
@@ -33,6 +33,16 @@ Procedimiento de montaje
 
 4. Configurar las opciones de Arduino IDE como se indica en la siguiente figura y ejecutar el comando Herramientas>Quemar bootloader. Comprobar que en la zona inferior de la interfaz de Arduino IDE se indica que la operación se ha realizado correctamente (este procedimiento es muy rápido; apenas dura 2-3 segundos).
 ![imagen](https://user-images.githubusercontent.com/52624907/136382695-d8d3115d-68d8-4fa2-abaa-5af52adfe9d3.png)
+
+5. Soldar todos los componentes de la cara posterior, excepto el botón (no lo soldamos aún porque, como sobresale del PCB, podría resultar un poco complicado mantenerlo en posición mientras lo soldamos). En este caso se ha realizado con estaño en pasta y un soldador de aire caliente, pero también podría hacerse con una soldador de tipo lápiz. 
+![imagen](https://user-images.githubusercontent.com/52624907/136383241-c6283e4d-9ea5-4427-bf46-61ff0d272be5.png)
+
+6. Soldar el GPS y el LED por la otra cara del PCB. En la siguiente imagen el LED tiene el cátodo en el pin izquierdo.
+![imagen](https://user-images.githubusercontent.com/52624907/136384098-d1f68b52-b1cb-4c3b-978a-f33c422e2c64.png)
+
+
+
+
 
 
 
