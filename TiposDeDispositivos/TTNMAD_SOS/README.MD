@@ -32,6 +32,7 @@ Procedimiento de montaje
 ![imagen](https://user-images.githubusercontent.com/52624907/136382172-0406707d-94fd-4c2d-a208-cf05dab69323.png)
 
 4. Configurar las opciones de Arduino IDE como se indica en la siguiente figura y ejecutar el comando Herramientas>Quemar bootloader. Comprobar que en la zona inferior de la interfaz de Arduino IDE se indica que la operación se ha realizado correctamente (este procedimiento es muy rápido; apenas dura 2 o 3 segundos).
+
 ![imagen](https://user-images.githubusercontent.com/52624907/136382695-d8d3115d-68d8-4fa2-abaa-5af52adfe9d3.png)
 
 5. Soldar todos los componentes de la cara posterior, excepto el botón (no lo soldamos aún porque, como sobresale del PCB, podría resultar un poco complicado mantenerlo en posición mientras lo soldamos). En este caso se ha realizado con estaño en pasta y un soldador de aire caliente, pero también podría hacerse con una soldador de tipo lápiz. Obsérvese la orientación del los integrados MIC94092.
