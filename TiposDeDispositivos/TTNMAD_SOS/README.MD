@@ -21,7 +21,7 @@ La salida por el monitor serie del ATmega328p a 9600bps debería ser similar a l
 
 Los caracteres extraños se deben a que el microcontrolador entra en estado de sueño (deep sleep) antes de terminar la impresión a través del monitor serie.
 
-Procedimiento de montaje
+# Procedimiento de montaje
 1. Insertar los pines por el lado más largo en el PCB. Este paso nos permite aprovechar el PCB para alinear los pines correctamente, de modo que al soldar en ellos el Arduino pro mini (paso siguiente) no queden inclinados
 ![imagen](https://user-images.githubusercontent.com/52624907/136381722-f86443d5-bb9d-4a0f-935f-44fc098ebe00.png)
 
@@ -39,7 +39,9 @@ Procedimiento de montaje
 ![imagen](https://user-images.githubusercontent.com/52624907/136383241-c6283e4d-9ea5-4427-bf46-61ff0d272be5.png)
 
 6. Soldar el GPS y el LED por la otra cara del PCB. En la siguiente imagen el LED tiene el cátodo en el pin izquierdo.
-![imagen](https://user-images.githubusercontent.com/52624907/136384098-d1f68b52-b1cb-4c3b-978a-f33c422e2c64.png)
+
+![imagen](https://user-images.githubusercontent.com/52624907/136400894-252a9d4e-a1a6-43ef-b82f-40711d162d87.png)
+
 
 7. Cortar los cables del portabaterías con una longitud de entre 7 y 8 centímetros (dejarlos más largos podría complicar la inserción posterior del nodo en de la carcasa). Insertar los cables por los orificios para evitar su torsión y soldarlos como se muestra en las siguientes imágenes.
 ![imagen](https://user-images.githubusercontent.com/52624907/136384583-f48538d1-5957-4806-82e8-d21a68269c8b.png)
