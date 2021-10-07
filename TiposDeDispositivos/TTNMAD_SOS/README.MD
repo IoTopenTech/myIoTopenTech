@@ -14,6 +14,9 @@ Resultado de la compilación del programa del ESP03 con Arduino 1.8.10 y versió
 Perfil de consumos
 ![imagen](https://user-images.githubusercontent.com/52624907/134661465-e4668836-8e76-4cf8-9a08-4740f311c621.png)
 
+La salida por el monitor serie del ATmega328p a 9600bps debería ser similar a la siguiente.
+![imagen](https://user-images.githubusercontent.com/52624907/136377468-1de53bfc-13ae-418d-95df-22dd412de35c.png)
+
 
 
 En estado dormido consume unos 12uA.
