@@ -4,7 +4,7 @@ Como el nodo funciona por ABP y en TTN han cambiado el valor de la ventana RX1 a
 
 ![imagen](https://user-images.githubusercontent.com/52624907/136522101-0f51454a-7e0d-422b-a766-2e43faccba57.png)
 
-Como no usamos modo B y necesitamos reducir el tamaño de la librería al máximo, hay que configurar el archivo lmic_project_config.h del siguiente modo:
+Como nuestro nodo es de clase A y necesitamos reducir el tamaño de la librería al máximo, hay que configurar el archivo lmic_project_config.h del siguiente modo anulando las funcionalidades de la clase B:
 
 ![imagen](https://user-images.githubusercontent.com/52624907/136522374-925deabe-731d-4e11-8ca5-bd4fb0cef07d.png)
 
