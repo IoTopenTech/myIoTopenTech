@@ -49,16 +49,17 @@ unsigned long contadorDOWN;
 
 // LoRaWAN NwkSKey, network session key
 // This should be in big-endian (aka msb).
-static const PROGMEM u1_t NWKSKEY[16] = { 0x7C, 0x6D, 0x65, 0xCA, 0x22, 0x07, 0xEC, 0x88, 0xA4, 0x79, 0x6D, 0x54, 0xAB, 0x74, 0x56, 0xA0 };
+static const PROGMEM u1_t NWKSKEY[16] = {0xC6, 0x52, 0xE9, 0x9C, 0x7C, 0xCB, 0x06, 0xC4, 0x61, 0x38, 0x90, 0xC5, 0xBF, 0x54, 0xFF, 0x39};
 
 // LoRaWAN AppSKey, application session key
 // This should also be in big-endian (aka msb).
-static const u1_t PROGMEM APPSKEY[16] = { 0x07, 0xAD, 0xB2, 0xB2, 0x1E, 0x2D, 0x06, 0x4D, 0x2C, 0x9D, 0x73, 0xC3, 0x7F, 0xD2, 0x4E, 0xAA };
+static const u1_t PROGMEM APPSKEY[16] = { 0x5D, 0xD6, 0x65, 0x4B, 0x0B, 0xF4, 0x5F, 0x29, 0x5D, 0x82, 0xA7, 0xBC, 0x4C, 0xEA, 0x4C, 0x09};
 
 // LoRaWAN end-device address (DevAddr)
 // See http://thethingsnetwork.org/wiki/AddressSpace
 // The library converts the address to network byte order as needed, so this should be in big-endian (aka msb) too.
-static const u4_t DEVADDR = 0x260131A9; // <-- Change this address for every node!
+static const u4_t DEVADDR = 0x260B6FD4; // <-- Change this address for every node!
+
 
 // These callbacks are only used in over-the-air activation, so they are
 // left empty here (we cannot leave them out completely unless
@@ -396,7 +397,7 @@ void loop() {
 }
 
 void enviarMensaje() {
-  
+
   envioEnCurso = true;
   digitalWrite(POWER_SENSORS, HIGH);
   int32_t comodin;
@@ -423,7 +424,7 @@ void enviarMensaje() {
   payload[5] = comodin >> 8;
   payload[6] = comodin;
 
-  
+
 
   for (byte i = 0; i < 10; i++) {
     medidas[i] = analogRead(LDR);
@@ -460,8 +461,8 @@ void enviarMensaje() {
   float comodinHTU21D;
 
 
- 
- comodinHTU21D = myHumidity.readTemperature();
+
+  comodinHTU21D = myHumidity.readTemperature();
 
   Serial.println(comodinHTU21D);
   payload[2] = ((int)(comodinHTU21D * 10)) >> 8;
@@ -474,7 +475,7 @@ void enviarMensaje() {
   //Para evitar fuga de corriente por las pullup del i2c
   digitalWrite( SDA, LOW);
   digitalWrite( SCL, LOW);
-  
+
   delay(200);
   os_setCallback (&sendjob, do_send);
 }

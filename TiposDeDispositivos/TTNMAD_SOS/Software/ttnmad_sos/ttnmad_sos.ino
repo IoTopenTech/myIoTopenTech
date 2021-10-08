@@ -66,11 +66,11 @@ unsigned long contadorDOWN;
 
 // LoRaWAN NwkSKey, network session key
 // This should be in big-endian (aka msb).
-static const PROGMEM u1_t NWKSKEY[16] = { FILLMEIN };
+static const PROGMEM u1_t NWKSKEY[16] = {FILLMEIN};
 
 // LoRaWAN AppSKey, application session key
 // This should also be in big-endian (aka msb).
-static const u1_t PROGMEM APPSKEY[16] = { FILLMEIN };
+static const u1_t PROGMEM APPSKEY[16] = { FILLMEIN};
 
 // LoRaWAN end-device address (DevAddr)
 // See http://thethingsnetwork.org/wiki/AddressSpace
@@ -285,7 +285,11 @@ void setup() {
   os_init();
   // Reset the MAC state. Session and pending data transfers will be discarded.
   LMIC_reset();
-  LMIC_setClockError(MAX_CLOCK_ERROR * 1 / 100); //Para mejorar la recepción de los downlinks
+  //En la mayoría de los casos ya no es necesario configurar el ERROR por
+  //un error que existía en los cálculos de tiempo
+  //Esto es una maravilla porque nos ahorra problemas al usar distintos SF
+  //https://github.com/mcci-catena/arduino-lmic#controlling-protocol-timing
+  //LMIC_setClockError(MAX_CLOCK_ERROR * 1 / 100); //Para mejorar la recepción de los downlinks
 
   // Set static session parameters. Instead of dynamically establishing a session
   // by joining the network, precomputed session parameters are be provided.
@@ -420,13 +424,13 @@ void setup() {
   contadorDOWN = contadorDOWNInicial ;
   minutosHeartbeatSinAlarma = EEPROM.read(1023);
   if (minutosHeartbeatSinAlarma == 0 || minutosHeartbeatSinAlarma == 255) {
-    minutosHeartbeatSinAlarma = 240;
+    minutosHeartbeatSinAlarma = 30;
     EEPROM.write(1023, 240);
     delay(10);
   }
   minutosHeartbeatConAlarma = EEPROM.read(1022);
   if (minutosHeartbeatConAlarma == 0 || minutosHeartbeatConAlarma == 255) {
-    minutosHeartbeatConAlarma = 5;
+    minutosHeartbeatConAlarma = 3;
     EEPROM.write(1022, 5);
     delay(10);
   }

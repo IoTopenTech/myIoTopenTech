@@ -10,7 +10,7 @@
 //y el último [1023] para los minutos de heartbeat
 
 #define NTCPin A6
-#define R_PULL_DOWN 8120
+#define R_PULL_DOWN 8130
 #define R_25 10000
 #define TEMPERATURA_NOMINAL 25
 #define COEFICIENTE_BETA 3950
@@ -51,16 +51,16 @@ unsigned long contadorDOWN;
 
 // LoRaWAN NwkSKey, network session key
 // This should be in big-endian (aka msb).
-static const PROGMEM u1_t NWKSKEY[16] = {0x4F, 0x52, 0xF0, 0x58, 0x33, 0x82, 0x17, 0x9C, 0xD5, 0x98, 0x1C, 0xE5, 0xD6, 0x1E, 0x86, 0x6B};
+static const PROGMEM u1_t NWKSKEY[16] = { 0x73, 0xDB, 0xB8, 0x86, 0x16, 0xC9, 0xE7, 0xF6, 0x3A, 0xC4, 0x00, 0xA7, 0x23, 0x5C, 0x4F, 0x55 };
 
 // LoRaWAN AppSKey, application session key
 // This should also be in big-endian (aka msb).
-static const u1_t PROGMEM APPSKEY[16] = {0xD6, 0xDB, 0xB5, 0x06, 0x1C, 0x65, 0xB8, 0xFE, 0x0F, 0x65, 0x23, 0x2C, 0x2D, 0xD0, 0x46, 0x0C};
+static const u1_t PROGMEM APPSKEY[16] = { 0x16, 0x5D, 0x07, 0x12, 0x2F, 0x9B, 0x6E, 0x3B, 0x5D, 0x56, 0xDC, 0xCD, 0x6F, 0x2D, 0x3E, 0xBB};
 
 // LoRaWAN end-device address (DevAddr)
 // See http://thethingsnetwork.org/wiki/AddressSpace
 // The library converts the address to network byte order as needed, so this should be in big-endian (aka msb) too.
-static const u4_t DEVADDR = 0x260BCB6E; // <-- Change this address for every node!
+static const u4_t DEVADDR = 0x260B5235; // <-- Change this address for every node!
 
 // These callbacks are only used in over-the-air activation, so they are
 // left empty here (we cannot leave them out completely unless
