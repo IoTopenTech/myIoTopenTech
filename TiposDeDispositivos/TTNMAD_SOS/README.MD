@@ -1,3 +1,19 @@
+# Cuestiones generales
+
+Como el nodo funciona por ABP y en TTN han cambiado el valor de la ventana RX1 a 5 segundos, en el archivo lorabase.h de la librería MCCI LMIC (\Documents\Arduino\libraries\MCCI_LoRaWAN_LMIC_library\src\lmic) hay que hacer el siguiente cambio:
+
+![imagen](https://user-images.githubusercontent.com/52624907/136522101-0f51454a-7e0d-422b-a766-2e43faccba57.png)
+
+Como no usamos modo B y necesitamos reducir el tamaño de la librería al máximo, hay que configurar el archivo lmic_project_config.h del siguiente modo:
+
+![imagen](https://user-images.githubusercontent.com/52624907/136522374-925deabe-731d-4e11-8ca5-bd4fb0cef07d.png)
+
+En TTN la configuración de los parámetros del Network Server tiene el siguiente aspecto:
+
+![imagen](https://user-images.githubusercontent.com/52624907/136522596-931535fd-e104-4fa9-bdc2-96744b21272a.png)
+
+![imagen](https://user-images.githubusercontent.com/52624907/136522685-5c12abb5-d942-4629-983b-5463281e26fc.png)
+
 Generalmente el programador no es capaz de aportar la corriente que el nodo necesita, por lo que es recomendable alimentarlo mediante las baterías también durante la programación.
 - Para programar el Arduino (y para el funcionamiento normal del nodo) es necesario colocar el interruptor de deslizamiento en la posición más alejada a la antena.
 - Para programar el ESP03 se tiene que pulsar el RESET del Arduino, que está unido al GPIO0 del ESP03 y, además usar el deslizador para poner EN_ESP en alto (es decir, colocar el interruptor de deslizamiento en la posición más próxima a la antena).
@@ -5,8 +21,7 @@ Generalmente el programador no es capaz de aportar la corriente que el nodo nece
 - El RESET del Arduino debe estar ya pulsado antes de alimentar el sistema
 
 Resultado de la compilación del programa del ATmega328p con Arduino 1.8.10 y versión de las librerías utilizadas (la versión de Minicore es 2.0.3).
-![imagen](https://user-images.githubusercontent.com/52624907/134652531-3c782e80-79ed-4b29-9e56-d59d169ad6dc.png)
-
+![imagen](https://user-images.githubusercontent.com/52624907/136521832-90153797-4469-41c9-b613-4df72694c422.png)
 Resultado de la compilación del programa del ESP03 con Arduino 1.8.10 y versión de las librerías utilizadas (la versión de las placas ESP8266 es 2.7.4).
 ![imagen](https://user-images.githubusercontent.com/52624907/136376825-1e3f0aeb-a2c3-45ee-8378-6d923f4e4e44.png)
 
