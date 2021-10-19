@@ -7,3 +7,7 @@ Concretamente para SF8, parece que un 2% es un valor de error apropiado (algunos
 Aparentemente, para que la librería MCCI LMIC acepte estos errores tan grandes (por defecto ignora errores superiores al 0.4%) es necesario incluir la siguiente directiva en el archivo lmic_project_config.json
 
 ![imagen](https://user-images.githubusercontent.com/52624907/137908161-caf523df-6cf1-4541-82a0-9887dff27d4f.png)
+
+Resultado de la compilación y versiones de librerías:
+
+![imagen](https://user-images.githubusercontent.com/52624907/137908388-b81c4265-d500-4883-b162-43e5c7798cfa.png)
