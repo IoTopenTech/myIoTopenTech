@@ -11,3 +11,9 @@ Aparentemente, para que la librería MCCI LMIC acepte estos errores tan grandes 
 Resultado de la compilación y versiones de librerías:
 
 ![imagen](https://user-images.githubusercontent.com/52624907/137908388-b81c4265-d500-4883-b162-43e5c7798cfa.png)
+
+Captura de consumos en un evento de apertura y cierre de puerta:
+![imagen](https://user-images.githubusercontent.com/52624907/137925595-97a66655-37e0-4c18-99ee-e1ae04346eb5.png)
+
+
+El consumo en estado "dormido" es aproximadamente 12uA.
