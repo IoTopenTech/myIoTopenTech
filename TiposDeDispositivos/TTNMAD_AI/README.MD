@@ -20,3 +20,5 @@ Para programarlo desde Arduino IDE, además de elegir la placa, hay que poner el
 He usado como referencia la placa Adafruit Metro M4, porque usa el mismo microcontrolador.
 Usar estas placas en Arduino
 http://iespf2014.villatic.org/package_ttnmad_index.json
+
+![imagen](https://user-images.githubusercontent.com/52624907/143233815-d2ee316d-10e5-4979-ae74-6e6ce76775f5.png)
