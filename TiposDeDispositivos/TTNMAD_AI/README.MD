@@ -22,3 +22,7 @@ Usar estas placas en Arduino
 http://iespf2014.villatic.org/package_ttnmad_index.json
 
 ![imagen](https://user-images.githubusercontent.com/52624907/143233815-d2ee316d-10e5-4979-ae74-6e6ce76775f5.png)
+
+![imagen](https://user-images.githubusercontent.com/52624907/143233992-a4de0383-d8e4-4e69-aa30-5233a8d60b78.png)
+
+![imagen](https://user-images.githubusercontent.com/52624907/143238809-55a3da08-a73f-4efe-a868-288005494866.png)
