@@ -18,3 +18,5 @@
 Para programarlo desde Arduino IDE, además de elegir la placa, hay que poner el TTNMAD_AI en modo bootloader pulsando 2 veces rápido el botón de RESET (el LED empezará a hacer dimming y aparecerán un puerto Serial y una unidad MSD).
 
 He usado como referencia la placa Adafruit Metro M4, porque usa el mismo microcontrolador.
+Usar estas placas en Arduino
+http://iespf2014.villatic.org/package_ttnmad_index.json
