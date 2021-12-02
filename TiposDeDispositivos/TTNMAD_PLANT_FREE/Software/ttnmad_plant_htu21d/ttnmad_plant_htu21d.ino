@@ -49,16 +49,16 @@ unsigned long contadorDOWN;
 
 // LoRaWAN NwkSKey, network session key
 // This should be in big-endian (aka msb).
-static const PROGMEM u1_t NWKSKEY[16] = {0xC6, 0x52, 0xE9, 0x9C, 0x7C, 0xCB, 0x06, 0xC4, 0x61, 0x38, 0x90, 0xC5, 0xBF, 0x54, 0xFF, 0x39};
+static const PROGMEM u1_t NWKSKEY[16] = {0xA1, 0x49, 0xAF, 0x3F, 0x75, 0xEE, 0x2E, 0x81, 0x31, 0x67, 0x12, 0x39, 0x6B, 0xD1, 0x48, 0xB3};
 
 // LoRaWAN AppSKey, application session key
 // This should also be in big-endian (aka msb).
-static const u1_t PROGMEM APPSKEY[16] = { 0x5D, 0xD6, 0x65, 0x4B, 0x0B, 0xF4, 0x5F, 0x29, 0x5D, 0x82, 0xA7, 0xBC, 0x4C, 0xEA, 0x4C, 0x09};
+static const u1_t PROGMEM APPSKEY[16] = { 0xDA, 0xFE, 0xEB, 0xF4, 0xFA, 0x19, 0x0A, 0xD6, 0xC7, 0xF6, 0xC2, 0xEE, 0x7D, 0xCF, 0x39, 0x95};
 
 // LoRaWAN end-device address (DevAddr)
 // See http://thethingsnetwork.org/wiki/AddressSpace
 // The library converts the address to network byte order as needed, so this should be in big-endian (aka msb) too.
-static const u4_t DEVADDR = 0x260B6FD4; // <-- Change this address for every node!
+static const u4_t DEVADDR = 0x260B7BB0; // <-- Change this address for every node!
 
 
 // These callbacks are only used in over-the-air activation, so they are
@@ -329,6 +329,14 @@ void setup() {
 
   contadorUPInicial = EEPROM.get( 0, contadorUPInicial );
   contadorDOWNInicial = EEPROM.get( 804, contadorDOWNInicial );
+  
+  //Descomentar las 2 líneas siguientes para resetear los contadores a 0
+  //Programar el nodo con ellas descomentadas
+  //Comentarlas de nuevo
+  //y volver a reprogramar el nodo
+  //contadorUPInicial = 0xFFFFFFFF;
+  //contadorDOWNInicial = 0xFFFFFFFF;
+  
   contadorUP = contadorUPInicial ;
   contadorDOWN = contadorDOWNInicial ;
   //Si alguno de ellos es FFFFFFFF quiere decir que es el primer arranque
@@ -340,12 +348,16 @@ void setup() {
     EEPROM.write(4, 0xFF);
   } else {
     //Tengo que leer cuántos ceros consecutivos hay para sumarselos al valor inicial
-    for (int i = 4; i < 804; i++) {
+    for (int i = 4; i < 804; i++) {      
       byte lectura = EEPROM.read(i);
+      Serial.print(i);
+      Serial.print("--");
+      Serial.println(lectura,HEX);
       if (lectura == 0) {
         contadorUP = contadorUP + 8;
       } else {
         contadorUP = contadorUP + ultimoByte(lectura);
+        break;
       }
     }
   }
@@ -364,6 +376,7 @@ void setup() {
         contadorDOWN = contadorDOWN + 8;
       } else {
         contadorDOWN = contadorDOWN + ultimoByte(lectura);
+        break;
       }
     }
   }

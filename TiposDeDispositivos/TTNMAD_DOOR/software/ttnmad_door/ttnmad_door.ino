@@ -51,16 +51,16 @@ unsigned long contadorDOWN;
 
 // LoRaWAN NwkSKey, network session key
 // This should be in big-endian (aka msb).
-static const PROGMEM u1_t NWKSKEY[16] = { 0x73, 0xDB, 0xB8, 0x86, 0x16, 0xC9, 0xE7, 0xF6, 0x3A, 0xC4, 0x00, 0xA7, 0x23, 0x5C, 0x4F, 0x55 };
+static const PROGMEM u1_t NWKSKEY[16] = {0x8F, 0x11, 0xBA, 0xFD, 0x5C, 0xDD, 0x0D, 0xCD, 0x07, 0x9A, 0xBF, 0x64, 0xA4, 0x19, 0x30, 0x5A};
 
 // LoRaWAN AppSKey, application session key
 // This should also be in big-endian (aka msb).
-static const u1_t PROGMEM APPSKEY[16] = { 0x16, 0x5D, 0x07, 0x12, 0x2F, 0x9B, 0x6E, 0x3B, 0x5D, 0x56, 0xDC, 0xCD, 0x6F, 0x2D, 0x3E, 0xBB};
+static const u1_t PROGMEM APPSKEY[16] = {0x8F, 0x11, 0xBA, 0xFD, 0x5C, 0xDD, 0x0D, 0xCD, 0x07, 0x9A, 0xBF, 0x64, 0xA4, 0x19, 0x30, 0x5A};
 
 // LoRaWAN end-device address (DevAddr)
 // See http://thethingsnetwork.org/wiki/AddressSpace
 // The library converts the address to network byte order as needed, so this should be in big-endian (aka msb) too.
-static const u4_t DEVADDR = 0x260B5235; // <-- Change this address for every node!
+static const u4_t DEVADDR = 0x01234567; // <-- Change this address for every node!
 
 // These callbacks are only used in over-the-air activation, so they are
 // left empty here (we cannot leave them out completely unless
@@ -265,7 +265,7 @@ void setup() {
   os_init();
   // Reset the MAC state. Session and pending data transfers will be discarded.
   LMIC_reset();
-  LMIC_setClockError(MAX_CLOCK_ERROR * 1 / 100); //Para mejorar la recepción de los downlinks
+  LMIC_setClockError(MAX_CLOCK_ERROR * 2 / 100); //Para mejorar la recepción de los downlinks
 
   // Set static session parameters. Instead of dynamically establishing a session
   // by joining the network, precomputed session parameters are be provided.
@@ -370,6 +370,7 @@ void setup() {
         contadorUP = contadorUP + 8;
       } else {
         contadorUP = contadorUP + ultimoByte(lectura);
+        break;
       }
     }
   }
@@ -389,6 +390,7 @@ void setup() {
         contadorDOWN = contadorDOWN + 8;
       } else {
         contadorDOWN = contadorDOWN + ultimoByte(lectura);
+        break;
       }
     }
   }
@@ -426,7 +428,7 @@ confirmacionUplinks=0;
 
 void loop() {
   //Esperamos a que concluya el envío
-  while (envioEnCurso) {
+  while (envioEnCurso || os_queryTimeCriticalJobs(ms2osticks(60000))) {
     os_runloop_once();
   }
   delay(100);

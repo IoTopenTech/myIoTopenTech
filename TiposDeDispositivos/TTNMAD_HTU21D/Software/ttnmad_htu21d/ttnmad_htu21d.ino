@@ -343,6 +343,7 @@ void setup() {
         contadorUP = contadorUP + 8;
       } else {
         contadorUP = contadorUP + ultimoByte(lectura);
+        break;
       }
     }
   }
@@ -361,6 +362,7 @@ void setup() {
         contadorDOWN = contadorDOWN + 8;
       } else {
         contadorDOWN = contadorDOWN + ultimoByte(lectura);
+        break;
       }
     }
   }

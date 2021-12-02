@@ -33,7 +33,8 @@ boolean FIXconseguido = false;
 boolean FIXconseguido_preciso = false;
 byte precisionFIX = 0;
 boolean GPSarrancado = false;
-float latitud, longitud, altitud;
+float latitud, longitud;//, altitud;
+
 uint8_t payload[21];
 byte MACconseguidas = 0;
 
@@ -66,16 +67,16 @@ unsigned long contadorDOWN;
 
 // LoRaWAN NwkSKey, network session key
 // This should be in big-endian (aka msb).
-static const PROGMEM u1_t NWKSKEY[16] = {FILLMEIN};
+static const PROGMEM u1_t NWKSKEY[16] = {0x05, 0x84, 0x4D, 0x16, 0xC7, 0xF2, 0x28, 0x44, 0x2A, 0x87, 0x1E, 0x30, 0x46, 0x04, 0xF5, 0xF0};
 
 // LoRaWAN AppSKey, application session key
 // This should also be in big-endian (aka msb).
-static const u1_t PROGMEM APPSKEY[16] = { FILLMEIN};
+static const u1_t PROGMEM APPSKEY[16] = { 0xB3, 0x4B, 0xAA, 0xE3, 0x5F, 0x3E, 0xE7, 0xF3, 0xB8, 0xB8, 0xC7, 0x0E, 0xD1, 0x89, 0x23, 0xD2};
 
 // LoRaWAN end-device address (DevAddr)
 // See http://thethingsnetwork.org/wiki/AddressSpace
 // The library converts the address to network byte order as needed, so this should be in big-endian (aka msb) too.
-static const u4_t DEVADDR = FILLMEIN; // <-- Change this address for every node!
+static const u4_t DEVADDR = 0x260B4196; // <-- Change this address for every node!
 
 // These callbacks are only used in over-the-air activation, so they are
 // left empty here (we cannot leave them out completely unless
@@ -185,7 +186,7 @@ void onEvent (ev_t ev) {
             digitalWrite(LED, modoAlarma);
           } else if (LMIC.frame[LMIC.dataBeg + 0] == 0x03 && LMIC.frame[LMIC.dataBeg + 1] == 0x01 && LMIC.frame[LMIC.dataBeg + 2] <= 2) {
             //downlink para configurar el modo de localización
-            byte comodin=LMIC.frame[LMIC.dataBeg + 2];
+            byte comodin = LMIC.frame[LMIC.dataBeg + 2];
             if (modoLocalizacion != comodin && comodin <= 2) {
               modoLocalizacion = comodin;
               EEPROM.write(1021, comodin);
@@ -221,6 +222,7 @@ void onEvent (ev_t ev) {
           reset();
         }
       }
+      
       envioEnCurso = false;
       break;
     case EV_LOST_TSYNC:
@@ -396,6 +398,7 @@ void setup() {
         break;
       } else {
         contadorUP = contadorUP + ultimoByte(lectura);
+        break;
       }
     }
   }
@@ -417,6 +420,7 @@ void setup() {
         break;
       } else {
         contadorDOWN = contadorDOWN + ultimoByte(lectura);
+        break;
       }
     }
   }
@@ -457,11 +461,12 @@ void loop() {
   extern volatile unsigned long timer0_overflow_count;
   extern volatile unsigned long timer0_millis;
   //Esperamos a que concluya el envío en curso si lo hay
-  while (envioEnCurso == true) {
+  while (envioEnCurso == true || os_queryTimeCriticalJobs(ms2osticks(60000))) {
     os_runloop_once();
     if (aplicarAntirrebote == true) {
       funcionAplicarAntirrebote();
     }
+    delay(10);
   }
 
   if (aplicarAntirrebote == true) {
@@ -572,6 +577,7 @@ void loop() {
             }
           } else {
             digitalWrite(EN_ESP, LOW);
+            
             LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
             //Give the AVR back the slept time back (simple version)
             /*
@@ -605,8 +611,10 @@ void loop() {
                     FIXconseguido_preciso = true;
                     digitalWrite(EN_GPS, LOW);
                     GPSarrancado = false;
+                    
                   }
                 }
+                
                 int32_t comodin;
                 comodin = ((float)fix.latitude()) * 40000;
                 if (comodin < 0) {
@@ -626,7 +634,9 @@ void loop() {
                 }
                 payload[7] = comodin >> 8;
                 payload[8] = comodin;
+                
               }
+
             }
           }
 
@@ -702,9 +712,9 @@ void do_send(osjob_t* j) {
     comodin =  readVcc(); //Tensión en milivoltios
     payload[0] = comodin >> 8;
     payload[1] = comodin;
-    payload[2] = min(32,precisionFIX) | (modoAlarma << 7) |(modoLocalizacion<<5);
+    payload[2] = min(32, precisionFIX) | (modoAlarma << 7) | (modoLocalizacion << 5);
     //LMIC_setTxData2(1, lpp.getBuffer(), lpp.getSize(), 0);
-    
+
     LMIC_setTxData2(1, payload, (modoAlarma ? (9 + MACconseguidas * 6) : 3) , 0);
     Serial.println(F("Packet queued"));
   }
@@ -745,6 +755,13 @@ void actualizarContador(int direccion, long contador) {
     return;
   }
   byte valor;
+  valor=(2^(8-resto))-1;
+  if(resto==0){
+    //Reseteo el byte siguiente
+      EEPROM.write(direccion + 4 + direccionDelta + 1, 0xFF);
+      delay(10);
+  }
+  /*
   switch (resto) {
     case 0:
       valor = 0x00;
@@ -774,6 +791,7 @@ void actualizarContador(int direccion, long contador) {
       valor = 0x01;
       break;
   }
+  */
   EEPROM.write(direccion + 4 + direccionDelta, valor);
   delay(10);
   return;
