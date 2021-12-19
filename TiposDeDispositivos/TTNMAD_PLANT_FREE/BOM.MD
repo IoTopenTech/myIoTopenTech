@@ -1,5 +1,7 @@
 #Materiales para construir el nodo TTNMAD_PLANT_FRE
 
+| Componente | Imagen |
+| ----------- | ----------- |
 | PCB | Disponible gratuitamente en las reuniones de la comunidad TTN Madrid |
 | Arduino Pro Mini 3v3 8MHz | ![imagen](https://user-images.githubusercontent.com/52624907/146686259-b0c8695c-0284-427c-8235-d900a6a9cf44.png) |
 | RFM95W 868MHz | ![imagen](https://user-images.githubusercontent.com/52624907/146686304-6f63c346-85f2-48aa-bf96-096830942204.png) |
