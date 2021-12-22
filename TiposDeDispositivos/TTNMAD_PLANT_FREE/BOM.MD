@@ -1,4 +1,4 @@
-# Materiales para construir el nodo TTNMAD_PLANT_FRE
+# Materiales para construir el nodo TTNMAD_PLANT_FREE
 
 | Componente | Imagen |
 | ----------- | ----------- |
@@ -12,3 +12,5 @@
 | Sensor LDR PGM5506 | ![imagen](https://user-images.githubusercontent.com/52624907/146686762-c3287880-3336-4fcf-b8a1-9e1892b0a3e3.png) |
 | Resistencia 4k7 0805 o through hole | ![imagen](https://user-images.githubusercontent.com/52624907/146686842-42e4df89-4df5-4814-8530-c93489ec8eca.png) |
 | MIC94092YC6 | ![imagen](https://user-images.githubusercontent.com/52624907/146686813-7670501f-8f4f-422f-b5bd-1eff2ea867f1.png) |
+| Cuello impreso en 3D para la LDR | |
+| Semiesfera de vidrio para cubrir la LDR | |
