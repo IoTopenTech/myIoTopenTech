@@ -5,8 +5,8 @@
  * https://os.mbed.com/docs/mbed-os/v6.15/apis/lora-tech.html
  */
 #include "mbed.h"
-#include "CayenneLPP.h"
 
+#include "CayenneLPP.h"
 CayenneLPP lpp(11);
 void enviarPuertaCerrada();
 void enviarPuertaAbierta();
@@ -65,7 +65,9 @@ bool uplinkACK;
  */
 //#define PC_9                            0
 #define reed_pin    PA_10
+
 InterruptIn reed(reed_pin,PullDown);
+
 LowPowerTimeout heartbeat;
 
 
@@ -107,10 +109,13 @@ static lorawan_app_callbacks_t callbacks;
 static void send_message(int sensor_value){    
     //sensor_value puede ser 0 o 1, para indicar el estado de la puerta
     //o 2 para indicar un uplink automáticatico en respuesta a un downlink con fpending
-    AnalogIn bat(ADC_VREF);
+
+    
     DigitalOut NTC_power(PA_0);
+    DigitalOut LED(PA_8);
     AnalogIn NTC_pin(PB_2);
     NTC_power.write(1);
+    LED.write(1);
     int16_t retcode;
     lpp.reset();
      
@@ -127,7 +132,7 @@ static void send_message(int sensor_value){
  
     //VREFINT_CAL = 3000 * VREF(Factory) / 4096      [V]
     //Vdd         = VREFINT_CAL / VREFINT(ADC float) [V] 
-    
+    AnalogIn bat(ADC_VREF);
     uint16_t    vref_cal; 
     double      vdd_calibed;
     double      vref_calibed;
@@ -153,7 +158,7 @@ static void send_message(int sensor_value){
         lpp.addDigitalInput(2, !reed.read());
     }
     lpp.addTemperature(3, temperature-273.15); 
-    
+    LED.write(0);
     retcode = lorawan.send(MBED_CONF_LORA_APP_PORT, lpp.getBuffer(), lpp.getSize(),
                            uplinkACK==0?0x01:0x02);
 
