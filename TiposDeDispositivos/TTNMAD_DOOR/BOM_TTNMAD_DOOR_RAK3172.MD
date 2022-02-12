@@ -13,4 +13,5 @@
 | Interruptor deslizante through hole MSS22D18 | ![imagen](https://user-images.githubusercontent.com/52624907/151135183-e536c6ce-d12a-493f-be80-724624f445f5.png) | 
 | Antena helicoidal 868MHz acodada | ![imagen](https://user-images.githubusercontent.com/52624907/151135349-054a7224-765c-4091-8fbe-fcfb4778d852.png) | 
 | Portabaterías 2xAAA | ![imagen](https://user-images.githubusercontent.com/52624907/151135509-f35f0a5d-f188-4913-89be-b694f5b190ee.png) |
+| Iman N35 cilíndrico 5x10 | ![imagen](https://user-images.githubusercontent.com/52624907/153703141-153c8baf-e165-4632-94ea-ea18d4763b26.png) |
 
