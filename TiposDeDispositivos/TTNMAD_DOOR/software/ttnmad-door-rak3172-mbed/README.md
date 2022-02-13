@@ -1,3 +1,4 @@
+Modificación del ejemplo oficial de LoRaWAN para convertirlo en un sensor de puerta y temperatura.
 ![](./resources/official_armmbed_example_badge.png)
 # Example LoRaWAN application for Mbed-OS
 
