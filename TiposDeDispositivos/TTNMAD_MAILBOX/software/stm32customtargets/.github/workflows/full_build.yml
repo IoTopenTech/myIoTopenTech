@@ -1,0 +1,94 @@
+name: Non-regression
+
+on:
+  schedule:
+      - cron: '0 0 * * 6'
+  workflow_dispatch:
+
+jobs:
+  CLI1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: build CL1
+        uses: addnab/docker-run-action@v3
+        with:
+          options: -v ${{ github.workspace }}:/stm32customtargets -w=/stm32customtargets
+          image: ghcr.io/armmbed/mbed-os-env:latest
+          shell: bash
+          run: |
+            pip3 list
+            pip3 install mbed-tools -U
+            git clone https://github.com/ARMmbed/mbed-os.git
+            python3 aci_build.py --all
+
+  CLI1-baremetal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: build CL1
+        uses: addnab/docker-run-action@v3
+        with:
+          options: -v ${{ github.workspace }}:/stm32customtargets -w=/stm32customtargets
+          image: ghcr.io/armmbed/mbed-os-env:latest
+          shell: bash
+          run: |
+            pip3 list
+            pip3 install mbed-tools -U
+            git clone https://github.com/ARMmbed/mbed-os.git
+            python3 aci_build.py --all --baremetal
+
+  CLI2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: build CL2
+        uses: addnab/docker-run-action@v3
+        with:
+          options: -v ${{ github.workspace }}:/stm32customtargets -w=/stm32customtargets
+          image: ghcr.io/armmbed/mbed-os-env:latest
+          shell: bash
+          run: |
+            pip3 list
+            pip3 install mbed-tools -U
+            git clone https://github.com/ARMmbed/mbed-os.git
+            python3 aci_build.py --cli2 --all
+
+  CLI2-baremetal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: build CL2
+        uses: addnab/docker-run-action@v3
+        with:
+          options: -v ${{ github.workspace }}:/stm32customtargets -w=/stm32customtargets
+          image: ghcr.io/armmbed/mbed-os-env:latest
+          shell: bash
+          run: |
+            pip3 list
+            pip3 install mbed-tools -U
+            git clone https://github.com/ARMmbed/mbed-os.git
+            python3 aci_build.py --cli2 --all --baremetal
+
+  PIN_STANDARD:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: aci_pinvalidate.py
+        uses: addnab/docker-run-action@v3
+        with:
+          options: -v ${{ github.workspace }}:/stm32customtargets -w=/stm32customtargets
+          image: ghcr.io/armmbed/mbed-os-env:latest
+          shell: bash
+          run: |
+            python3 aci_build.py --pin --all

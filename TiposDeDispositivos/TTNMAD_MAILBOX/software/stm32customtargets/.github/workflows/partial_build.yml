@@ -1,0 +1,62 @@
+name: ACI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  CLI1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: build CL1
+        uses: addnab/docker-run-action@v3
+        with:
+          options: -v ${{ github.workspace }}:/stm32customtargets -w=/stm32customtargets
+          image: ghcr.io/armmbed/mbed-os-env:latest
+          shell: bash
+          run: |
+            pip3 list
+            git clone https://github.com/ARMmbed/mbed-os.git
+            python3 aci_build.py
+
+  CLI2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: build CL2
+        uses: addnab/docker-run-action@v3
+        with:
+          options: -v ${{ github.workspace }}:/stm32customtargets -w=/stm32customtargets
+          image: ghcr.io/armmbed/mbed-os-env:latest
+          shell: bash
+          run: |
+            pip3 list
+            git clone https://github.com/ARMmbed/mbed-os.git
+            python3 aci_build.py --cli2
+
+  PIN_STANDARD:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: aci_pinvalidate.py
+        uses: addnab/docker-run-action@v3
+        with:
+          options: -v ${{ github.workspace }}:/stm32customtargets -w=/stm32customtargets
+          image: ghcr.io/armmbed/mbed-os-env:latest
+          shell: bash
+          run: |
+            pip3 list
+            python3 aci_build.py --pin
