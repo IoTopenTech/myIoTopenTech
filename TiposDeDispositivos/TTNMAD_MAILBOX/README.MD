@@ -4,3 +4,4 @@ Para que todos los puertos puedan entrar en Deep sleep tenemos que introducir un
 
 https://github.com/ARMmbed/mbed-os/issues/15191
 
+![imagen](https://user-images.githubusercontent.com/52624907/156921889-3a7ad87b-7542-4127-8afc-9b167932b1ab.png)
