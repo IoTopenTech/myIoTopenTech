@@ -25,3 +25,16 @@ switch ($informacion->action) {
     }
 ```
     
+# 3. El archivo \[TIPO DISPOSITIVO]_GUI
+Aquí básicamente hay que sustituir el nombre de la telemetría en cada case.
+Si alguna telemetría requiere redondear los rótulos del eje Y se puede usar una función de este estilo:
+```php
+function YAxisFormat($Value) {
+    return(round($Value, 3));
+}
+```
+Que se utiliza desde el método setAxisDisplay:
+```php
+$myPicture->myData->setAxisDisplay(0, AXIS_FORMAT_CUSTOM, "YAxisFormat"); //Redondeo a 3 decimales
+```
+
