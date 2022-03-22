@@ -38,3 +38,47 @@ Que se utiliza desde el método setAxisDisplay:
 $myPicture->myData->setAxisDisplay(0, AXIS_FORMAT_CUSTOM, "YAxisFormat"); //Redondeo a 3 decimales
 ```
 
+# 4. La propiedad \[TIPO DISPOSITIVO]_config de myIoT
+Hay que añadir el bloque funciones al principio:
+```javascript
+<funciones>[{"nombre":"myiotlegrampassadm","codigo":"var result= '';var characters= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';var charactersLength = characters.length;for ( var i = 0; i != 20; i++ ) {result += characters.charAt(Math.floor(Math.random()* charactersLength));}$scope.vm.configuracion.__myiotlegram_passadm=result;$scope.form.configuracionmyiotlegram.$setDirty()"},{"nombre":"myiotlegrampassobs","codigo":"var result= '';var characters= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';var charactersLength = characters.length;for ( var i = 0; i != 20; i++ ) {result += characters.charAt(Math.floor(Math.random()* charactersLength));}$scope.vm.configuracion.__myiotlegram_passobs=result;$scope.form.configuracionmyiotlegram.$setDirty()"}]</funciones>
+```
+Y un panel (por encima del pandel Configuración general):
+```xml
+<panel titulo="myIoTlegram" resumen="Si regenera un código, los dispositivos que estén usando el actual quedarán desvinculados de myIoTlegram" nombreFormulario="myiotlegram" ng-if="!vm.attributes.hasOwnProperty('esDelegado') || (vm.attributes.esDelegado===false)">
+		<md-input-container  style="display: none;">
+			<input type="text" name="passadm" ng-value="vm.configuracion.__myiotlegram_passadm"/>
+		</md-input-container>
+		<div class="md-whiteframe-1dp" layout="column" style="padding-left: 5px; margin-bottom: 3px;">
+			<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0,0,0,0.57);">Código de administrador</div>
+			<div class="row" layout="column">
+				<div  ng-if="vm.configuracion.__myiotlegram_passadm!=undefined">{{vm.entityId.id}}:{{vm.configuracion.__myiotlegram_passadm}}-A
+					<md-button type="button" class="md-raised md-primary md-button md-ink-ripple" ng-href="https://chart.googleapis.com/chart?chs=350x350&amp;cht=qr&amp;chl={{vm.entityId.id}}:{{vm.configuracion.__myiotlegram_passadm}}-A" target="_blank">Ver código QR</md-button>
+				</div>
+				<div  ng-if="vm.configuracion.__myiotlegram_passadm==undefined">NO GENERADO</div>
+				<div width="20%">
+					<md-input-container  style="margin: 0px;">
+						<input type="button" value="Regenerar código" ng-click="myiotlegrampassadm()" class="md-raised md-primary md-button md-ink-ripple"/>
+					</md-input-container>
+				</div>
+			</div>
+		</div>
+		<md-input-container  style="display: none;">
+			<input type="text" name="passobs" ng-value="vm.configuracion.__myiotlegram_passobs"/>
+		</md-input-container>
+		<div class="md-whiteframe-1dp" layout="column" style="padding-left: 5px; margin-bottom: 3px;">
+			<div class="md-body-1" style="padding-bottom: 10px; color: rgba(0,0,0,0.57);">Código de observador</div>
+			<div class="row" layout="column">
+				<div  ng-if="vm.configuracion.__myiotlegram_passobs!=undefined">{{vm.entityId.id}}:{{vm.configuracion.__myiotlegram_passobs}}-O
+					<md-button type="button" class="md-raised md-primary md-button md-ink-ripple" ng-href="https://chart.googleapis.com/chart?chs=350x350&amp;cht=qr&amp;chl={{vm.entityId.id}}:{{vm.configuracion.__myiotlegram_passobs}}-O" target="_blank">Ver código QR</md-button>
+				</div>
+				<div  ng-if="vm.configuracion.__myiotlegram_passobs==undefined">NO GENERADO</div>
+				<div width="20%">
+					<md-input-container  style="margin: 0px;">
+						<input type="button" value="Regenerar código" ng-click="myiotlegrampassobs()" class="md-raised md-primary md-button md-ink-ripple"/>
+					</md-input-container>
+				</div>
+			</div>
+		</div>
+	</panel>
+```
