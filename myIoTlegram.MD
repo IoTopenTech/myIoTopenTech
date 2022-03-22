@@ -4,7 +4,8 @@ Por ejemplo, en el caso del dispositivo TTNMAD_PLANT
 2. Luminosity
 3. Temp
 4. Hum
-5. Bat
+5. Pressure
+6. Bat
 
 # 2. El archivo \[TIPO DISPOSITIVO]_KEYBOARD.php
 Añadir al array inline_keyboard los elementos correspondientes a las telemetrías, tanto en la acción home como en la acción telemetry.
