@@ -12,7 +12,7 @@ Añadir al array inline_keyboard los elementos correspondientes a las telemetrí
 switch ($informacion->action) {
         case "home":
             array_push($keyboard["inline_keyboard"], [["text" => "Moisture", "callback_data" => "{\"action\":\"telemetry\",\"p\":\"1\",\"q\":\"1\",\"r\":\"" . time() . "\"}"], ["text" => "Luminosity", "callback_data" => "{\"action\":\"telemetry\",\"p\":\"2\",\"q\":\"1\",\"r\":\"" . time() . "\"}"]]);
-            `array_push($keyboard["inline_keyboard"], [["text" => "Temp", "callback_data" => "{\"action\":\"telemetry\",\"p\":\"3\",\"q\":\"1\",\"r\":\"" . time() . "\"}"], ["text" => "Hum", "callback_data" => "{\"action\":\"telemetry\",\"p\":\"4\",\"q\":\"1\",\"r\":\"" . time() . "\"}"], ["text" => "Bat", "callback_data" => "{\"action\":\"telemetry\",\"p\":\"5\",\"q\":\"1\",\"r\":\"" . time() . "\"}"]]);`
+            array_push($keyboard["inline_keyboard"], [["text" => "Temp", "callback_data" => "{\"action\":\"telemetry\",\"p\":\"3\",\"q\":\"1\",\"r\":\"" . time() . "\"}"], ["text" => "Hum", "callback_data" => "{\"action\":\"telemetry\",\"p\":\"4\",\"q\":\"1\",\"r\":\"" . time() . "\"}"], ["text" => "Bat", "callback_data" => "{\"action\":\"telemetry\",\"p\":\"5\",\"q\":\"1\",\"r\":\"" . time() . "\"}"]]);
             array_push($keyboard["inline_keyboard"], [["text" => "Config", "callback_data" => "{\"action\":\"toConfig\"}"], ["text" => "Alarms", "callback_data" => "{\"action\":\"toAlarm\"}"]]);
             break;
         case "telemetry":
