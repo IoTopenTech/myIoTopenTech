@@ -172,7 +172,7 @@ switch ($informacion_estado_actual_chat->p) {
 }
 ```
 # 9. Icono para las notificaciones
-En el archivo notifica.php hay que indicar el icono correspondiente al tipo de dispositivo.
+En el archivo notificar.php hay que indicar el icono correspondiente al tipo de dispositivo.
 ```php
     switch ($tipoDispositivo){
         case "TTNMAD_DOOR":
