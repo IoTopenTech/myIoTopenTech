@@ -60,6 +60,11 @@ switch ($informacion->action) {
     
 # 3. El archivo \[TIPO DISPOSITIVO]_GUI
 Aquí básicamente hay que sustituir el nombre de la telemetría en cada case.
+```php
+case "2"://Bat 
+    $nombreTelemetria = "Bateria"; //Nombre de la telemetría en myIoT
+    $rotuloTelemetria = "Bat";
+```
 Si alguna telemetría requiere redondear los rótulos del eje Y se puede usar una función de este estilo:
 ```php
 function YAxisFormat($Value) {
