@@ -132,3 +132,25 @@ En general, los dispositivos de la serie TTNMAD tienen opciones para configurar:
 * Periodo de heartbeat
 * ACK de los uplinks
 * Resetear el dispositivo
+
+# 6. El archivo \[TIPO DISPOSITIVO]_ALARM.php
+Este archivo es muy similar al anterior, y es el responsable de mostrar las alarmas y su menú de configuración.
+El rol observador no puede configurar las alarmas (asume la configuración establecida por el rol administrador).
+
+# 7. El archivo \[TIPO DISPOSITIVO]_DOWNLOAD.php
+Este archivo permite descargar las telemetrías en formato CSV del gráfico que estemos visualizando.
+Sólo requiere indicar el nombre de la telemetría en función del número que le hayamos asignado a cada una en el paso 1.
+´´´php
+switch ($informacion_estado_actual_chat->p) {
+    case "1"://Correo       
+        $telemetrias = json_decode(obtenerTelemetriaDispositivo($informacion_estado_actual_chat->id, "Correo", intval($informacion_estado_actual_chat->r) * 1000, intval($informacion_estado_actual_chat->q) * 3600000));
+        $telemetrias = array_reverse($telemetrias->Correo);
+        $nombreArchivo = $nombre_dispositivo . "_correo_" . $informacion_estado_actual_chat->r . ".csv";
+        break;    
+    case "2"://Bateria       
+        $telemetrias = json_decode(obtenerTelemetriaDispositivo($informacion_estado_actual_chat->id, "Bateria", intval($informacion_estado_actual_chat->r) * 1000, intval($informacion_estado_actual_chat->q) * 3600000));
+        $telemetrias = array_reverse($telemetrias->Bateria);
+        $nombreArchivo = $nombre_dispositivo . "_bat_" . $informacion_estado_actual_chat->r . ".csv";
+        break;
+}
+´´´
