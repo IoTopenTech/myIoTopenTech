@@ -140,7 +140,7 @@ El rol observador no puede configurar las alarmas (asume la configuración estab
 # 7. El archivo \[TIPO DISPOSITIVO]_DOWNLOAD.php
 Este archivo permite descargar las telemetrías en formato CSV del gráfico que estemos visualizando.
 Sólo requiere indicar el nombre de la telemetría en función del número que le hayamos asignado a cada una en el paso 1.
-´´´php
+```php
 switch ($informacion_estado_actual_chat->p) {
     case "1"://Correo       
         $telemetrias = json_decode(obtenerTelemetriaDispositivo($informacion_estado_actual_chat->id, "Correo", intval($informacion_estado_actual_chat->r) * 1000, intval($informacion_estado_actual_chat->q) * 3600000));
@@ -153,4 +153,21 @@ switch ($informacion_estado_actual_chat->p) {
         $nombreArchivo = $nombre_dispositivo . "_bat_" . $informacion_estado_actual_chat->r . ".csv";
         break;
 }
-´´´
+```
+# 8. El archivo \[TIPO DISPOSITIVO]_TEXT.php
+Este archivo permite obtener en un mensaje de Telegram las variaciones de la telemetría que estemos visualizando (con un límite de unos 65000 caracteres impuesto por Telegram).
+Básicamente, como en el caso del archivo DOWNLOAD, sólo requiere asociar a cada número el nombre correspondiente de telemetría de acuerdo al paso 1.
+```php
+switch ($informacion_estado_actual_chat->p) {
+    case "1"://Correo       
+        $telemetrias = json_decode(obtenerTelemetriaDispositivo($informacion_estado_actual_chat->id, "Correo", intval($informacion_estado_actual_chat->r) * 1000, intval($informacion_estado_actual_chat->q) * 3600000));
+        $telemetrias = array_reverse($telemetrias->Correo);
+        $txt = $nombre_dispositivo . ": Variaciones de Correo" . chr(10);
+        break;    
+    case "2"://Bateria       
+        $telemetrias = json_decode(obtenerTelemetriaDispositivo($informacion_estado_actual_chat->id, "Bateria", intval($informacion_estado_actual_chat->r) * 1000, intval($informacion_estado_actual_chat->q) * 3600000));
+        $telemetrias = array_reverse($telemetrias->Bateria);
+        $txt = $nombre_dispositivo . ": Variaciones de Bat" . chr(10);
+        break;
+}
+```
