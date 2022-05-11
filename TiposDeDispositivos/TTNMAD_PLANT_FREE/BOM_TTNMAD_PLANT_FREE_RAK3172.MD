@@ -17,3 +17,5 @@
 | Portabaterías CR123A | ![imagen](https://user-images.githubusercontent.com/52624907/167811774-4ae5751b-33d4-4b05-afe5-e2cc7f52cee6.png) |
 | Batería CR123A |![imagen](https://user-images.githubusercontent.com/52624907/167811939-325dbbe6-497c-4687-8443-ce7fcbe54ee0.png)|
 | Tira acodada 4 pines macho separación 2.54mm |![imagen](https://user-images.githubusercontent.com/52624907/167812431-347dca23-237d-464a-bc74-c2aec2a882d1.png)|
+| Impresión 3D de la carcasa (https://www.tinkercad.com/things/ibdePQXrxBA)|![imagen](https://user-images.githubusercontent.com/52624907/167813099-7c3796d8-5a3d-4560-8e10-fb874222e484.png)|
+| Semiesfera de vídrio 20mm diámetro |![imagen](https://user-images.githubusercontent.com/52624907/167813418-c07056a5-572b-41b6-ba74-77df439bfcfb.png)|
