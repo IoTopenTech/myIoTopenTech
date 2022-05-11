@@ -6,13 +6,14 @@
 | Sensor de humedad del suelo versión 2.0 (otras versiones tienen fallos en el PCB) | ![imagen](https://user-images.githubusercontent.com/52624907/167809249-92f43a5d-19f3-42bf-8d54-82009da121c8.png) |
 | LDR 5506 | ![imagen](https://user-images.githubusercontent.com/52624907/167809549-e1d6ede2-462c-4e17-8a40-ce764325cbd7.png) |
 | Módulo HTU-21D, sensor de temperatura y humedad |![imagen](https://user-images.githubusercontent.com/52624907/167809909-dc644620-1abb-4bfb-a9a9-80445264e25b.png)|
-| Antena helicoidal 868MHz acodada |![imagen](https://user-images.githubusercontent.com/52624907/167810332-53aabcca-ce82-4546-a2b2-36cbdb0aaa3e.png)|
-| Resistencia 0805 300ohm | |
-| Resistencia 0805 10k | |
-| Resistencia 0805 8.2k | |
-| Condensador 0805 100n | |
-| LED 3mm through hole rojo | ![imagen](https://user-images.githubusercontent.com/52624907/151134978-b1282e50-e24b-458d-bba7-4785c42f7257.png) | 
-| Interruptor deslizante through hole MSS22D18 | ![imagen](https://user-images.githubusercontent.com/52624907/151135183-e536c6ce-d12a-493f-be80-724624f445f5.png) | 
+| MIC94092YC6 |![imagen](https://user-images.githubusercontent.com/52624907/167811421-f856e82b-dfae-499d-853a-008830a03722.png)|
+| Resistencia 0805 220ohm (R3) | |
+| Resistencia 0805 10k (R4) | |
+| Resistencia 0805 6.8k (R2) | |
+| 3x Condensador 0805 100n (C1, C2 y C4)| |
+| LED 3mm through hole verde | ![imagen](https://user-images.githubusercontent.com/52624907/167811529-4963568e-f4ce-4749-aa2c-7963dfa78b17.png) | 
+| Interruptor deslizante SMD MSS22D18 | ![imagen](https://user-images.githubusercontent.com/52624907/167811630-2629b4c8-c6a2-42b1-b155-e2578ab032df.png)| 
 | Antena helicoidal 868MHz acodada | ![imagen](https://user-images.githubusercontent.com/52624907/151135349-054a7224-765c-4091-8fbe-fcfb4778d852.png) | 
-| Portabaterías 2xAAA | ![imagen](https://user-images.githubusercontent.com/52624907/151135509-f35f0a5d-f188-4913-89be-b694f5b190ee.png) |
-| Iman N35 cilíndrico 5x10 | ![imagen](https://user-images.githubusercontent.com/52624907/153703141-153c8baf-e165-4632-94ea-ea18d4763b26.png) |
+| Portabaterías CR123A | ![imagen](https://user-images.githubusercontent.com/52624907/167811774-4ae5751b-33d4-4b05-afe5-e2cc7f52cee6.png) |
+| Batería CR123A |![imagen](https://user-images.githubusercontent.com/52624907/167811939-325dbbe6-497c-4687-8443-ce7fcbe54ee0.png)|
+| Tira acodada 4 pines macho separación 2.54mm |![imagen](https://user-images.githubusercontent.com/52624907/167812431-347dca23-237d-464a-bc74-c2aec2a882d1.png)|
