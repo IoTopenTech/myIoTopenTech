@@ -18,4 +18,4 @@ The main aims of my IoT open Tech are:
 
 * Lower the barrier to IoT technologies, even for non-techies.
 * Protect data privacy, and raise awareness of its importance. Your data is your data.
-* Encourage the cooperative deployment of community networks and tools.
+* Encourage the cooperative deployment of community IoT networks and tools.
