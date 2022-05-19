@@ -1,3 +1,6 @@
+---
+layout: default
+---
 # my IoT open Tech
 myIoT (https://my.iotopentech.io) es un sitio web para gestionar y configurar dispositivos IoT.
 Algunas de las funciones que podrá realizar con myIoT son:
