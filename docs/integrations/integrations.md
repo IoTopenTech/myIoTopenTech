@@ -18,4 +18,8 @@ The url format is:
 
 https://my.iotopentech.io/api/v1/`access_token_copied_from_details_tab`/telemetry
 
+The request's type mush be `POST` and should use the following header:
+
+`Content-Type: application/json`
+
 ## MQTT publishing
