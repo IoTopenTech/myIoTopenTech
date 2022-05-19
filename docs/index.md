@@ -12,6 +12,7 @@ my IoT open Tech is an IoT platform, developed on top of Things Board Community 
 {: .fs-6 .fw-300 }
 Users can store and chart the telemetries from their device, configure their features, and manage alarms.
 {: .fs-6 .fw-300 }
+---
 
 The main aims of my IoT open Tech are:
 
