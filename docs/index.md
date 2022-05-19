@@ -9,7 +9,7 @@ nav_order: 1
 {: .fs-9 }
 
 my IoT open Tech is an IoT platform, developed on top of Things Board Community Edition (Open Source), with a user-centered desing.
-
+{: .fs-6 .fw-300 }
 Users can store and chart the telemetries from their device, configure their features, and manage alarms.
 {: .fs-6 .fw-300 }
 
