@@ -31,3 +31,5 @@ The main aims of my IoT open Tech are:
 # Most relevant capabilities
 
 * Telemetries can be sent using HTTP requests or publishing MQTT messages. In the case of LoRaWAN, my IoT open Tech can also send downlinks through the Network Servers The Things Stack Community Edition, Everynet and ChirpStack.
+* Multi level tree structure based on assets and devices. An asset is an organizational entity that can group several other assets and/or devices. For example, in a hotel we could configure a "Floor 1" asset, that in turn would contain assets for every room in that floor, and those room assets would contain the devices of each room (like temperature sensors, door locks...)
+* The user interacts with the platform mainly through two dashboards: Configuracion and Panel de control.
