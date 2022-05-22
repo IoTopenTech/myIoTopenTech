@@ -52,6 +52,6 @@ In my IoT open Tech every user has an special device called "Control". This devi
 
 6. If you haven't done it yet, create an application and device in The Things Stack Community Edition console. You can find more information here:
 
-    * ([Adding Applications | The Things Stack for LoRaWAN] (https://www.thethingsindustries.com/docs/integrations/adding-applications/))
-    * ([Creating applications and adding devices to The Things Stack - YouTube] (https://www.youtube.com/watch?v=PpbkBgz1CbI))
+    * [Adding Applications | The Things Stack for LoRaWAN] (https://www.thethingsindustries.com/docs/integrations/adding-applications/)
+    * [Creating applications and adding devices to The Things Stack - YouTube] (https://www.youtube.com/watch?v=PpbkBgz1CbI)
 
