@@ -9,11 +9,11 @@ nav_order: 1
 
 Integrations in The Things Network are configured at application level, so all the devices in an application share the same integrations.
 
-In my IoT open Tech every user has an special device called "Control". This device can queue the messages received from The Things Network to the correct final device using the Device EUI as filtering criteria, so the application in The Things Network should be integrated to send telemetries to the user's Control device, that in turn will deliver them to the device with the matching Device EUI.
+In my IoT open Tech every user has a special device called "Control". This device can queue the messages received from The Things Network to the correct final device using the Device EUI as filtering criteria, so the application in The Things Network should be integrated to send telemetries to the user's Control device, that in turn will deliver them to the device with the matching Device EUI.
 
 ## Prerequisites
 
-* A The Things Stack Communnity Edition account (account can be registered at https://console.cloud.thethings.network/).
+* A The Things Stack Community Edition account (account can be registered at https://console.cloud.thethings.network/).
 * A valid email address to register an account in my IoT open Tech service.
 
 ## General procedure
@@ -54,4 +54,14 @@ In my IoT open Tech every user has an special device called "Control". This devi
 
     * [Adding Applications | The Things Stack for LoRaWAN] (https://www.thethingsindustries.com/docs/integrations/adding-applications/)
     * [Creating applications and adding devices to The Things Stack - YouTube] (https://www.youtube.com/watch?v=PpbkBgz1CbI)
+7. Select *Integrations* in the left panel of your The Things Stack Community Edition application console, then *Webhooks*, and finally press the *Add webhook* button in the upper right. Write the access token you got in step 1, and click on *Create my iot open tech webhook*.
+
+    ![imagen](https://user-images.githubusercontent.com/52624907/169710180-8fe44aff-32ff-4b89-b5cd-23dc420f2328.png)
+
+8. You can verify that the integration is working properly simulating a telemetry message. In The Things Stack Community Edition console, open the *Messaging* tab of your new device, write `CBF0090C018201089E7FFF` (this is the raw payload of an LHT65 message) in the *Payload* field of the *Simulate uplink* section, and press the button *Simulate uplink*. Now open your *Panel de control* dashboard in my IoT open Tech and click on your device nested under the *ROOT* asset; the dashboard should show the telemetry as in the last image.
+
+    ![imagen](https://user-images.githubusercontent.com/52624907/169710410-f1ebcda8-a8b3-4fb6-a48c-210bbc56fba4.png)
+    
+    ![imagen](https://user-images.githubusercontent.com/52624907/169710448-56ae680f-82ae-4f92-a231-7a92c5fdddeb.png)
+
 
