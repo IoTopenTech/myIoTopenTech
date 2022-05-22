@@ -9,7 +9,7 @@ nav_order: 1
 
 my IoT open Tech currently supports the following device/asset type.
 
-If the device you want to use is not available in this table, or if you want to modify/improve its integration, please refer to the developer documentation in our repository.
+If the device you want to use is not available in this table, or if you want to modify/improve its integration, please refer to the developer's documentation in our repository.
 
 ## Asset types
 
