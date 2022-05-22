@@ -22,4 +22,11 @@ If the device you want to use is not available in this table, or if you want to 
 
 |Name|my IoT legram| Auto-provisioning capability|
 |---|---|---|
-|TTNMAD_DOOR|Yes|Yes|
+|TTNMAD_Door|Yes|Yes|
+|TTNMAD_Plant|Yes|No|
+|TTNMAD_Mailbox|Yes|No|
+|Dragino LHT65|No|No|
+|Dragino LDS01|No|No|
+|Dragino LGT92|No|No|
+|Rak 7200|No|No|
+|Rak7204|No|No|
