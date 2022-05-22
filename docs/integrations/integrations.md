@@ -12,7 +12,7 @@ my IoT open Tech can receive telemetries through HTTP requests and MQTT publishi
 ## HTTP Request
 Every device has an access token in its details tab.
 
-![imagen](https://user-images.githubusercontent.com/52624907/169384922-adb8ea4a-a984-444e-9c45-37123503decf.png)
+![imagen](https://user-images.githubusercontent.com/52624907/169706220-d9e40e8c-794e-4ca1-817a-930c0429926a.png)
 
 The url format is:
 
