@@ -28,17 +28,16 @@ In my IoT open Tech every user has an special device called "Control". This devi
 
 1. Use your web browser to open the address https://iotopentech.io/register.php, write your email address, and press the Send button. After a few seconds, the web service will show the access token of your *Control* device (please, remember to keep it safe), and you will also receive an email message with the link to activate your my IoT open Tech account.
 
-![imagen](https://user-images.githubusercontent.com/52624907/169708987-612435e9-b969-40e5-9342-912e38004224.png)
+ ![imagen](https://user-images.githubusercontent.com/52624907/169708987-612435e9-b969-40e5-9342-912e38004224.png)
 
 2. Click on the *Activate your account* link in the email message from the previous step to activate your account and choose a password.
 
-![imagen](https://user-images.githubusercontent.com/52624907/169709254-588868fa-c4ee-4f3e-a3dd-f5f8f8e70d79.png)
+ ![imagen](https://user-images.githubusercontent.com/52624907/169709254-588868fa-c4ee-4f3e-a3dd-f5f8f8e70d79.png)
 
-![imagen](https://user-images.githubusercontent.com/52624907/169709279-00dd32d7-4835-4f82-b574-5e22a958868b.png)
+ ![imagen](https://user-images.githubusercontent.com/52624907/169709279-00dd32d7-4835-4f82-b574-5e22a958868b.png)
 
 3. Click on *Dashboards*, and then on *Configuración*.
 
-![imagen](https://user-images.githubusercontent.com/52624907/169709327-280fd753-240f-486f-a25e-6a338ca7fa98.png)
-
+ ![imagen](https://user-images.githubusercontent.com/52624907/169709327-280fd753-240f-486f-a25e-6a338ca7fa98.png)
 
 4. 
