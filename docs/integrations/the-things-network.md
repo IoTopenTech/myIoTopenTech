@@ -18,11 +18,11 @@ In my IoT open Tech every user has an special device called "Control". This devi
 
 ## General procedure
 
-1. Register a new user account in my IoT open Tech service to get the access token of the Control device. This access token will be used later (step 4) to configure the integration in The Things Stack Community Edition.
+1. Register a new user account in my IoT open Tech service to get the access token of the *Control* device. This access token will be used later (step 4) to configure the integration in The Things Stack Community Edition.
 2. If the device type has not auto-provisioning capability (see [supported device/asset types table](https://iotopentech.github.io/myIoTopenTech/supported-devices.html)), create a new device in my IoT open Tech and indicate its Device EUI. Otherwise, this step is optional, and the device will be automatically created at the reception of its first telemetry from The Things Stack Community Edition, and besides the user will receive an email with the codes to integrate it with my IoT legram.
 3. If it hasn't been done yet, create the application and the device in The Things Stack Community Edition console.
 4. Configure the my IoT open Tech integration using the access token got in step 1.
-5. Verify that the telemetries are properly received in the my IoT open Tech **Panel de control** dashboard.
+5. Verify that the telemetries are properly received in the my IoT open Tech *Panel de control* dashboard.
 
 ## Example for integrating a Dragino LHT65 device
 
