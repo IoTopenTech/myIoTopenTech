@@ -56,7 +56,7 @@ In my IoT open Tech every user has a special device called "Control". This devic
     * [Creating applications and adding devices to The Things Stack - YouTube] (https://www.youtube.com/watch?v=PpbkBgz1CbI)
 7. Select *Integrations* in the left panel of your The Things Stack Community Edition application console, then *Webhooks*, and finally press the *Add webhook* button in the upper right. Write the access token you got in step 1, and click on *Create my iot open tech webhook*.
 
-    ![imagen](https://user-images.githubusercontent.com/52624907/169710180-8fe44aff-32ff-4b89-b5cd-23dc420f2328.png)
+    ![imagen](https://user-images.githubusercontent.com/52624907/169710935-bed5c57b-70e9-44bc-9c71-f03c56408164.png)
 
 8. You can verify that the integration is working properly simulating a telemetry message. In The Things Stack Community Edition console, open the *Messaging* tab of your new device, write `CBF0090C018201089E7FFF` (this is the raw payload of an LHT65 message) in the *Payload* field of the *Simulate uplink* section, and press the button *Simulate uplink*. Now open your *Panel de control* dashboard in my IoT open Tech and click on your device nested under the *ROOT* asset; the dashboard should show the telemetry as in the last image.
 
