@@ -29,4 +29,4 @@ If the device you want to use is not available in this table, or if you want to 
 |Dragino LDS01|No|No|
 |Dragino LGT92|No|No|
 |Rak 7200|No|No|
-|Rak7204|No|No|
+|Rak 7204|No|No|
