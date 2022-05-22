@@ -2,7 +2,7 @@
 layout: default
 title: The Things Network
 parent: Integrations
-nav_order: 1
+nav_order: 2
 ---
 
 # The Things Network (The Things Stack Community Edition)
