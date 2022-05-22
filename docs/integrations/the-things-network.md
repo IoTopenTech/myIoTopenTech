@@ -36,4 +36,9 @@ In my IoT open Tech every user has an special device called "Control". This devi
 
 ![imagen](https://user-images.githubusercontent.com/52624907/169709279-00dd32d7-4835-4f82-b574-5e22a958868b.png)
 
-3. 
+3. Click on *Dashboards*, and then on *Configuración*.
+
+![imagen](https://user-images.githubusercontent.com/52624907/169709327-280fd753-240f-486f-a25e-6a338ca7fa98.png)
+
+
+4. 
