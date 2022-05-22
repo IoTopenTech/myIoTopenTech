@@ -52,8 +52,8 @@ In my IoT open Tech every user has a special device called "Control". This devic
 
 6. If you haven't done it yet, create an application and device in The Things Stack Community Edition console. You can find more information here:
 
-    * [Adding Applications | The Things Stack for LoRaWAN] (https://www.thethingsindustries.com/docs/integrations/adding-applications/)
-    * [Creating applications and adding devices to The Things Stack - YouTube] (https://www.youtube.com/watch?v=PpbkBgz1CbI)
+    * [Adding Applications | The Things Stack for LoRaWAN](https://www.thethingsindustries.com/docs/integrations/adding-applications/)
+    * [Creating applications and adding devices to The Things Stack - YouTube](https://www.youtube.com/watch?v=PpbkBgz1CbI)
 7. Select *Integrations* in the left panel of your The Things Stack Community Edition application console, then *Webhooks*, and finally press the *Add webhook* button in the upper right. Write the access token you got in step 1, and click on *Create my iot open tech webhook*.
 
     ![imagen](https://user-images.githubusercontent.com/52624907/169710935-bed5c57b-70e9-44bc-9c71-f03c56408164.png)
