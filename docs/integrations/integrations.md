@@ -25,4 +25,4 @@ The request's type mush be `POST` and should use the following header:
 
 ## MQTT publishing
 
-To send a telemetry using MQTT, a JSON message must be published in topic `v1/devices/me/telemetry` of the my.iotopentech.io server using the access token of the device as the user name (the password should be empty).
+To send a telemetry using MQTT, a JSON message must be published in topic `v1/devices/me/telemetry` of the my.iotopentech.io server (port 1883) using the access token of the device as the user name (the password should be empty).
