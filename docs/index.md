@@ -2,7 +2,7 @@
 layout: default
 title: Introduction
 nav_order: 1
-
+has_children: true
 ---
 
 # A free, open and neutral IoT platform
