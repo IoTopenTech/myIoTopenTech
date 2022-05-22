@@ -26,7 +26,7 @@ In my IoT open Tech every user has an special device called "Control". This devi
 
 ## Example for integrating a Dragino LHT65 device
 
-1. Use your web browser to open the address https://iotopentech.io/register.php, write your email address, and press the Send button. After a few seconds, the web service will show the access token of your *Control* device (please, remember to keep it safe), and you will also receive an email message with the link to activate your my IoT open Tech account.
+1. Use your web browser to open the address (https://iotopentech.io/register.php), write your email address, and press the Send button. After a few seconds, the web service will show the access token of your *Control* device (please, remember to keep it safe), and you will also receive an email message with the link to activate your my IoT open Tech account.
 
     ![imagen](https://user-images.githubusercontent.com/52624907/169708987-612435e9-b969-40e5-9342-912e38004224.png)
 
@@ -46,4 +46,12 @@ In my IoT open Tech every user has an special device called "Control". This devi
 
     ![imagen](https://user-images.githubusercontent.com/52624907/169709728-56f387f1-cda2-4188-9cac-52fb8216da13.png)
 
-6. 
+5. Click on your new device to open its configuration dialog box. In the tab *Configurar*, click on the drop down *Device EUI* section, write the Device EUI of your device, and press the *Configurar* button.
+
+    ![imagen](https://user-images.githubusercontent.com/52624907/169709887-e9203b03-a177-45a4-b736-73c10c15782d.png)
+
+6. If you haven't done it yet, create an application and device in The Things Stack Community Edition console. You can find more information here:
+
+    * ([Adding Applications | The Things Stack for LoRaWAN] (https://www.thethingsindustries.com/docs/integrations/adding-applications/))
+    * ([Creating applications and adding devices to The Things Stack - YouTube] (https://www.youtube.com/watch?v=PpbkBgz1CbI))
+
