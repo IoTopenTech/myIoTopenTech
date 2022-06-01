@@ -42,11 +42,11 @@ In my IoT open Tech every user has a special device called "Control". This devic
     
     ![imagen](https://user-images.githubusercontent.com/52624907/169709500-623de388-3067-4372-aa7d-ae49b12ff913.png)
 
-4. In the center panel *ACTIVOS Y DISPOSITIVOS*, click on the *ROOT* asset to open its configuration dialog box. In the *Crear* tab, write a name for your new device, indicate that this element is a *Device* (not an *Asset*), choose the *LHT65* device type, and click on the *Crear* button. The new device will appear nested below the *ROOT* asset.
+4. In the center panel *ACTIVOS Y DISPOSITIVOS*, click on the *ROOT* asset to open its configuration dialog box. In the *CREAR* tab, write a name for your new device, indicate that this element is a *Device* (not an *Asset*), choose the *LHT65* device type, and click on the *CREAR* button. The new device will appear nested below the *ROOT* asset.
 
     ![imagen](https://user-images.githubusercontent.com/52624907/169709728-56f387f1-cda2-4188-9cac-52fb8216da13.png)
 
-5. Click on your new device to open its configuration dialog box. In the tab *Configurar*, click on the drop down *Device EUI* section, write the Device EUI of your device, and press the *Configurar* button.
+5. Click on your new device to open its configuration dialog box. In the tab *CONFIGURAR*, click on the drop down *Device EUI* section, write the Device EUI of your device, and press the *CONFIGURAR* button.
 
     ![imagen](https://user-images.githubusercontent.com/52624907/169709887-e9203b03-a177-45a4-b736-73c10c15782d.png)
 
