@@ -26,7 +26,7 @@ In my IoT open Tech every user has a special device called "Control". This devic
 
 ## Example for integrating a Dragino LHT65 device
 
-1. Use your web browser to open the address (https://iotopentech.io/register.php), write your email address, and press the Send button. After a few seconds, the web service will show the access token of your *Control* device (please, remember to keep it safe), and you will also receive an email message with the link to activate your my IoT open Tech account.
+1. Use your web browser to open the address [https://iotopentech.io/register.php](https://iotopentech.io/register.php), write your email address, and press the Send button. After a few seconds, the web service will show the access token of your *Control* device (please, remember to keep it safe), and you will also receive an email message with the link to activate your my IoT open Tech account.
 
     ![imagen](https://user-images.githubusercontent.com/52624907/169708987-612435e9-b969-40e5-9342-912e38004224.png)
 
