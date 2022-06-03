@@ -16,11 +16,11 @@ If the device you want to use is not available in this table, or if you want to 
 |Name|Description|
 |---|---|
 |Mapa|A map asset is useful to show the latitude/longitude position of the devices nested in it.|
-|Imagen|In this type of asset, the user indicates the url of a image (for example, the floorplant of her home), and the devices nested in it are shown accoringly to ther abscissa and ordinate.|
+|Imagen|In this type of asset, the user provides an image url (for example, a home floorplan), and the devices nested in it are shown accordingly to their abscissa and ordinate.|
 
 ## Device types
 
-|Name|my IoT legram| Auto-provisioning capability|
+|Name|my IoT legram| Self-provisioning capability|
 |---|---|---|
 |TTNMAD_Door|Yes|Yes|
 |TTNMAD_Plant|Yes|No|
