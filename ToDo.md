@@ -34,4 +34,4 @@
 - [ ] Valorar incluir en los tipos de dispositivos LoRaWAN widgets en el dashboard (o un estado) con información sobre la transmisión (contador, RSSI, número de gateways...)
 - [ ] Permitir configurar los mensajes de texto de las alarmas
 - [X] Permitir que los créditos se puedan recargar automáticamente con una donación en Open Collective. Cada usuario podrá indicar su Slug de Open Collective, y se creará una relación a él, de tipo el propio slug, desde el cliente patrón. El cliente patrón tendrá asignado un dispositivo de tipo Stripe, que será el que reciba las telemetrías por webhook del evento charge.succeeded desde Stripe y actualice los créditos.
-- [ ] Si se borra un dispositivo en myIoT, luego no se puede acceder a él en myIoTlegram, ni siquiera para cerrarlo.
+- [ ] Si se borra un dispositivo en myIoT, luego no se puede acceder a él en myIoTlegram, ni siquiera para borrarlo.
