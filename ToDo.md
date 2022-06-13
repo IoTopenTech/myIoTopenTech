@@ -35,3 +35,4 @@
 - [ ] Permitir configurar los mensajes de texto de las alarmas
 - [X] Permitir que los créditos se puedan recargar automáticamente con una donación en Open Collective. Cada usuario podrá indicar su Slug de Open Collective, y se creará una relación a él, de tipo el propio slug, desde el cliente patrón. El cliente patrón tendrá asignado un dispositivo de tipo Stripe, que será el que reciba las telemetrías por webhook del evento charge.succeeded desde Stripe y actualice los créditos.
 - [ ] Si se borra un dispositivo en myIoT, luego no se puede acceder a él en myIoTlegram, ni siquiera para borrarlo.
+- [ ] En el dispositivo CONTROL de cada usuario es necesario disponer de un atributo root_asset_ID que permita auto-aprovisionar los tipos de dispositivos conocidos (actualmente sólo TTNMAD_DOOR). Para los usuarios nuevos ya se crea automáticamente en el registro... pero para los antiguos ¿cómo lo hacemos?
