@@ -186,3 +186,13 @@ En el archivo notificar.php hay que indicar el icono correspondiente al tipo de 
             break;
     }
 ```
+# 10. Localización y zona horaria
+La localización afecta a myIoT en:
+* tooltip (se usa en última telemetría) -> En lugar de usar este atributo, uso uno nuevo llamado ultimaTelemetria_myIoTlegram
+* asuntoEmail (se usa en última alarma) -> En lugar de usar este atributo, uso uno nuevo llamado ultimaAlarma_myIoTlegram
+* mensajeTelegram (se usa en la comunicación de las alarmas) -> En lugar de usar este atributo, uso uno nuevo llamado myIoTlegram
+
+A nivel del propio myIoTlegram:
+* keyboards (botones)
+* Gráficas (leyenda y rótulos de ejes)
+* Intrucciones
