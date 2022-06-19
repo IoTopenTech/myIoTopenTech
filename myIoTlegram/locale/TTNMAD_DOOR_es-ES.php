@@ -3,9 +3,15 @@
 //Telemetrias
 //Con prefijo t_, equivalencia para las telemetrías originales de myIoT
 define("localizacion_disponible",TRUE);
+define("localizacion_disponible_es-ES",TRUE);
 define("loc_t_Hall", "Estado");
 define("loc_t_Bateria", "Batería");
 define("loc_t_Temperatura", "Temperatura");
+define('loc_text_Variaciones_de','Variaciones de');
+define('loc_text_alcanzado_limite_tamaño_mensaje_telegram','Se ha alcanzado el límite de tamaño de mensaje de Telegram.');
+define('loc_text_no_se_pueden_mostrar_mas_datos','No se pueden mostrar más datos.');
+
+
 define("loc_gui_no_hay_telemetrias", "No hay telemetrías");
 define("log_gui_no_hay_alarmas", "No hay alarmas");
 define("loc_gui_Hall", "Estado");
@@ -143,4 +149,18 @@ define('loc_alarm_inactividad_umbral_tiempo_maximo', 'Por favor, escriba el umbr
 define('loc_alarm_inactividad_umbral_tiempo_maximo_no_valido','El umbral de tiempo máximo de inactividad indicado no es válido. Debe ser un número natural mayor que 0.');
 define('loc_alarm_inactividad_activada','La alarma de inactividad del dispositivo se ha configurado correctamente.');
 
-define('loc_text_Variaciones_de','Variaciones de');
+define('es-ES_loc_alarm_notification_puerta_abierta_generar','El dispositivo [nombre] ha generado una alarma de tipo Puerta abierta.');
+define('es-ES_loc_alarm_notification_puerta_abierta_anular','El dispositivo [nombre] ha anulado la  alarma de tipo Puerta abierta.');
+define('es-ES_loc_alarm_notification_nivel_bajo_de_bateria_generar','El dispositivo [nombre] ha generado una alarma de tipo Nivel bajo de batería. La tensión actual de la batería es %%1%% V, y el umbral de alarma es %%2%% V.');
+define('es-ES_loc_alarm_notification_nivel_bajo_de_bateria_anular','El dispositivo [nombre] ha anulado la  alarma de tipo Nivel bajo de batería. La tensión actual de la batería es %%1%% V, y el umbral de alarma es %%2%% V.');
+define('es-ES_loc_alarm_notification_temperatura_superior_al_umbral_maximo_generar','El dispositivo [nombre] ha generado una alarma de tipo Temperatura superior al umbral máximo. La temperatura es %%1%% ºC, y el umbral es %%2%% ºC.');
+define('es-ES_loc_alarm_notification_temperatura_superior_al_umbral_maximo_anular','El dispositivo [nombre] ha anulado la alarma de tipo Temperatura superior al umbral máximo. La temperatura es %%1%% ºC, y el umbral es %%2%% ºC.');
+define('es-ES_loc_alarm_notification_temperatura_inferior_al_umbral_minimo_generar','El dispositivo [nombre] ha generado una alarma de tipo Temperatura inferior al umbral mínimo. La temperatura es %%1%% ºC, y el umbral es %%2%% ºC.');
+define('es-ES_loc_alarm_notification_temperatura_inferior_al_umbral_minimo_anular','El dispositivo [nombre] ha anulado la alarma de tipo Temperatura inferior al umbral mínimo. La temperatura es %%1%% ºC, y el umbral es %%2%% ºC.');
+define('es-ES_loc_alarm_notification_inactividad_generar','El dispositivo [nombre] ha generado una alarma de tipo Inactividad.');
+define('es-ES_loc_alarm_notification_inactividad_anular','El dispositivo [nombre] ha anulado la alarma de tipo Inactividad.');
+
+
+
+
+        
