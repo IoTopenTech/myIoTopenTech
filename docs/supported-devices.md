@@ -23,8 +23,8 @@ If the device you want to use is not available in this table, or if you want to 
 |Name|my IoT legram| Self-provisioning capability|
 |---|---|---|
 |TTNMAD_Door|Yes|Yes|
-|TTNMAD_Plant|Yes|No|
-|TTNMAD_Mailbox|Yes|No|
+|TTNMAD_Plant|Yes|Yes|
+|TTNMAD_Mailbox|Yes|Yes|
 |Dragino LHT65|No|No|
 |Dragino LDS01|No|No|
 |Dragino LGT92|No|No|
