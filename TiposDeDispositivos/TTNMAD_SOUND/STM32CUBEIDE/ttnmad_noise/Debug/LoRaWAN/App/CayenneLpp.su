@@ -1,0 +1,17 @@
+../LoRaWAN/App/CayenneLpp.c:90:6:CayenneLppInit	4	static
+../LoRaWAN/App/CayenneLpp.c:98:6:CayenneLppReset	4	static
+../LoRaWAN/App/CayenneLpp.c:106:9:CayenneLppGetSize	4	static
+../LoRaWAN/App/CayenneLpp.c:114:10:CayenneLppGetBuffer	4	static
+../LoRaWAN/App/CayenneLpp.c:122:9:CayenneLppCopy	16	static
+../LoRaWAN/App/CayenneLpp.c:134:9:CayenneLppAddDigitalInput	16	static
+../LoRaWAN/App/CayenneLpp.c:152:9:CayenneLppAddDigitalOutput	16	static
+../LoRaWAN/App/CayenneLpp.c:170:9:CayenneLppAddAnalogInput	24	static
+../LoRaWAN/App/CayenneLpp.c:191:9:CayenneLppAddAnalogOutput	24	static
+../LoRaWAN/App/CayenneLpp.c:211:9:CayenneLppAddLuminosity	16	static
+../LoRaWAN/App/CayenneLpp.c:230:9:CayenneLppAddPresence	16	static
+../LoRaWAN/App/CayenneLpp.c:248:9:CayenneLppAddTemperature	24	static
+../LoRaWAN/App/CayenneLpp.c:268:9:CayenneLppAddRelativeHumidity	24	static
+../LoRaWAN/App/CayenneLpp.c:286:9:CayenneLppAddAccelerometer	32	static
+../LoRaWAN/App/CayenneLpp.c:313:9:CayenneLppAddBarometricPressure	24	static
+../LoRaWAN/App/CayenneLpp.c:334:9:CayenneLppAddGyrometer	32	static
+../LoRaWAN/App/CayenneLpp.c:361:9:CayenneLppAddGps	40	static

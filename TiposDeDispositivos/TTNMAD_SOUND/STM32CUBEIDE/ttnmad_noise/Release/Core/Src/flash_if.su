@@ -1,0 +1,7 @@
+../Core/Src/flash_if.c:166:9:FLASH_IF_Write64	24	static
+../Core/Src/flash_if.c:246:16:FLASH_IF_Write_Buffer	32	static
+../Core/Src/flash_if.c:183:9:FLASH_IF_EraseByPages	24	static
+../Core/Src/flash_if.c:89:9:FLASH_IF_Write	48	static
+../Core/Src/flash_if.c:212:6:HAL_FLASH_EndOfOperationCallback	0	static
+../Core/Src/flash_if.c:227:6:HAL_FLASH_OperationErrorCallback	0	static
+../Core/Src/flash_if.c:234:6:HWCB_FLASH_EndOfCleanup	0	static

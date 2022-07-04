@@ -1,0 +1,9 @@
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h:1813:26:LL_FLASH_IsActiveFlag_OperationSuspended	4	static
+../Core/Src/flash_if.c:89:9:FLASH_IF_Write	56	static
+../Core/Src/flash_if.c:166:9:FLASH_IF_Write64	24	static
+../Core/Src/flash_if.c:183:9:FLASH_IF_EraseByPages	48	static
+../Core/Src/flash_if.c:212:6:HAL_FLASH_EndOfOperationCallback	16	static
+../Core/Src/flash_if.c:227:6:HAL_FLASH_OperationErrorCallback	16	static
+../Core/Src/flash_if.c:234:6:HWCB_FLASH_EndOfCleanup	4	static
+../Core/Src/flash_if.c:246:16:FLASH_IF_Write_Buffer	48	static
+../Core/Src/flash_if.c:281:16:FLASH_IF_IsEmpty	24	static

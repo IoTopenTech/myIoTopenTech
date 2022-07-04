@@ -1,0 +1,11 @@
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_bus.h:1062:22:LL_APB1_GRP1_ForceReset	16	static
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_bus.h:1107:22:LL_APB1_GRP1_ReleaseReset	16	static
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_exti.h:265:22:LL_EXTI_EnableIT_0_31	16	static
+../Core/Src/usart_if.c:101:25:vcom_Init	16	static
+../Core/Src/usart_if.c:116:25:vcom_DeInit	8	static
+../Core/Src/usart_if.c:139:6:vcom_Trace	16	static
+../Core/Src/usart_if.c:150:25:vcom_Trace_DMA	16	static
+../Core/Src/usart_if.c:162:25:vcom_ReceiveInit	24	static
+../Core/Src/usart_if.c:198:6:vcom_Resume	8	static
+../Core/Src/usart_if.c:219:6:HAL_UART_TxCpltCallback	16	static
+../Core/Src/usart_if.c:234:6:HAL_UART_RxCpltCallback	16	static

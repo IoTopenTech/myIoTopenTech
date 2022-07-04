@@ -1,0 +1,6 @@
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_bus.h:449:22:LL_AHB2_GRP1_EnableClock	24	static
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_bus.h:914:22:LL_APB1_GRP1_EnableClock	24	static
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_bus.h:1018:22:LL_APB1_GRP1_DisableClock	16	static
+../Core/Src/usart.c:32:6:MX_USART2_UART_Init	8	static
+../Core/Src/usart.c:75:6:HAL_UART_MspInit	96	static
+../Core/Src/usart.c:137:6:HAL_UART_MspDeInit	16	static

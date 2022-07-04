@@ -1,0 +1,8 @@
+../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A26.c:58:10:RegionCN470A26GetDownlinkFrequency	16	static
+../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A26.c:63:9:RegionCN470A26GetBeaconChannelOffset	16	static
+../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A26.c:68:9:RegionCN470A26LinkAdrChMaskUpdate	32	static
+../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A26.c:114:6:RegionCN470A26VerifyRfFreq	16	static
+../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A26.c:126:6:RegionCN470A26InitializeChannels	24	static
+../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A26.c:137:6:RegionCN470A26InitializeChannelsMask	16	static
+../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A26.c:159:10:RegionCN470A26GetRx1Frequency	16	static
+../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCN470A26.c:164:10:RegionCN470A26GetRx2Frequency	16	static

@@ -1,0 +1,12 @@
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c:254:9:RFW_TransmitLongPacket	0	static
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c:420:9:RFW_ReceiveLongPacket	0	static
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c:471:9:RFW_Init	0	static
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c:549:6:RFW_DeInit	0	static
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c:556:9:RFW_Is_Init	0	static
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c:565:9:RFW_Is_LongPacketModeEnabled	0	static
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c:574:6:RFW_SetAntSwitch	0	static
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c:581:9:RFW_TransmitInit	0	static
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c:633:9:RFW_ReceiveInit	0	static
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c:655:6:RFW_DeInit_TxLongPacket	0	static
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c:665:6:RFW_ReceivePayload	0	static
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_fw.c:720:6:RFW_SetRadioModem	0	static

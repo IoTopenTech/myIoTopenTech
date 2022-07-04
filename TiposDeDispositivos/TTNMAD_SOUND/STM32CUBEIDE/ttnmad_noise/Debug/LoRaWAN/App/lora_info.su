@@ -1,0 +1,2 @@
+../LoRaWAN/App/lora_info.c:69:6:LoraInfo_Init	8	static
+../LoRaWAN/App/lora_info.c:138:13:LoraInfo_GetPtr	4	static

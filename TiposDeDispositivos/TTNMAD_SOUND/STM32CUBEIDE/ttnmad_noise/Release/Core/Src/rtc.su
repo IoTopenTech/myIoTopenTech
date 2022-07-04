@@ -1,0 +1,3 @@
+../Core/Src/rtc.c:30:6:MX_RTC_Init	56	static
+../Core/Src/rtc.c:86:6:HAL_RTC_MspInit	72	static
+../Core/Src/rtc.c:121:6:HAL_RTC_MspDeInit	8	static

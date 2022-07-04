@@ -1,0 +1,13 @@
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:129:28:GetElement.constprop	12	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:151:6:LoRaMacConfirmQueueInit	8	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:168:6:LoRaMacConfirmQueueAdd	8	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:193:6:LoRaMacConfirmQueueRemoveLast	0	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:208:6:LoRaMacConfirmQueueRemoveFirst	0	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:223:6:LoRaMacConfirmQueueSetStatus	8	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:238:26:LoRaMacConfirmQueueGetStatus	8	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:253:6:LoRaMacConfirmQueueSetStatusCmn	12	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:275:26:LoRaMacConfirmQueueGetStatusCmn	0	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:280:6:LoRaMacConfirmQueueIsCmdActive	8	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:289:6:LoRaMacConfirmQueueHandleCb	32	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:324:9:LoRaMacConfirmQueueGetCnt	0	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacConfirmQueue.c:329:6:LoRaMacConfirmQueueIsFull	0	static
