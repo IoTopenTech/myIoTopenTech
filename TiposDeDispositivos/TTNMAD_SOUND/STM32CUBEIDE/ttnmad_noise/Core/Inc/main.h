@@ -62,8 +62,6 @@ void Error_Handler(void);
 #define RTC_PREDIV_S ((1<<RTC_N_PREDIV_S)-1)
 #define RF_CTRL1_Pin GPIO_PIN_8
 #define RF_CTRL1_GPIO_Port GPIOB
-#define FREQ_HIGH_Pin GPIO_PIN_12
-#define FREQ_HIGH_GPIO_Port GPIOB
 #define RF_CTRL2_Pin GPIO_PIN_13
 #define RF_CTRL2_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */

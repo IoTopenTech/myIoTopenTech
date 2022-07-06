@@ -1,2 +1,3 @@
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_bus.h:449:22:LL_AHB2_GRP1_EnableClock	24	static
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h:498:22:LL_SYSCFG_EnableFastModePlus	16	static
 ../Core/Src/gpio.c:44:6:MX_GPIO_Init	32	static

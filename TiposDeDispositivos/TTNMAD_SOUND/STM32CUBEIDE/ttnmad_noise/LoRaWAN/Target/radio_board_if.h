@@ -42,7 +42,6 @@ extern "C" {
 #define RBI_CONF_RFO_HP     RADIO_CONF_RFO_HP
 #else
 /* USER CODE BEGIN Board Definition */
-
 /* USER CODE END Board Definition */
 #define RBI_CONF_RFO_LP_HP  0
 #define RBI_CONF_RFO_LP     1
@@ -90,6 +89,17 @@ extern "C" {
 #else
 /* USER CODE BEGIN Exported PinMapping */
 #warning user to provide its board definitions pins
+
+  #define RF_SW_CTRL1_PIN                          GPIO_PIN_8
+  #define RF_SW_CTRL1_GPIO_PORT                    GPIOB
+  #define RF_SW_CTRL1_GPIO_CLK_ENABLE()            __HAL_RCC_GPIOB_CLK_ENABLE()
+  #define RF_SW_CTRL1_GPIO_CLK_DISABLE()           __HAL_RCC_GPIOB_CLK_DISABLE()
+
+  #define RF_SW_CTRL2_PIN                          GPIO_PIN_13
+  #define RF_SW_CTRL2_GPIO_PORT                    GPIOC
+  #define RF_SW_CTRL2_GPIO_CLK_ENABLE()            __HAL_RCC_GPIOC_CLK_ENABLE()
+  #define RF_SW_CTRL2_GPIO_CLK_DISABLE()           __HAL_RCC_GPIOC_CLK_DISABLE()
+
 /* USER CODE END Exported PinMapping */
 #endif  /* USE_BSP_DRIVER  */
 

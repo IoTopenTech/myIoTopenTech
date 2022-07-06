@@ -66,6 +66,9 @@ default.size.stdout \
 OBJDUMP_LIST += \
 ttnmad_noise.list \
 
+OBJCOPY_HEX += \
+ttnmad_noise.hex \
+
 
 # All Target
 all: main-build
@@ -89,12 +92,17 @@ ttnmad_noise.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
+ttnmad_noise.hex: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O ihex $(EXECUTABLES) "ttnmad_noise.hex"
+	@echo 'Finished building: $@'
+	@echo ' '
+
 # Other Targets
 clean:
-	-$(RM) default.size.stdout ttnmad_noise.elf ttnmad_noise.list ttnmad_noise.map
+	-$(RM) default.size.stdout ttnmad_noise.elf ttnmad_noise.hex ttnmad_noise.list ttnmad_noise.map
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_HEX)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'

@@ -16,7 +16,7 @@
 ../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandler.c:1091:13:MlmeConfirm	64	static
 ../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandler.c:989:24:LmHandlerGetActiveRegion	0	static
 ../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandler.c:1000:24:LmHandlerSetSystemMaxRxError	48	static
-../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandler.c:362:24:LmHandlerConfigure	88	static
+../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandler.c:362:24:LmHandlerConfigure	72	static
 ../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandler.c:1296:24:LmHandlerPackageRegister	16	static
 ../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandler.c:311:24:LmHandlerInit	8	static
 ../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandler.c:1440:24:LmHandlerGetVersion	0	static

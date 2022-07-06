@@ -39,7 +39,7 @@ extern "C" {
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
-#define MW_LOG_ENABLED
+//#define MW_LOG_ENABLED
 
 /* USER CODE BEGIN EC */
 

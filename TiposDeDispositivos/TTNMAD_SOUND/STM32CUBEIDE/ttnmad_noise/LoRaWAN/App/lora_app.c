@@ -347,7 +347,7 @@ void LoRaWAN_Init(void)
   }
 
   /* USER CODE BEGIN LoRaWAN_Init_Last */
-  LmHandlerSetDutyCycleEnable(false);
+  //LmHandlerSetDutyCycleEnable(false);
   /* USER CODE END LoRaWAN_Init_Last */
 }
 

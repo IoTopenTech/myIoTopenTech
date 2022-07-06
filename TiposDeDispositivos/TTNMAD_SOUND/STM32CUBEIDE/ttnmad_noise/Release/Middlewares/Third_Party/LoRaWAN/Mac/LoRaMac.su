@@ -1,11 +1,11 @@
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:908:13:OnRadioTxTimeout	0	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:919:13:OnRadioRxError	0	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:929:13:OnRadioRxTimeout	0	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:940:13:UpdateRxSlotIdleState	0	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:2415:16:GetMaxAppPayloadWithoutFOptsLength	24	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:2182:13:OnAckTimeoutTimerEvent	8	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:1031:13:PrepareRxDoneAbort	8	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:1616:13:HandleRadioRxErrorTimeout	24	static
-../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:929:13:OnRadioRxTimeout	8	static
-../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:908:13:OnRadioTxTimeout	8	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:888:13:OnRadioRxDone	24	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:874:13:OnRadioTxDone	24	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.c:3301:13:ResetMacParameters	80	static

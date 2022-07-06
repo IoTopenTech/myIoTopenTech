@@ -11,11 +11,11 @@
 ../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:517:10:RegionCommonComputeSymbolTimeFsk	0	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:522:6:RegionCommonComputeRxWindowParameters	12	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:530:8:RegionCommonComputeTxPower	16	static
-../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:539:6:RegionCommonRxBeaconSetup	64	static
+../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:539:6:RegionCommonRxBeaconSetup	56	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:570:6:RegionCommonCountNbOfEnabledChannels	48	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:613:17:RegionCommonIdentifyChannels	48	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:657:8:RegionCommonGetNextLowerTxDr	24	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:677:8:RegionCommonLimitTxPower	0	static
 ../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:683:10:RegionCommonGetBandwidth	0	static
-../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:698:6:RegionCommonRxConfigPrint	24	static
-../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:710:6:RegionCommonTxConfigPrint	16	static
+../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:698:6:RegionCommonRxConfigPrint	0	static
+../Middlewares/Third_Party/LoRaWAN/Mac/Region/RegionCommon.c:710:6:RegionCommonTxConfigPrint	0	static
