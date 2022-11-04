@@ -1,0 +1,12 @@
+../Core/Src/sys_app.c:301:13:tiny_snprintf_like.constprop	16	static
+../Core/Src/sys_app.c:265:13:TimestampNow	32	static
+../Core/Src/sys_app.c:90:6:SystemApp_Init	8	static
+../Core/Src/sys_app.c:141:6:UTIL_SEQ_Idle	0	static
+../Core/Src/sys_app.c:152:9:GetBatteryLevel	8	static
+../Core/Src/sys_app.c:185:9:GetTemperatureLevel	32	static
+../Core/Src/sys_app.c:199:6:GetUniqueId	16	static
+../Core/Src/sys_app.c:239:10:GetDevAddr	8	static
+../Core/Src/sys_app.c:279:6:UTIL_ADV_TRACE_PreSendHook	0	static
+../Core/Src/sys_app.c:290:6:UTIL_ADV_TRACE_PostSendHook	0	static
+../Core/Src/sys_app.c:324:10:HAL_GetTick	0	static
+../Core/Src/sys_app.c:356:6:HAL_Delay	8	static

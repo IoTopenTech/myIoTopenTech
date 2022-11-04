@@ -1,0 +1,11 @@
+../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.c:51:16:rand1	4	static
+../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.c:56:6:srand1	16	static
+../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.c:62:9:randr	16	static
+../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.c:67:6:memcpy1	24	static
+../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.c:75:6:memcpyr	24	static
+../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.c:84:6:memset1	16	static
+../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.c:92:8:Nibble2HexChar	16	static
+../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.c:108:10:Crc32	24	static
+../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.c:130:10:Crc32Init	4	static
+../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.c:135:10:Crc32Update	32	static
+../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.c:156:10:Crc32Finalize	16	static

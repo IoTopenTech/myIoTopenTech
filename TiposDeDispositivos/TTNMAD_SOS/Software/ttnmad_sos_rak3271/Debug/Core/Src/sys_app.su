@@ -1,0 +1,16 @@
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_rcc.h:1971:22:LL_RCC_SetClkAfterWakeFromStop	16	static
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h:1880:26:LL_FLASH_GetUDN	4	static
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h:1890:26:LL_FLASH_GetDeviceID	4	static
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_system.h:1900:26:LL_FLASH_GetSTCompanyID	4	static
+../Core/Src/sys_app.c:90:6:SystemApp_Init	8	static
+../Core/Src/sys_app.c:141:6:UTIL_SEQ_Idle	8	static
+../Core/Src/sys_app.c:152:9:GetBatteryLevel	16	static
+../Core/Src/sys_app.c:185:9:GetTemperatureLevel	40	static
+../Core/Src/sys_app.c:199:6:GetUniqueId	40	static
+../Core/Src/sys_app.c:239:10:GetDevAddr	24	static
+../Core/Src/sys_app.c:265:13:TimestampNow	32	static
+../Core/Src/sys_app.c:279:6:UTIL_ADV_TRACE_PreSendHook	8	static
+../Core/Src/sys_app.c:290:6:UTIL_ADV_TRACE_PostSendHook	8	static
+../Core/Src/sys_app.c:301:13:tiny_snprintf_like	24	static
+../Core/Src/sys_app.c:324:10:HAL_GetTick	16	static
+../Core/Src/sys_app.c:356:6:HAL_Delay	16	static

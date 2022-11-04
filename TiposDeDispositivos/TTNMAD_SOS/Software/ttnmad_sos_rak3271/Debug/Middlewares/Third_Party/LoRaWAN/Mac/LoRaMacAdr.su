@@ -1,0 +1,2 @@
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacAdr.c:39:13:CalcNextV10X	56	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacAdr.c:125:6:LoRaMacAdrCalcNext	24	static

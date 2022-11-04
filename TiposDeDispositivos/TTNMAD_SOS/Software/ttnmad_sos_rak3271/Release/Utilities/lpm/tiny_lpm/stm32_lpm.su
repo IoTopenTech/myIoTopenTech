@@ -1,0 +1,6 @@
+../Utilities/lpm/tiny_lpm/stm32_lpm.c:121:6:UTIL_LPM_Init	0	static
+../Utilities/lpm/tiny_lpm/stm32_lpm.c:128:6:UTIL_LPM_DeInit	0	static
+../Utilities/lpm/tiny_lpm/stm32_lpm.c:132:6:UTIL_LPM_SetStopMode	8	static,ignoring_inline_asm
+../Utilities/lpm/tiny_lpm/stm32_lpm.c:157:6:UTIL_LPM_SetOffMode	8	static,ignoring_inline_asm
+../Utilities/lpm/tiny_lpm/stm32_lpm.c:182:17:UTIL_LPM_GetMode	0	static,ignoring_inline_asm
+../Utilities/lpm/tiny_lpm/stm32_lpm.c:215:6:UTIL_LPM_EnterLowPower	16	static,ignoring_inline_asm

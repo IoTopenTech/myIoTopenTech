@@ -1,0 +1,3 @@
+../Core/Src/adc.c:30:6:MX_ADC_Init	8	static
+../Core/Src/adc.c:72:6:HAL_ADC_MspInit	8	static
+../Core/Src/adc.c:88:6:HAL_ADC_MspDeInit	0	static

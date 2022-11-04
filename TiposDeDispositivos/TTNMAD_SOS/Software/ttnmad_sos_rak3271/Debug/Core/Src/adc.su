@@ -1,0 +1,5 @@
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_bus.h:1303:22:LL_APB2_GRP1_EnableClock	24	static
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_bus.h:1351:22:LL_APB2_GRP1_DisableClock	16	static
+../Core/Src/adc.c:30:6:MX_ADC_Init	8	static
+../Core/Src/adc.c:72:6:HAL_ADC_MspInit	16	static
+../Core/Src/adc.c:88:6:HAL_ADC_MspDeInit	16	static

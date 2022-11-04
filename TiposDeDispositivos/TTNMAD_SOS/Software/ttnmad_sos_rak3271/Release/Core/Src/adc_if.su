@@ -1,0 +1,5 @@
+../Core/Src/adc_if.c:181:17:ADC_ReadChannels	32	static
+../Core/Src/adc_if.c:79:6:SYS_InitMeasurement	0	static
+../Core/Src/adc_if.c:90:6:SYS_DeInitMeasurement	0	static
+../Core/Src/adc_if.c:139:10:SYS_GetBatteryLevel	8	static
+../Core/Src/adc_if.c:97:9:SYS_GetTemperatureLevel	16	static

@@ -1,0 +1,2 @@
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_bus.h:287:22:LL_AHB1_GRP1_EnableClock	24	static
+../Core/Src/dma.c:39:6:MX_DMA_Init	8	static

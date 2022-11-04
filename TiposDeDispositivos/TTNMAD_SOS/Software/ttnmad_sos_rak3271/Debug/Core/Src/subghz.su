@@ -1,0 +1,5 @@
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_bus.h:1488:22:LL_APB3_GRP1_EnableClock	24	static
+../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_bus.h:1516:22:LL_APB3_GRP1_DisableClock	16	static
+../Core/Src/subghz.c:30:6:MX_SUBGHZ_Init	8	static
+../Core/Src/subghz.c:51:6:HAL_SUBGHZ_MspInit	16	static
+../Core/Src/subghz.c:68:6:HAL_SUBGHZ_MspDeInit	16	static

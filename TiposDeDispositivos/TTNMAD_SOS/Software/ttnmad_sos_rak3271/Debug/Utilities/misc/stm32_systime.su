@@ -1,0 +1,13 @@
+../Utilities/misc/stm32_systime.c:199:11:SysTimeAdd	32	static
+../Utilities/misc/stm32_systime.c:213:11:SysTimeSub	32	static
+../Utilities/misc/stm32_systime.c:227:6:SysTimeSet	40	static
+../Utilities/misc/stm32_systime.c:242:11:SysTimeGet	48	static
+../Utilities/misc/stm32_systime.c:259:11:SysTimeGetMcuTime	24	static
+../Utilities/misc/stm32_systime.c:268:10:SysTimeToMs	40	static
+../Utilities/misc/stm32_systime.c:278:11:SysTimeFromMs	48	static
+../Utilities/misc/stm32_systime.c:289:10:SysTimeMkTime	48	static
+../Utilities/misc/stm32_systime.c:318:6:SysTimeLocalTime	64	static
+../Utilities/misc/stm32_systime.c:381:17:CalendarGetMonth	24	static
+../Utilities/misc/stm32_systime.c:418:13:CalendarDiv86400	32	static
+../Utilities/misc/stm32_systime.c:444:17:CalendarDiv61	24	static
+../Utilities/misc/stm32_systime.c:466:13:CalendarDiv60	32	static

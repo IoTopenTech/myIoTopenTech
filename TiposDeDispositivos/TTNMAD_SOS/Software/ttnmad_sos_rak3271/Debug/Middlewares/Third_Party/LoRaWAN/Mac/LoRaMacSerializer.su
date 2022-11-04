@@ -1,0 +1,4 @@
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacSerializer.c:36:27:LoRaMacSerializerJoinRequest	24	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacSerializer.c:72:27:LoRaMacSerializerReJoinType1	24	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacSerializer.c:103:27:LoRaMacSerializerReJoinType0or2	24	static
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacSerializer.c:134:27:LoRaMacSerializerData	24	static

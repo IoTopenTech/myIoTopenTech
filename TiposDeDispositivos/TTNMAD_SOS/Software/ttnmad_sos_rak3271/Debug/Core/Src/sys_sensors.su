@@ -1,0 +1,2 @@
+../Core/Src/sys_sensors.c:122:9:EnvSensors_Read	32	static
+../Core/Src/sys_sensors.c:161:9:EnvSensors_Init	16	static
