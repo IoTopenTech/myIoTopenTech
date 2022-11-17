@@ -13,4 +13,6 @@
 | Interruptor deslizante through hole MSS22D18 | ![imagen](https://user-images.githubusercontent.com/52624907/151135183-e536c6ce-d12a-493f-be80-724624f445f5.png) | 
 | Antena FPC para RAK3172 con uFl (recomendada) o helicoidal 868MHz acodada para RAK3172 sin uFl | ![imagen](https://user-images.githubusercontent.com/52624907/202451490-8a9093c5-a204-4baf-a745-d729c364bda0.png) ![imagen](https://user-images.githubusercontent.com/52624907/151135349-054a7224-765c-4091-8fbe-fcfb4778d852.png) | 
 | Portabaterías 2xAAA | ![imagen](https://user-images.githubusercontent.com/52624907/151135509-f35f0a5d-f188-4913-89be-b694f5b190ee.png) |
+|Imán de neodimio cilíndrico 5x10mm | ![imagen](https://user-images.githubusercontent.com/52624907/202459043-114b7ed6-3bca-4ce1-b8fe-bce5055768e0.png) |
+
 
