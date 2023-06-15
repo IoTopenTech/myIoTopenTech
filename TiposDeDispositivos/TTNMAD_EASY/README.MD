@@ -23,7 +23,7 @@ En la carpeta EJEMPLOS hay algunos programas básicos.
 La lista de materiales para su fabricación es la siguiente:
 
 | Id | Identificador | Paquete | Cantidad | Identificación | 
-|----------|-------------|------|
+|----|---------------|---------|----------|----------------|
 | 1 | R4,R7,R8 | R_0805_2012Metric_Pad1.20x1.40mm_HandSolder | 3 | 4.7k | 
 | 2 | C1,C2,C4 | C_0805_2012Metric_Pad1.18x1.45mm_HandSolder | 3 | 100n | 
 | 3 | U3 | SOT-23-5 | 1 | XC6215B332MR | 
