@@ -50,6 +50,7 @@ La lista de materiales para su fabricación es la siguiente:
 | 24 | U4 | usb_c_6_pin | 1 | usb_c_6_pin_jfmateos | 
 | 25 | R3 | R_LDR_4.9x4.2mm_P2.54mm_Vertical | 1 | R_Photo | 
 | 26 | BT1 | BatteryHolder_Keystone_2479_3xAAA | 1 | Battery | 
+| 27 |  | Antena externa LoRaWAN | 1 |  | 
 
 
 
