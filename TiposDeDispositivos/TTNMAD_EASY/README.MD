@@ -10,8 +10,8 @@ Está basado en el microcontrolador RAK3172, que puede programarse directamente 
 TTNMAD_EASY dispone de:
 
 * 2 Botones
-* 2 LEDSs
-* Un acelerómetro LIS3dH
+* 2 LEDs
+* Un acelerómetro LIS3DH
 * Todos los pines expuestos en pin headers
 * Alimentación mediante 3 baterías AAA o mediante conector USB Tipo C
 * Conversor de tensión XC6215B332 de muy baja corriente de fuga
