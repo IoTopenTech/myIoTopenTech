@@ -10,8 +10,8 @@ Está basado en el microcontrolador RAK3172, que puede programarse directamente 
 TTNMAD_EASY dispone de:
 
 * 2 Botones
-* 2 LEDSs
-* Un acelerómetro LIS3dH
+* 2 LEDs
+* Un acelerómetro LIS3DH
 * Todos los pines expuestos en pin headers
 * Alimentación mediante 3 baterías AAA o mediante conector USB Tipo C
 * Conversor de tensión XC6215B332 de muy baja corriente de fuga
@@ -50,6 +50,7 @@ La lista de materiales para su fabricación es la siguiente:
 | 24 | U4 | usb_c_6_pin | 1 | usb_c_6_pin_jfmateos | 
 | 25 | R3 | R_LDR_4.9x4.2mm_P2.54mm_Vertical | 1 | R_Photo | 
 | 26 | BT1 | BatteryHolder_Keystone_2479_3xAAA | 1 | Battery | 
+| 27 |  | Antena externa LoRaWAN | 1 |  | 
 
 
 

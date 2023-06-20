@@ -81,7 +81,7 @@ Hay que añadir el bloque funciones al principio:
 ```javascript
 <funciones>[{"nombre":"myiotlegrampassadm","codigo":"var result= '';var characters= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';var charactersLength = characters.length;for ( var i = 0; i != 20; i++ ) {result += characters.charAt(Math.floor(Math.random()* charactersLength));}$scope.vm.configuracion.__myiotlegram_passadm=result;$scope.form.configuracionmyiotlegram.$setDirty()"},{"nombre":"myiotlegrampassobs","codigo":"var result= '';var characters= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';var charactersLength = characters.length;for ( var i = 0; i != 20; i++ ) {result += characters.charAt(Math.floor(Math.random()* charactersLength));}$scope.vm.configuracion.__myiotlegram_passobs=result;$scope.form.configuracionmyiotlegram.$setDirty()"}]</funciones>
 ```
-Y un panel (por encima del pandel Configuración general):
+Y un panel (por encima del panel Configuración general):
 ```xml
 <panel titulo="myIoTlegram" resumen="Si regenera un código, los dispositivos que estén usando el actual quedarán desvinculados de myIoTlegram" nombreFormulario="myiotlegram" ng-if="!vm.attributes.hasOwnProperty('esDelegado') || (vm.attributes.esDelegado===false)">
 		<md-input-container  style="display: none;">
