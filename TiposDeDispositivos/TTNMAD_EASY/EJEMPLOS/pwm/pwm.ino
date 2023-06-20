@@ -11,5 +11,5 @@ void loop() {
   }
   duty_cycle+=incremento;
   analogWrite(PA0,duty_cycle);
-  delay(10);
+  delay(10); 
 }
