@@ -125,7 +125,7 @@ En este punto ya podríamos depurar las telemetrías del nuevo tipo de dispositi
 # 5. El archivo \[TIPO DISPOSITIVO]_CONFIG.php
 En este archivo se genera el menú y las acciones de configuración.
 Son muy dependientes del tipo de dispositivo; pero se gestionan mediante los case de un switch($informacion_estado_actual_chat->p).
-El case list muestra el estado actual de la configuración y ofrece el menú para modificarla, en el que el rol administrador tiene acceso a todas las opciones, mientras que el rol observador sólo puede cambiar el nombre del dispositivo (el nombre es local para cada instancia de myIoTlegram; no afecta al nombre real del dispositivo en myIoY, ni al de otros usuarios que lo tengan vinculado en su myIoTlegram), o desvincular el dispositivo.
+El case list muestra el estado actual de la configuración y ofrece el menú para modificarla, en el que el rol administrador tiene acceso a todas las opciones, mientras que el rol observador sólo puede cambiar el nombre del dispositivo (el nombre es local para cada instancia de myIoTlegram; no afecta al nombre real del dispositivo en myIoT, ni al de otros usuarios que lo tengan vinculado en su myIoTlegram), o desvincular el dispositivo.
 Otros case genéricos son toNombre y toDesvincular.
 En general, los dispositivos de la serie TTNMAD tienen opciones para configurar:
 
