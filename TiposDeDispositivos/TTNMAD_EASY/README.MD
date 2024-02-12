@@ -10,7 +10,7 @@ Está basado en el microcontrolador RAK3172, que puede programarse directamente 
 Para programarlo desde el IDE de Arduino con el core STMDuino necesitaremos un ST-Link V2 original o clónico. El original tiene un precio de unos 20€, mientras que los clónicos pueden encontrarse por unos 2-5€ en tiendas como Aliespress, eBay o Amazon.
 
 
-Para programarlo desde el IDE de Arduino con el core RAK necesitaremos un adaptador USB a Serial con lógica de 3.3V. Estos dispositivos suelen estar basados en los circuitos integrados CH340G o FT232RL, y pueden encontrarse por unos 2-5€ en tiendas como Aliespress, eBay o Amazon.
+Para programarlo desde el IDE de Arduino con el core RAK necesitaremos un adaptador USB a Serial con lógica de 3.3V. Estos dispositivos suelen estar basados en los circuitos integrados CH340G o FT232RL, y pueden encontrarse por unos 2-5€ en tiendas como Aliexpress, eBay o Amazon.
 
 
 
