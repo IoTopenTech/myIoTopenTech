@@ -7,12 +7,14 @@ Está basado en el microcontrolador RAK3172, que puede programarse directamente 
 * Usando el core STMDuino: https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json
 * Usando el core RAK para microcontroladores STM: https://raw.githubusercontent.com/RAKWireless/RAKwireless-Arduino-BSP-Index/main/package_rakwireless.com_rui_index.json
 
-Para programarlo desde el IDE de Arduino con el core STMDuino necesitaremos un ST-Link V2 original o clónico. El original tiene un precio de unos 20€, mientras que los clónicos pueden encontrarse por unos 2-5€ en tiendas como Aliespress, eBay o Amazon.
+Para programarlo desde el IDE de Arduino con el core STMDuino necesitaremos un ST-Link V2 original o clónico. El original tiene un precio de unos 20€, mientras que los clónicos pueden encontrarse por unos 2-5€ en tiendas como Aliespress, eBay o Amazon. También puede programarse con un adaptador USB a Serial, pero se perderá el bootloader de RAK RUI3 y si posteriormente quisiéramos restituirlo necesitaráimos igualmente un ST-Link.
 
 
 Para programarlo desde el IDE de Arduino con el core RAK necesitaremos un adaptador USB a Serial con lógica de 3.3V. Estos dispositivos suelen estar basados en los circuitos integrados CH340G o FT232RL, y pueden encontrarse por unos 2-5€ en tiendas como Aliexpress, eBay o Amazon.
 
+Más información en la presentación disponible en este mismo repositorio:
 
+https://github.com/IoTopenTech/myIoTopenTech/blob/master/TiposDeDispositivos/TTNMAD_EASY/ttnmad_easy.pdf
 
 TTNMAD_EASY dispone de:
 
