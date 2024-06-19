@@ -63,3 +63,4 @@ La lista de materiales para su fabricación es la siguiente:
 
 TTNMAD_Easy no está optimizado para lograr un consumo mínimo (es una herramienta didáctica). En la siguiente imagen pueden observarse que el consumo medio
 
+![imagen](./consumo_ttnmad_easy.jpg)
