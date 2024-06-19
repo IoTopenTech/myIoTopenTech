@@ -61,6 +61,5 @@ La lista de materiales para su fabricación es la siguiente:
 | 26 | BT1 | BatteryHolder_Keystone_2479_3xAAA | 1 | Battery | 
 | 27 |  | Antena externa LoRaWAN | 1 |  | 
 
-
-
+TTNMAD_Easy no está optimizado para lograr un consumo mínimo (es una herramienta didáctica). En la siguiente imagen pueden observarse que el consumo medio
 
