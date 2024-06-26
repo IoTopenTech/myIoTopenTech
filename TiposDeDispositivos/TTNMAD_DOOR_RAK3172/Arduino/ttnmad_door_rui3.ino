@@ -229,7 +229,7 @@ void setup() {
     //Serial.print("Wait for LoRaWAN join...");
     api.lorawan.join();
     uint64_t last = millis();
-    while(millis()-last<10000){
+    while(millis()-last<10000 && api.lorawan.njs.get() == 0){
       digitalWrite(PA8,HIGH);
       delay(250);
       digitalWrite(PA8,LOW);
