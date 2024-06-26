@@ -162,7 +162,19 @@ void puerta_cerrada() {
 void setup() {
   //Serial.begin(115200, RAK_AT_MODE);
   delay(2000);
-
+  //LED
+  pinMode(PA8, OUTPUT);
+  //Habilitador de la NTC
+  pinMode(PA0, OUTPUT);
+  digitalWrite(PA0, LOW);
+  //Interrupciones
+  pinMode(PA10, INPUT);  //HALL
+  delay(300);
+  if (digitalRead(PA10)) {
+    attachInterrupt(PA10, puerta_cerrada, FALLING);  //Puerta cerrada
+  } else {
+    attachInterrupt(PA10, puerta_abierta, RISING);  //Puerta cerrada
+  }
 
 
   //Serial.println("RAKwireless LoRaWan OTAA Example");
@@ -216,7 +228,13 @@ void setup() {
   while (api.lorawan.njs.get() == 0) {
     //Serial.print("Wait for LoRaWAN join...");
     api.lorawan.join();
-    delay(10000);
+    uint64_t last = millis();
+    while(millis()-last<10000){
+      digitalWrite(PA8,HIGH);
+      delay(250);
+      digitalWrite(PA8,LOW);
+      delay(250);
+    }   
   }
 
   if (!api.lorawan.adr.set(true)) {
@@ -269,21 +287,6 @@ void setup() {
   api.lorawan.registerRecvCallback(recvCallback);
   api.lorawan.registerJoinCallback(joinCallback);
   api.lorawan.registerSendCallback(sendCallback);
-
-
-  //LED
-  pinMode(PA8, OUTPUT);
-  //Habilitador de la NTC
-  pinMode(PA0, OUTPUT);
-  digitalWrite(PA0, LOW);
-  //Interrupciones
-  pinMode(PA10, INPUT);  //HALL
-  delay(300);
-  if (digitalRead(PA10)) {
-    attachInterrupt(PA10, puerta_cerrada, FALLING);  //Puerta cerrada
-  } else {
-    attachInterrupt(PA10, puerta_abierta, RISING);  //Puerta cerrada
-  }
 }
 
 bool uplink_routine() {
