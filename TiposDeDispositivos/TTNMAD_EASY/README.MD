@@ -61,6 +61,5 @@ La lista de materiales para su fabricación es la siguiente:
 | 26 | BT1 | BatteryHolder_Keystone_2479_3xAAA | 1 | Battery | 
 | 27 |  | Antena externa LoRaWAN | 1 |  | 
 
-TTNMAD_Easy no está optimizado para lograr un consumo mínimo (es una herramienta didáctica). En la siguiente imagen pueden observarse que el consumo medio es aproximadamente 11 mA, que alimentando a 4.5 V, corresponden a aproximadamente a 50 mW. Por ejemplo, utilizando 3 baterías alcalinas AAA en serie dispondríamos de una autonomía aproximada de 100 horas.
+TTNMAD_Easy no está optimizado para lograr un consumo mínimo (es una herramienta didáctica). Su consumo en estado dormido es unos 360 uA alimentando a 4.5 V, que corresponden a aproximadamente 1.6 mW. Por ejemplo, utilizando 3 baterías alcalinas AAA en serie dispondríamos de una autonomía aproximada de 600 horas (26 días).
 
-![imagen](./consumo_ttnmad_easy.jpg)
