@@ -151,7 +151,7 @@ void setup() {
     Serial.printf("LoRaWan OTAA - set band is incorrect! \r\n");
     return;
   }
-  if (!api.lorawan.deviceClass.set(RAK_LORA_CLASS_C)) {
+  if (!api.lorawan.deviceClass.set(RAK_LORA_CLASS_A)) {
     Serial.printf("LoRaWan OTAA - set device class is incorrect! \r\n");
     return;
   }
