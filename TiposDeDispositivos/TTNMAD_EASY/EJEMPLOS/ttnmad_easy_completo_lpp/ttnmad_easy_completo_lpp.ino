@@ -1,4 +1,3 @@
-#include "CRC8.h"
 #include "CRC.h"
 CRC32 crc;
 
