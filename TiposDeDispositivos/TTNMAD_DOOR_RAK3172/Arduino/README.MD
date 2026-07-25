@@ -1,4 +1,4 @@
-Este programa se ha compilado con la versión 4.1.1 del gestor de placas RUI3 para Arduino.
+Este programa se ha compilado con la versión 4.1.1 del gestor de placas RUI3 para Arduino (también se ha comprobado que funciona con la 4.2.4).
 
 Para grabarlo en el nodo TTNMAD_DOOR seguir estos pasos:
 
