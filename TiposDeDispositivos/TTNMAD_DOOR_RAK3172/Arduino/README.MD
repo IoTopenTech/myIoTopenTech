@@ -10,5 +10,5 @@ Para grabarlo en el nodo TTNMAD_DOOR seguir estos pasos:
 
 ![Conexiones ST-Link](imagenes/stlink.jpg)
 
-El consumo en estado dormido es aproximadamente 7uA a 3V.
+El consumo en estado dormido es aproximadamente 8uA a 3V para la versión sin TCXO y 10uA a 3V para la versión con TCXO.
 
